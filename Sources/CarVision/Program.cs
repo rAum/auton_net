@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using Emgu.CV;
 
 namespace CarVision
 {
