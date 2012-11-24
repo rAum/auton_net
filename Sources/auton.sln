@@ -3,16 +3,30 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarVision", "CarVision\CarVision.csproj", "{1BF1D22B-B4E6-4FB2-A1BB-F0CF811A0387}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{41FC9DA0-0667-4046-BEF0-0BA9BF295E23}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1BF1D22B-B4E6-4FB2-A1BB-F0CF811A0387}.Debug|x64.ActiveCfg = Debug|x64
+		{1BF1D22B-B4E6-4FB2-A1BB-F0CF811A0387}.Debug|x64.Build.0 = Debug|x64
 		{1BF1D22B-B4E6-4FB2-A1BB-F0CF811A0387}.Debug|x86.ActiveCfg = Debug|x86
 		{1BF1D22B-B4E6-4FB2-A1BB-F0CF811A0387}.Debug|x86.Build.0 = Debug|x86
+		{1BF1D22B-B4E6-4FB2-A1BB-F0CF811A0387}.Release|x64.ActiveCfg = Release|x64
+		{1BF1D22B-B4E6-4FB2-A1BB-F0CF811A0387}.Release|x64.Build.0 = Release|x64
 		{1BF1D22B-B4E6-4FB2-A1BB-F0CF811A0387}.Release|x86.ActiveCfg = Release|x86
 		{1BF1D22B-B4E6-4FB2-A1BB-F0CF811A0387}.Release|x86.Build.0 = Release|x86
+		{41FC9DA0-0667-4046-BEF0-0BA9BF295E23}.Debug|x64.ActiveCfg = Debug|x64
+		{41FC9DA0-0667-4046-BEF0-0BA9BF295E23}.Debug|x64.Build.0 = Debug|x64
+		{41FC9DA0-0667-4046-BEF0-0BA9BF295E23}.Debug|x86.ActiveCfg = Debug|x64
+		{41FC9DA0-0667-4046-BEF0-0BA9BF295E23}.Release|x64.ActiveCfg = Release|x64
+		{41FC9DA0-0667-4046-BEF0-0BA9BF295E23}.Release|x64.Build.0 = Release|x64
+		{41FC9DA0-0667-4046-BEF0-0BA9BF295E23}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

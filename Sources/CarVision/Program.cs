@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
+using Emgu.CV;
+
 namespace CarVision
 {
     static class Program
@@ -12,9 +14,6 @@ namespace CarVision
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
         }
     }
 }
