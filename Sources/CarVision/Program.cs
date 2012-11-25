@@ -13,6 +13,7 @@ namespace CarVision
         [STAThread]
         static void Main()
         {
+            Application.Run(new ViewForm());
         }
     }
 }
