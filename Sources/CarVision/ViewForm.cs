@@ -18,6 +18,7 @@ namespace CarVision
     {
         VideoSource videoSource;
         Smoothener smoothener;
+        Canny canny;
 
         private void DisplayVideo(object sender, CarVision.ResultReadyEventArgs e)
         {
@@ -26,6 +27,8 @@ namespace CarVision
                 imgBox = imgVideoSource;
             else if (sender == smoothener)
                 imgBox = imgSmoothener;
+            else if (sender == canny)
+                imgBox = imgCanny;
             if (imgBox == null)
                 throw new InvalidOperationException("No receiver registered");
             imgBox.Image = (Image<Gray, Byte>)e.Result;
@@ -41,6 +44,9 @@ namespace CarVision
 
             smoothener = new Smoothener(videoSource);
             smoothener.ResultReady += DisplayVideo;
+
+            canny = new Canny(smoothener);
+            canny.ResultReady += DisplayVideo;
             
         }
 

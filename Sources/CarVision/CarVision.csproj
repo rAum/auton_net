@@ -108,6 +108,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Filters\Canny.cs" />
     <Compile Include="Filters\Smoothener.cs" />
     <Compile Include="Filters\VideoSource.cs" />
     <Compile Include="Program.cs" />
