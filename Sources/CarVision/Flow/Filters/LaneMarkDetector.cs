@@ -23,6 +23,9 @@ namespace CarVision.Filters
             set { tau = value < 1 ? 1 : value; }
         }
 
+        public double Threshold { get; set; }
+
+        // TODO: rewrite this by using Data, or better - as native.
         private void DetectLaneMark(Image<Gray, Byte> img)
         {
             Image<Gray, Byte> dst = new Image<Gray, byte>(img.Width, img.Height);
@@ -39,9 +42,11 @@ namespace CarVision.Filters
                     aux -= img[j, i + tau].Intensity;
                         
                     aux -= Math.Abs(img[j, i - tau].Intensity - img[j, i + tau].Intensity);
+                    
+                    aux *= 2.0;// more contrast
 
                     if (aux > 255.0) aux = 255.0;
-                    else if (aux < 0.0) aux = 0.0;
+                    else if (aux < Threshold) aux = 0.0;
 
                     dst[j, i] = new Gray(aux);
                 }
@@ -57,6 +62,7 @@ namespace CarVision.Filters
             supplier.ResultReady += MaterialReady;
 
             Tau = 5;
+            Threshold = 175.0;
 
             Process += DetectLaneMark;
         }

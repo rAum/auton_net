@@ -108,11 +108,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Flow\Filters\LaneMarkDetector.cs" />
-    <Compile Include="Flow\Filters\Canny.cs" />
-    <Compile Include="Flow\Filters\PerspectiveCorrection.cs" />
-    <Compile Include="Flow\Filters\Smoothener.cs" />
-    <Compile Include="Flow\Sources\VideoSource.cs" />
+<<<<<<< HEAD
+    <Compile Include="Filters\LaneMarkDetector.cs" />
+    <Compile Include="Filters\PerspectiveCorrection.cs" />
+=======
+    <Compile Include="Filters\Canny.cs" />
+>>>>>>> b0f3a000caeb571885c4bd8d7cfc5dce4322872d
+    <Compile Include="Filters\Smoothener.cs" />
+    <Compile Include="Filters\VideoSource.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Supplier.cs" />
