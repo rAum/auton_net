@@ -11,6 +11,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using CarVision.Filters;
 using Emgu.CV.UI;
+using Emgu;
 
 namespace CarVision
 {
@@ -30,8 +31,11 @@ namespace CarVision
             {
                 imgBox = imgSmoothener;
                 //TODO remove this, make better
-                Image<Gray, Byte>[] t = { ((Image<Gray, Byte>)e.Result), new Image<Gray, Byte>(320, 240), new Image<Gray, Byte>(320, 240) };
-                imgBox.Image = (new Image<Rgb, Byte>(t)) + (new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap)); // mix current video frame with founded line marks
+                //Image<Gray, Byte>[] t = { ((Image<Gray, Byte>)e.Result), ((Image<Gray, Byte>)e.Result), ((Image<Gray, Byte>)e.Result) };
+                Image<Rgb,Byte> ipc = ((Image<Gray, Byte>)e.Result).Convert<Rgb, Byte>();
+                
+                Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
+                imgBox.Image = cam + (ipc - new Rgb(0.0, 255.0, 255.0)); // mix current video frame with founded line marks
                 return;
             }
             else if (sender == perpCorr)
@@ -47,7 +51,8 @@ namespace CarVision
         public ViewForm()
         {
             InitializeComponent();
-            videoSource = new VideoSource("D://test.avi");
+            //videoSource = new VideoSource();
+            videoSource = new VideoSource(@"C:/film.avi");
             videoSource.ResultReady += DisplayVideo;
            
             // FIXME: move to better place and enable changes this in runtime [and draw lines/points?]
