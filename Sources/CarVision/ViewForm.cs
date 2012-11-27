@@ -19,6 +19,7 @@ namespace CarVision
         VideoSource videoSource;
         Smoothener smoothener;
         LaneMarkDetector laneDetector;
+        Canny canny;
         PerspectiveCorrection perpCorr;
 
         private void DisplayVideo(object sender, CarVision.ResultReadyEventArgs e)
@@ -30,6 +31,8 @@ namespace CarVision
                 imgBox = imgSmoothener;
             else if (sender == laneDetector || sender == perpCorr)
                 imgBox = imgSmoothener;
+            else if (sender == canny)
+                imgBox = imgCanny;
             if (imgBox == null)
                 throw new InvalidOperationException("No receiver registered");
             imgBox.Image = (Image<Gray, Byte>)e.Result;
@@ -48,6 +51,8 @@ namespace CarVision
 
             laneDetector = new LaneMarkDetector(videoSource);
             //laneDetector.ResultReady += perpCorr.;
+            canny = new Canny(smoothener);
+            canny.ResultReady += DisplayVideo;
 
             PointF[] src = { new PointF(0,320), new PointF(320, 320), new PointF(150, 320-240), new PointF(75,320-240) };
             PointF[] dst = { new PointF(0,320), new PointF(320, 320), new PointF(320, 320-240), new PointF(0,320-240) };

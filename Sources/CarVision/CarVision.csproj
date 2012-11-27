@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1BF1D22B-B4E6-4FB2-A1BB-F0CF811A0387}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CarVision</RootNamespace>
     <AssemblyName>CarVision</AssemblyName>
@@ -109,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Filters\LaneMarkDetector.cs" />
+    <Compile Include="Filters\Canny.cs" />
     <Compile Include="Filters\PerspectiveCorrection.cs" />
     <Compile Include="Filters\Smoothener.cs" />
     <Compile Include="Filters\VideoSource.cs" />

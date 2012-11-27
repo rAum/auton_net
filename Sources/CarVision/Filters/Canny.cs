@@ -8,22 +8,22 @@ using Emgu.CV.Structure;
 
 namespace CarVision.Filters
 {
-    class Smoothener : ThreadSupplier<Image<Gray, Byte>, Image<Gray, Byte>>
+    class Canny : ThreadSupplier<Image<Gray, Byte>, Image<Gray, Byte>>
     {
         private Supplier<Image<Gray, Byte>> supplier;
 
-        private void SmoothenImage(Image<Gray, Byte> image)
+        private void FindEdges(Image<Gray, Byte> image)
         {
-            LastResult = image.SmoothBlur(3, 3);
+            LastResult = image.Canny(new Gray(100), new Gray(60));
             PostComplete();
         }
 
-        public Smoothener(Supplier<Image<Gray, Byte>> supplier_)
+        public Canny(Supplier<Image<Gray, Byte>> supplier_)
         {
             supplier = supplier_;
             supplier.ResultReady += MaterialReady;
 
-            Process += SmoothenImage;
+            Process += FindEdges;
         }
     }
 }
