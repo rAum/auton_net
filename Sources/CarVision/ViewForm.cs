@@ -17,18 +17,26 @@ namespace CarVision
     public partial class ViewForm : Form
     {
         VideoSource videoSource;
-        Smoothener smoothener;
-        Canny canny;
+        LaneMarkDetector laneDetector;
+        PerspectiveCorrection perpCorr;
+        PerspectiveCorrection invPerpCorr;
 
         private void DisplayVideo(object sender, CarVision.ResultReadyEventArgs e)
         {
             ImageBox imgBox = null;
             if (sender == videoSource)
                 imgBox = imgVideoSource;
-            else if (sender == smoothener)
+            else if (sender == invPerpCorr)
+            {
                 imgBox = imgSmoothener;
-            else if (sender == canny)
+                //TODO remove this, make better
+                Image<Gray, Byte>[] t = { ((Image<Gray, Byte>)e.Result), new Image<Gray, Byte>(320, 240), new Image<Gray, Byte>(320, 240) };
+                imgBox.Image = (new Image<Rgb, Byte>(t)) + (new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap)); // mix current video frame with founded line marks
+                return;
+            }
+            else if (sender == perpCorr)
                 imgBox = imgCanny;
+            else return;
             if (imgBox == null)
                 throw new InvalidOperationException("No receiver registered");
             imgBox.Image = (Image<Gray, Byte>)e.Result;
@@ -39,15 +47,34 @@ namespace CarVision
         public ViewForm()
         {
             InitializeComponent();
-            videoSource = new VideoSource();
+            videoSource = new VideoSource("D://test.avi");
             videoSource.ResultReady += DisplayVideo;
+           
+            // FIXME: move to better place and enable changes this in runtime [and draw lines/points?]
+            PointF[] src = { 
+                                new PointF(116,      108), 
+                                new PointF(116 + 88, 108),                                 
+                                new PointF(320,     217), 
+                                new PointF(0,       217), 
+                           };
 
-            smoothener = new Smoothener(videoSource);
-            smoothener.ResultReady += DisplayVideo;
-
-            canny = new Canny(smoothener);
-            canny.ResultReady += DisplayVideo;
+            int offset = 320 / 4;
+            PointF[] dst = { 
+                                new PointF(offset,       0), 
+                                new PointF(320 - offset, 0), 
+                                new PointF(src[2].X - offset, src[2].Y + 33), 
+                                new PointF(src[3].X + offset, src[3].Y + 33) 
+                           };
             
+            perpCorr = new PerspectiveCorrection(videoSource, src, dst);
+            
+            perpCorr.ResultReady += DisplayVideo;           
+         
+            laneDetector = new LaneMarkDetector(perpCorr);
+            laneDetector.ResultReady += DisplayVideo;
+
+            invPerpCorr = new PerspectiveCorrection(laneDetector, dst, src);
+            invPerpCorr.ResultReady += DisplayVideo;
         }
 
         private void ViewForm_FormClosing(object sender, FormClosingEventArgs e)

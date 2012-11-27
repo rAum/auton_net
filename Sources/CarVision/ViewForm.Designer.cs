@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.gbVideoSource = new System.Windows.Forms.GroupBox();
             this.imgVideoSource = new Emgu.CV.UI.ImageBox();
             this.grpSmoothener = new System.Windows.Forms.GroupBox();
@@ -70,10 +69,11 @@
             this.grpSmoothener.Size = new System.Drawing.Size(419, 326);
             this.grpSmoothener.TabIndex = 3;
             this.grpSmoothener.TabStop = false;
-            this.grpSmoothener.Text = "Smoothener";
+            this.grpSmoothener.Text = "Line Mark";
             // 
             // imgSmoothener
             // 
+            this.imgSmoothener.BackColor = System.Drawing.Color.Transparent;
             this.imgSmoothener.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imgSmoothener.Location = new System.Drawing.Point(3, 16);
             this.imgSmoothener.Name = "imgSmoothener";
@@ -89,7 +89,7 @@
             this.grpCanny.Size = new System.Drawing.Size(419, 326);
             this.grpCanny.TabIndex = 4;
             this.grpCanny.TabStop = false;
-            this.grpCanny.Text = "Canny";
+            this.grpCanny.Text = "Perspective Correction";
             // 
             // imgCanny
             // 
