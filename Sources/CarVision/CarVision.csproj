@@ -108,6 +108,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Filters\LaneMarkDetector.cs" />
+    <Compile Include="Filters\PerspectiveCorrection.cs" />
     <Compile Include="Filters\Smoothener.cs" />
     <Compile Include="Filters\VideoSource.cs" />
     <Compile Include="Program.cs" />
