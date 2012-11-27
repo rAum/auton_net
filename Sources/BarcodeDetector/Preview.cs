@@ -37,7 +37,7 @@ namespace BarcodeDetector
 
         private void ProcessFrame(object sender, EventArgs args) 
         {
-            Image<Bgr, Byte> frame = camera.RetrieveBgrFrame();
+            Image<Bgr, Byte> frame = camera.RetrieveBgrFrame().Clone();
             Image<Gray, float> gray = frame.Convert<Gray, float>();
             List<POI> points = detector.FindPOI(gray);
 
@@ -55,7 +55,7 @@ namespace BarcodeDetector
                 frame.Draw(arrow, new Bgr(Color.Blue), 1);
             }
             
-            outputImage.Image = frame;
+            outputImage.Image = frame.Clone();
         }
 
         private void Preview_FormClosing(object sender, FormClosingEventArgs e)

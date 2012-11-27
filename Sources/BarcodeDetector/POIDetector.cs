@@ -36,29 +36,47 @@ namespace BarcodeDetector
             double thr = GradientMagnitudeThreshold;
             thr = thr * thr;
             int last_direction = 0;
+
+            int best_c = 0;
+            double best_c_mag = 0;
             for (int c = 0; c < w; c++) 
             {
                 double x = gx[r, c].Intensity;
                 double y = gy[r, c].Intensity;
                 
                 // check if gradient magnitude is big enough
+                
                 double magnitude = x * x + y * y;
+                
+                if (magnitude > best_c_mag)
+                {
+                    best_c_mag = magnitude;
+                    best_c = c;
+                }
+
                 if (magnitude < thr)
-                    continue;
+                {
+                    if (best_c_mag >= thr)
+                    {
+                        double best_x = gx[r, best_c].Intensity;
+                        double best_y = gy[r, best_c].Intensity;
+                        double best_angle = Math.Atan2(y, x);
+                        double best_a = Math.Abs(best_angle);
+                        if (Math.Abs(best_a - Math.PI / 2) >= Math.PI / 2 - MaxAngle)
+                        {
+                            int direction = (best_x > 0) ? 1 : 0;
+                            if (direction != last_direction)
+                            {
+                                last_direction = direction;
+                                points.Add(new POI(best_c, r, best_x, best_y, best_angle));
+                            }
 
-                // check if angle beetween scanline and gradient isn't too close to 90* 
-                double angle = Math.Atan2(y, x);
-                double a = Math.Abs(angle);
-                if (Math.Abs(a - Math.PI / 2) < Math.PI / 2 - MaxAngle)
-                    continue;
+                        }
+                    }
 
-                // check if this gradient direction differs from last one
-                int direction = (x > 0) ? 1 : 0;
-                if (direction == last_direction)
-                    continue;
-
-                last_direction = direction;
-                points.Add(new POI(c, r, x, y, angle));
+                    best_c_mag = 0;
+                }
+                
             }
 
             return points;
