@@ -14,22 +14,46 @@ namespace BarcodeDetector
         public double GradientMagnitudeThreshold;
         public double MaxAngle;
 
-        public POIDetector() 
-        { 
+        Image<Gray, float> gx, gy;
+
+        int w, h;
+
+        public POIDetector(double thr) 
+        {
             // set default parameters
-            GradientMagnitudeThreshold = 2.0;
+            GradientMagnitudeThreshold = thr;
             MaxAngle = Math.PI / 4;
+
         }
 
+        public void LoadImage(Image<Gray, float> gray)
+        {
+            w = gray.Width;
+            h = gray.Height;
 
-        public List<POI> FindPOI(Image<Gray, float> gray) 
-        { 
-            int w = gray.Width;
-            int h = gray.Height;
             gray = gray.SmoothGaussian(9);
-            Image<Gray, float> gx = gray.Sobel(1, 0, 3);
-            Image<Gray, float> gy = gray.Sobel(0, 1, 3);
+            gx = gray.Sobel(1, 0, 3);
+            gy = gray.Sobel(0, 1, 3);
+        }
 
+        public double GradientMagnitude(int c, int r)
+        {
+            int direction = (gx[r, c].Intensity >= 0) ? 1 : -1;
+            double x = gx[r, c].Intensity;
+            double y = gy[r, c].Intensity;
+            double len = Math.Sqrt(x * x + y * y);
+
+            return direction * len;
+        }
+
+        public int FoundWB { get; private set; }
+        public int FoundBW { get; private set; }
+        public int Found { get { return FoundWB + FoundBW; } }
+
+        public List<POI> FindPOI() 
+        {
+            FoundWB = 0;
+            FoundBW = 0;
 
             List<POI> points = new List<POI>();
             int r = h / 2;
@@ -64,11 +88,15 @@ namespace BarcodeDetector
                         double best_a = Math.Abs(best_angle);
                         if (Math.Abs(best_a - Math.PI / 2) >= Math.PI / 2 - MaxAngle)
                         {
-                            int direction = (best_x > 0) ? 1 : 0;
-                            if (direction != last_direction)
+                            int direction = (best_x > 0) ? 1 : -1;
+                            //if (direction != last_direction)
                             {
                                 last_direction = direction;
                                 points.Add(new POI(best_c, r, best_x, best_y, best_angle));
+                                if (direction > 0)
+                                    FoundBW++;
+                                else
+                                    FoundWB++;
                             }
 
                         }

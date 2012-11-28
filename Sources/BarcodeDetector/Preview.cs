@@ -17,8 +17,8 @@ namespace BarcodeDetector
     {
 
         private Capture camera;
-        private POIDetector detector;
-
+        POIDetector detector;
+       
         public Preview()
         {
             InitializeComponent();
@@ -28,8 +28,7 @@ namespace BarcodeDetector
                 MessageBox.Show("Unable to open camera");
             }
 
-            detector = new POIDetector();
-            detector.GradientMagnitudeThreshold = 10.0;
+            detector = new POIDetector((double) numThreshold.Value);
             
             camera.ImageGrabbed += ProcessFrame;
             camera.Start();
@@ -37,9 +36,12 @@ namespace BarcodeDetector
 
         private void ProcessFrame(object sender, EventArgs args) 
         {
+            
             Image<Bgr, Byte> frame = camera.RetrieveBgrFrame().Clone();
             Image<Gray, float> gray = frame.Convert<Gray, float>();
-            List<POI> points = detector.FindPOI(gray);
+
+            detector.LoadImage(gray);
+            List<POI> points = detector.FindPOI();
 
             
             // draw debug information on frame
@@ -54,13 +56,45 @@ namespace BarcodeDetector
                 frame.Draw(circle, new Bgr(Color.Blue), 2);
                 frame.Draw(arrow, new Bgr(Color.Blue), 1);
             }
-            
+
+            Point previous = new Point(0, (int) detector.GradientMagnitude(0, frame.Height/2) + frame.Height/2);
+
+            for (int i = 1; i < frame.Width; ++i)
+            {
+                Point current = new Point(i, (int)detector.GradientMagnitude(i, frame.Height / 2) + frame.Height / 2);
+                frame.Draw(new LineSegment2D(previous, current), new Bgr(Color.Green), 1);
+                previous = current;
+            }
+
+            frame.Draw(new LineSegment2D(
+                new Point(0, frame.Height / 2 + (int)detector.GradientMagnitudeThreshold),
+                new Point(frame.Width, frame.Height / 2 + (int)detector.GradientMagnitudeThreshold
+                    )), new Bgr(Color.Yellow), 1);
+
+            frame.Draw(new LineSegment2D(
+                new Point(0, frame.Height / 2 - (int)detector.GradientMagnitudeThreshold),
+                new Point(frame.Width, frame.Height / 2 - (int)detector.GradientMagnitudeThreshold
+                    )), new Bgr(Color.Yellow), 1);
+
             outputImage.Image = frame.Clone();
+            
+            this.Invoke((MethodInvoker)delegate()
+            {
+                txtFoundBW.Text = detector.FoundBW.ToString();
+                txtFoundWB.Text = detector.FoundWB.ToString();
+                txtFoundTotal.Text = detector.Found.ToString();
+            });
+            
         }
 
         private void Preview_FormClosing(object sender, FormClosingEventArgs e)
         {
             camera.Stop();
+        }
+
+        private void numThreshold_ValueChanged(object sender, EventArgs e)
+        {
+            detector.GradientMagnitudeThreshold = (double)numThreshold.Value;
         }
 
     }
