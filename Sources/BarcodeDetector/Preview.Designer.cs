@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.outputImage = new Emgu.CV.UI.ImageBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -387,6 +388,7 @@
             this.Name = "Preview";
             this.Text = "Preview";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Preview_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Preview_FormClosed);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.outputImage)).EndInit();
             this.groupBox2.ResumeLayout(false);

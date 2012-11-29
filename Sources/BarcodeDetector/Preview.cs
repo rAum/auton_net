@@ -36,6 +36,7 @@ namespace BarcodeDetector
             udScanlineWidth.Value = detector.MeanRadius;
 
             detector.ResultReady += displayResult;
+
         }
 
         private void displayResult(object sender, ResultReadyEventArgs<Image<Bgr, float>> e)
@@ -112,5 +113,10 @@ namespace BarcodeDetector
             detector.AveragingMultipiler = (int)udMult.Value;
         }
 
+        private void Preview_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            source.Stop();
+            Application.Exit();
+        }
     }
 }
