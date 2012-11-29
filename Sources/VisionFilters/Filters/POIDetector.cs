@@ -22,9 +22,8 @@ namespace Auton.CarVision.Video.Filters
         public int AveragingMultipiler;
         public double MaxAngle;
 
-        public double[] MeanMagnitude;
-        public double[] AdaptiveThreshold;
-        public double[] AbsMeanMagnitude;
+        private double[] MeanMagnitude;
+        private double[] AdaptiveThreshold;
 
         public List<POI> POIs { get; private set; }
 
@@ -48,7 +47,6 @@ namespace Auton.CarVision.Video.Filters
         private void ProcessImage(Image<Gray, float> source)
         {
             Image<Gray, float> gx, gy;
-
             Image<Bgr, float> display = source.Convert<Bgr, float>();
 
             PreprocessImage(source, out gx, out gy);
@@ -71,37 +69,14 @@ namespace Auton.CarVision.Video.Filters
             }
         }
 
+
         private void DrawGraphs(Image<Bgr, float> frame, Image<Gray, float> gx, Image<Gray, float> gy)
         {
-            int r = rows / 2;
-            double[] grad_mags = new double[cols];
-            for (int c = 0; c < cols; ++c)
-            {
-                double x = gx[r, c].Intensity;
-                double y = gy[r, c].Intensity;
-
-                double magnitude = Math.Sqrt(x * x + y * y);
-                int direction = (x > 0.0) ? 1 : -1;
-                grad_mags[c] = magnitude * direction;
-            }
-
-            LineSegment2D line = new LineSegment2D(new Point(0, frame.Height / 2), new Point(frame.Width, frame.Height / 2));
-            frame.Draw(line, new Bgr(Color.Red), 2);
-
-            DrawFunction(frame, grad_mags, new Bgr(Color.LightGreen));
-
-
-            foreach (POI p in POIs)
-            {
-                Point begin = new Point(p.X, p.Y);
-                Point end = new Point((int)(p.X + p.GX), (int)(p.Y + p.GY));
-                LineSegment2D arrow = new LineSegment2D(begin, end);
-                CircleF circle = new CircleF(begin, 5);
-                frame.Draw(circle, new Bgr(Color.Blue), 2);
-                frame.Draw(arrow, new Bgr(Color.Blue), 1);
-            }
-
-            DrawFunction(frame, AbsMeanMagnitude, new Bgr(Color.Green));
+            double[] abs = new double[cols];
+            for (int i = 0; i < cols; i++)
+                abs[i] = Math.Abs(MeanMagnitude[i]);
+            
+            DrawFunction(frame, abs, new Bgr(Color.Green));
             DrawFunction(frame, AdaptiveThreshold, new Bgr(Color.Yellow));  
             
         }
@@ -111,7 +86,6 @@ namespace Auton.CarVision.Video.Filters
             cols = gray.Width;
             MeanMagnitude = new double[cols];
             AdaptiveThreshold = new double[cols];
-            AbsMeanMagnitude = new double[cols];
             rows = gray.Height;
 
             gray = gray.SmoothGaussian(2 * SmoothRadius + 1);
@@ -129,9 +103,6 @@ namespace Auton.CarVision.Video.Filters
             return direction * len;
         }
 
-        public int FoundWB { get; private set; }
-        public int FoundBW { get; private set; }
-        public int Found { get { return FoundWB + FoundBW; } }
 
         private void CalcMeans(double[] partialSums, double[] dst, int r)
         {
@@ -151,9 +122,6 @@ namespace Auton.CarVision.Video.Filters
 
         private List<POI> FindPOI(Image<Gray, float> gx, Image<Gray, float> gy) 
         {
-            FoundWB = 0;
-            FoundBW = 0;
-
             List<POI> points = new List<POI>();
             int centralRow = rows / 2;
             double thr = GradientMagnitudeThreshold;
@@ -180,8 +148,12 @@ namespace Auton.CarVision.Video.Filters
             CalcMeans(meanWindow, MeanMagnitude, MeanRadius);
             CalcMeans(absMeanWindow, AdaptiveThreshold, MeanRadius * AveragingMultipiler);
 
-            for (int i = 0; i < cols; i++)
-                AbsMeanMagnitude[i] = Math.Abs(MeanMagnitude[i]);
+            // find poi candidates
+            List<int> candidates = new List<int>();
+            for (int c = 1; c < cols - 1; c++) {
+                if (Math.Abs(MeanMagnitude[c]) > AdaptiveThreshold[c]) 
+                    candidates.Add(c);
+            }
 
             return points;
         }
