@@ -131,7 +131,7 @@ namespace BarcodeDetector
 
                     camera.Start();
                     started = true;
-                    button1.Text = "Stop";
+                    button1.Text = "Pause";
                 }
                 catch (System.Exception ex)
                 {
@@ -143,9 +143,9 @@ namespace BarcodeDetector
             {
                 if (camera != null)
                 {
-                    camera.Stop();
+                    camera.Pause();
                     started = false;
-                    button1.Text = "Start";
+                    button1.Text = "Resume";
                 }
             }
         }
