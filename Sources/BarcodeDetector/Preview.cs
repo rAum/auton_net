@@ -89,6 +89,12 @@ namespace BarcodeDetector
             }
         }
 
+        private void TriggerProcessing()
+        {
+            if (detector != null)
+                detector.PostProcess();
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
         }
@@ -96,21 +102,25 @@ namespace BarcodeDetector
         private void udSmoothRadius_ValueChanged(object sender, EventArgs e)
         {
             detector.SmoothRadius = (int)udSmoothRadius.Value;
+            TriggerProcessing();
         }
 
         private void udSobelRadius_ValueChanged(object sender, EventArgs e)
         {
             detector.SobelRadius = (int)udSobelRadius.Value;
+            TriggerProcessing();
         }
 
         private void udScanlineWidth_ValueChanged(object sender, EventArgs e)
         {
             detector.MeanRadius = (int)udScanlineWidth.Value;
+            TriggerProcessing();
         }
 
         private void udMult_ValueChanged(object sender, EventArgs e)
         {
             detector.AveragingMultipiler = (int)udMult.Value;
+            TriggerProcessing();
         }
 
         private void Preview_FormClosed(object sender, FormClosedEventArgs e)

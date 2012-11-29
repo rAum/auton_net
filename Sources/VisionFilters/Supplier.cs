@@ -55,7 +55,12 @@ namespace Auton.CarVision.Video
                 PostProcess();
         }
 
-        private void PostProcess()
+        protected void PostFailed()
+        {
+            working = false;
+        }
+
+        public void PostProcess()
         {
             if (!working)
             {

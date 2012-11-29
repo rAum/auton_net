@@ -48,15 +48,21 @@ namespace Auton.CarVision.Video.Filters
 
         private void ProcessImage(Image<Gray, float> source)
         {
-            Image<Gray, float> gx, gy;
-            Image<Bgr, float> display = source.Convert<Bgr, float>();
+            if (source != null)
+            {
+                Image<Gray, float> gx, gy;
+                Image<Bgr, float> display = source.Convert<Bgr, float>();
 
-            PreprocessImage(source, out gx, out gy);
-            POIs = FindPOI(gx, gy);
-            DrawGraphs(display, gx, gy);
+                PreprocessImage(source, out gx, out gy);
+                POIs = FindPOI(gx, gy);
+                DrawGraphs(display, gx, gy);
 
-            LastResult = display;
-            PostComplete();
+                LastResult = display;
+
+                PostComplete();
+            }
+            else
+                PostFailed();
         }
 
 
