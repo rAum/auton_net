@@ -71,6 +71,15 @@ namespace Auton.CarVision.Video.Filters
             }
         }
 
+        private void DrawCircle(Image<Bgr, float> frame, int c, float radius, Bgr color)
+        {
+            int r = rows / 2;
+
+            CircleF circle = new CircleF(new PointF(c, r), radius);
+
+            frame.Draw(circle, color, 2);
+        }
+
         private void DrawGraphs(Image<Bgr, float> frame, Image<Gray, float> gx, Image<Gray, float> gy)
         {
             int r = rows / 2;
@@ -90,14 +99,13 @@ namespace Auton.CarVision.Video.Filters
 
             DrawFunction(frame, grad_mags, new Bgr(Color.LightGreen));
 
-
             foreach (POI p in POIs)
             {
                 Point begin = new Point(p.X, p.Y);
                 Point end = new Point((int)(p.X + p.GX), (int)(p.Y + p.GY));
                 LineSegment2D arrow = new LineSegment2D(begin, end);
-                CircleF circle = new CircleF(begin, 5);
-                frame.Draw(circle, new Bgr(Color.Blue), 2);
+
+                DrawCircle(frame, p.X, 5, new Bgr(Color.Blue));
                 frame.Draw(arrow, new Bgr(Color.Blue), 1);
             }
 
@@ -192,11 +200,19 @@ namespace Auton.CarVision.Video.Filters
 
     public class POI
     {
-        public int X;
-        public int Y;
-        public double GX;
-        public double GY;
-        public double Angle;
+        public int X { get; private set; }
+        public int Y { get; private set; }
+        public double GX { get; private set; }
+        public double GY { get; private set; }
+        public double Angle { get; private set; }
+
+        public bool IntoDark
+        {
+            get
+            {
+                return X < 0;
+            }
+        }
 
         public POI(int x, int y, double gx, double gy, double Angle)
         {
