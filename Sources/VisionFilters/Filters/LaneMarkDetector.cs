@@ -7,12 +7,12 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 
-namespace CarVision.Filters
+namespace Auton.CarVision.Video.Filters
 {
     /// <summary>
     /// This class finds pixel which may be white road lane.
     /// </summary>
-    class LaneMarkDetector : ThreadSupplier<Image<Gray, Byte>, Image<Gray, Byte>>
+    public class LaneMarkDetector : ThreadSupplier<Image<Gray, Byte>, Image<Gray, Byte>>
     {
         private Supplier<Image<Gray, Byte>> supplier;
         private int tau;

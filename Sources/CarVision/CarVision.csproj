@@ -73,26 +73,8 @@
     <Reference Include="Emgu.CV">
       <HintPath>..\..\Libs\Emgu.CV.dll</HintPath>
     </Reference>
-    <Reference Include="Emgu.CV.DebuggerVisualizers.VS2010">
-      <HintPath>..\..\Libs\Emgu.CV.DebuggerVisualizers.VS2010.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.CV.GPU">
-      <HintPath>..\..\Libs\Emgu.CV.GPU.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.CV.ML">
-      <HintPath>..\..\Libs\Emgu.CV.ML.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.CV.OCR">
-      <HintPath>..\..\Libs\Emgu.CV.OCR.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.CV.Stitching">
-      <HintPath>..\..\Libs\Emgu.CV.Stitching.dll</HintPath>
-    </Reference>
     <Reference Include="Emgu.CV.UI">
       <HintPath>..\..\Libs\Emgu.CV.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.CV.VideoStab">
-      <HintPath>..\..\Libs\Emgu.CV.VideoStab.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.Util">
       <HintPath>..\..\Libs\Emgu.Util.dll</HintPath>
@@ -108,14 +90,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Flow\Filters\LaneMarkDetector.cs" />
-    <Compile Include="Flow\Filters\Canny.cs" />
-    <Compile Include="Flow\Filters\PerspectiveCorrection.cs" />
-    <Compile Include="Flow\Filters\Smoothener.cs" />
-    <Compile Include="Flow\Sources\VideoSource.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Supplier.cs" />
     <Compile Include="ViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,6 +138,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VisionFilters\VisionFilters.csproj">
+      <Project>{03833D47-DF5A-4B24-ABDB-19601109D523}</Project>
+      <Name>VisionFilters</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

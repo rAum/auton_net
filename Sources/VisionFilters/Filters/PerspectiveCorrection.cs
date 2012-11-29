@@ -9,12 +9,12 @@ using Emgu.CV.Structure;
 using System.Drawing;
 using Emgu;
 
-namespace CarVision.Filters
+namespace Auton.CarVision.Video.Filters
 {
         /// <summary>
         /// This filter makes perspective correction.
         /// </summary>
-    class PerspectiveCorrection : ThreadSupplier<Image<Gray, Byte>, Image<Gray, Byte>>
+    public class PerspectiveCorrection : ThreadSupplier<Image<Gray, Byte>, Image<Gray, Byte>>
     {
         private Supplier<Image<Gray, Byte>> supplier;
         private PointF[] srcPoints; // input points

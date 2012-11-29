@@ -1,29 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 using Emgu.CV;
 using Emgu.CV.Structure;
 
-namespace CarVision.Filters
+namespace Auton.CarVision.Video.Filters
 {
-    class Canny : ThreadSupplier<Image<Gray, Byte>, Image<Gray, Byte>>
+    public class Smoothener : ThreadSupplier<Image<Gray, Byte>, Image<Gray, Byte>>
     {
         private Supplier<Image<Gray, Byte>> supplier;
 
-        private void FindEdges(Image<Gray, Byte> image)
+        private void SmoothenImage(Image<Gray, Byte> image)
         {
-            LastResult = image.Canny(new Gray(100), new Gray(60));
+            LastResult = image.SmoothBlur(3, 3);
             PostComplete();
         }
 
-        public Canny(Supplier<Image<Gray, Byte>> supplier_)
+        public Smoothener(Supplier<Image<Gray, Byte>> supplier_)
         {
             supplier = supplier_;
             supplier.ResultReady += MaterialReady;
 
-            Process += FindEdges;
+            Process += SmoothenImage;
         }
     }
 }
