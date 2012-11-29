@@ -29,6 +29,7 @@ namespace Auton.CarVision.Video.Filters
         private List<int> candidates;
 
         int cols, rows;
+        public int PerpendicularCheckDepth;
 
         public POIDetector(Supplier<Image<Gray, float>> supplier, double thr) 
         {
@@ -41,6 +42,7 @@ namespace Auton.CarVision.Video.Filters
             MeanRadius = 5;
             AveragingMultipiler = 2;
             MaxAngle = Math.PI / 4;
+            PerpendicularCheckDepth = 20;
 
             Process += ProcessImage;
         }
@@ -72,13 +74,14 @@ namespace Auton.CarVision.Video.Filters
             }
         }
 
-        private void DrawCircle(Image<Bgr, float> frame, int c, float radius, Bgr color)
+
+        private void DrawCircle(Image<Bgr, float> frame, int c, float radius, Color color)
         {
             int r = rows / 2;
 
             CircleF circle = new CircleF(new PointF(c, r), radius);
 
-            frame.Draw(circle, color, 2);
+            frame.Draw(circle, new Bgr(color), 2);
         }
 
 
@@ -90,6 +93,12 @@ namespace Auton.CarVision.Video.Filters
             
             DrawFunction(frame, abs, new Bgr(Color.Green));
             DrawFunction(frame, AdaptiveThreshold, new Bgr(Color.Yellow));  
+
+            foreach(int c in candidates)
+                DrawCircle(frame, c, 3, Color.Red);
+
+            foreach (POI p in POIs)
+                DrawCircle(frame, p.X, 3, Color.Magenta);
         }
 
 
@@ -104,6 +113,7 @@ namespace Auton.CarVision.Video.Filters
             gx = gray.Sobel(1, 0, 2 * SobelRadius + 1);
             gy = gray.Sobel(0, 1, 2 * SobelRadius + 1);
         }
+
 
         private double GradientMagnitude(Image<Gray, float> gx, Image<Gray, float> gy, int c, int r)
         {
@@ -134,7 +144,6 @@ namespace Auton.CarVision.Video.Filters
 
         private List<POI> FindPOI(Image<Gray, float> gx, Image<Gray, float> gy) 
         {
-            List<POI> points = new List<POI>();
             int centralRow = rows / 2;
             double thr = GradientMagnitudeThreshold;
 
@@ -165,18 +174,46 @@ namespace Auton.CarVision.Video.Filters
             // find poi candidates
             candidates = new List<int>();
             for (int c = 1; c < cols - 1; c++) {
-                if (Math.Abs(MeanMagnitude[c]) < AdaptiveThreshold[c])
+                if (Math.Abs(MeanMagnitude[c]) <= AdaptiveThreshold[c] + 3)
                     continue;
-                if(Math.Abs(MeanMagnitude[c]) < Math.Max(Math.Abs(MeanMagnitude[c-1]), Math.Abs(MeanMagnitude[c+1])))
+                if(Math.Abs(MeanMagnitude[c]) <= Math.Max(Math.Abs(MeanMagnitude[c-1]), Math.Abs(MeanMagnitude[c+1])))
                     continue;
                 candidates.Add(c);
             }
 
-            // draw them
-
             // check each one 
+            POIs = new List<POI>();
+            foreach(int c in candidates){
+                double x = gx[centralRow, c].Intensity;
+                double y = gy[centralRow, c].Intensity;
+                double len = Math.Abs(MeanMagnitude[c]);
 
-            return points;
+                double perp_x = y / len;
+                double perp_y = -x / len;
+                
+                // average x along this line
+                double mean_gx = 0;
+                double mean_gy = 0;
+                int n = 0;
+                for (int i = 0; i < PerpendicularCheckDepth; i++) {
+                    int prow = (int) perp_y * i + centralRow;
+                    int pcol = (int) perp_x * i + c; 
+                    if(prow >= 0 && prow < rows && pcol > 0 && pcol < cols)
+                    {
+                        n++;
+                        mean_gx += gx[prow, pcol].Intensity;
+                        mean_gy += gy[prow, pcol].Intensity;
+                    }
+                }
+                mean_gx /= n;
+                mean_gx /= n;
+
+                if(Math.Max(Math.Abs(mean_gx - x), Math.Abs(mean_gy - y)) < 400){
+                    POIs.Add(new POI(c, centralRow, x, y, Math.Atan2(y, x)));
+                }
+            }
+
+            return POIs;
         }
     }
 
