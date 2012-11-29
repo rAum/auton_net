@@ -11,6 +11,8 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using System.Threading;
 
+using Auton.CarVision.Video;
+using Auton.CarVision.Video.Filters;
 
 namespace BarcodeDetector
 {
@@ -23,78 +25,38 @@ namespace BarcodeDetector
         public Preview(string filename = null)
         {
             InitializeComponent();
-            detector = new POIDetector((double)numThreshold.Value);
+            GrayVideoSource<float> source = new GrayVideoSource<float>();
+            POIDetector detector;
+            //source.ResultReady += detector.
+
+            detector = new POIDetector(source, (double)numThreshold.Value);
 
             udSmoothRadius.Value = detector.SmoothRadius;
             udSobelRadius.Value = detector.SobelRadius;
             udScanlineWidth.Value = detector.ScanlineWidth;
+
+            detector.ResultReady += displayResult;
         }
 
-        private void ProcessFrame(object sender, EventArgs args) 
+        private void displayResult(object sender, ResultReadyEventArgs<Image<Bgr, float>> e)
         {
-            if (camera == null)
-                return; 
-        
-
-            Image<Bgr, Byte> frame = camera.RetrieveBgrFrame().Clone();
-            Image<Gray, float> gray = frame.Convert<Gray, float>();
-
-            detector.LoadImage(gray);
-            List<POI> points = detector.FindPOI();
-
-            
-            // draw debug information on frame
-            LineSegment2D line = new LineSegment2D(new Point(0, frame.Height / 2), new Point(frame.Width, frame.Height / 2));
-            frame.Draw(line, new Bgr(Color.Red), 2);
-            
-            foreach(POI p in points){
-                Point begin = new Point(p.X, p.Y);
-                Point end = new Point((int)(p.X + p.GX), (int)(p.Y + p.GY));
-                LineSegment2D arrow = new LineSegment2D(begin, end);
-                CircleF circle = new CircleF(begin, 5);
-                frame.Draw(circle, new Bgr(Color.Blue), 2);
-                frame.Draw(arrow, new Bgr(Color.Blue), 1);
-            }
-
-            Point previous = new Point(0, (int) detector.GradientMagnitude(0, frame.Height/2) + frame.Height/2);
-            for (int i = 1; i < frame.Width; ++i)
+            try
             {
-                Point current = new Point(i, (int)detector.GradientMagnitude(i, frame.Height / 2) + frame.Height / 2);
-                frame.Draw(new LineSegment2D(previous, current), new Bgr(Color.LightGreen), 1);
-                previous = current;
+                outputImage.Image = (Image<Bgr, float>)e.Result;
             }
-
-            frame.Draw(new LineSegment2D(
-                new Point(0, frame.Height / 2 + (int)detector.GradientMagnitudeThreshold),
-                new Point(frame.Width, frame.Height / 2 + (int)detector.GradientMagnitudeThreshold
-                    )), new Bgr(Color.Yellow), 1);
-
-            frame.Draw(new LineSegment2D(
-                new Point(0, frame.Height / 2 - (int)detector.GradientMagnitudeThreshold),
-                new Point(frame.Width, frame.Height / 2 - (int)detector.GradientMagnitudeThreshold
-                    )), new Bgr(Color.Yellow), 1);
-
-            outputImage.Image = frame.Clone();
-            
-            this.Invoke((MethodInvoker)delegate()
+            catch (Exception)
             {
-                txtFoundBW.Text = detector.FoundBW.ToString();
-                txtFoundWB.Text = detector.FoundWB.ToString();
-                txtFoundTotal.Text = detector.Found.ToString();
-            });
-
-            Thread.Sleep((int) numSleep.Value);
+            }
         }
 
         private void Preview_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (camera != null)
-                camera.Stop();
+
         }
 
         private void numThreshold_ValueChanged(object sender, EventArgs e)
         {
-            detector.GradientMagnitudeThreshold = (double)numThreshold.Value;
+            //detector.GradientMagnitudeThreshold = (double)numThreshold.Value;
         }
 
         private void btnFileBrowse_Click(object sender, EventArgs e)
@@ -113,40 +75,40 @@ namespace BarcodeDetector
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (!started)
-            {
-                if (camera != null)
-                {
-                    camera.Stop();
-                    camera.Dispose();
-                }
-                try
-                {
-                    if (string.IsNullOrWhiteSpace(txtFilePath.Text))
-                        camera = new Capture();
-                    else
-                        camera = new Capture(txtFilePath.Text);
-                    camera.ImageGrabbed += ProcessFrame;
+            //if (!started)
+            //{
+            //    if (camera != null)
+            //    {
+            //        camera.Stop();
+            //        camera.Dispose();
+            //    }
+            //    try
+            //    {
+            //        if (string.IsNullOrWhiteSpace(txtFilePath.Text))
+            //            camera = new Capture();
+            //        else
+            //            camera = new Capture(txtFilePath.Text);
+            //        camera.ImageGrabbed += ProcessFrame;
 
-                    camera.Start();
-                    started = true;
-                    button1.Text = "Pause";
-                }
-                catch (System.Exception ex)
-                {
-                    MessageBox.Show("Unable to open file/camera. I'm gonna crash");
-                    return;
-                }
-            }
-            else
-            {
-                if (camera != null)
-                {
-                    camera.Pause();
-                    started = false;
-                    button1.Text = "Resume";
-                }
-            }
+            //        camera.Start();
+            //        started = true;
+            //        button1.Text = "Pause";
+            //    }
+            //    catch (System.Exception ex)
+            //    {
+            //        MessageBox.Show("Unable to open file/camera. I'm gonna crash");
+            //        return;
+            //    }
+            //}
+            //else
+            //{
+            //    if (camera != null)
+            //    {
+            //        camera.Pause();
+            //        started = false;
+            //        button1.Text = "Resume";
+            //    }
+            //}
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -155,17 +117,17 @@ namespace BarcodeDetector
 
         private void udSmoothRadius_ValueChanged(object sender, EventArgs e)
         {
-            detector.SmoothRadius = (int)udSmoothRadius.Value;
+            //detector.SmoothRadius = (int)udSmoothRadius.Value;
         }
 
         private void udSobelRadius_ValueChanged(object sender, EventArgs e)
         {
-            detector.SobelRadius = (int)udSobelRadius.Value;
+            //detector.SobelRadius = (int)udSobelRadius.Value;
         }
 
         private void udScanlineWidth_ValueChanged(object sender, EventArgs e)
         {
-            detector.ScanlineWidth = (int)udScanlineWidth.Value;
+            //detector.ScanlineWidth = (int)udScanlineWidth.Value;
         }
 
     }

@@ -6,10 +6,10 @@ using System.Threading;
 
 namespace Auton.CarVision.Video
 {
-    public class ResultReadyEventArgs
+    public class ResultReadyEventArgs<ResultType>
     {
-        public object Result { get; private set; }
-        public ResultReadyEventArgs(object value)
+        public ResultType Result { get; private set; }
+        public ResultReadyEventArgs(ResultType value)
         {
             Result = value;
         }
@@ -18,10 +18,10 @@ namespace Auton.CarVision.Video
     public abstract class Supplier<ResultType>
     {
         public virtual ResultType LastResult { get; protected set; }
-        public delegate void ResultReadyEventHandler(object sender, ResultReadyEventArgs e);
+        public delegate void ResultReadyEventHandler(object sender, ResultReadyEventArgs<ResultType> e);
         public event ResultReadyEventHandler ResultReady;
 
-        protected void OnResultReady(ResultReadyEventArgs e)
+        protected void OnResultReady(ResultReadyEventArgs<ResultType> e)
         {
             if (ResultReady != null)
                 ResultReady(this, e);
@@ -40,7 +40,7 @@ namespace Auton.CarVision.Video
             protected set 
             {
                 result = value; 
-                OnResultReady(new ResultReadyEventArgs(LastResult));
+                OnResultReady(new ResultReadyEventArgs<ResultType>(LastResult));
             }
         }
 
@@ -65,15 +65,11 @@ namespace Auton.CarVision.Video
             }
         }
 
-        protected void MaterialReady(object sender, ResultReadyEventArgs e)
+        protected void MaterialReady(object sender, ResultReadyEventArgs<MaterialType> e)
         {
-            if (e.Result is MaterialType)
-            {
-                is_pending = true;
-                pending = (MaterialType)e.Result;
-            }
-            else
-                throw new InvalidCastException("MaterialReady called with wrong material type");
+            is_pending = true;
+            pending = e.Result;
+            
             PostProcess();
         }
     }

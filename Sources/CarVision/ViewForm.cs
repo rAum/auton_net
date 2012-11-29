@@ -20,12 +20,12 @@ namespace CarVision
 {
     public partial class ViewForm : Form
     {
-        VideoSource videoSource;
+        GrayVideoSource<Byte> videoSource;
         LaneMarkDetector laneDetector;
         PerspectiveCorrection perpCorr;
         PerspectiveCorrection invPerpCorr;
 
-        private void DisplayVideo(object sender, ResultReadyEventArgs e)
+        private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Gray, Byte>> e)
         {
             ImageBox imgBox = null;
             if (sender == videoSource)
@@ -55,7 +55,7 @@ namespace CarVision
         {
             InitializeComponent();
             //videoSource = new VideoSource();
-            videoSource = new VideoSource(@"C:/film.avi");
+            videoSource = new GrayVideoSource<Byte>(@"C:/film.avi");
             videoSource.ResultReady += DisplayVideo;
            
             // FIXME: move to better place and enable changes this in runtime [and draw lines/points?]

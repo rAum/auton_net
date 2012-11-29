@@ -77,8 +77,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="POIDetector.cs" />
-    <Compile Include="POI.cs" />
     <Compile Include="Preview.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -108,6 +106,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VisionFilters\VisionFilters.csproj">
+      <Project>{03833D47-DF5A-4B24-ABDB-19601109D523}</Project>
+      <Name>VisionFilters</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
