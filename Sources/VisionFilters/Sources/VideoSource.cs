@@ -11,6 +11,8 @@ namespace Auton.CarVision.Video
 {
     public class GrayVideoSource<PixelType> : Supplier<Image<Gray, PixelType>> where PixelType : new()
     {
+        public Boolean Runs { get; private set; }
+
         public override Image<Gray, PixelType> LastResult
         {
             get
@@ -45,17 +47,24 @@ namespace Auton.CarVision.Video
                 capture = new Capture(file);
             capture.ImageGrabbed +=
                 (sender, e) => { OnResultReady(new ResultReadyEventArgs<Image<Gray, PixelType>>(LastResult)); };
-            Start();
         }
 
         public void Start()
         {
+            Runs = true;
             capture.Start();
         }
 
         public void Stop()
         {
+            Runs = false;
             capture.Stop();
+        }
+
+        public void Pause()
+        {
+            Runs = false;
+            capture.Pause();
         }
     }
 

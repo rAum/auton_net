@@ -19,21 +19,21 @@ namespace BarcodeDetector
     public partial class Preview : Form
     {
 
-        private Capture camera;
+        GrayVideoSource<float> source;
         POIDetector detector;
        
         public Preview(string filename = null)
         {
             InitializeComponent();
-            GrayVideoSource<float> source = new GrayVideoSource<float>();
-            POIDetector detector;
-            //source.ResultReady += detector.
+            source = new GrayVideoSource<float>();
+            
 
             detector = new POIDetector(source, (double)numThreshold.Value);
 
             udSmoothRadius.Value = detector.SmoothRadius;
             udSobelRadius.Value = detector.SobelRadius;
-            //udScanlineWidth.Value = detector.ScanlineWidth;
+            udMult.Value = detector.AveragingMultipiler;
+            udScanlineWidth.Value = detector.MeanRadius;
 
             detector.ResultReady += displayResult;
         }
@@ -71,44 +71,21 @@ namespace BarcodeDetector
                 btnFileBrowse_Click(sender, e);
         }
 
-        private bool started = false;
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //if (!started)
-            //{
-            //    if (camera != null)
-            //    {
-            //        camera.Stop();
-            //        camera.Dispose();
-            //    }
-            //    try
-            //    {
-            //        if (string.IsNullOrWhiteSpace(txtFilePath.Text))
-            //            camera = new Capture();
-            //        else
-            //            camera = new Capture(txtFilePath.Text);
-            //        camera.ImageGrabbed += ProcessFrame;
+            if (source == null)
+                return;
 
-            //        camera.Start();
-            //        started = true;
-            //        button1.Text = "Pause";
-            //    }
-            //    catch (System.Exception ex)
-            //    {
-            //        MessageBox.Show("Unable to open file/camera. I'm gonna crash");
-            //        return;
-            //    }
-            //}
-            //else
-            //{
-            //    if (camera != null)
-            //    {
-            //        camera.Pause();
-            //        started = false;
-            //        button1.Text = "Resume";
-            //    }
-            //}
+            if (source.Runs)
+            {
+                source.Pause();
+                button1.Text = "Re&sume";
+            }
+            else {
+                source.Start();
+                button1.Text = "Pau&se";
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)

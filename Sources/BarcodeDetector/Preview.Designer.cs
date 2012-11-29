@@ -52,14 +52,14 @@
             this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.udMult = new System.Windows.Forms.NumericUpDown();
             this.udScanlineWidth = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
             this.udSobelRadius = new System.Windows.Forms.NumericUpDown();
             this.udSmoothRadius = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.udMult = new System.Windows.Forms.NumericUpDown();
-            this.label9 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.outputImage)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -68,10 +68,10 @@
             this.grpPOIFound.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udMult)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udScanlineWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSobelRadius)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSmoothRadius)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udMult)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -306,6 +306,23 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Detector parameters";
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(7, 103);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(27, 13);
+            this.label9.TabIndex = 7;
+            this.label9.Text = "Mult";
+            // 
+            // udMult
+            // 
+            this.udMult.Location = new System.Drawing.Point(183, 101);
+            this.udMult.Name = "udMult";
+            this.udMult.Size = new System.Drawing.Size(120, 20);
+            this.udMult.TabIndex = 6;
+            this.udMult.ValueChanged += new System.EventHandler(this.udMult_ValueChanged);
+            // 
             // udScanlineWidth
             // 
             this.udScanlineWidth.Location = new System.Drawing.Point(183, 74);
@@ -319,9 +336,9 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(7, 76);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(76, 13);
+            this.label8.Size = new System.Drawing.Size(65, 13);
             this.label8.TabIndex = 4;
-            this.label8.Text = "Scanline width";
+            this.label8.Text = "Mean radius";
             // 
             // udSobelRadius
             // 
@@ -357,23 +374,6 @@
             this.label6.TabIndex = 0;
             this.label6.Text = "Sobel radius";
             // 
-            // udMult
-            // 
-            this.udMult.Location = new System.Drawing.Point(183, 101);
-            this.udMult.Name = "udMult";
-            this.udMult.Size = new System.Drawing.Size(120, 20);
-            this.udMult.TabIndex = 6;
-            this.udMult.ValueChanged += new System.EventHandler(this.udMult_ValueChanged);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(7, 103);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(27, 13);
-            this.label9.TabIndex = 7;
-            this.label9.Text = "Mult";
-            // 
             // Preview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -399,10 +399,10 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udMult)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udScanlineWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSobelRadius)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSmoothRadius)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udMult)).EndInit();
             this.ResumeLayout(false);
 
         }

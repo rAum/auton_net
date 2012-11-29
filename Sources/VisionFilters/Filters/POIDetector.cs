@@ -21,7 +21,6 @@ namespace Auton.CarVision.Video.Filters
         public int MeanRadius;
         public int AveragingMultipiler;
         public double MaxAngle;
-        private int NumHistBins;
 
         public double[] MeanMagnitude;
         public double[] AdaptiveThreshold;
@@ -40,7 +39,6 @@ namespace Auton.CarVision.Video.Filters
             SobelRadius = 1;
             SmoothRadius = 4;
             MeanRadius = 5;
-            NumHistBins = 50;
             AveragingMultipiler = 2;
             MaxAngle = Math.PI / 4;
 
@@ -185,12 +183,12 @@ namespace Auton.CarVision.Video.Filters
             for (int i = 0; i < cols; i++)
                 AbsMeanMagnitude[i] = Math.Abs(MeanMagnitude[i]);
 
-
-            // 
-
             return points;
         }
     }
+
+
+
 
     public class POI
     {
