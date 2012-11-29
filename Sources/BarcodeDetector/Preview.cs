@@ -25,17 +25,16 @@ namespace BarcodeDetector
             InitializeComponent();
             detector = new POIDetector((double)numThreshold.Value);
 
-
-            
-
-            
-
+            udSmoothRadius.Value = detector.SmoothRadius;
+            udSobelRadius.Value = detector.SobelRadius;
         }
 
         private void ProcessFrame(object sender, EventArgs args) 
         {
             if (camera == null)
                 return; 
+        
+
             Image<Bgr, Byte> frame = camera.RetrieveBgrFrame().Clone();
             Image<Gray, float> gray = frame.Convert<Gray, float>();
 
@@ -152,6 +151,16 @@ namespace BarcodeDetector
 
         private void button2_Click(object sender, EventArgs e)
         {
+        }
+
+        private void udSmoothRadius_ValueChanged(object sender, EventArgs e)
+        {
+            detector.SmoothRadius = (int)udSmoothRadius.Value;
+        }
+
+        private void udSobelRadius_ValueChanged(object sender, EventArgs e)
+        {
+            detector.SobelRadius = (int)udSobelRadius.Value;
         }
 
     }
