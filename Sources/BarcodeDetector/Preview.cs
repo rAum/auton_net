@@ -94,22 +94,22 @@ namespace BarcodeDetector
 
         private void udSmoothRadius_ValueChanged(object sender, EventArgs e)
         {
-            //detector.SmoothRadius = (int)udSmoothRadius.Value;
+            detector.SmoothRadius = (int)udSmoothRadius.Value;
         }
 
         private void udSobelRadius_ValueChanged(object sender, EventArgs e)
         {
-            //detector.SobelRadius = (int)udSobelRadius.Value;
+            detector.SobelRadius = (int)udSobelRadius.Value;
         }
 
         private void udScanlineWidth_ValueChanged(object sender, EventArgs e)
         {
-            //detector.ScanlineWidth = (int)udScanlineWidth.Value;
+            detector.MeanRadius = (int)udScanlineWidth.Value;
         }
 
         private void udMult_ValueChanged(object sender, EventArgs e)
         {
-            //detector.ScanlineWidth = (int)udScanlineWidth.Value;
+            detector.AveragingMultipiler = (int)udMult.Value;
         }
 
     }
