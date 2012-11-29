@@ -52,12 +52,12 @@
             this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.udSmoothRadius = new System.Windows.Forms.NumericUpDown();
-            this.udSobelRadius = new System.Windows.Forms.NumericUpDown();
-            this.label8 = new System.Windows.Forms.Label();
             this.udScanlineWidth = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
+            this.udSobelRadius = new System.Windows.Forms.NumericUpDown();
+            this.udSmoothRadius = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.outputImage)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -66,9 +66,9 @@
             this.grpPOIFound.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.udSmoothRadius)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udSobelRadius)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udScanlineWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSobelRadius)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSmoothRadius)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -76,16 +76,17 @@
             this.groupBox1.Controls.Add(this.outputImage);
             this.groupBox1.Location = new System.Drawing.Point(329, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(583, 491);
+            this.groupBox1.Size = new System.Drawing.Size(931, 764);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Input";
             // 
             // outputImage
             // 
-            this.outputImage.Location = new System.Drawing.Point(6, 19);
+            this.outputImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.outputImage.Location = new System.Drawing.Point(3, 16);
             this.outputImage.Name = "outputImage";
-            this.outputImage.Size = new System.Drawing.Size(571, 466);
+            this.outputImage.Size = new System.Drawing.Size(925, 745);
             this.outputImage.TabIndex = 2;
             this.outputImage.TabStop = false;
             // 
@@ -107,7 +108,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(74, 23);
             this.button1.TabIndex = 4;
-            this.button1.Text = "Start";
+            this.button1.Text = "&Start";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -295,44 +296,18 @@
             this.groupBox4.Controls.Add(this.label6);
             this.groupBox4.Location = new System.Drawing.Point(12, 325);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(311, 178);
+            this.groupBox4.Size = new System.Drawing.Size(311, 316);
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Detector parameters";
             // 
-            // label6
+            // udScanlineWidth
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(7, 49);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(65, 13);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "Sobel radius";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 22);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(74, 13);
-            this.label7.TabIndex = 1;
-            this.label7.Text = "Smooth radius";
-            // 
-            // udSmoothRadius
-            // 
-            this.udSmoothRadius.Location = new System.Drawing.Point(183, 20);
-            this.udSmoothRadius.Name = "udSmoothRadius";
-            this.udSmoothRadius.Size = new System.Drawing.Size(120, 20);
-            this.udSmoothRadius.TabIndex = 2;
-            this.udSmoothRadius.ValueChanged += new System.EventHandler(this.udSmoothRadius_ValueChanged);
-            // 
-            // udSobelRadius
-            // 
-            this.udSobelRadius.Location = new System.Drawing.Point(183, 47);
-            this.udSobelRadius.Name = "udSobelRadius";
-            this.udSobelRadius.Size = new System.Drawing.Size(120, 20);
-            this.udSobelRadius.TabIndex = 3;
-            this.udSobelRadius.ValueChanged += new System.EventHandler(this.udSobelRadius_ValueChanged);
+            this.udScanlineWidth.Location = new System.Drawing.Point(183, 74);
+            this.udScanlineWidth.Name = "udScanlineWidth";
+            this.udScanlineWidth.Size = new System.Drawing.Size(120, 20);
+            this.udScanlineWidth.TabIndex = 5;
+            this.udScanlineWidth.ValueChanged += new System.EventHandler(this.udScanlineWidth_ValueChanged);
             // 
             // label8
             // 
@@ -343,19 +318,45 @@
             this.label8.TabIndex = 4;
             this.label8.Text = "Scanline width";
             // 
-            // udScanlineWidth
+            // udSobelRadius
             // 
-            this.udScanlineWidth.Location = new System.Drawing.Point(183, 74);
-            this.udScanlineWidth.Name = "udScanlineWidth";
-            this.udScanlineWidth.Size = new System.Drawing.Size(120, 20);
-            this.udScanlineWidth.TabIndex = 5;
-            this.udScanlineWidth.ValueChanged += new System.EventHandler(this.udScanlineWidth_ValueChanged);
+            this.udSobelRadius.Location = new System.Drawing.Point(183, 47);
+            this.udSobelRadius.Name = "udSobelRadius";
+            this.udSobelRadius.Size = new System.Drawing.Size(120, 20);
+            this.udSobelRadius.TabIndex = 3;
+            this.udSobelRadius.ValueChanged += new System.EventHandler(this.udSobelRadius_ValueChanged);
+            // 
+            // udSmoothRadius
+            // 
+            this.udSmoothRadius.Location = new System.Drawing.Point(183, 20);
+            this.udSmoothRadius.Name = "udSmoothRadius";
+            this.udSmoothRadius.Size = new System.Drawing.Size(120, 20);
+            this.udSmoothRadius.TabIndex = 2;
+            this.udSmoothRadius.ValueChanged += new System.EventHandler(this.udSmoothRadius_ValueChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(7, 22);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(74, 13);
+            this.label7.TabIndex = 1;
+            this.label7.Text = "Smooth radius";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(7, 49);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(65, 13);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "Sobel radius";
             // 
             // Preview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(924, 540);
+            this.ClientSize = new System.Drawing.Size(1272, 788);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.grpPOIFound);
@@ -363,7 +364,6 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "Preview";
             this.Text = "Preview";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Preview_FormClosing);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.outputImage)).EndInit();
             this.groupBox2.ResumeLayout(false);
@@ -376,9 +376,9 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.udSmoothRadius)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udSobelRadius)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udScanlineWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSobelRadius)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSmoothRadius)).EndInit();
             this.ResumeLayout(false);
 
         }

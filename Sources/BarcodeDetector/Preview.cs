@@ -27,8 +27,23 @@ namespace BarcodeDetector
 
             udSmoothRadius.Value = detector.SmoothRadius;
             udSobelRadius.Value = detector.SobelRadius;
-            udScanlineWidth.Value = detector.ScanlineWidth;
+            udScanlineWidth.Value = detector.MeanRadius;
+
+            
         }
+
+
+        private void DrawFunction(Image<Bgr, Byte> frame, double[] ys, Bgr color) 
+        {
+            Point previous = new Point(0, (int)ys[0] + frame.Height / 2);
+            for (int i = 1; i < frame.Width; ++i)
+            {
+                Point current = new Point(i, (int)ys[i] + frame.Height / 2);
+                frame.Draw(new LineSegment2D(previous, current), color, 1);
+                previous = current;
+            }
+        }
+
 
         private void ProcessFrame(object sender, EventArgs args) 
         {
@@ -56,32 +71,21 @@ namespace BarcodeDetector
                 frame.Draw(arrow, new Bgr(Color.Blue), 1);
             }
 
-            Point previous = new Point(0, (int) detector.GradientMagnitude(0, frame.Height/2) + frame.Height/2);
-            for (int i = 1; i < frame.Width; ++i)
-            {
-                Point current = new Point(i, (int)detector.GradientMagnitude(i, frame.Height / 2) + frame.Height / 2);
-                frame.Draw(new LineSegment2D(previous, current), new Bgr(Color.Green), 1);
-                previous = current;
-            }
-
-            frame.Draw(new LineSegment2D(
-                new Point(0, frame.Height / 2 + (int)detector.GradientMagnitudeThreshold),
-                new Point(frame.Width, frame.Height / 2 + (int)detector.GradientMagnitudeThreshold
-                    )), new Bgr(Color.Yellow), 1);
-
-            frame.Draw(new LineSegment2D(
-                new Point(0, frame.Height / 2 - (int)detector.GradientMagnitudeThreshold),
-                new Point(frame.Width, frame.Height / 2 - (int)detector.GradientMagnitudeThreshold
-                    )), new Bgr(Color.Yellow), 1);
+            DrawFunction(frame, detector.MeanMagnitude, new Bgr(Color.Green));
+            DrawFunction(frame, detector.AdaptiveThreshold, new Bgr(Color.Yellow));
 
             outputImage.Image = frame.Clone();
             
-            this.Invoke((MethodInvoker)delegate()
-            {
-                txtFoundBW.Text = detector.FoundBW.ToString();
-                txtFoundWB.Text = detector.FoundWB.ToString();
-                txtFoundTotal.Text = detector.Found.ToString();
-            });
+            try{
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    txtFoundBW.Text = detector.FoundBW.ToString();
+                    txtFoundWB.Text = detector.FoundWB.ToString();
+                    txtFoundTotal.Text = detector.Found.ToString();
+                });
+            }
+            catch (InvalidOperationException)
+            {}
 
             Thread.Sleep((int) numSleep.Value);
         }
@@ -130,7 +134,7 @@ namespace BarcodeDetector
 
                     camera.Start();
                     started = true;
-                    button1.Text = "Pause";
+                    button1.Text = "Pau&se";
                 }
                 catch (System.Exception ex)
                 {
@@ -144,7 +148,7 @@ namespace BarcodeDetector
                 {
                     camera.Pause();
                     started = false;
-                    button1.Text = "Resume";
+                    button1.Text = "Re&sume";
                 }
             }
         }
@@ -165,7 +169,7 @@ namespace BarcodeDetector
 
         private void udScanlineWidth_ValueChanged(object sender, EventArgs e)
         {
-            detector.ScanlineWidth = (int)udScanlineWidth.Value;
+            detector.MeanRadius = (int)udScanlineWidth.Value;
         }
 
     }
