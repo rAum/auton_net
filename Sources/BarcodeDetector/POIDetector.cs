@@ -12,9 +12,13 @@ namespace BarcodeDetector
     class POIDetector
     {
         public double GradientMagnitudeThreshold;
+        public int SobelRadius;
+        public int SmoothRadius;
+        public int ScanlineWidth;
         public double MaxAngle;
 
         Image<Gray, float> gx, gy;
+        Image<Gray, float> gray;
 
         int w, h;
 
@@ -22,8 +26,10 @@ namespace BarcodeDetector
         {
             // set default parameters
             GradientMagnitudeThreshold = thr;
+            SobelRadius = 1;
+            SmoothRadius = 4;
+            ScanlineWidth = 10;
             MaxAngle = Math.PI / 4;
-
         }
 
         public void LoadImage(Image<Gray, float> gray)
@@ -31,9 +37,9 @@ namespace BarcodeDetector
             w = gray.Width;
             h = gray.Height;
 
-            gray = gray.SmoothGaussian(9);
-            gx = gray.Sobel(1, 0, 3);
-            gy = gray.Sobel(0, 1, 3);
+            this.gray = gray.SmoothGaussian(2*SmoothRadius + 1);
+            gx = this.gray.Sobel(1, 0, 2*SobelRadius + 1);
+            gy = this.gray.Sobel(0, 1, 2*SobelRadius + 1);
         }
 
         public double GradientMagnitude(int c, int r)

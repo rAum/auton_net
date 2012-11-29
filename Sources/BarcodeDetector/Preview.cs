@@ -25,17 +25,17 @@ namespace BarcodeDetector
             InitializeComponent();
             detector = new POIDetector((double)numThreshold.Value);
 
-
-            
-
-            
-
+            udSmoothRadius.Value = detector.SmoothRadius;
+            udSobelRadius.Value = detector.SobelRadius;
+            udScanlineWidth.Value = detector.ScanlineWidth;
         }
 
         private void ProcessFrame(object sender, EventArgs args) 
         {
             if (camera == null)
                 return; 
+        
+
             Image<Bgr, Byte> frame = camera.RetrieveBgrFrame().Clone();
             Image<Gray, float> gray = frame.Convert<Gray, float>();
 
@@ -57,7 +57,6 @@ namespace BarcodeDetector
             }
 
             Point previous = new Point(0, (int) detector.GradientMagnitude(0, frame.Height/2) + frame.Height/2);
-
             for (int i = 1; i < frame.Width; ++i)
             {
                 Point current = new Point(i, (int)detector.GradientMagnitude(i, frame.Height / 2) + frame.Height / 2);
@@ -131,7 +130,7 @@ namespace BarcodeDetector
 
                     camera.Start();
                     started = true;
-                    button1.Text = "Stop";
+                    button1.Text = "Pause";
                 }
                 catch (System.Exception ex)
                 {
@@ -143,15 +142,30 @@ namespace BarcodeDetector
             {
                 if (camera != null)
                 {
-                    camera.Stop();
+                    camera.Pause();
                     started = false;
-                    button1.Text = "Start";
+                    button1.Text = "Resume";
                 }
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+        }
+
+        private void udSmoothRadius_ValueChanged(object sender, EventArgs e)
+        {
+            detector.SmoothRadius = (int)udSmoothRadius.Value;
+        }
+
+        private void udSobelRadius_ValueChanged(object sender, EventArgs e)
+        {
+            detector.SobelRadius = (int)udSobelRadius.Value;
+        }
+
+        private void udScanlineWidth_ValueChanged(object sender, EventArgs e)
+        {
+            detector.ScanlineWidth = (int)udScanlineWidth.Value;
         }
 
     }
