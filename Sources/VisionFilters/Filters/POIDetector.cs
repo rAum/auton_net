@@ -26,6 +26,7 @@ namespace Auton.CarVision.Video.Filters
         private double[] AdaptiveThreshold;
 
         public List<POI> POIs { get; private set; }
+        private List<int> candidates;
 
         int cols, rows;
 
@@ -44,6 +45,7 @@ namespace Auton.CarVision.Video.Filters
             Process += ProcessImage;
         }
 
+
         private void ProcessImage(Image<Gray, float> source)
         {
             Image<Gray, float> gx, gy;
@@ -56,6 +58,7 @@ namespace Auton.CarVision.Video.Filters
             LastResult = display;
             PostComplete();
         }
+
 
         private void DrawFunction(Image<Bgr, float> frame, double[] ys, Bgr color)
         {
@@ -78,8 +81,8 @@ namespace Auton.CarVision.Video.Filters
             
             DrawFunction(frame, abs, new Bgr(Color.Green));
             DrawFunction(frame, AdaptiveThreshold, new Bgr(Color.Yellow));  
-            
         }
+
 
         private void PreprocessImage(Image<Gray, float> gray, out Image<Gray, float> gx, out Image<Gray, float> gy)
         {
@@ -144,16 +147,25 @@ namespace Auton.CarVision.Video.Filters
                 prevAbsMean = absMeanWindow[c];
             }
 
+
             // compute mean magnitude
             CalcMeans(meanWindow, MeanMagnitude, MeanRadius);
             CalcMeans(absMeanWindow, AdaptiveThreshold, MeanRadius * AveragingMultipiler);
 
+
             // find poi candidates
-            List<int> candidates = new List<int>();
+            candidates = new List<int>();
             for (int c = 1; c < cols - 1; c++) {
-                if (Math.Abs(MeanMagnitude[c]) > AdaptiveThreshold[c]) 
-                    candidates.Add(c);
+                if (Math.Abs(MeanMagnitude[c]) < AdaptiveThreshold[c])
+                    continue;
+                if(Math.Abs(MeanMagnitude[c]) < Math.Max(Math.Abs(MeanMagnitude[c-1]), Math.Abs(MeanMagnitude[c+1])))
+                    continue;
+                candidates.Add(c);
             }
+
+            // draw them
+
+            // check each one 
 
             return points;
         }
