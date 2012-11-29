@@ -61,7 +61,7 @@ namespace BarcodeDetector
             for (int i = 1; i < frame.Width; ++i)
             {
                 Point current = new Point(i, (int)detector.GradientMagnitude(i, frame.Height / 2) + frame.Height / 2);
-                frame.Draw(new LineSegment2D(previous, current), new Bgr(Color.Green), 1);
+                frame.Draw(new LineSegment2D(previous, current), new Bgr(Color.LightGreen), 1);
                 previous = current;
             }
 

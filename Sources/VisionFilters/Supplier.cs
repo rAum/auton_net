@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace CarVision
+namespace Auton.CarVision.Video
 {
     public class ResultReadyEventArgs
     {
@@ -15,7 +15,7 @@ namespace CarVision
         }
     }
 
-    abstract class Supplier<ResultType>
+    public abstract class Supplier<ResultType>
     {
         public virtual ResultType LastResult { get; protected set; }
         public delegate void ResultReadyEventHandler(object sender, ResultReadyEventArgs e);
@@ -28,7 +28,7 @@ namespace CarVision
         }
     }
 
-    abstract class ThreadSupplier<MaterialType, ResultType> : Supplier<ResultType>
+    public abstract class ThreadSupplier<MaterialType, ResultType> : Supplier<ResultType>
     {
         protected delegate void MaterialProcessor(MaterialType value);
         protected MaterialProcessor Process;

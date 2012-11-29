@@ -9,9 +9,12 @@ using System.Windows.Forms;
 
 using Emgu.CV;
 using Emgu.CV.Structure;
-using CarVision.Filters;
+using Auton.CarVision.Video;
+using Auton.CarVision.Video.Filters;
+
 using Emgu.CV.UI;
 using Emgu;
+
 
 namespace CarVision
 {
@@ -22,7 +25,7 @@ namespace CarVision
         PerspectiveCorrection perpCorr;
         PerspectiveCorrection invPerpCorr;
 
-        private void DisplayVideo(object sender, CarVision.ResultReadyEventArgs e)
+        private void DisplayVideo(object sender, ResultReadyEventArgs e)
         {
             ImageBox imgBox = null;
             if (sender == videoSource)

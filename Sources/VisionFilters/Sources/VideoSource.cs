@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using Emgu.CV;
 using Emgu.CV.Structure;
-//using Emgu.Util;
 
-namespace CarVision.Filters
+using Auton.CarVision.Video;
+
+namespace Auton.CarVision.Video
 {
-    class VideoSource : Supplier<Image<Gray, Byte>>
+    public class VideoSource : Supplier<Image<Gray, Byte>>
     {
         public override Image<Gray, Byte> LastResult
         {
