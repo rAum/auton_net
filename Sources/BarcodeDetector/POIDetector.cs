@@ -14,6 +14,7 @@ namespace BarcodeDetector
         public double GradientMagnitudeThreshold;
         public int SobelRadius;
         public int SmoothRadius;
+        public int ScanlineWidth;
         public double MaxAngle;
 
         Image<Gray, float> gx, gy;
@@ -27,6 +28,7 @@ namespace BarcodeDetector
             GradientMagnitudeThreshold = thr;
             SobelRadius = 1;
             SmoothRadius = 4;
+            ScanlineWidth = 10;
             MaxAngle = Math.PI / 4;
         }
 

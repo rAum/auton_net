@@ -27,6 +27,7 @@ namespace BarcodeDetector
 
             udSmoothRadius.Value = detector.SmoothRadius;
             udSobelRadius.Value = detector.SobelRadius;
+            udScanlineWidth.Value = detector.ScanlineWidth;
         }
 
         private void ProcessFrame(object sender, EventArgs args) 
@@ -56,7 +57,6 @@ namespace BarcodeDetector
             }
 
             Point previous = new Point(0, (int) detector.GradientMagnitude(0, frame.Height/2) + frame.Height/2);
-
             for (int i = 1; i < frame.Width; ++i)
             {
                 Point current = new Point(i, (int)detector.GradientMagnitude(i, frame.Height / 2) + frame.Height / 2);
@@ -161,6 +161,11 @@ namespace BarcodeDetector
         private void udSobelRadius_ValueChanged(object sender, EventArgs e)
         {
             detector.SobelRadius = (int)udSobelRadius.Value;
+        }
+
+        private void udScanlineWidth_ValueChanged(object sender, EventArgs e)
+        {
+            detector.ScanlineWidth = (int)udScanlineWidth.Value;
         }
 
     }
