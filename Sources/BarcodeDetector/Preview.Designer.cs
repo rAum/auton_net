@@ -58,6 +58,8 @@
             this.udSmoothRadius = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.udMult = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.outputImage)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -69,6 +71,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.udScanlineWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSobelRadius)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSmoothRadius)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udMult)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -288,6 +291,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label9);
+            this.groupBox4.Controls.Add(this.udMult);
             this.groupBox4.Controls.Add(this.udScanlineWidth);
             this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Controls.Add(this.udSobelRadius);
@@ -352,6 +357,23 @@
             this.label6.TabIndex = 0;
             this.label6.Text = "Sobel radius";
             // 
+            // udMult
+            // 
+            this.udMult.Location = new System.Drawing.Point(183, 101);
+            this.udMult.Name = "udMult";
+            this.udMult.Size = new System.Drawing.Size(120, 20);
+            this.udMult.TabIndex = 6;
+            this.udMult.ValueChanged += new System.EventHandler(this.udMult_ValueChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(7, 103);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(27, 13);
+            this.label9.TabIndex = 7;
+            this.label9.Text = "Mult";
+            // 
             // Preview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -364,6 +386,7 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "Preview";
             this.Text = "Preview";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Preview_FormClosing);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.outputImage)).EndInit();
             this.groupBox2.ResumeLayout(false);
@@ -379,6 +402,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.udScanlineWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSobelRadius)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSmoothRadius)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udMult)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -415,6 +439,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown udScanlineWidth;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.NumericUpDown udMult;
     }
 }
 

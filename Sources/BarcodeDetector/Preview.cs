@@ -28,8 +28,7 @@ namespace BarcodeDetector
             udSmoothRadius.Value = detector.SmoothRadius;
             udSobelRadius.Value = detector.SobelRadius;
             udScanlineWidth.Value = detector.MeanRadius;
-
-            
+            udMult.Value = detector.AveragingMultipiler;
         }
 
 
@@ -71,12 +70,11 @@ namespace BarcodeDetector
                 frame.Draw(arrow, new Bgr(Color.Blue), 1);
             }
 
-            DrawFunction(frame, detector.MeanMagnitude, new Bgr(Color.Green));
-            DrawFunction(frame, detector.AdaptiveThreshold, new Bgr(Color.Yellow));
-
-            outputImage.Image = frame.Clone();
+            DrawFunction(frame, detector.AbsMeanMagnitude, new Bgr(Color.Green));
+            DrawFunction(frame, detector.AdaptiveThreshold, new Bgr(Color.Yellow));  
             
             try{
+                outputImage.Image = frame.Clone();
                 this.Invoke((MethodInvoker)delegate()
                 {
                     txtFoundBW.Text = detector.FoundBW.ToString();
@@ -87,13 +85,8 @@ namespace BarcodeDetector
             catch (InvalidOperationException)
             {}
 
-            Thread.Sleep((int) numSleep.Value);
-        }
 
-        private void Preview_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (camera != null)
-                camera.Stop();
+            Thread.Sleep((int) numSleep.Value);
         }
 
         private void numThreshold_ValueChanged(object sender, EventArgs e)
@@ -172,5 +165,15 @@ namespace BarcodeDetector
             detector.MeanRadius = (int)udScanlineWidth.Value;
         }
 
+        private void udMult_ValueChanged(object sender, EventArgs e)
+        {
+            detector.AveragingMultipiler = (int)udMult.Value;
+        }
+
+        private void Preview_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (camera != null)
+                camera.Stop();
+        }
     }
 }

@@ -23,6 +23,7 @@ namespace BarcodeDetector
 
         public double[] MeanMagnitude;
         public double[] AdaptiveThreshold;
+        public double[] AbsMeanMagnitude;
 
         Image<Gray, float> gx, gy;
         Image<Gray, float> gray;
@@ -37,7 +38,7 @@ namespace BarcodeDetector
             SmoothRadius = 4;
             MeanRadius = 5;
             NumHistBins = 50;
-            AveragingMultipiler = 30;
+            AveragingMultipiler = 2;
             MaxAngle = Math.PI / 4;
         }
 
@@ -46,6 +47,7 @@ namespace BarcodeDetector
             cols = gray.Width;
             MeanMagnitude = new double[cols];
             AdaptiveThreshold = new double[cols];
+            AbsMeanMagnitude = new double[cols];
             rows = gray.Height;
 
             this.gray = gray.SmoothGaussian(2 * SmoothRadius + 1);
@@ -118,13 +120,20 @@ namespace BarcodeDetector
                 double sign = (x > 0) ? 1 : -1;
 
                 meanWindow[c] = prevMean + mag*sign;
+                absMeanWindow[c] = prevAbsMean + mag;
                 prevMean = meanWindow[c];
+                prevAbsMean = absMeanWindow[c];
             }
 
             // compute mean magnitude
             CalcMeans(meanWindow, MeanMagnitude, MeanRadius);
-            CalcMeans(meanWindow, AdaptiveThreshold, MeanRadius * 3);
+            CalcMeans(absMeanWindow, AdaptiveThreshold, MeanRadius * AveragingMultipiler);
 
+            for (int i = 0; i < cols; i++)
+                AbsMeanMagnitude[i] = Math.Abs(MeanMagnitude[i]);
+
+
+            // 
 
             return points;
         }
