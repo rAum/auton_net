@@ -89,7 +89,7 @@ namespace BarcodeDetector
                         if (Math.Abs(best_a - Math.PI / 2) >= Math.PI / 2 - MaxAngle)
                         {
                             int direction = (best_x > 0) ? 1 : -1;
-                            //if (direction != last_direction)
+                            if (direction != last_direction)
                             {
                                 last_direction = direction;
                                 points.Add(new POI(best_c, r, best_x, best_y, best_angle));

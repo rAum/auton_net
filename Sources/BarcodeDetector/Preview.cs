@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 using Emgu.CV;
 using Emgu.CV.Structure;
+using System.Threading;
 
 
 namespace BarcodeDetector
@@ -19,24 +20,22 @@ namespace BarcodeDetector
         private Capture camera;
         POIDetector detector;
        
-        public Preview()
+        public Preview(string filename = null)
         {
             InitializeComponent();
-            camera = new Capture();
-            if (camera == null) 
-            {
-                MessageBox.Show("Unable to open camera");
-            }
+            detector = new POIDetector((double)numThreshold.Value);
 
-            detector = new POIDetector((double) numThreshold.Value);
+
             
-            camera.ImageGrabbed += ProcessFrame;
-            camera.Start();
+
+            
+
         }
 
         private void ProcessFrame(object sender, EventArgs args) 
         {
-            
+            if (camera == null)
+                return; 
             Image<Bgr, Byte> frame = camera.RetrieveBgrFrame().Clone();
             Image<Gray, float> gray = frame.Convert<Gray, float>();
 
@@ -84,17 +83,75 @@ namespace BarcodeDetector
                 txtFoundWB.Text = detector.FoundWB.ToString();
                 txtFoundTotal.Text = detector.Found.ToString();
             });
-            
+
+            Thread.Sleep((int) numSleep.Value);
         }
 
         private void Preview_FormClosing(object sender, FormClosingEventArgs e)
         {
-            camera.Stop();
+            if (camera != null)
+                camera.Stop();
         }
 
         private void numThreshold_ValueChanged(object sender, EventArgs e)
         {
             detector.GradientMagnitudeThreshold = (double)numThreshold.Value;
+        }
+
+        private void btnFileBrowse_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                txtFilePath.Text = openFileDialog1.FileName;
+        }
+
+        private void radFile_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radFile.Checked)
+                btnFileBrowse_Click(sender, e);
+        }
+
+        private bool started = false;
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (!started)
+            {
+                if (camera != null)
+                {
+                    camera.Stop();
+                    camera.Dispose();
+                }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(txtFilePath.Text))
+                        camera = new Capture();
+                    else
+                        camera = new Capture(txtFilePath.Text);
+                    camera.ImageGrabbed += ProcessFrame;
+
+                    camera.Start();
+                    started = true;
+                    button1.Text = "Stop";
+                }
+                catch (System.Exception ex)
+                {
+                    MessageBox.Show("Unable to open file/camera. I'm gonna crash");
+                    return;
+                }
+            }
+            else
+            {
+                if (camera != null)
+                {
+                    camera.Stop();
+                    started = false;
+                    button1.Text = "Start";
+                }
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
         }
 
     }
