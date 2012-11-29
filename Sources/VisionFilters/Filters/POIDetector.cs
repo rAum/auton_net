@@ -13,24 +13,35 @@ namespace Auton.CarVision.Video.Filters
 {
     public class POIDetector : ThreadSupplier<Image<Gray, float>, Image<Bgr, float>>
     {
-        public double GradientMagnitudeThreshold { get; set; }
-        public int SobelRadius { get; set; }
-        public int SmoothRadius { get; set; }
-        public int ScanlineWidth { get; set; }
-        public double MaxAngle { get; set; }
+        public double GradientMagnitudeThreshold;
+
+        public int SobelRadius;
+        public int SmoothRadius;
+
+        public int MeanRadius;
+        public int AveragingMultipiler;
+        public double MaxAngle;
+        private int NumHistBins;
+
+        public double[] MeanMagnitude;
+        public double[] AdaptiveThreshold;
+        public double[] AbsMeanMagnitude;
 
         public List<POI> POIs { get; private set; }
 
-        int w, h;
+        int cols, rows;
 
         public POIDetector(Supplier<Image<Gray, float>> supplier, double thr) 
         {
             supplier.ResultReady += MaterialReady;
+
             // set default parameters
             GradientMagnitudeThreshold = thr;
             SobelRadius = 1;
             SmoothRadius = 4;
-            ScanlineWidth = 10;
+            MeanRadius = 5;
+            NumHistBins = 50;
+            AveragingMultipiler = 2;
             MaxAngle = Math.PI / 4;
 
             Process += ProcessImage;
@@ -64,9 +75,9 @@ namespace Auton.CarVision.Video.Filters
 
         private void DrawGraphs(Image<Bgr, float> frame, Image<Gray, float> gx, Image<Gray, float> gy)
         {
-            int r = h / 2;
-            double[] grad_mags = new double[w];
-            for (int c = 0; c < w; ++c)
+            int r = rows / 2;
+            double[] grad_mags = new double[cols];
+            for (int c = 0; c < cols; ++c)
             {
                 double x = gx[r, c].Intensity;
                 double y = gy[r, c].Intensity;
@@ -76,17 +87,38 @@ namespace Auton.CarVision.Video.Filters
                 grad_mags[c] = magnitude * direction;
             }
 
+            LineSegment2D line = new LineSegment2D(new Point(0, frame.Height / 2), new Point(frame.Width, frame.Height / 2));
+            frame.Draw(line, new Bgr(Color.Red), 2);
+
             DrawFunction(frame, grad_mags, new Bgr(Color.LightGreen));
+
+
+            foreach (POI p in POIs)
+            {
+                Point begin = new Point(p.X, p.Y);
+                Point end = new Point((int)(p.X + p.GX), (int)(p.Y + p.GY));
+                LineSegment2D arrow = new LineSegment2D(begin, end);
+                CircleF circle = new CircleF(begin, 5);
+                frame.Draw(circle, new Bgr(Color.Blue), 2);
+                frame.Draw(arrow, new Bgr(Color.Blue), 1);
+            }
+
+            DrawFunction(frame, AbsMeanMagnitude, new Bgr(Color.Green));
+            DrawFunction(frame, AdaptiveThreshold, new Bgr(Color.Yellow));  
+            
         }
 
         private void PreprocessImage(Image<Gray, float> gray, out Image<Gray, float> gx, out Image<Gray, float> gy)
         {
-            w = gray.Width;
-            h = gray.Height;
+            cols = gray.Width;
+            MeanMagnitude = new double[cols];
+            AdaptiveThreshold = new double[cols];
+            AbsMeanMagnitude = new double[cols];
+            rows = gray.Height;
 
-            gray = gray.SmoothGaussian(2*SmoothRadius + 1);
-            gx = gray.Sobel(1, 0, 2*SobelRadius + 1);
-            gy = gray.Sobel(0, 1, 2*SobelRadius + 1);
+            gray = gray.SmoothGaussian(2 * SmoothRadius + 1);
+            gx = gray.Sobel(1, 0, 2 * SobelRadius + 1);
+            gy = gray.Sobel(0, 1, 2 * SobelRadius + 1);
         }
 
         private double GradientMagnitude(Image<Gray, float> gx, Image<Gray, float> gy, int c, int r)
@@ -103,62 +135,58 @@ namespace Auton.CarVision.Video.Filters
         public int FoundBW { get; private set; }
         public int Found { get { return FoundWB + FoundBW; } }
 
+        private void CalcMeans(double[] partialSums, double[] dst, int r)
+        {
+            for (int i = 0; i < partialSums.Length; i++)
+            {
+                if (i - r - 1 < 0 || i + r >= partialSums.Length)
+                {
+                    dst[i] = 0;
+                }
+                else
+                {
+                    dst[i] = partialSums[r + i] - partialSums[i - r - 1];
+                    dst[i] /= 2 * r + 1;
+                }
+            }
+        }
+
         private List<POI> FindPOI(Image<Gray, float> gx, Image<Gray, float> gy) 
         {
             FoundWB = 0;
             FoundBW = 0;
 
             List<POI> points = new List<POI>();
-            int r = h / 2;
+            int centralRow = rows / 2;
             double thr = GradientMagnitudeThreshold;
-            thr = thr * thr;
-            int last_direction = 0;
 
-            int best_c = 0;
-            double best_c_mag = 0;
-            for (int c = 0; c < w; c++) 
+            // compute partial sums of scaled angles
+            double[] meanWindow = new double[cols];
+            double[] absMeanWindow = new double[cols];
+            double prevMean = 0;
+            double prevAbsMean = 0;
+            for (int c = 0; c < cols; c++)
             {
-                double x = gx[r, c].Intensity;
-                double y = gy[r, c].Intensity;
-                
-                // check if gradient magnitude is big enough
-                
-                double magnitude = x * x + y * y;
-                
-                if (magnitude > best_c_mag)
-                {
-                    best_c_mag = magnitude;
-                    best_c = c;
-                }
+                double x = gx[centralRow, c].Intensity;
+                double y = gy[centralRow, c].Intensity;
+                double mag = Math.Sqrt(x * x + y * y);
+                double sign = (x > 0) ? 1 : -1;
 
-                if (magnitude < thr)
-                {
-                    if (best_c_mag >= thr)
-                    {
-                        double best_x = gx[r, best_c].Intensity;
-                        double best_y = gy[r, best_c].Intensity;
-                        double best_angle = Math.Atan2(y, x);
-                        double best_a = Math.Abs(best_angle);
-                        if (Math.Abs(best_a - Math.PI / 2) >= Math.PI / 2 - MaxAngle)
-                        {
-                            int direction = (best_x > 0) ? 1 : -1;
-                            if (direction != last_direction)
-                            {
-                                last_direction = direction;
-                                points.Add(new POI(best_c, r, best_x, best_y, best_angle));
-                                if (direction > 0)
-                                    FoundBW++;
-                                else
-                                    FoundWB++;
-                            }
-
-                        }
-                    }
-
-                    best_c_mag = 0;
-                }
-                
+                meanWindow[c] = prevMean + mag * sign;
+                absMeanWindow[c] = prevAbsMean + mag;
+                prevMean = meanWindow[c];
+                prevAbsMean = absMeanWindow[c];
             }
+
+            // compute mean magnitude
+            CalcMeans(meanWindow, MeanMagnitude, MeanRadius);
+            CalcMeans(absMeanWindow, AdaptiveThreshold, MeanRadius * AveragingMultipiler);
+
+            for (int i = 0; i < cols; i++)
+                AbsMeanMagnitude[i] = Math.Abs(MeanMagnitude[i]);
+
+
+            // 
 
             return points;
         }

@@ -33,7 +33,7 @@ namespace BarcodeDetector
 
             udSmoothRadius.Value = detector.SmoothRadius;
             udSobelRadius.Value = detector.SobelRadius;
-            udScanlineWidth.Value = detector.ScanlineWidth;
+            //udScanlineWidth.Value = detector.ScanlineWidth;
 
             detector.ResultReady += displayResult;
         }
@@ -126,6 +126,11 @@ namespace BarcodeDetector
         }
 
         private void udScanlineWidth_ValueChanged(object sender, EventArgs e)
+        {
+            //detector.ScanlineWidth = (int)udScanlineWidth.Value;
+        }
+
+        private void udMult_ValueChanged(object sender, EventArgs e)
         {
             //detector.ScanlineWidth = (int)udScanlineWidth.Value;
         }
