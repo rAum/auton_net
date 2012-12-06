@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{D99C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GUIs", "GUIs", "{C0E47EED-3A6C-4348-B552-C269700D81AD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RANSAC_Test", "RANSAC_Test\RANSAC_Test.csproj", "{4B27BA20-E859-45F3-8791-DF0710DC6F6B}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = auton.vsmdi
@@ -117,6 +119,18 @@ Global
 		{03833D47-DF5A-4B24-ABDB-19601109D523}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{03833D47-DF5A-4B24-ABDB-19601109D523}.Release|x64.ActiveCfg = Release|Any CPU
 		{03833D47-DF5A-4B24-ABDB-19601109D523}.Release|x86.ActiveCfg = Release|Any CPU
+		{4B27BA20-E859-45F3-8791-DF0710DC6F6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B27BA20-E859-45F3-8791-DF0710DC6F6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B27BA20-E859-45F3-8791-DF0710DC6F6B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4B27BA20-E859-45F3-8791-DF0710DC6F6B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4B27BA20-E859-45F3-8791-DF0710DC6F6B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4B27BA20-E859-45F3-8791-DF0710DC6F6B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4B27BA20-E859-45F3-8791-DF0710DC6F6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B27BA20-E859-45F3-8791-DF0710DC6F6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B27BA20-E859-45F3-8791-DF0710DC6F6B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4B27BA20-E859-45F3-8791-DF0710DC6F6B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4B27BA20-E859-45F3-8791-DF0710DC6F6B}.Release|x64.ActiveCfg = Release|Any CPU
+		{4B27BA20-E859-45F3-8791-DF0710DC6F6B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,5 +138,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1BF1D22B-B4E6-4FB2-A1BB-F0CF811A0387} = {C0E47EED-3A6C-4348-B552-C269700D81AD}
 		{721F9855-EF69-4AE2-8FB4-8820C702DBCB} = {D99C25BB-0EA5-44FF-BE6A-BED6933B76E3}
+		{4B27BA20-E859-45F3-8791-DF0710DC6F6B} = {D99C25BB-0EA5-44FF-BE6A-BED6933B76E3}
 	EndGlobalSection
 EndGlobal

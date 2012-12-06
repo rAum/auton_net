@@ -14,6 +14,7 @@ using Auton.CarVision.Video.Filters;
 
 using Emgu.CV.UI;
 using Emgu;
+using VisionFilters.Filters.Lane_Mark_Detector;
 
 
 namespace CarVision
@@ -24,22 +25,32 @@ namespace CarVision
         LaneMarkDetector laneDetector;
         PerspectiveCorrection perpCorr;
         PerspectiveCorrection invPerpCorr;
+        PerspectiveCorrectionRgb invPerpColor;
+        LineHistogram lineHist;
+        ClusterLanes cluster;
+        CHEVP chevp;
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Gray, Byte>> e)
         {
             ImageBox imgBox = null;
             if (sender == videoSource)
                 imgBox = imgVideoSource;
+            else if (sender == laneDetector)
+            {
+                imgBox = imgCanny;
+            }
             else if (sender == invPerpCorr)
             {
                 imgBox = imgSmoothener;
-                //TODO remove this, make better
-                //Image<Gray, Byte>[] t = { ((Image<Gray, Byte>)e.Result), ((Image<Gray, Byte>)e.Result), ((Image<Gray, Byte>)e.Result) };
                 Image<Rgb,Byte> ipc = ((Image<Gray, Byte>)e.Result).Convert<Rgb, Byte>();
                 
                 Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
-                imgBox.Image = cam + (ipc - new Rgb(0.0, 255.0, 255.0)); // mix current video frame with founded line marks
+                imgBox.Image = cam + (ipc * 2 - new Rgb(0.0, 255.0, 10.0)); // mix current video frame with founded line marks
                 return;
+            }
+            else if (sender == chevp)
+            {
+                imgBox = imgCanny;
             }
             else if (sender == perpCorr)
                 imgBox = imgCanny;
@@ -50,14 +61,31 @@ namespace CarVision
             
         }
 
+        private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Rgb, Byte>> e)
+        {
+            ImageBox imgBox = null;
+            if (sender != invPerpColor)
+            {
+                imgBox = imgCanny;
+            }
+            else
+            {
+                imgBox = imgSmoothener;
+                Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
+                imgBox.Image = (Image<Rgb, Byte>)e.Result + cam;
+                return;
+            }
+            imgBox.Image = (Image<Rgb, Byte>)e.Result;
+        }
+
 
         public ViewForm()
         {
             InitializeComponent();
             //videoSource = new VideoSource();
-            videoSource = new GrayVideoSource<Byte>(@"C:/film.avi");
+            videoSource = new GrayVideoSource<Byte>(@"C:/test.avi");
             videoSource.ResultReady += DisplayVideo;
-           
+            
             // FIXME: move to better place and enable changes this in runtime [and draw lines/points?]
             PointF[] src = { 
                                 new PointF(116,      108), 
@@ -75,20 +103,35 @@ namespace CarVision
                            };
             
             perpCorr = new PerspectiveCorrection(videoSource, src, dst);
-            
-            perpCorr.ResultReady += DisplayVideo;           
+            //perpCorr.ResultReady += DisplayVideo;           
          
             laneDetector = new LaneMarkDetector(perpCorr);
-            laneDetector.ResultReady += DisplayVideo;
+            //laneDetector.ResultReady += DisplayVideo;
 
-            invPerpCorr = new PerspectiveCorrection(laneDetector, dst, src);
-            invPerpCorr.ResultReady += DisplayVideo;
+            //lineHist = new LineHistogram(laneDetector);
+            //lineHist.ResultReady += DisplayVideo;
+
+            //chevp = new CHEVP(laneDetector);
+            //chevp.Threshold = 29;
+            //chevp.ResultReady += DisplayVideo;
+
+            cluster = new ClusterLanes(laneDetector);
+            cluster.ResultReady += DisplayVideo;
+
+            invPerpColor = new PerspectiveCorrectionRgb(cluster, dst, src);
+            invPerpColor.ResultReady += DisplayVideo;
+
+            //invPerpCorr = new PerspectiveCorrection<Gray>(chevp, dst, src);
+            //invPerpCorr.ResultReady += DisplayVideo;
+
+
+            videoSource.Start();
         }
 
         private void ViewForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            videoSource.ResultReady -= DisplayVideo;
             videoSource.Stop();
+            videoSource.ResultReady -= DisplayVideo;
         }
     }
 }

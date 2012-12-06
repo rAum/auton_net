@@ -12,11 +12,17 @@ namespace Auton.CarVision.Video
     public class GrayVideoSource<PixelType> : Supplier<Image<Gray, PixelType>> where PixelType : new()
     {
         public Boolean Runs { get; private set; }
+        static bool first = true;
 
         public override Image<Gray, PixelType> LastResult
         {
             get
             {
+                if (first)
+                {
+                    //System.Threading.Thread.Sleep(3000);
+                    first = false;
+                }
                 var frame = capture.RetrieveGrayFrame();
                 while (frame == null)
                 {
@@ -24,7 +30,7 @@ namespace Auton.CarVision.Video
                     frame = capture.RetrieveGrayFrame();
                 }
 
-                System.Threading.Thread.Sleep(30);
+                System.Threading.Thread.Sleep(230);
 
                 return frame.Convert<Gray, PixelType>();
             }
@@ -81,7 +87,7 @@ namespace Auton.CarVision.Video
                     frame = capture.RetrieveBgrFrame();
                 }
 
-                System.Threading.Thread.Sleep(30);
+                System.Threading.Thread.Sleep(10);
 
                 return frame.Convert<Bgr, float>();
             }
