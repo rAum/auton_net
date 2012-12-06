@@ -42,7 +42,7 @@ namespace RANSAC
                 model_error = 0;
                 foreach (var p in inputData)
                 {
-                    err = model.value(p.X) - p.Y;
+                    err = model.value(p.Y) - p.X;
                     if (Math.Abs(err) < error_threshold ) {
                         consensus_set.Add(p);
                         model_error += err;

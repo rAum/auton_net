@@ -52,8 +52,8 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             const int hoffset = 120;
             if (first.Count > 8 && second.Count > 8)
             {
-                var one = RANSAC.RANSAC.fit(1100, 8, (int)(first.Count * 0.75), 140, first);
-                var two = RANSAC.RANSAC.fit(1100, 8, (int)(second.Count * 0.75), 140, second);
+                var one = RANSAC.RANSAC.fit(1100, 8, (int)(first.Count * 0.7), 10, first);
+                var two = RANSAC.RANSAC.fit(1100, 8, (int)(second.Count * 0.7), 10, second);
                 if (one != null && two != null)
                 {
                     if (one.value(img.Height) > two.value(img.Height))
