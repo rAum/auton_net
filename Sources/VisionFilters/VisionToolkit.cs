@@ -100,7 +100,7 @@ namespace VisionFilters
             Matrix<float> samplesMatrix = new Matrix<float>(samples);
             Matrix<Int32> labels = new Matrix<Int32>(input.Count, 1);
 
-            CvInvoke.cvKMeans2(samplesMatrix, 2, labels, term, attempts, IntPtr.Zero, KMeansInitType.PPCenters, IntPtr.Zero, IntPtr.Zero);
+            CvInvoke.cvKMeans2(samplesMatrix, 2, labels, term, attempts, IntPtr.Zero, KMeansInitType.RandomCenters, IntPtr.Zero, IntPtr.Zero);
 
             first.Clear();
             second.Clear();

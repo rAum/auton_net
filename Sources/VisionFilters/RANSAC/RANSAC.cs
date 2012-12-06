@@ -45,7 +45,7 @@ namespace RANSAC
                     err = model.value(p.X) - p.Y;
                     if (Math.Abs(err) < error_threshold ) {
                         consensus_set.Add(p);
-                        model_error = Math.Max(err, model_error);
+                        model_error += err;
                     }
                 }
 

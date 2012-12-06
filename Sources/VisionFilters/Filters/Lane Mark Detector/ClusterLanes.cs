@@ -24,7 +24,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             byte[,,] raw = img.Data;
             byte[,,] oraw = output.Data;
 
-            for (int y = 0; y < img.Height; ++y)
+            for (int y = 120; y < img.Height; ++y)
             {
                 for (int x = 0; x < img.Width; ++x)
                 {
@@ -49,11 +49,11 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 oraw[p.Y, p.X, 1] = 255;
             }
 
-            const int hoffset = 110;
-            if (first.Count > 10 && second.Count > 10)
+            const int hoffset = 120;
+            if (first.Count > 8 && second.Count > 8)
             {
-                var one = RANSAC.RANSAC.fit(1000, 11, (int)(first.Count * 0.75), 120, first);
-                var two = RANSAC.RANSAC.fit(1000, 11, (int)(second.Count * 0.75), 120, second);
+                var one = RANSAC.RANSAC.fit(1100, 8, (int)(first.Count * 0.75), 140, first);
+                var two = RANSAC.RANSAC.fit(1100, 8, (int)(second.Count * 0.75), 140, second);
                 if (one != null && two != null)
                 {
                     if (one.value(img.Height) > two.value(img.Height))
@@ -66,39 +66,39 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                         first = second;
                         second = first;
                     }
+                }
 
-                    if (one != null)
+                if (one != null)
+                {
+                    for (int y = hoffset; y < img.Height; y += 16)
                     {
-                        for (int y = hoffset; y < img.Height; y += 16)
-                        {
-                            output.Draw(
-                                new CircleF(new PointF((float)one.value(y), (float)y), 3.0f)
-                                , new Rgb(210, 140, 183),
-                                0);
-                        }
+                        output.Draw(
+                            new CircleF(new PointF((float)one.value(y), (float)y), 3.0f)
+                            , new Rgb(210, 140, 183),
+                            0);
                     }
+                }
 
-                    if (two != null)
+                if (two != null)
+                {
+                    for (int y = hoffset; y < img.Height; y += 16)
                     {
-                        for (int y = hoffset; y < img.Height; y += 16)
-                        {
-                            output.Draw(
-                                new CircleF(new PointF((float)two.value(y), (float)y), 3.0f)
-                                , new Rgb(170, 210, 143),
-                                0);
-                        }
+                        output.Draw(
+                            new CircleF(new PointF((float)two.value(y), (float)y), 3.0f)
+                            , new Rgb(170, 210, 143),
+                            0);
                     }
+                }
 
-                    //if (one != null && two != null)
+                if (one != null && two != null)
+                {
+                    var p = new Parabola(0.5 * (one.a + two.a), 0.5 * (one.b + two.b), 0.5 * (one.c + two.c));
+                    for (int y = 0; y < img.Height; y += 8)
                     {
-                        var p = new Parabola(0.5 * (one.a + two.a), 0.5 * (one.b + two.b), 0.5 * (one.c + two.c));
-                        for (int y = 0; y < img.Height; y += 8)
-                        {
-                            output.Draw(
-                                new CircleF(new PointF((float)p.value(y), (float)y), 1.0f)
-                                , new Rgb(230, 230, 230),
-                                0);
-                        }
+                        output.Draw(
+                            new CircleF(new PointF((float)p.value(y), (float)y), 1.0f)
+                            , new Rgb(230, 230, 230),
+                            0);
                     }
                 }
             }

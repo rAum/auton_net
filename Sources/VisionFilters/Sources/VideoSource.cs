@@ -30,7 +30,7 @@ namespace Auton.CarVision.Video
                     frame = capture.RetrieveGrayFrame();
                 }
 
-                System.Threading.Thread.Sleep(230);
+                System.Threading.Thread.Sleep(30);
 
                 return frame.Convert<Gray, PixelType>();
             }
