@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace BarcodeDetector
+namespace BarcodeDetectorPreview
 {
     static class Program
     {

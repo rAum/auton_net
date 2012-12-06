@@ -14,13 +14,13 @@ using System.Threading;
 using Auton.CarVision.Video;
 using Auton.CarVision.Video.Filters;
 
-namespace BarcodeDetector
+namespace BarcodeDetectorPreview
 {
     public partial class Preview : Form
     {
 
         GrayVideoSource<float> source;
-        POIDetector detector;
+        BarcodeDetector detector;
        
         public Preview(string filename = null)
         {
@@ -28,7 +28,7 @@ namespace BarcodeDetector
             source = new GrayVideoSource<float>();
             
 
-            detector = new POIDetector(source, (double)numThreshold.Value);
+            detector = new BarcodeDetector(source, (double)numThreshold.Value);
 
             udSmoothRadius.Value = detector.SmoothRadius;
             udSobelRadius.Value = detector.SobelRadius;

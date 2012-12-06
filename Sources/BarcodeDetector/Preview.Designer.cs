@@ -1,4 +1,4 @@
-﻿namespace BarcodeDetector
+﻿namespace BarcodeDetectorPreview
 {
     partial class Preview
     {
