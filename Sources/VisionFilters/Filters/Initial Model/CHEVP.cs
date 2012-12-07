@@ -9,8 +9,9 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Emgu;
 
-namespace VisionFilters.Filters.Lane_Mark_Detector
+namespace VisionFilters.InitialModel
 {
+    ///TODO: implement to estimate horizon and automate finding perspective transform.
     /// <summary>
     /// The CHEVP algorithm - Canny/Hough Estimation of Vanishing Points
     /// ref: "Lane detection and tracking using B-Snake" Yue Wang et al

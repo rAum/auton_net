@@ -71,33 +71,22 @@ namespace RANSAC_Test
         ///A test for GetRandomSample
         ///</summary>
         [TestMethod()]
-        public void GetRandomSampleTest()
+        public void GetRandomSampleSimpleTest()
         {
-            List<Point> input = null; // TODO: Initialize to an appropriate value
-            int samplesCount = 0; // TODO: Initialize to an appropriate value
-            List<Point> expected = null; // TODO: Initialize to an appropriate value
+            List<Point> input = new List<Point>()
+            {
+                new Point(1,1),
+                new Point(2,2),
+                new Point(3,3),
+                new Point(4,4)
+            };
+
+            int samplesCount = 2;
             List<Point> actual;
             actual = RANSAC.RANSAC.GetRandomSample(input, samplesCount);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
 
-        /// <summary>
-        ///A test for fit
-        ///</summary>
-        [TestMethod()]
-        public void fitTest()
-        {
-            int iterations = 0; // TODO: Initialize to an appropriate value
-            int init_samples = 0; // TODO: Initialize to an appropriate value
-            int n = 0; // TODO: Initialize to an appropriate value
-            double error_threshold = 0F; // TODO: Initialize to an appropriate value
-            List<Point> inputData = null; // TODO: Initialize to an appropriate value
-            Parabola expected = null; // TODO: Initialize to an appropriate value
-            Parabola actual;
-            actual = RANSAC.RANSAC.fit(iterations, init_samples, n, error_threshold, inputData);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            Assert.AreEqual(actual.Count, samplesCount, "number of random samples mismatch.");
+            Assert.AreNotEqual(actual[0], actual[1], "the same points are in the set.");
         }
     }
 }

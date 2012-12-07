@@ -68,9 +68,9 @@ namespace RANSAC_Test
         {
             List<Point> points = new List<Point>()
             {
-                new Point(2,3),
-                new Point(4,2),
-                new Point(1,8)
+                new Point(3,2),
+                new Point(2,4),
+                new Point(8,1)
             };
 
             Parabola result = Parabola.fit(points);
@@ -87,9 +87,9 @@ namespace RANSAC_Test
         {
             List<Point> points = new List<Point>()
             {
-                new Point(30,32),
-                new Point(20,22),
-                new Point(3,5)
+                new Point(32,30),
+                new Point(22,20),
+                new Point(5,3)
             };
 
             Parabola result = Parabola.fit(points);
@@ -105,14 +105,14 @@ namespace RANSAC_Test
         {
             List<Point> points = new List<Point>()
             {
-                new Point(31,  0),
-                new Point(7,  -1),
-                new Point(3,  -3),
-                new Point(9,  -5),
-                new Point(5,  -7),
-                new Point(1, -10),
-                new Point(7, -15),
-                new Point(3, -25)
+                new Point(0, 31),
+                new Point(-1, 7),
+                new Point(-3, 3),
+                new Point(-5, 9),
+                new Point(-7, 5),
+                new Point(-10, 1),
+                new Point(-15, 7),
+                new Point(-25, 3)
             };
 
             Parabola result = Parabola.fit(points);
@@ -128,13 +128,13 @@ namespace RANSAC_Test
         {
             List<Point> points = new List<Point>()
             {
-                new Point(720,  0),
-                new Point(245,320),
-                new Point(245, 54),
-                new Point(689,32),
-                new Point(530,754),
-                new Point(732,24),
-                new Point(323,240)
+                new Point(0, 720),
+                new Point(320, 245),
+                new Point(54, 245),
+                new Point(32, 689),
+                new Point(754, 530),
+                new Point(24, 732),
+                new Point(240, 323)
             };
 
             Parabola result = Parabola.fit(points);

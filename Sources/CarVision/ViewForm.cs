@@ -26,9 +26,7 @@ namespace CarVision
         PerspectiveCorrection perpCorr;
         PerspectiveCorrection invPerpCorr;
         PerspectiveCorrectionRgb invPerpColor;
-        LineHistogram lineHist;
         ClusterLanes cluster;
-        CHEVP chevp;
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Gray, Byte>> e)
         {
@@ -47,10 +45,6 @@ namespace CarVision
                 Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
                 imgBox.Image = cam + (ipc * 2 - new Rgb(0.0, 255.0, 10.0)); // mix current video frame with founded line marks
                 return;
-            }
-            else if (sender == chevp)
-            {
-                imgBox = imgCanny;
             }
             else if (sender == perpCorr)
                 imgBox = imgCanny;
@@ -78,11 +72,10 @@ namespace CarVision
             imgBox.Image = (Image<Rgb, Byte>)e.Result;
         }
 
-
         public ViewForm()
         {
             InitializeComponent();
-            //videoSource = new VideoSource();
+
             videoSource = new GrayVideoSource<Byte>(@"C:/test.avi");
             videoSource.ResultReady += DisplayVideo;
             
@@ -103,27 +96,14 @@ namespace CarVision
                            };
             
             perpCorr = new PerspectiveCorrection(videoSource, src, dst);
-            //perpCorr.ResultReady += DisplayVideo;           
          
             laneDetector = new LaneMarkDetector(perpCorr);
-            //laneDetector.ResultReady += DisplayVideo;
-
-            //lineHist = new LineHistogram(laneDetector);
-            //lineHist.ResultReady += DisplayVideo;
-
-            //chevp = new CHEVP(laneDetector);
-            //chevp.Threshold = 29;
-            //chevp.ResultReady += DisplayVideo;
 
             cluster = new ClusterLanes(laneDetector);
             cluster.ResultReady += DisplayVideo;
 
             invPerpColor = new PerspectiveCorrectionRgb(cluster, dst, src);
             invPerpColor.ResultReady += DisplayVideo;
-
-            //invPerpCorr = new PerspectiveCorrection<Gray>(chevp, dst, src);
-            //invPerpCorr.ResultReady += DisplayVideo;
-
 
             videoSource.Start();
         }
