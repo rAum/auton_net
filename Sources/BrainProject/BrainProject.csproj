@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>e7db80fc-beb2-43bf-beee-3369ca1fd1d3</ProjectGuid>
+    <ProjectGuid>{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BrainProject</RootNamespace>

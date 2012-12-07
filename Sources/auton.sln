@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "autonomiczny_samochod", "au
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{AC8330CF-3F32-45C6-B8E8-5BE9F8AFF33D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainProject", "BrainProject\BrainProject.csproj", "{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = auton.vsmdi
@@ -174,6 +176,18 @@ Global
 		{AC8330CF-3F32-45C6-B8E8-5BE9F8AFF33D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AC8330CF-3F32-45C6-B8E8-5BE9F8AFF33D}.Release|x64.ActiveCfg = Release|Any CPU
 		{AC8330CF-3F32-45C6-B8E8-5BE9F8AFF33D}.Release|x86.ActiveCfg = Release|Any CPU
+		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Debug|x64.ActiveCfg = Debug|x86
+		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Debug|x86.ActiveCfg = Debug|x86
+		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Debug|x86.Build.0 = Debug|x86
+		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Release|Any CPU.ActiveCfg = Release|x86
+		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Release|Mixed Platforms.Build.0 = Release|x86
+		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Release|x64.ActiveCfg = Release|x86
+		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Release|x86.ActiveCfg = Release|x86
+		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
