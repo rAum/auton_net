@@ -1,0 +1,7 @@
+﻿TODO:
+	now:
+		- making FakeCarModel working like real model (Kubon???)
+		- starting sequence (using IsInitialized()) + some barier to sync everything ((???) rly - now u can just turn in on in every moment)
+
+	future:
+		- real time charts drawing (from gathered stats) (it would make regulators tuning much easier)
