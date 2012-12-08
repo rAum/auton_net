@@ -61,6 +61,11 @@ namespace autonomiczny_samochod
         {
             ICar = parent;
 
+            for(int i = 0; i < lastTicksMeasurements.Length; i++)
+            {
+                lastTicksMeasurements[i] = 0;
+            }
+
             extentionCardCommunicator = new USB4702();
             servoDriver = new ServoDriver();
             angleAndSpeedMeter = new RS232Controller(this);

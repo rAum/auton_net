@@ -41,7 +41,9 @@
     <AssociationLine Name="Controller" Type="autonomiczny_samochod.CarController" FixedFromPoint="true">
       <Path>
         <Point X="20.25" Y="2.812" />
-        <Point X="18.75" Y="2.812" />
+        <Point X="19.875" Y="2.812" />
+        <Point X="19.875" Y="2.531" />
+        <Point X="18.75" Y="2.531" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="0.248" Y="0.1" />
@@ -92,10 +94,10 @@
     </TypeIdentifier>
   </Class>
   <Class Name="autonomiczny_samochod.CarController" Collapsed="true">
-    <Position X="17" Y="2.5" Width="1.75" />
+    <Position X="17" Y="2.25" Width="1.75" />
     <AssociationLine Name="Model" Type="autonomiczny_samochod.ICar" FixedToPoint="true">
       <Path>
-        <Point X="18.188" Y="3.062" />
+        <Point X="18.188" Y="2.812" />
         <Point X="18.188" Y="5" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
@@ -103,12 +105,11 @@
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AIAAQAKgAgACAAAAIBAOABgEAAAAAAIACAgAAAAEAiA=</HashCode>
+      <HashCode>AIAAQAKgAgACAAAAIBAKABgEAAAAAAIACAgAAAAEAiA=</HashCode>
       <FileName>Controller\CarController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Model" />
-      <Property Name="MainWindow" />
     </ShowAsAssociation>
   </Class>
   <Class Name="autonomiczny_samochod.TargetSpeedChangedEventArgs" Collapsed="true">
@@ -223,7 +224,7 @@
   <Class Name="car_communicator.USB4702" Collapsed="true">
     <Position X="23.5" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAIAAAIBQAEAAQIIAABIQAQIAAEAAgYAAgBAAAEGgAE=</HashCode>
+      <HashCode>IAIEACIDQAEAAQIIIABIQAQIAAEAAhYAAgBAAAEGgAE=</HashCode>
       <FileName>Model\Communicators\USB4702.cs</FileName>
     </TypeIdentifier>
   </Class>

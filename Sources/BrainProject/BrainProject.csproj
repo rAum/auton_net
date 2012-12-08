@@ -75,6 +75,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\autonomiczny_samochod\autonomiczny_samochod.csproj">
+      <Project>{E23EBE5E-CF61-479E-AA5E-3BE971E03653}</Project>
+      <Name>autonomiczny_samochod</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Helpers\Helpers.csproj">
       <Project>{AC8330CF-3F32-45C6-B8E8-5BE9F8AFF33D}</Project>
       <Name>Helpers</Name>

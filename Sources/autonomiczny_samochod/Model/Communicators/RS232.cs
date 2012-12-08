@@ -41,7 +41,7 @@ namespace autonomiczny_samochod
         private const double WHEEL_ANGLE_ON_MAX_LEFT = -30.0; //IMPORTANT: TODO: check it in documentation
 
         //brake
-        private const int BRAKE_OUTPUT_MAX_PUSHED = 11020; //was checked to be 11170 when max but decreased to improve steering
+        private const int BRAKE_OUTPUT_MAX_PUSHED = 11070; //was checked to be 11170 when max but decreased to improve steering
         private const double BRAKE_POWER_WHEN_MAX_PUSHED = 100;
 
         private const int BRAKE_OUTPUT_MAX_PULLED = 10740; //was checked to be 10729 when min but increased to improve steering
