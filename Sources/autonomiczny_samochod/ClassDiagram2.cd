@@ -228,20 +228,6 @@
       <FileName>Model\Communicators\USB4702.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="autonomiczny_samochod.Model.Regulators.PIDRegulator" Collapsed="true">
-    <Position X="11.25" Y="12.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>BAABIAAAAgAAQEQAAAgAEABAAAQAAABCAAAAAMAAAAA=</HashCode>
-      <FileName>Model\Regulators\PIDRegulator.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="autonomiczny_samochod.Model.Regulators.PIDSettings" Collapsed="true">
-    <Position X="9.5" Y="12.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAABAAAgEAAAAAAAgAAAAAEQEEAAACAoA=</HashCode>
-      <FileName>Model\Regulators\PIDSettings.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="autonomiczny_samochod.FakeBrakeRegulator" Collapsed="true">
     <Position X="17.5" Y="12" Width="1.5" />
     <TypeIdentifier>

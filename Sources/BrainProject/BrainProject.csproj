@@ -83,6 +83,10 @@
       <Project>{AC8330CF-3F32-45C6-B8E8-5BE9F8AFF33D}</Project>
       <Name>Helpers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VisionFilters\VisionPerception.csproj">
+      <Project>{03833D47-DF5A-4B24-ABDB-19601109D523}</Project>
+      <Name>VisionPerception</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

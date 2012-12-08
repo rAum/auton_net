@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Helpers
 {
-    class PIDRegulator
+    public class PIDRegulator
     {
         //variables needed in CalculateSteering method
         private double I_Factor_sum = 0.0;

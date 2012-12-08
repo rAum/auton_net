@@ -83,8 +83,6 @@
     <Compile Include="Test\Fakes\FakeSpeedRegulator.cs" />
     <Compile Include="Controller\CarController.cs" />
     <Compile Include="Model\Car\RealCar.cs" />
-    <Compile Include="Model\Regulators\PIDRegulator.cs" />
-    <Compile Include="Model\Regulators\PIDSettings.cs" />
     <Compile Include="Model\Regulators\PIDBrakeRegulator.cs" />
     <Compile Include="Test\Fakes\CarModel.cs" />
     <Compile Include="Model\Regulators\PIDSpeedRegulator.cs" />
