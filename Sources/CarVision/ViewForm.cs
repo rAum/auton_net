@@ -65,7 +65,7 @@ namespace CarVision
         {
             InitializeComponent();
 
-            videoSource = new GrayVideoSource<Byte>(@"C:/test.avi");
+            videoSource = new GrayVideoSource<Byte>("");//@"C:/test.avi");
             videoSource.ResultReady += DisplayVideo;
 
             roadDetector = new RoadCenterDetector(videoSource);

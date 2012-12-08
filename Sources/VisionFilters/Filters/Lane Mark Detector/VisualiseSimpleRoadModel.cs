@@ -12,18 +12,18 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
     public class VisualiseSimpleRoadModel : ThreadSupplier<SimpleRoadModel, Image<Rgb, byte>>
     {
         private Supplier<SimpleRoadModel> supplier;
+        Image<Rgb, byte> output;
 
         private void CreateImage(SimpleRoadModel model)
         {
-            Image<Rgb, byte> output = new Image<Rgb, byte>(320, 240);
-
+            output = new Image<Rgb, byte>(CamModel.Width, CamModel.Height);
             var one = model.leftLane;
             var two = model.rightLane;
             var cen = model.center;
 
             if (one != null)
             {
-                for (int y = 0; y < output.Height; y += 16)
+                for (int y = 0; y < output.Height; y += 4)
                 {
                     output.Draw(
                         new CircleF(new PointF((float)one.value(y), (float)y), 3.0f)
@@ -34,7 +34,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
             if (two != null)
             {
-                for (int y = 0; y < output.Height; y += 16)
+                for (int y = 0; y < output.Height; y += 4)
                 {
                     output.Draw(
                         new CircleF(new PointF((float)two.value(y), (float)y), 3.0f)
@@ -45,7 +45,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
             if (cen != null)
             {
-                for (int y = 0; y < output.Height; y += 8)
+                for (int y = 0; y < output.Height; y += 4)
                 {
                     output.Draw(
                         new CircleF(new PointF((float)cen.value(y), (float)y), 1.0f)

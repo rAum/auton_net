@@ -87,7 +87,6 @@
             this.imgDebug.Location = new System.Drawing.Point(3, 16);
             this.imgDebug.Name = "imgDebug";
             this.imgDebug.Size = new System.Drawing.Size(314, 276);
-            this.imgDebug.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.imgDebug.TabIndex = 2;
             this.imgDebug.TabStop = false;
             // 
@@ -98,7 +97,6 @@
             this.imgVideoSource.Location = new System.Drawing.Point(3, 16);
             this.imgVideoSource.Name = "imgVideoSource";
             this.imgVideoSource.Size = new System.Drawing.Size(314, 276);
-            this.imgVideoSource.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.imgVideoSource.TabIndex = 2;
             this.imgVideoSource.TabStop = false;
             // 

@@ -12,7 +12,7 @@ namespace VisionFilters.Output
     /// </summary>
     public class RoadCenterDetector
     {
-        private double[] samplePoints;
+        private int[] samplePoints; // in pixels
         private VisionPerceptor perceptor;
 
         // for dbg purpose
@@ -31,10 +31,14 @@ namespace VisionFilters.Output
 
         public RoadCenterDetector(GrayVideoSource<byte> videoSource)
         {
-            samplePoints = new double[]
+            float[] samplePointsDistance = new float[] // in meters
             {
-                0.9, 0.8, 0.7
+                0.5f, 
+                1.0f, 
+                1.5f
             };
+
+            samplePoints = samplePointsDistance.Select(p => { return CamModel.ToPixels(p); }).ToArray();
 
             perceptor = new VisionPerceptor(videoSource);
             perceptor.ActualRoadModel += NewRoadModel;
@@ -51,19 +55,21 @@ namespace VisionFilters.Output
         /// <param name="roadModel">road center model</param>
         private void RoadCenterFounded(Parabola roadModel)
         {
+            PointF[] samples = samplePoints.Select(p => { return new PointF((float)roadModel.value(p), (float)p); }).ToArray();
+
+            System.Console.Write("New measurements: ");
+            foreach (var p in samples)
+            {
+                System.Console.Out.Write(p + " ");
+            }
+            System.Console.Out.WriteLine();
+
             if (RoadCenterSupply == null)
             {
-                System.Console.Out.WriteLine("Nobody is waiting for road center.");
                 //Helpers.Logger.Log(this, "Nobody is waiting for road center.", 5);
                 return;
             }
-
-            RoadCenterSupply.Invoke(this, new RoadCenterEvent(
-                samplePoints.Select( sample => 
-                { 
-                    return new PointF((float)roadModel.value(sample), (float)sample); 
-                }).ToArray())
-            );
+            RoadCenterSupply.Invoke(this, new RoadCenterEvent(samples));
         }
     }
 }

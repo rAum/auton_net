@@ -12,6 +12,7 @@ namespace VisionFilters.Output
     public class GrayVideoSource<PixelType> : Supplier<Image<Gray, PixelType>> where PixelType : new()
     {
         public Boolean Runs { get; private set; }
+        int sleepTime = 20;
 
         public override Image<Gray, PixelType> LastResult
         {
@@ -24,9 +25,9 @@ namespace VisionFilters.Output
                     frame = capture.RetrieveGrayFrame();
                 }
 
-                System.Threading.Thread.Sleep(20);
+                System.Threading.Thread.Sleep(sleepTime);
 
-                return frame.Convert<Gray, PixelType>().Resize(320, 240, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
+                return frame.Convert<Gray, PixelType>().Resize(CamModel.Width, CamModel.Height, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
             }
         }
 
@@ -42,7 +43,10 @@ namespace VisionFilters.Output
         private void Load()
         {
             if (file == "")
+            {
                 capture = new Capture();
+                sleepTime = 0;
+            }
             else
                 capture = new Capture(file);
             capture.ImageGrabbed +=

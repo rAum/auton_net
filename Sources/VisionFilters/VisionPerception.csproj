@@ -75,6 +75,7 @@
     <Compile Include="Filters\Image Operations\Smoothener.cs" />
     <Compile Include="Filters\Lane Mark Detector\SimpleRoadModel.cs" />
     <Compile Include="Filters\Lane Mark Detector\VisualiseSimpleRoadModel.cs" />
+    <Compile Include="InputProperties.cs" />
     <Compile Include="Output\RoadCenterEvent.cs" />
     <Compile Include="VisionPerceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
