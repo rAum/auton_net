@@ -7,6 +7,8 @@ using Auton.CarVision.Video.Filters;
 using VisionFilters.Filters.Lane_Mark_Detector;
 using System.Drawing;
 using VisionFilters.Output;
+using Emgu.CV;
+using Emgu.CV.Structure;
 
 namespace VisionFilters
 {
@@ -40,7 +42,7 @@ namespace VisionFilters
 
         public event RoadModelEventHandler ActualRoadModel;
 
-        public VisionPerceptor(GrayVideoSource<byte> videoSource)
+        public VisionPerceptor(Supplier<Image<Gray, byte>> input)
         {
             // construct perspective transformation
             src = new PointF[] { 
@@ -59,7 +61,7 @@ namespace VisionFilters
 
             ///////////////////////////////////
 
-            perspectiveTransform = new PerspectiveCorrection(videoSource, src, dst);
+            perspectiveTransform = new PerspectiveCorrection(input, src, dst);
             laneDetector = new LaneMarkDetector(perspectiveTransform);
             roadDetector = new ClusterLanes(laneDetector);
             roadDetector.ResultReady += PassRoadModel;

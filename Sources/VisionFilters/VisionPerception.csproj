@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Filters\Image Operations\HsvFilter.cs" />
     <Compile Include="Filters\Image Operations\Canny.cs" />
     <Compile Include="Filters\Initial Model\CHEVP.cs" />
     <Compile Include="Filters\Lane Mark Detector\ClusterLanes.cs" />

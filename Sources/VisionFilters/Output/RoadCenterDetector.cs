@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using RANSAC.Functions;
 using System.Drawing;
+using Auton.CarVision.Video;
+using Emgu.CV;
+using Emgu.CV.Structure;
 
 namespace VisionFilters.Output
 {
@@ -29,7 +32,15 @@ namespace VisionFilters.Output
         /// </summary>
         public event RoadCenterHandler RoadCenterSupply;
 
-        public RoadCenterDetector(GrayVideoSource<byte> videoSource)
+        public RoadCenterDetector(Supplier<Image<Gray, byte>> input)
+        {
+            Setup();
+
+            perceptor = new VisionPerceptor(input);
+            perceptor.ActualRoadModel += NewRoadModel;
+        }
+
+        private void Setup()
         {
             float[] samplePointsDistance = new float[] // in meters
             {
@@ -39,9 +50,6 @@ namespace VisionFilters.Output
             };
 
             samplePoints = samplePointsDistance.Select(p => { return CamModel.ToPixels(p); }).ToArray();
-
-            perceptor = new VisionPerceptor(videoSource);
-            perceptor.ActualRoadModel += NewRoadModel;
         }
 
         private void NewRoadModel(object sender, RoadModelEvent e)

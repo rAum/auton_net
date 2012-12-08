@@ -15,6 +15,7 @@ using Auton.CarVision.Video.Filters;
 using VisionFilters.Output;
 using Emgu.CV.UI;
 using VisionFilters.Filters.Lane_Mark_Detector;
+using VisionFilters.Filters.Image_Operations;
 
 
 namespace CarVision
@@ -22,15 +23,19 @@ namespace CarVision
     public partial class ViewForm : Form
     {
         GrayVideoSource<byte> videoSource;
+        ColorVideoSource<byte> colorVideoSource;
+        HsvFilter filter;
+
         RoadCenterDetector roadDetector;
         VisualiseSimpleRoadModel visRoad;
         PerspectiveCorrectionRgb invPerp;
 
+
+        VideoWriter videoWriter;
+
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Gray, Byte>> e)
         {
             ImageBox imgBox = imgDebug;
-            if (sender == videoSource)
-                imgBox = imgVideoSource;
             if (imgBox == null)
             {
                 System.Console.Out.WriteLine("No receiver registered!!");
@@ -44,14 +49,13 @@ namespace CarVision
             ImageBox imgBox = imgDebug;
             if (sender == invPerp)
             {
-                imgBox = imgOutput;
                 Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
-                imgBox.Image = (Image<Rgb, Byte>)e.Result + cam;
+                imgOutput.Image = (Image<Rgb, Byte>)e.Result + cam;
                 return;
             }
-            else if (sender == visRoad)
+            else if (sender == colorVideoSource)
             {
-                imgBox = imgDebug;
+                imgBox = imgVideoSource;
             }
             if (imgBox == null)
             {
@@ -61,14 +65,26 @@ namespace CarVision
             imgBox.Image = (Image<Rgb, Byte>)e.Result;
         }
 
+        private Hsv ColorToHsv(Color col)
+        {
+            Hsv c  = new Hsv(col.GetHue(), col.GetSaturation(), col.GetBrightness());
+            return c;
+        }
+
         public ViewForm()
         {
             InitializeComponent();
 
-            videoSource = new GrayVideoSource<Byte>("");//@"C:/test.avi");
-            videoSource.ResultReady += DisplayVideo;
+            //videoSource = new GrayVideoSource<Byte>(@"C:/test.avi");
+            //videoSource.ResultReady += DisplayVideo;
 
-            roadDetector = new RoadCenterDetector(videoSource);
+            colorVideoSource = new ColorVideoSource<byte>("");
+            colorVideoSource.ResultReady += DisplayVideo;
+
+            filter = new HsvFilter(colorVideoSource, new Hsv(160, 0, 0), new Hsv(180, 255, 255));
+            filter.ResultReady += DisplayVideo;
+
+            roadDetector = new RoadCenterDetector(filter);
 
             visRoad = new VisualiseSimpleRoadModel(roadDetector.Perceptor.roadDetector);
             visRoad.ResultReady += DisplayVideo;
@@ -76,14 +92,17 @@ namespace CarVision
             invPerp = new PerspectiveCorrectionRgb(visRoad, roadDetector.Perceptor.dst, roadDetector.Perceptor.src);
             invPerp.ResultReady += DisplayVideo;
 
-            videoSource.Start();
+            //videoSource.Start();
+            colorVideoSource.Start();
         }
 
         private void ViewForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            videoSource.Stop();
+            //videoSource.Stop();
 
-            videoSource.ResultReady -= DisplayVideo;
+            colorVideoSource.Stop();
+
+            //videoSource.ResultReady -= DisplayVideo;
             invPerp.ResultReady -= DisplayVideo;
             visRoad.ResultReady -= DisplayVideo;
         }
