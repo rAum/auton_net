@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using autonomiczny_samochod.Model.Regulators;
+using Helpers;
 
 namespace autonomiczny_samochod
 {

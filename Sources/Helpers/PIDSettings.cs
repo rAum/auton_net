@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Helpers
 {
-    abstract class PIDSettings
+    public abstract class PIDSettings
     {
         //P part settings
         public double P_FACTOR_MULTIPLER;
