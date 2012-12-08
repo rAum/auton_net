@@ -55,9 +55,9 @@
     <Compile Include="RANSACTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\VisionFilters\VisionFilters.csproj">
+    <ProjectReference Include="..\VisionFilters\VisionPerception.csproj">
       <Project>{03833D47-DF5A-4B24-ABDB-19601109D523}</Project>
-      <Name>VisionFilters</Name>
+      <Name>VisionPerception</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

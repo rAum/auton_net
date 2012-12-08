@@ -10,21 +10,17 @@ using RANSAC.Functions;
 
 namespace VisionFilters.Filters.Lane_Mark_Detector
 {
-    public class ClusterLanes : ThreadSupplier<Image<Gray, Byte>, Image<Rgb, Byte>>
+    public class ClusterLanes : ThreadSupplier<Image<Gray, Byte>, SimpleRoadModel> 
     {
         private Supplier<Image<Gray, Byte>> supplier;
-        private Image<Rgb, Byte> output;
 
-        private void DrawCluster(Image<Gray, Byte> img)
+        private void ObtainSimpleModel(Image<Gray, Byte> img)
         {
-            output = new Image<Rgb, Byte>(img.Width, img.Height);
+            List<Point> lanes = new List<Point>(200);
 
-            List<Point> lanes = new List<Point>(100);
-
+            // find pixels which can be on lane mark
             byte[,,] raw = img.Data;
-            byte[,,] oraw = output.Data;
-
-            for (int y = 120; y < img.Height; ++y)
+            for (int y = 0; y < img.Height; ++y)
             {
                 for (int x = 0; x < img.Width; ++x)
                 {
@@ -35,84 +31,50 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 }
             }
 
+            // try to cluster data to distinguish left and right lane
             List<Point> first = new List<Point>(100);
             List<Point> second = new List<Point>(100);
             VisionToolkit.Two_Means_Clustering(lanes, ref first, ref second);
 
-            foreach (var p in first)
-            {
-                oraw[p.Y, p.X, 0] = 255;
-            }
+            Parabola leftLane   = null;
+            Parabola rightLane  = null;
+            Parabola roadCenter = null;
 
-            foreach (var p in second)
-            {
-                oraw[p.Y, p.X, 1] = 255;
-            }
-
-            const int hoffset = 120;
+            // if there are enough points, try to find lanes.
             if (first.Count > 8 && second.Count > 8)
             {
-                var one = RANSAC.RANSAC.fit(1100, 8, (int)(first.Count * 0.7), 5, first);
-                var two = RANSAC.RANSAC.fit(1100, 8, (int)(second.Count * 0.7), 5, second);
+                leftLane  = RANSAC.RANSAC.fit(1100, 8, (int)(first.Count * 0.8), 3, first);
+                rightLane = RANSAC.RANSAC.fit(1100, 8, (int)(second.Count * 0.8), 3, second);
 
-                if (one != null && two != null)
+                if (leftLane != null && rightLane != null)
                 {
-                    if (one.value(img.Height) > two.value(img.Height))
+                    // swap lanes if necessary
+                    if (leftLane.value(img.Height) > rightLane.value(img.Height))
                     {
-                        var t = one;
-                        one = two;
-                        two = one;
-
-                        var tt = first;
-                        first = second;
-                        second = first;
+                        var t     = leftLane;
+                        leftLane  = rightLane;
+                        rightLane = leftLane;
                     }
-                }
 
-                if (one != null)
-                {
-                    for (int y = hoffset; y < img.Height; y += 16)
-                    {
-                        output.Draw(
-                            new CircleF(new PointF((float)one.value(y), (float)y), 3.0f)
-                            , new Rgb(210, 140, 183),
-                            0);
-                    }
-                }
-
-                if (two != null)
-                {
-                    for (int y = hoffset; y < img.Height; y += 16)
-                    {
-                        output.Draw(
-                            new CircleF(new PointF((float)two.value(y), (float)y), 3.0f)
-                            , new Rgb(170, 210, 143),
-                            0);
-                    }
-                }
-
-                if (one != null && two != null)
-                {
-                    var p = new Parabola(0.5 * (one.a + two.a), 0.5 * (one.b + two.b), 0.5 * (one.c + two.c));
-                    for (int y = 0; y < img.Height; y += 8)
-                    {
-                        output.Draw(
-                            new CircleF(new PointF((float)p.value(y), (float)y), 1.0f)
-                            , new Rgb(230, 230, 230),
-                            0);
-                    }
+                    // center is between left and right lane
+                    roadCenter = new Parabola(
+                        0.5 * (leftLane.a + rightLane.a),
+                        0.5 * (leftLane.b + rightLane.b),
+                        0.5 * (leftLane.c + rightLane.c)
+                        );
                 }
             }
 
-            LastResult = output;
+            LastResult = new SimpleRoadModel(roadCenter, leftLane, rightLane);
             PostComplete();
         }
+
         public ClusterLanes(Supplier<Image<Gray, Byte>> supplier_)
         {
             supplier = supplier_;
             supplier.ResultReady += MaterialReady;
 
-            Process += DrawCluster;
+            Process += ObtainSimpleModel;
         }
     }
 }

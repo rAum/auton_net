@@ -9,14 +9,12 @@ namespace VisionFilters
 {
     public class RoadModel
     {
-        internal class CyclicBuffer
-        {
-            private Parabola[] models;
-            private int tail;
-            private int head;
-
-
-        }
+        //public class CyclicBuffer
+        //{
+        //    private Parabola[] models;
+        //    private int tail;
+        //    private int head;
+        //}
 
         private Kalman kalman;
 

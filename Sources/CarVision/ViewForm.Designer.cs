@@ -28,106 +28,148 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.gbVideoSource = new System.Windows.Forms.GroupBox();
+            this.gbOutput = new System.Windows.Forms.GroupBox();
+            this.imgOutput = new Emgu.CV.UI.ImageBox();
+            this.grpDebug = new System.Windows.Forms.GroupBox();
+            this.imgDebug = new Emgu.CV.UI.ImageBox();
             this.imgVideoSource = new Emgu.CV.UI.ImageBox();
-            this.grpSmoothener = new System.Windows.Forms.GroupBox();
-            this.imgSmoothener = new Emgu.CV.UI.ImageBox();
-            this.grpCanny = new System.Windows.Forms.GroupBox();
-            this.imgCanny = new Emgu.CV.UI.ImageBox();
-            this.gbVideoSource.SuspendLayout();
+            this.gbVideoSource = new System.Windows.Forms.GroupBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.gbOutput.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imgOutput)).BeginInit();
+            this.grpDebug.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imgDebug)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgVideoSource)).BeginInit();
-            this.grpSmoothener.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.imgSmoothener)).BeginInit();
-            this.grpCanny.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.imgCanny)).BeginInit();
+            this.gbVideoSource.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // gbVideoSource
+            // gbOutput
             // 
-            this.gbVideoSource.Controls.Add(this.imgVideoSource);
-            this.gbVideoSource.Location = new System.Drawing.Point(0, 2);
-            this.gbVideoSource.Name = "gbVideoSource";
-            this.gbVideoSource.Size = new System.Drawing.Size(320, 240);
-            this.gbVideoSource.TabIndex = 0;
-            this.gbVideoSource.TabStop = false;
-            this.gbVideoSource.Text = "VideoSource";
+            this.gbOutput.Controls.Add(this.imgOutput);
+            this.gbOutput.Location = new System.Drawing.Point(326, 2);
+            this.gbOutput.Name = "gbOutput";
+            this.gbOutput.Size = new System.Drawing.Size(320, 240);
+            this.gbOutput.TabIndex = 3;
+            this.gbOutput.TabStop = false;
+            this.gbOutput.Text = "Output";
+            // 
+            // imgOutput
+            // 
+            this.imgOutput.BackColor = System.Drawing.Color.Transparent;
+            this.imgOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imgOutput.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
+            this.imgOutput.Location = new System.Drawing.Point(3, 16);
+            this.imgOutput.Name = "imgOutput";
+            this.imgOutput.Size = new System.Drawing.Size(314, 221);
+            this.imgOutput.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.imgOutput.TabIndex = 2;
+            this.imgOutput.TabStop = false;
+            // 
+            // grpDebug
+            // 
+            this.grpDebug.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpDebug.Controls.Add(this.imgDebug);
+            this.grpDebug.Location = new System.Drawing.Point(652, 2);
+            this.grpDebug.Name = "grpDebug";
+            this.grpDebug.Size = new System.Drawing.Size(320, 295);
+            this.grpDebug.TabIndex = 4;
+            this.grpDebug.TabStop = false;
+            this.grpDebug.Text = "Dbg View";
+            // 
+            // imgDebug
+            // 
+            this.imgDebug.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imgDebug.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
+            this.imgDebug.Location = new System.Drawing.Point(3, 16);
+            this.imgDebug.Name = "imgDebug";
+            this.imgDebug.Size = new System.Drawing.Size(314, 276);
+            this.imgDebug.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.imgDebug.TabIndex = 2;
+            this.imgDebug.TabStop = false;
             // 
             // imgVideoSource
             // 
             this.imgVideoSource.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imgVideoSource.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
             this.imgVideoSource.Location = new System.Drawing.Point(3, 16);
             this.imgVideoSource.Name = "imgVideoSource";
-            this.imgVideoSource.Size = new System.Drawing.Size(314, 221);
+            this.imgVideoSource.Size = new System.Drawing.Size(314, 276);
+            this.imgVideoSource.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.imgVideoSource.TabIndex = 2;
             this.imgVideoSource.TabStop = false;
             // 
-            // grpSmoothener
+            // gbVideoSource
             // 
-            this.grpSmoothener.Controls.Add(this.imgSmoothener);
-            this.grpSmoothener.Location = new System.Drawing.Point(326, 2);
-            this.grpSmoothener.Name = "grpSmoothener";
-            this.grpSmoothener.Size = new System.Drawing.Size(320, 240);
-            this.grpSmoothener.TabIndex = 3;
-            this.grpSmoothener.TabStop = false;
-            this.grpSmoothener.Text = "Output";
+            this.gbVideoSource.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbVideoSource.Controls.Add(this.imgVideoSource);
+            this.gbVideoSource.Location = new System.Drawing.Point(0, 2);
+            this.gbVideoSource.Name = "gbVideoSource";
+            this.gbVideoSource.Size = new System.Drawing.Size(320, 295);
+            this.gbVideoSource.TabIndex = 0;
+            this.gbVideoSource.TabStop = false;
+            this.gbVideoSource.Text = "VideoSource";
             // 
-            // imgSmoothener
+            // panel1
             // 
-            this.imgSmoothener.BackColor = System.Drawing.Color.Transparent;
-            this.imgSmoothener.Location = new System.Drawing.Point(3, 16);
-            this.imgSmoothener.Name = "imgSmoothener";
-            this.imgSmoothener.Size = new System.Drawing.Size(413, 307);
-            this.imgSmoothener.TabIndex = 2;
-            this.imgSmoothener.TabStop = false;
+            this.panel1.Controls.Add(this.button1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 242);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(974, 58);
+            this.panel1.TabIndex = 5;
             // 
-            // grpCanny
+            // button1
             // 
-            this.grpCanny.Controls.Add(this.imgCanny);
-            this.grpCanny.Location = new System.Drawing.Point(652, 2);
-            this.grpCanny.Name = "grpCanny";
-            this.grpCanny.Size = new System.Drawing.Size(320, 240);
-            this.grpCanny.TabIndex = 4;
-            this.grpCanny.TabStop = false;
-            this.grpCanny.Text = "Dbg View";
-            // 
-            // imgCanny
-            // 
-            this.imgCanny.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imgCanny.Location = new System.Drawing.Point(3, 16);
-            this.imgCanny.Name = "imgCanny";
-            this.imgCanny.Size = new System.Drawing.Size(314, 221);
-            this.imgCanny.TabIndex = 2;
-            this.imgCanny.TabStop = false;
+            this.button1.Location = new System.Drawing.Point(691, 17);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(230, 27);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "Toggle lane detector / road detector";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // ViewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(974, 245);
-            this.Controls.Add(this.grpCanny);
-            this.Controls.Add(this.grpSmoothener);
+            this.AutoScroll = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(974, 300);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.grpDebug);
+            this.Controls.Add(this.gbOutput);
             this.Controls.Add(this.gbVideoSource);
             this.Location = new System.Drawing.Point(200, 200);
             this.Name = "ViewForm";
             this.Text = "ViewForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ViewForm_FormClosing);
-            this.gbVideoSource.ResumeLayout(false);
+            this.Resize += new System.EventHandler(this.ViewForm_Resize);
+            this.gbOutput.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.imgOutput)).EndInit();
+            this.grpDebug.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.imgDebug)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgVideoSource)).EndInit();
-            this.grpSmoothener.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.imgSmoothener)).EndInit();
-            this.grpCanny.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.imgCanny)).EndInit();
+            this.gbVideoSource.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.GroupBox gbVideoSource;
+        private System.Windows.Forms.GroupBox gbOutput;
+        private Emgu.CV.UI.ImageBox imgOutput;
+        private System.Windows.Forms.GroupBox grpDebug;
+        private Emgu.CV.UI.ImageBox imgDebug;
         private Emgu.CV.UI.ImageBox imgVideoSource;
-        private System.Windows.Forms.GroupBox grpSmoothener;
-        private Emgu.CV.UI.ImageBox imgSmoothener;
-        private System.Windows.Forms.GroupBox grpCanny;
-        private Emgu.CV.UI.ImageBox imgCanny;
+        private System.Windows.Forms.GroupBox gbVideoSource;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button button1;
     }
 }

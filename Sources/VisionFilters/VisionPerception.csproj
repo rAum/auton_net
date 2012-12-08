@@ -73,15 +73,22 @@
     <Compile Include="Filters\Lane Mark Detector\LineModel.cs" />
     <Compile Include="Filters\Image Operations\PerspectiveCorrection.cs" />
     <Compile Include="Filters\Image Operations\Smoothener.cs" />
+    <Compile Include="Filters\Lane Mark Detector\SimpleRoadModel.cs" />
+    <Compile Include="Filters\Lane Mark Detector\VisualiseSimpleRoadModel.cs" />
+    <Compile Include="Output\RoadCenterEvent.cs" />
+    <Compile Include="VisionPerceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RANSAC\Functions.cs" />
     <Compile Include="RANSAC\RANSAC.cs" />
+    <Compile Include="Output\RoadCenterDetector.cs" />
     <Compile Include="RoadModel.cs" />
-    <Compile Include="Sources\VideoSource.cs" />
+    <Compile Include="Output\VideoSource.cs" />
     <Compile Include="Supplier.cs" />
     <Compile Include="VisionToolkit.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VisionUtils\VisionUtils.csproj">
       <Project>{19924303-E2DE-4948-8AA5-AEBF488F2A97}</Project>

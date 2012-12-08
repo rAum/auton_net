@@ -7,7 +7,7 @@ using Emgu.CV.Structure;
 
 using Auton.CarVision.Video;
 
-namespace Auton.CarVision.Video
+namespace VisionFilters.Output
 {
     public class GrayVideoSource<PixelType> : Supplier<Image<Gray, PixelType>> where PixelType : new()
     {
@@ -26,7 +26,7 @@ namespace Auton.CarVision.Video
 
                 System.Threading.Thread.Sleep(20);
 
-                return frame.Convert<Gray, PixelType>();
+                return frame.Convert<Gray, PixelType>().Resize(320, 240, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
             }
         }
 
