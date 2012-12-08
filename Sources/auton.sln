@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarcodeInterpreter", "Barco
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarcodeDetectorPreview", "BarcodeDetector\BarcodeDetectorPreview.csproj", "{36ABBA65-EFD0-4113-9D48-6B8DAE6DAADD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisionFilters", "VisionFilters\VisionFilters.csproj", "{03833D47-DF5A-4B24-ABDB-19601109D523}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisionPerception", "VisionFilters\VisionPerception.csproj", "{03833D47-DF5A-4B24-ABDB-19601109D523}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{D99C25BB-0EA5-44FF-BE6A-BED6933B76E3}"
 EndProject

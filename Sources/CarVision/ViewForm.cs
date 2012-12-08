@@ -12,8 +12,8 @@ using Emgu.CV.Structure;
 using Auton.CarVision.Video;
 using Auton.CarVision.Video.Filters;
 
+using VisionFilters.Output;
 using Emgu.CV.UI;
-using Emgu;
 using VisionFilters.Filters.Lane_Mark_Detector;
 
 
@@ -21,52 +21,41 @@ namespace CarVision
 {
     public partial class ViewForm : Form
     {
-        GrayVideoSource<Byte> videoSource;
-        LaneMarkDetector laneDetector;
-        PerspectiveCorrection perpCorr;
-        PerspectiveCorrection invPerpCorr;
-        PerspectiveCorrectionRgb invPerpColor;
-        ClusterLanes cluster;
+        GrayVideoSource<byte> videoSource;
+        RoadCenterDetector roadDetector;
+        VisualiseSimpleRoadModel visRoad;
+        PerspectiveCorrectionRgb invPerp;
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Gray, Byte>> e)
         {
-            ImageBox imgBox = null;
+            ImageBox imgBox = imgDebug;
             if (sender == videoSource)
                 imgBox = imgVideoSource;
-            else if (sender == laneDetector)
+            if (imgBox == null)
             {
-                imgBox = imgCanny;
-            }
-            else if (sender == invPerpCorr)
-            {
-                imgBox = imgSmoothener;
-                Image<Rgb,Byte> ipc = ((Image<Gray, Byte>)e.Result).Convert<Rgb, Byte>();
-                
-                Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
-                imgBox.Image = cam + (ipc * 2 - new Rgb(0.0, 255.0, 10.0)); // mix current video frame with founded line marks
+                System.Console.Out.WriteLine("No receiver registered!!");
                 return;
             }
-            else if (sender == perpCorr)
-                imgBox = imgCanny;
-            else return;
-            if (imgBox == null)
-                throw new InvalidOperationException("No receiver registered");
             imgBox.Image = (Image<Gray, Byte>)e.Result;
-            
         }
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Rgb, Byte>> e)
         {
-            ImageBox imgBox = null;
-            if (sender != invPerpColor)
+            ImageBox imgBox = imgDebug;
+            if (sender == invPerp)
             {
-                imgBox = imgCanny;
-            }
-            else
-            {
-                imgBox = imgSmoothener;
+                imgBox = imgOutput;
                 Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
                 imgBox.Image = (Image<Rgb, Byte>)e.Result + cam;
+                return;
+            }
+            else if (sender == visRoad)
+            {
+                imgBox = imgDebug;
+            }
+            if (imgBox == null)
+            {
+                System.Console.Out.WriteLine("No receiver registered!!");
                 return;
             }
             imgBox.Image = (Image<Rgb, Byte>)e.Result;
@@ -76,34 +65,16 @@ namespace CarVision
         {
             InitializeComponent();
 
-            videoSource = new GrayVideoSource<Byte>(@"D:/test.avi");
+            videoSource = new GrayVideoSource<Byte>("");//@"C:/test.avi");
             videoSource.ResultReady += DisplayVideo;
-            
-            // FIXME: move to better place and enable changes this in runtime [and draw lines/points?]
-            PointF[] src = { 
-                                new PointF(116,      108), 
-                                new PointF(116 + 88, 108),                                 
-                                new PointF(320,     217), 
-                                new PointF(0,       217), 
-                           };
 
-            int offset = 320 / 4;
-            PointF[] dst = { 
-                                new PointF(offset,       0), 
-                                new PointF(320 - offset, 0), 
-                                new PointF(src[2].X - offset, src[2].Y + 33), 
-                                new PointF(src[3].X + offset, src[3].Y + 33) 
-                           };
-            
-            perpCorr = new PerspectiveCorrection(videoSource, src, dst);
-         
-            laneDetector = new LaneMarkDetector(perpCorr);
+            roadDetector = new RoadCenterDetector(videoSource);
 
-            cluster = new ClusterLanes(laneDetector);
-            cluster.ResultReady += DisplayVideo;
+            visRoad = new VisualiseSimpleRoadModel(roadDetector.Perceptor.roadDetector);
+            visRoad.ResultReady += DisplayVideo;
 
-            invPerpColor = new PerspectiveCorrectionRgb(cluster, dst, src);
-            invPerpColor.ResultReady += DisplayVideo;
+            invPerp = new PerspectiveCorrectionRgb(visRoad, roadDetector.Perceptor.dst, roadDetector.Perceptor.src);
+            invPerp.ResultReady += DisplayVideo;
 
             videoSource.Start();
         }
@@ -111,7 +82,32 @@ namespace CarVision
         private void ViewForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             videoSource.Stop();
+
             videoSource.ResultReady -= DisplayVideo;
+            invPerp.ResultReady -= DisplayVideo;
+            visRoad.ResultReady -= DisplayVideo;
+        }
+
+        private void ViewForm_Resize(object sender, EventArgs e)
+        {
+        }
+
+        int next = 0;
+        private void button1_Click(object sender, EventArgs e)
+        {
+            next = (next + 1) % 2;
+
+            if (next == 1)
+            {
+                visRoad.ResultReady -= DisplayVideo;
+                roadDetector.Perceptor.laneDetector.ResultReady += DisplayVideo;
+            }
+            else
+            {
+                visRoad.ResultReady += DisplayVideo;
+                roadDetector.Perceptor.laneDetector.ResultReady -= DisplayVideo;
+            }
+
         }
     }
 }

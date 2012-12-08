@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Auton.CarVision.Video.Filters.BarcodeDetector" Collapsed="true">
+    <Position X="0.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAgAAACAAAAAYABAAAAAAQCAAAAEECABAQQAQBA=</HashCode>
+      <FileName>Filters\BarcodeDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auton.CarVision.Video.Filters.Canny" Collapsed="true">
+    <Position X="5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAACAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Filters\Image Operations\Canny.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auton.CarVision.Video.Filters.PerspectiveCorrection" Collapsed="true">
+    <Position X="9.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAABAAAAAQAADACAAEAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Filters\Image Operations\PerspectiveCorrection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auton.CarVision.Video.Filters.PerspectiveCorrectionRgb" Collapsed="true">
+    <Position X="11.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAABAAAAAQAADACAAEAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Filters\Image Operations\PerspectiveCorrection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auton.CarVision.Video.Filters.Smoothener" Collapsed="true">
+    <Position X="14" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Filters\Image Operations\Smoothener.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auton.CarVision.Video.Filters.LaneMarkDetector" Collapsed="true">
+    <Position X="18.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAgAAAgAAAAAAGAAAAAAAAAAAAAAAAiAAAAAAA=</HashCode>
+      <FileName>Filters\Lane Mark Detector\LaneMarkDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VisionFilters.InitialModel.CHEVP" Collapsed="true">
+    <Position X="2.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAQAAAQAAACAAABAAAAAAAAAAAAgAQQAAAA=</HashCode>
+      <FileName>Filters\Initial Model\CHEVP.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VisionFilters.Filters.Lane_Mark_Detector.ClusterLanes" Collapsed="true">
+    <Position X="7.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAABAACAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Filters\Lane Mark Detector\ClusterLanes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VisionFilters.Filters.Lane_Mark_Detector.LineModel" Collapsed="true">
+    <Position X="25.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Filters\Lane Mark Detector\LineModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VisionFilters.Filters.Lane_Mark_Detector.SimpleRoadModel" Collapsed="true">
+    <Position X="25.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAEAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Filters\Lane Mark Detector\SimpleRoadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VisionFilters.Filters.Lane_Mark_Detector.VisualiseSimpleRoadModel" Collapsed="true">
+    <Position X="16.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Filters\Lane Mark Detector\Visualisation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VisionFilters.Output.RoadCenterDetector" Collapsed="true">
+    <Position X="25.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAABAAAAAAAAIAAAAAAAAAAAAAABAAAAAAEAA=</HashCode>
+      <FileName>Output\RoadCenterDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VisionFilters.Output.RoadCenterEvent" Collapsed="true">
+    <Position X="27.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Output\RoadCenterEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RANSAC.Functions.Parabola" Collapsed="true">
+    <Position X="27.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAEAAAAAAAAAAAAACCgAQAAAAAAAAA=</HashCode>
+      <FileName>RANSAC\Functions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RANSAC.RANSAC" Collapsed="true">
+    <Position X="29" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RANSAC\RANSAC.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VisionFilters.RoadModel" Collapsed="true">
+    <Position X="29" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RoadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VisionFilters.RoadModelEvent" Collapsed="true">
+    <Position X="30.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>VisionPerceptor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VisionFilters.VisionPerceptor" Collapsed="true">
+    <Position X="27.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAQAACAIAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAI=</HashCode>
+      <FileName>VisionPerceptor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VisionFilters.VisionToolkit" Collapsed="true">
+    <Position X="29" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAgAAAAABAAQAAIAAAAAAAAA=</HashCode>
+      <FileName>VisionToolkit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auton.CarVision.Video.GrayVideoSource&lt;PixelType&gt;" Collapsed="true">
+    <Position X="20.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAggAAAACAAEAAAAAAAAAAAAAAAEgAAJAAAAAAAAAA=</HashCode>
+      <FileName>Sources\VideoSource.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auton.CarVision.Video.ColorVideoSource" Collapsed="true">
+    <Position X="23" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAACAAAAAAAAAAAAAAAAAAEgAAJAAAAAAAAAA=</HashCode>
+      <FileName>Sources\VideoSource.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auton.CarVision.Video.ResultReadyEventArgs&lt;ResultType&gt;" Collapsed="true">
+    <Position X="30.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Supplier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auton.CarVision.Video.Supplier&lt;ResultType&gt;" Collapsed="true">
+    <Position X="11.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAAAAAAAAAAAAAAgAAAAAAEAAAAAA=</HashCode>
+      <FileName>Supplier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auton.CarVision.Video.ThreadSupplier&lt;MaterialType, ResultType&gt;" Collapsed="true">
+    <Position X="9.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACQAAAAAACABgCAAAAAAAAAAgAAAAAAAAAECCA=</HashCode>
+      <FileName>Supplier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Delegate Name="VisionFilters.Output.RoadCenterHandler" Collapsed="true">
+    <Position X="25.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Output\RoadCenterEvent.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="VisionFilters.RoadModelEventHandler" Collapsed="true">
+    <Position X="27.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>VisionPerceptor.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>

@@ -13,6 +13,7 @@ using System.Threading;
 
 using Auton.CarVision.Video;
 using Auton.CarVision.Video.Filters;
+using VisionFilters.Output;
 
 namespace BarcodeDetectorPreview
 {
