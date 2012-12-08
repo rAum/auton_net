@@ -42,7 +42,7 @@
   <ItemGroup>
     <Reference Include="Automation.BDaq, Version=1.0.1.0, Culture=neutral, PublicKeyToken=463f5928d60183a0, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libs\Automation.BDaq.dll</HintPath>
+      <HintPath>..\..\Libs\Automation.BDaq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -70,6 +70,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\Regulators\SimpleBrakeRegulator.cs" />
     <Compile Include="Test\Fakes\CarWithFakeCommunicator.cs" />
     <Compile Include="Test\Fakes\CarWithFakeRegulators.cs" />
     <Compile Include="Test\Fakes\FakeBrakeRegulator.cs" />

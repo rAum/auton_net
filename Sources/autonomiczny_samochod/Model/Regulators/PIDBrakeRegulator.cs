@@ -47,10 +47,10 @@ namespace autonomiczny_samochod.Model.Regulators
             public Settings() 
             { 
                 //P part settings
-                P_FACTOR_MULTIPLER = 4;
+                P_FACTOR_MULTIPLER = 2;
 
                 //I part settings
-                I_FACTOR_MULTIPLER = 1; //hypys radzi, żeby to wyłączyć bo może być niestabilny (a tego baardzo nie chcemy)
+                I_FACTOR_MULTIPLER = 0; //hypys radzi, żeby to wyłączyć bo może być niestabilny (a tego baardzo nie chcemy)
                 I_FACTOR_SUM_MAX_VALUE = 100;
                 I_FACTOR_SUM_MIN_VALUE = -100; 
                 I_FACTOR_SUM_SUPPRESSION_PER_SEC = 0.96; // = 0.88; //1.0 = suppresing disabled

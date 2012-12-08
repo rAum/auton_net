@@ -47,6 +47,8 @@
     <Compile Include="PIDSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReScaller.cs" />
+    <Compile Include="SimpleRegulator.cs" />
+    <Compile Include="SimpleRegulatorSettings.cs" />
     <Compile Include="StatsCollector.cs" />
     <Compile Include="Time.cs" />
   </ItemGroup>

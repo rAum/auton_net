@@ -39,7 +39,8 @@ namespace autonomiczny_samochod.Model.Car
             SteeringWheelAngleRegulator = new PIDSteeringWheelAngleRegulator(this);
             //SteeringWheelAngleRegulator = new FakeSteeringWheelRegulator();
 
-            BrakeRegulator = new PIDBrakeRegulator(this);
+            //BrakeRegulator = new PIDBrakeRegulator(this);
+            BrakeRegulator = new SimpleBrakeRegulator(this);
 
             CarComunicator.InitRegulatorsEventsHandling();  //TODO: REFACTOR THIS SHIT!!! //for now this is needed, because reagulators does not exists when communicator constructor is invoked
 

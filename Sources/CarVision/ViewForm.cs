@@ -76,7 +76,7 @@ namespace CarVision
         {
             InitializeComponent();
 
-            videoSource = new GrayVideoSource<Byte>(@"C:/test.avi");
+            videoSource = new GrayVideoSource<Byte>(@"D:/test.avi");
             videoSource.ResultReady += DisplayVideo;
             
             // FIXME: move to better place and enable changes this in runtime [and draw lines/points?]
