@@ -41,10 +41,10 @@ namespace autonomiczny_samochod
         private const double WHEEL_ANGLE_ON_MAX_LEFT = -30.0; //IMPORTANT: TODO: check it in documentation
 
         //brake
-        private const int BRAKE_OUTPUT_MAX_PUSHED = 11170;
+        private const int BRAKE_OUTPUT_MAX_PUSHED = 11070; //was checked to be 11170 when max but decreased to improve steering
         private const double BRAKE_POWER_WHEN_MAX_PUSHED = 100;
 
-        private const int BRAKE_OUTPUT_MAX_PULLED = 10729; //decreased by 6
+        private const int BRAKE_OUTPUT_MAX_PULLED = 10740; //was checked to be 10729 when min but increased to improve steering
         private const double BRAKE_POWER_WHEN_MAX_PULLED = 0;
 
         //read values
@@ -92,6 +92,10 @@ namespace autonomiczny_samochod
         private double ConvertReceivedBrakeAngleToRealBrakePosition(int value)
         {
             double val = Convert.ToDouble(value);
+            if (Limiter.LimitAndReturnTrueIfLimitted(ref val, BRAKE_OUTPUT_MAX_PULLED, BRAKE_OUTPUT_MAX_PUSHED))
+            {
+                Logger.Log(this, "brake received value is out of range", 1);
+            }
             return ReScaller.ReScale(ref val, BRAKE_OUTPUT_MAX_PULLED, BRAKE_OUTPUT_MAX_PUSHED, BRAKE_POWER_WHEN_MAX_PULLED, BRAKE_POWER_WHEN_MAX_PUSHED); 
         }
 

@@ -27,7 +27,7 @@ namespace autonomiczny_samochod
 
         public MainWindow()
         {
-            Controller = new CarController(this);
+            Controller = new CarController();
             
             InitializeComponent();
 

@@ -1,0 +1,25 @@
+TODO:
+
+
+
+Maciej Oziêb³y TODO:
+	- steering at BrainProject (7 dec 2012 - xxx)
+
+
+
+Priotr Gródek TODO:
+	- adding interface of visions (7 dec 2012 - xxx)
+
+
+
+Micha³ Flendrich TODO:
+	- bar codes?
+	- intruders allert?
+	- i cant see my road error handling?
+
+
+
+Krzysztof Chrobak TODO:
+	- bar codes?
+	- intruders allert?
+	- i cant see my road error handling?

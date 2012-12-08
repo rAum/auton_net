@@ -11,7 +11,6 @@ namespace autonomiczny_samochod
     public class CarController
     {
         public ICar Model { get; private set; }
-        public MainWindow MainWindow { get; private set; }
         private System.Threading.Thread mFakeSignalsSenderThread;
 
         //stats collecting
@@ -20,9 +19,8 @@ namespace autonomiczny_samochod
         private System.Windows.Forms.Timer mStatsCollectorTimer = new System.Windows.Forms.Timer();
         private const int TIMER_INTERVAL_IN_MS = 10;
 
-        public CarController(MainWindow window)
+        public CarController()
         {
-            MainWindow = window;
 
             //Model = new ExampleFakeCar(this);
             Model = new autonomiczny_samochod.Model.Car.RealCar(this);
@@ -107,28 +105,28 @@ namespace autonomiczny_samochod
         public void SaveStatsToFile(string fileName)
         {
             statsCollector.WriteStatsToFile(fileName);
-            Logger.Log(this, "----------------------------------------------------------------");
-            Logger.Log(this, "----------------------------------------------------------------");
-            Logger.Log(this, "----------------------------------------------------------------");
-            Logger.Log(this, "----------------------------------------------------------------");
-            Logger.Log(this, String.Format("STATS HAS BEEN WRITTEN TO FILE: stats.txt"));
-            Logger.Log(this, "----------------------------------------------------------------");
-            Logger.Log(this, "----------------------------------------------------------------");
-            Logger.Log(this, "----------------------------------------------------------------");
-            Logger.Log(this, "----------------------------------------------------------------");
+            Logger.Log(this, "----------------------------------------------------------------", 2);
+            Logger.Log(this, "----------------------------------------------------------------", 2);
+            Logger.Log(this, "----------------------------------------------------------------", 2);
+            Logger.Log(this, "----------------------------------------------------------------", 2);
+            Logger.Log(this, String.Format("STATS HAS BEEN WRITTEN TO FILE: stats.txt"), 2);
+            Logger.Log(this, "----------------------------------------------------------------", 2);
+            Logger.Log(this, "----------------------------------------------------------------", 2);
+            Logger.Log(this, "----------------------------------------------------------------", 2);
+            Logger.Log(this, "----------------------------------------------------------------", 2);
         }
 
         void mFakeSignalsSenderFoo()
         {
-            System.Threading.Thread.Sleep(1000);
+            //System.Threading.Thread.Sleep(1000);
 
-            Model.SetTargetSpeed(50.0);
-            Model.SetTargetWheelAngle(60.0);
+            //Model.SetTargetSpeed(50.0);
+            //Model.SetTargetWheelAngle(60.0);
 
-            System.Threading.Thread.Sleep(1000);
+            //System.Threading.Thread.Sleep(1000);
 
-            Model.SetTargetSpeed(25.0);
-            Model.SetTargetWheelAngle(30.0);
+            //Model.SetTargetSpeed(25.0);
+            //Model.SetTargetWheelAngle(30.0);
         }
 
         public CarInformations GetCarInformation()
