@@ -72,9 +72,9 @@ namespace Auton.CarVision.Video.Filters
             supplier = supplier_;
             supplier.ResultReady += MaterialReady;
 
-            Tau = 4;
-            Threshold = 210;
-            VerticalOffset = 140;
+            Tau = 5;
+            Threshold = 40;
+            VerticalOffset = 0;
 
             Process += DetectLaneMark;
         }

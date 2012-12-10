@@ -23,7 +23,7 @@ namespace CarVision
 {
     public partial class ViewForm : Form
     {
-        GrayVideoSource<byte> videoSource;
+        //GrayVideoSource<byte> videoSource;
         ColorVideoSource<byte> colorVideoSource;
         HsvFilter filter;
 
@@ -31,13 +31,13 @@ namespace CarVision
         VisualiseSimpleRoadModel visRoad;
         PerspectiveCorrectionRgb invPerp;
 
-        VideoWriter videoWriter;
+        //VideoWriter videoWriter;
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Gray, Byte>> e)
         {
             ImageBox imgBox = imgDebug;
-            if (sender == videoSource)
-                imgBox = imgVideoSource;
+            //if (sender == videoSource)
+            //    imgBox = imgVideoSource;
             imgBox.Image = (Image<Gray, Byte>)e.Result;
         }
 
@@ -74,17 +74,16 @@ namespace CarVision
 
             //videoSource = new GrayVideoSource<byte>(@"D:/niebieskie.avi");
             //videoSource.ResultReady += DisplayVideo;
-            colorVideoSource = new ColorVideoSource<byte>(@"C:/video/testowe.avi");
+            colorVideoSource = new ColorVideoSource<byte>(@"C:/video/testBlue.avi");
             colorVideoSource.ResultReady += DisplayVideo;
 
-            Hsv minColor = new Hsv(195.0 / 2.0, 0.2 * 255.0, 0.56 * 255.0);
-            Hsv maxColor = new Hsv(220.0 / 2.0, 0.6 * 255.0, 0.78 * 255.0);
+            Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);
+            Hsv maxColor = new Hsv(222.0 / 2.0, 0.61 * 255.0, 0.78 * 255.0);
 
             filter = new HsvFilter(colorVideoSource, minColor, maxColor);
-            filter.ResultReady += DisplayVideo;
-
+            //filter.ResultReady += DisplayVideo;
             roadDetector = new RoadCenterDetector(filter);
-            //roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
+           // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
 
             visRoad = new VisualiseSimpleRoadModel(roadDetector.Perceptor.roadDetector);
             visRoad.ResultReady += DisplayVideo;

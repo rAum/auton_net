@@ -23,7 +23,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
             if (one != null)
             {
-                for (int y = 0; y < output.Height; y += 4)
+                for (int y = 0; y < output.Height; y += 8)
                 {
                     output.Draw(
                         new CircleF(new PointF((float)one.value(y), (float)y), 3.0f)
@@ -34,7 +34,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
             if (two != null)
             {
-                for (int y = 0; y < output.Height; y += 4)
+                for (int y = 0; y < output.Height; y += 8)
                 {
                     output.Draw(
                         new CircleF(new PointF((float)two.value(y), (float)y), 3.0f)
