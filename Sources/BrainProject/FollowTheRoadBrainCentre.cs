@@ -15,7 +15,7 @@ namespace BrainProject
         CarController carController;
         PIDRegulator regulator;
         VisionFilters.Output.RoadCenterDetector roadCenterDetector;
-        VisionFilters.Output.ColorVideoSource colorVideoSource;
+        VisionFilters.Output.ColorVideoSource<byte> colorVideoSource;
 
         class Settings : PIDSettings
         {
@@ -52,7 +52,7 @@ namespace BrainProject
             regulator = new PIDRegulator(new Settings(), "carSteeringRegulator");
             regulator.SetTargetValue(0.0); //we want to go straight with the road
 
-            colorVideoSource = new VisionFilters.Output.ColorVideoSource();
+            colorVideoSource = new VisionFilters.Output.ColorVideoSource<byte>();
             //roadCenterDetector = new VisionFilters.Output.RoadCenterDetector(colorVideoSource);
 
             roadCenterDetector.RoadCenterSupply += new VisionFilters.Output.RoadCenterHandler(roadCenterDetector_RoadCenterSupply);
