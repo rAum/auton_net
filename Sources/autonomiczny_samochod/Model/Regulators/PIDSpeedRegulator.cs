@@ -172,7 +172,7 @@ namespace autonomiczny_samochod
             targetSpeedLocalCopy = args.GetTargetSpeed();
             Logger.Log(this, String.Format("target speed changed to: {0}", args.GetTargetSpeed()));
 
-            if (targetSpeedLocalCopy < MAX_STAND_STILL_SPEED_IN_MPS && targetSpeedLocalCopy > MIN_STAND_STILL_SPEED_IN_MPS)
+            if (targetSpeedLocalCopy <= MAX_STAND_STILL_SPEED_IN_MPS && targetSpeedLocalCopy >= MIN_STAND_STILL_SPEED_IN_MPS)
             {
                 Mode = RideMode.standStill;
             }

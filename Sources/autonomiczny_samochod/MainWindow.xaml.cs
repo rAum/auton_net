@@ -102,12 +102,12 @@ namespace autonomiczny_samochod
 
                 case Key.Left:
                 case Key.A:
-                    Controller.ChangeTargetWheelAngle(-5);
+                    Controller.ChangeTargetWheelAngle(-1);
                     break;
 
                 case Key.Right:
                 case Key.D:
-                    Controller.ChangeTargetWheelAngle(5);
+                    Controller.ChangeTargetWheelAngle(1);
                     break;
 
                 case Key.Space:
