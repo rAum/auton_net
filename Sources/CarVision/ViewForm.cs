@@ -30,7 +30,6 @@ namespace CarVision
         VisualiseSimpleRoadModel visRoad;
         PerspectiveCorrectionRgb invPerp;
 
-
         VideoWriter videoWriter;
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Gray, Byte>> e)
@@ -67,32 +66,33 @@ namespace CarVision
 
         private Hsv ColorToHsv(Color col)
         {
-            Hsv c  = new Hsv(col.GetHue(), col.GetSaturation(), col.GetBrightness());
+            Hsv c  = new Hsv(col.GetHue(), col.GetSaturation() * 255, col.GetBrightness()*255);
             return c;
         }
 
         public ViewForm()
         {
             InitializeComponent();
-
+            
             //videoSource = new GrayVideoSource<Byte>(@"C:/test.avi");
             //videoSource.ResultReady += DisplayVideo;
 
             colorVideoSource = new ColorVideoSource<byte>("");
             colorVideoSource.ResultReady += DisplayVideo;
 
-            filter = new HsvFilter(colorVideoSource, new Hsv(160, 0, 0), new Hsv(180, 255, 255));
+            filter = new HsvFilter(colorVideoSource, ColorToHsv(colLower), ColorToHsv(colUpper));
             filter.ResultReady += DisplayVideo;
 
             roadDetector = new RoadCenterDetector(filter);
 
             visRoad = new VisualiseSimpleRoadModel(roadDetector.Perceptor.roadDetector);
-            visRoad.ResultReady += DisplayVideo;
+            //visRoad.ResultReady += DisplayVideo;
 
             invPerp = new PerspectiveCorrectionRgb(visRoad, roadDetector.Perceptor.dst, roadDetector.Perceptor.src);
             invPerp.ResultReady += DisplayVideo;
 
             //videoSource.Start();
+            button2_Click(this, null);
             colorVideoSource.Start();
         }
 
@@ -127,6 +127,26 @@ namespace CarVision
                 roadDetector.Perceptor.laneDetector.ResultReady -= DisplayVideo;
             }
 
+        }
+
+        Color colLower;
+        Color colUpper;
+        private void button2_Click(object sender, EventArgs e)
+        {
+            colorDialog.Color = colLower;
+            if (colorDialog.ShowDialog() == DialogResult.OK)
+            {
+                colLower = colorDialog.Color;
+            }
+
+            colorDialog.Color = colUpper;
+            if (colorDialog.ShowDialog() == DialogResult.OK)
+            {
+                colUpper = colorDialog.Color;
+            }
+
+            filter.lower = ColorToHsv(colLower);
+            filter.upper = ColorToHsv(colUpper);
         }
     }
 }

@@ -32,22 +32,22 @@ namespace VisionFilters.Filters.Image_Operations
         }
         private void GetChannel(Image<Rgb, byte> image)
         {
-            var hsv = image;//.Convert<Hsv, byte>();
+            //var hsv = image;//.Convert<Hsv, byte>();
 
-            byte[, ,] output = filtered.Data;
-            for (int y = 0; y < hsv.Height; ++y)
-                for (int x = 0; x < hsv.Width; ++x)
-                {
-                    output[y, x, 0] = clamp((2 * hsv.Data[y, x, 2] - hsv.Data[y, x, 0] - hsv.Data[y, x, 1]) + hsv.Data[y, x, 2] / 4);
-                        //if (inRange(hsv[y,x].Hue, lower.Hue, upper.Hue) 
-                        //    && inRange(hsv[y,x].Satuation, lower.Satuation, upper.Satuation)
-                        //    && inRange(hsv[y,x].Value, lower.Value, upper.Value))
-                        //    output[y, x, 0] = 255;
-                        //else
-                        //    output[y, x, 0] = 0;
-                }
+            //byte[, ,] output = filtered.Data;
+            //for (int y = 0; y < hsv.Height; ++y)
+            //    for (int x = 0; x < hsv.Width; ++x)
+            //    {
+            //        output[y, x, 0] = clamp((2 * hsv.Data[y, x, 2] - hsv.Data[y, x, 0] - hsv.Data[y, x, 1]) + hsv.Data[y, x, 2] / 4);
+            //            //if (inRange(hsv[y,x].Hue, lower.Hue, upper.Hue) 
+            //            //    && inRange(hsv[y,x].Satuation, lower.Satuation, upper.Satuation)
+            //            //    && inRange(hsv[y,x].Value, lower.Value, upper.Value))
+            //            //    output[y, x, 0] = 255;
+            //            //else
+            //            //    output[y, x, 0] = 0;
+            //    }
 
-            LastResult = filtered;
+            LastResult = image.Convert<Hsv, byte>().InRange(lower, upper); // filtered;
             PostComplete();
         }
 
