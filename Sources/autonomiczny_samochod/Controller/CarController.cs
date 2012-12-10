@@ -23,9 +23,9 @@ namespace autonomiczny_samochod
         {
 
             //Model = new ExampleFakeCar(this);
-            Model = new autonomiczny_samochod.Model.Car.RealCar(this);
+            //Model = new autonomiczny_samochod.Model.Car.RealCar(this);
             //Model = new CarWithFakeRegulators(this);
-            //Model = new CarWithFakeCommunicator(this);
+            Model = new CarWithFakeCommunicator(this);
 
             Model.SetTargetSpeed(0.0);
             Model.SetTargetWheelAngle(0.0);

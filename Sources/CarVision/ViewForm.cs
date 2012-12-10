@@ -74,7 +74,7 @@ namespace CarVision
 
             //videoSource = new GrayVideoSource<byte>(@"D:/niebieskie.avi");
             //videoSource.ResultReady += DisplayVideo;
-            colorVideoSource = new ColorVideoSource<byte>(@"C:/video/testBlue.avi");
+            colorVideoSource = new ColorVideoSource<byte>(@"D:\testBlue.avi");
             colorVideoSource.ResultReady += DisplayVideo;
 
             Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);
