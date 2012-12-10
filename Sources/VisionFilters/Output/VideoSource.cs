@@ -12,7 +12,7 @@ namespace VisionFilters.Output
     public class GrayVideoSource<PixelType> : Supplier<Image<Gray, PixelType>> where PixelType : new()
     {
         public Boolean Runs { get; private set; }
-        int sleepTime = 20;
+        int sleepTime = 200;
 
         public override Image<Gray, PixelType> LastResult
         {

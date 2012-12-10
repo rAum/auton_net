@@ -35,8 +35,8 @@
             this.imgVideoSource = new Emgu.CV.UI.ImageBox();
             this.gbVideoSource = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.gbOutput.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgOutput)).BeginInit();
@@ -77,7 +77,7 @@
             this.grpDebug.Controls.Add(this.imgDebug);
             this.grpDebug.Location = new System.Drawing.Point(652, 2);
             this.grpDebug.Name = "grpDebug";
-            this.grpDebug.Size = new System.Drawing.Size(320, 295);
+            this.grpDebug.Size = new System.Drawing.Size(320, 240);
             this.grpDebug.TabIndex = 4;
             this.grpDebug.TabStop = false;
             this.grpDebug.Text = "Dbg View";
@@ -88,7 +88,8 @@
             this.imgDebug.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
             this.imgDebug.Location = new System.Drawing.Point(3, 16);
             this.imgDebug.Name = "imgDebug";
-            this.imgDebug.Size = new System.Drawing.Size(314, 276);
+            this.imgDebug.Size = new System.Drawing.Size(314, 221);
+            this.imgDebug.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.imgDebug.TabIndex = 2;
             this.imgDebug.TabStop = false;
             // 
@@ -98,7 +99,8 @@
             this.imgVideoSource.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
             this.imgVideoSource.Location = new System.Drawing.Point(3, 16);
             this.imgVideoSource.Name = "imgVideoSource";
-            this.imgVideoSource.Size = new System.Drawing.Size(314, 276);
+            this.imgVideoSource.Size = new System.Drawing.Size(314, 221);
+            this.imgVideoSource.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.imgVideoSource.TabIndex = 2;
             this.imgVideoSource.TabStop = false;
             // 
@@ -110,7 +112,7 @@
             this.gbVideoSource.Controls.Add(this.imgVideoSource);
             this.gbVideoSource.Location = new System.Drawing.Point(0, 2);
             this.gbVideoSource.Name = "gbVideoSource";
-            this.gbVideoSource.Size = new System.Drawing.Size(320, 295);
+            this.gbVideoSource.Size = new System.Drawing.Size(320, 240);
             this.gbVideoSource.TabIndex = 0;
             this.gbVideoSource.TabStop = false;
             this.gbVideoSource.Text = "VideoSource";
@@ -125,16 +127,6 @@
             this.panel1.Size = new System.Drawing.Size(974, 58);
             this.panel1.TabIndex = 5;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(691, 17);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(230, 27);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Toggle lane detector / road detector";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(12, 17);
@@ -144,6 +136,16 @@
             this.button2.Text = "Define Line Color Range";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(691, 17);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(230, 27);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "Toggle lane detector / road detector";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // colorDialog
             // 

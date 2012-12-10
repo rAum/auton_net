@@ -37,31 +37,11 @@ namespace VisionFilters
         public PerspectiveCorrection perspectiveTransform;
         public ClusterLanes roadDetector;
 
-        public PointF[] src;
-        public PointF[] dst;
-
         public event RoadModelEventHandler ActualRoadModel;
 
         public VisionPerceptor(Supplier<Image<Gray, byte>> input)
         {
-            // construct perspective transformation
-            src = new PointF[] { 
-                    new PointF(116,      108), 
-                    new PointF(116 + 88, 108),                                 
-                    new PointF(320,     217), 
-                    new PointF(0,       217), 
-                };
-            int offset = 320 / 4;
-            dst = new PointF[] { 
-                    new PointF(offset,       0), 
-                    new PointF(320 - offset, 0), 
-                    new PointF(src[2].X - offset, src[2].Y + 33), 
-                    new PointF(src[3].X + offset, src[3].Y + 33) 
-                };
-
-            ///////////////////////////////////
-
-            perspectiveTransform = new PerspectiveCorrection(input, src, dst);
+            perspectiveTransform = new PerspectiveCorrection(input, CamModel.srcPerspective, CamModel.dstPerspective);
             laneDetector = new LaneMarkDetector(perspectiveTransform);
             roadDetector = new ClusterLanes(laneDetector);
             roadDetector.ResultReady += PassRoadModel;

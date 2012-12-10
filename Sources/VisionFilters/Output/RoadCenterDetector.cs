@@ -45,7 +45,7 @@ namespace VisionFilters.Output
             float[] samplePointsDistance = new float[] // in meters
             {
                 0.5f, 
-                1.0f, 
+                1.0f,
                 1.5f
             };
 

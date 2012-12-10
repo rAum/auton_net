@@ -16,6 +16,7 @@ using VisionFilters.Output;
 using Emgu.CV.UI;
 using VisionFilters.Filters.Lane_Mark_Detector;
 using VisionFilters.Filters.Image_Operations;
+using VisionFilters;
 
 
 namespace CarVision
@@ -35,11 +36,8 @@ namespace CarVision
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Gray, Byte>> e)
         {
             ImageBox imgBox = imgDebug;
-            if (imgBox == null)
-            {
-                System.Console.Out.WriteLine("No receiver registered!!");
-                return;
-            }
+            if (sender == videoSource)
+                imgBox = imgVideoSource;
             imgBox.Image = (Image<Gray, Byte>)e.Result;
         }
 
@@ -73,26 +71,28 @@ namespace CarVision
         public ViewForm()
         {
             InitializeComponent();
-            
-            //videoSource = new GrayVideoSource<Byte>(@"C:/test.avi");
-            //videoSource.ResultReady += DisplayVideo;
 
-            colorVideoSource = new ColorVideoSource<byte>("");
+            //videoSource = new GrayVideoSource<byte>(@"D:/niebieskie.avi");
+            //videoSource.ResultReady += DisplayVideo;
+            colorVideoSource = new ColorVideoSource<byte>(@"C:/video/testowe.avi");
             colorVideoSource.ResultReady += DisplayVideo;
 
-            filter = new HsvFilter(colorVideoSource, ColorToHsv(colLower), ColorToHsv(colUpper));
+            Hsv minColor = new Hsv(195.0 / 2.0, 0.2 * 255.0, 0.56 * 255.0);
+            Hsv maxColor = new Hsv(220.0 / 2.0, 0.6 * 255.0, 0.78 * 255.0);
+
+            filter = new HsvFilter(colorVideoSource, minColor, maxColor);
             filter.ResultReady += DisplayVideo;
 
             roadDetector = new RoadCenterDetector(filter);
+            //roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
 
             visRoad = new VisualiseSimpleRoadModel(roadDetector.Perceptor.roadDetector);
-            //visRoad.ResultReady += DisplayVideo;
+            visRoad.ResultReady += DisplayVideo;
 
-            invPerp = new PerspectiveCorrectionRgb(visRoad, roadDetector.Perceptor.dst, roadDetector.Perceptor.src);
+            invPerp = new PerspectiveCorrectionRgb(visRoad, CamModel.dstPerspective, CamModel.srcPerspective);
             invPerp.ResultReady += DisplayVideo;
 
             //videoSource.Start();
-            button2_Click(this, null);
             colorVideoSource.Start();
         }
 
@@ -101,7 +101,7 @@ namespace CarVision
             //videoSource.Stop();
 
             colorVideoSource.Stop();
-
+            colorVideoSource.ResultReady -= DisplayVideo;
             //videoSource.ResultReady -= DisplayVideo;
             invPerp.ResultReady -= DisplayVideo;
             visRoad.ResultReady -= DisplayVideo;
