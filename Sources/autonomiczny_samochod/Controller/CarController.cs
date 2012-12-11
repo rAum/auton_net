@@ -19,13 +19,19 @@ namespace autonomiczny_samochod
         private System.Windows.Forms.Timer mStatsCollectorTimer = new System.Windows.Forms.Timer();
         private const int TIMER_INTERVAL_IN_MS = 10;
 
+        private GamePad gamePad;
+
         public CarController()
         {
 
             //Model = new ExampleFakeCar(this);
-            //Model = new autonomiczny_samochod.Model.Car.RealCar(this);
+            Model = new autonomiczny_samochod.Model.Car.RealCar(this);
             //Model = new CarWithFakeRegulators(this);
-            Model = new CarWithFakeCommunicator(this);
+            //Model = new CarWithFakeCommunicator(this);
+
+            gamePad = new GamePad();
+            gamePad.evNevGamePadInfoAcquired += new GamePad.newGamePadInfoAcquiredEventHangler(gamePad_evNevGamePadInfoAcquired);
+            //gamePad.evNevGamePadInfoAcquired
 
             Model.SetTargetSpeed(0.0);
             Model.SetTargetWheelAngle(0.0);
@@ -39,6 +45,12 @@ namespace autonomiczny_samochod
 
             //mFakeSignalsSenderThread = new System.Threading.Thread(new System.Threading.ThreadStart(mFakeSignalsSenderFoo));
             //mFakeSignalsSenderThread.Start();
+        }
+
+        void gamePad_evNevGamePadInfoAcquired(object sender, double x, double y)
+        {
+            SetTargetSpeed(ReScaller.ReScale(ref y, -100, 100, -7, 7));
+            SetTargetWheelAngle(ReScaller.ReScale(ref x, -100, 100, -20, 20));
         }
 
         private void EventHandlingForStatsCollectingInit()

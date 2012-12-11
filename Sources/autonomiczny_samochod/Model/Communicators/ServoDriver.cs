@@ -20,9 +20,10 @@ namespace car_communicator
         public const int MIN_THROTTLE = 3900;
 
         public const int GEAR_P = 4000; //IMPORTANT: NOT WORKING
-        public const int GEAR_R = 5246;
-        public const int GEAR_N = 6125;
-        public const int GEAR_D = 7355;
+        public const int GEAR_R = 4950;
+        public const int GEAR_N_WHEN_LAST_WAS_R_OR_P  = 6415;
+        public const int GEAR_N_WHEN_LAST_WAS_D = 6200;
+        public const int GEAR_D = 7350;
 
         Usc Driver = null;
 
@@ -52,7 +53,7 @@ namespace car_communicator
             {
                 if (channel == GEARBOX_CHANNEL)
                 {
-                    if (!(target == GEAR_P || target == GEAR_R || target == GEAR_N || target == GEAR_D))
+                    if (!(target == GEAR_P || target == GEAR_R || target == GEAR_N_WHEN_LAST_WAS_D || target == GEAR_N_WHEN_LAST_WAS_R_OR_P || target == GEAR_D))
                     {
                         throw new ApplicationException("wrong target");
                     }
@@ -103,6 +104,7 @@ namespace car_communicator
         /// n - neutral
         /// d - tylko 1 bieg
         /// </param>
+        Gear lastGear = Gear.neutral;
         public void setGear(Gear gear) //TODO: make some enum
         {
             switch(gear)
@@ -116,7 +118,14 @@ namespace car_communicator
                     break;
 
                 case Gear.neutral:
-                    setTarget(GEARBOX_CHANNEL, GEAR_N);
+                    if (lastGear == Gear.reverse || lastGear == Gear.parking)
+                    {
+                        setTarget(GEARBOX_CHANNEL, GEAR_N_WHEN_LAST_WAS_R_OR_P);
+                    }
+                    else
+                    {
+                        setTarget(GEARBOX_CHANNEL, GEAR_N_WHEN_LAST_WAS_D);
+                    }
                     break;
                 
                 case Gear.drive:
@@ -127,6 +136,8 @@ namespace car_communicator
                     Logger.Log(this, String.Format("trying to set not-existing gear", gear), 2);
                     break;
             }
+
+            lastGear = gear;
         }
 
     }
