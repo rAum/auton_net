@@ -169,5 +169,15 @@ namespace autonomiczny_samochod
         {
             Model.ActivateAlertBrake();
         }
+
+        public void OverrideTargetBrakeSetting(double setting)
+        {
+            Model.OverrideTargetBrakeSetting(setting);
+        }
+
+        public void EndTargetBrakeSteeringOverriding()
+        {
+            Model.EndTargetBrakeSteeringOverriding();
+        }
     }
 }

@@ -157,5 +157,16 @@ namespace autonomiczny_samochod.Model.Regulators
             BrakeSteering = regulator.ProvideObjectCurrentValueToRegulator(args.GetPosition());
         }
 
+
+
+        public void OverrideTargetBrakeSetting(double setting)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EndTargetBrakeSteeringOverriding()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

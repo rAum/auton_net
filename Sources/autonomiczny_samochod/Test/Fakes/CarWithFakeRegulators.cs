@@ -57,5 +57,16 @@ namespace autonomiczny_samochod
                 temp(this, new EventArgs());
             }
         }
+
+
+        public void OverrideTargetBrakeSetting(double setting)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EndTargetBrakeSteeringOverriding()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

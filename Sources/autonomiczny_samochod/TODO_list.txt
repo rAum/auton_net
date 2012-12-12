@@ -1,5 +1,6 @@
 ﻿TODO:
 	now:
+		- zrobić działające jednostki (m/s, prawdziwe stopnie, a nie takie gówno jak jest teraz)
 		- making FakeCarModel working like real model (Kubon???)
 		- starting sequence (using IsInitialized()) + some barier to sync everything ((???) rly - now u can just turn in on in every moment)
 
