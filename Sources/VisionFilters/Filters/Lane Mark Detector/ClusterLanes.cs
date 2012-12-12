@@ -43,8 +43,8 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             // if there are enough points, try to find lanes.
             if (first.Count > 8 && second.Count > 8)
             {
-                leftLane  = RANSAC.RANSAC.fit(900, 8, (int)(first.Count * 0.7), 4, first);
-                rightLane = RANSAC.RANSAC.fit(900, 8, (int)(second.Count * 0.7), 4, second);
+                leftLane  = RANSAC.RANSAC.fit(1100, 8, (int)(first.Count * 0.7), 7, first);
+                rightLane = RANSAC.RANSAC.fit(1100, 8, (int)(second.Count * 0.7), 7, second);
 
                 if (leftLane != null && rightLane != null)
                 {

@@ -26,18 +26,18 @@ namespace VisionFilters
             //    };
                 
             src = new PointF[]{
-                new PointF(303,       106),
-                new PointF(303 + 160, 106),
-                new PointF(178 + 361, 255),
-                new PointF(178,       255)
+                new PointF(253,       183),
+                new PointF(253 + 210, 183),
+                new PointF(161 + 387, 317),
+                new PointF(161,       317)
             };
 
-            int offset = width / 4 + 64;
+            int offset = width / 4 + 40;// +64;
             dst = new PointF[] { 
-                    new PointF(offset,       50), 
-                    new PointF(width - offset, 50), 
-                    new PointF(width - offset, height - 30),
-                    new PointF(offset, height - 30)
+                    new PointF(offset,         200), 
+                    new PointF(width - offset, 200), 
+                    new PointF(width - offset, height),
+                    new PointF(offset, height)
                 };
             //dst = new PointF[] { 
             //        new PointF(offset,       0), 
