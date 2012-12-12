@@ -32,7 +32,7 @@ namespace CarVision
 
         VideoWriter videoWriter;
 
-        const string sourceInput = @"C:/video/rec_2012-12-11_17_49_705.avi";// @"C:/video/testBlue.avi";
+        const string sourceInput =  @"C:/video/testBlue.avi";
                                      //"";
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Gray, Byte>> e)
@@ -79,11 +79,11 @@ namespace CarVision
             colorVideoSource = new ColorVideoSource<byte>(sourceInput);
             colorVideoSource.ResultReady += DisplayVideo;
 
-            //Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);
-            //Hsv maxColor = new Hsv(222.0 / 2.0, 0.61 * 255.0, 0.78 * 255.0);
+            Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);
+            Hsv maxColor = new Hsv(222.0 / 2.0, 0.61 * 255.0, 0.78 * 255.0);
 
-            Hsv minColor = new Hsv(150.0 / 2.0, 0.02 * 255.0, 0.7 * 255.0);
-            Hsv maxColor = new Hsv(242.0 / 2.0, 0.19 * 255.0, 1.0 * 255.0);
+            ///Hsv minColor = new Hsv(150.0 / 2.0, 0.02 * 255.0, 0.7 * 255.0);
+            //Hsv maxColor = new Hsv(242.0 / 2.0, 0.19 * 255.0, 1.0 * 255.0);
 
             filter = new HsvFilter(colorVideoSource, minColor, maxColor);
             //filter.ResultReady += DisplayVideo;
