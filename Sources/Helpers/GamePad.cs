@@ -16,8 +16,21 @@ namespace Helpers
 
         const int TIMER_INTERVAL_IN_MS = 10;
 
-        public delegate void newGamePadInfoAcquiredEventHangler(object sender, double x, double y);
-        public event newGamePadInfoAcquiredEventHangler evNevGamePadInfoAcquired;
+        public delegate void newGamePadXYInfoAcquiredEventHangler(object sender, double x, double y);
+        public event newGamePadXYInfoAcquiredEventHangler evNewGamePadXYInfoAcquired;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="buttonNo"></param>
+        /// <param name="pressed">
+        /// pressed = 1
+        /// unpressed = 0;
+        /// </param>
+        public delegate void newGamePadButtonInfoAcquiredEventHandler(object sender, int buttonNo, bool pressed);
+        public event newGamePadButtonInfoAcquiredEventHandler evNewGamePadButtonInfoAcquired;
+
         volatile bool GamePadBlocker = false;
 
         public GamePad()
@@ -77,6 +90,7 @@ namespace Helpers
 
         int lastX = 0;
         int lastY = 0;
+        bool XorYAcuired = false;
         void timer_Tick(object sender, EventArgs e)
         {
             if (!GamePadBlocker)
@@ -90,37 +104,61 @@ namespace Helpers
                     //double x = ReScaller.ReScale(ref datas[0].Value, 
                     foreach (var obj in datas)
                     {
-                        if (obj.Offset == JoystickOffset.Y)
+                        switch (obj.Offset)
                         {
-                            lastY = obj.Value;
+                            case JoystickOffset.Y:
+                                lastY = obj.Value;
+                                XorYAcuired = true;
+                                break;
+
+                            case JoystickOffset.RotationZ:
+                                lastX = obj.Value;
+                                XorYAcuired = true;
+                                break;
+
+                            case JoystickOffset.Buttons1:
+                                newGamePadButtonInfoAcquiredEventHandler temp = evNewGamePadButtonInfoAcquired;
+                                if (temp != null)
+                                {
+                                    if (obj.Value == 0)
+                                    {
+                                        temp(this, 1, false);
+                                    }
+                                    else
+                                    {
+                                        temp(this, 1, true);
+                                    }
+                                }
+                                break;
                         }
-                        else if (obj.Offset == JoystickOffset.RotationZ)
+                    }
+
+                    if(XorYAcuired)
+                    {
+                        double tempX = lastX;
+                        double tempY = lastY;
+
+                        if(Math.Abs(tempX - 31487) < 100)
                         {
-                            lastX = obj.Value;
+                            tempX = 65535 / 2 + 1;
+                        }
+
+                        if (Math.Abs(tempY - 31487) < 100)
+                        {
+                            tempY = 65535 / 2 + 1;
+                        }
+
+                        ReScaller.ReScale(ref tempX, 0, 65536, -100, 100);
+                        ReScaller.ReScale(ref tempY, 65536, 0, -100, 100);
+
+                        newGamePadXYInfoAcquiredEventHangler temp = evNewGamePadXYInfoAcquired;
+                        if (temp != null)
+                        {
+                            temp(this, tempX, tempY);
                         }
                     }
 
-                    double tempX = lastX;
-                    double tempY = lastY;
 
-                    if(Math.Abs(tempX - 31487) < 100)
-                    {
-                        tempX = 65535 / 2 + 1;
-                    }
-
-                    if (Math.Abs(tempY - 31487) < 100)
-                    {
-                        tempY = 65535 / 2 + 1;
-                    }
-
-                    ReScaller.ReScale(ref tempX, 0, 65536, -100, 100);
-                    ReScaller.ReScale(ref tempY, 65536, 0, -100, 100);
-
-                    newGamePadInfoAcquiredEventHangler temp = evNevGamePadInfoAcquired;
-                    if (temp != null)
-                    {
-                        temp(this, tempX, tempY);
-                    }
 
                     GamePadBlocker = false;
                 }

@@ -67,5 +67,16 @@ namespace autonomiczny_samochod
 
             Logger.Log(this, "alert brake activated!", 2);
         }
+
+
+        public void OverrideTargetBrakeSetting(double setting)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EndTargetBrakeSteeringOverriding()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

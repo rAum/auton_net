@@ -92,5 +92,14 @@ namespace autonomiczny_samochod.Model.Car
             }
         }
 
+        public void OverrideTargetBrakeSetting(double setting)
+        {
+            BrakeRegulator.OverrideTargetBrakeSetting(setting);
+        }
+
+        public void EndTargetBrakeSteeringOverriding()
+        {
+            BrakeRegulator.EndTargetBrakeSteeringOverriding();
+        }
     }
 }

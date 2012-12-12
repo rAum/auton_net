@@ -13,6 +13,9 @@ namespace autonomiczny_samochod.Model.Regulators
         private double targetValue;
         private double currentValue;
 
+        private bool targetBrakeOverriden = false;
+        private double targetBrakeOverridenValue = 0.0;
+
         /// <summary>
         /// setting this property will also send evNewBrakeSettingCalculated event with set value
         /// </summary>
@@ -58,7 +61,6 @@ namespace autonomiczny_samochod.Model.Regulators
             ICar = car;
             regulator = new SimpleRegulator(new Settings(), "brake PID regulator");
 
-            ICar.evTargetSpeedChanged += new TargetSpeedChangedEventHandler(ICar_evTargetSpeedChanged);
             ICar.SpeedRegulator.evNewSpeedSettingCalculated += new NewSpeedSettingCalculatedEventHandler(SpeedRegulator_evNewSpeedSettingCalculated);
             ICar.CarComunicator.evBrakePositionReceived += new BrakePositionReceivedEventHandler(CarComunicator_evBrakePositionReceived);
             evNewBrakeSettingCalculated += new NewBrakeSettingCalculatedEventHandler(PIDBrakeRegulator_evNewBrakeSettingCalculated);
@@ -83,23 +85,6 @@ namespace autonomiczny_samochod.Model.Regulators
             }
         }
 
-        private bool stopModeOn = false;
-
-        void ICar_evTargetSpeedChanged(object sender, TargetSpeedChangedEventArgs args)
-        {
-            double targetSpeed = args.GetTargetSpeed();
-
-            if (targetSpeed > -0.1 && targetSpeed < 0.1)
-            {
-                stopModeOn = true;
-            }
-            else
-            {
-                stopModeOn = false;
-            }
-
-        }
-
         void PIDBrakeRegulator_evNewBrakeSettingCalculated(object sender, NewBrakeSettingCalculatedEventArgs args)
         {
             Logger.Log(this, String.Format("New brake steering has been calculated: {0}", args.GetBrakeSetting()));
@@ -122,9 +107,9 @@ namespace autonomiczny_samochod.Model.Regulators
             {
                 calculatedSteering = regulator.SetTargetValue(ALERT_BRAKE_BRAKE_SETTING);
             }
-            else if (stopModeOn)
+            else if (targetBrakeOverriden)
             {
-                calculatedSteering = regulator.SetTargetValue(100);
+                calculatedSteering = regulator.SetTargetValue(targetBrakeOverridenValue);
             }
             else
             {
@@ -141,5 +126,15 @@ namespace autonomiczny_samochod.Model.Regulators
             BrakeSteering = regulator.ProvideObjectCurrentValueToRegulator(args.GetPosition());
         }
 
+        public void OverrideTargetBrakeSetting(double setting)
+        {
+            targetBrakeOverriden = true;
+            targetBrakeOverridenValue = setting;
+        }
+
+        public void EndTargetBrakeSteeringOverriding()
+        {
+            targetBrakeOverriden = false;
+        }
     }
 }

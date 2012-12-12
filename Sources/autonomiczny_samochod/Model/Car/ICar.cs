@@ -77,5 +77,9 @@ namespace autonomiczny_samochod
         void SetTargetSpeed(double targetSpeed);
 
         void ActivateAlertBrake();
+
+        void OverrideTargetBrakeSetting(double setting);
+
+        void EndTargetBrakeSteeringOverriding();
     }
 }

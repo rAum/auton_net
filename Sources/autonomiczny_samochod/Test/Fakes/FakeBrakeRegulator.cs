@@ -17,5 +17,16 @@ namespace autonomiczny_samochod
         {
             return new Dictionary<string, double>();
         }
+
+
+        public void OverrideTargetBrakeSetting(double setting)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EndTargetBrakeSteeringOverriding()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

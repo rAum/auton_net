@@ -36,5 +36,9 @@ namespace autonomiczny_samochod
         }
 
         IDictionary<string, double> GetRegulatorParameters();
+
+        void OverrideTargetBrakeSetting(double setting);
+
+        void EndTargetBrakeSteeringOverriding();
     }
 }
