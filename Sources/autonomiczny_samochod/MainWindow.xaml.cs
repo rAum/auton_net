@@ -25,6 +25,8 @@ namespace autonomiczny_samochod
         private System.Windows.Forms.Timer mTimer = new System.Windows.Forms.Timer();
         private const int TIMER_INTERVAL_IN_MS = 10;
 
+        private GamePad gamePad;
+
         public MainWindow()
         {
             Controller = new CarController();
@@ -55,6 +57,15 @@ namespace autonomiczny_samochod
             Controller.Model.BrakeRegulator.evNewBrakeSettingCalculated += new NewBrakeSettingCalculatedEventHandler(BrakeRegulator_evNewBrakeSettingCalculated);
 
             Controller.Model.evAlertBrake += new EventHandler(Model_evAlertBrake);
+
+            gamePad = new GamePad();
+            gamePad.evNewGamePadXYInfoAcquired += new GamePad.newGamePadXYInfoAcquiredEventHangler(gamePad_evNevGamePadInfoAcquired);
+        }
+
+        void gamePad_evNevGamePadInfoAcquired(object sender, double x, double y)
+        {
+            Controller.SetTargetSpeed(ReScaller.ReScale(ref y, -100, 100, -7, 7));
+            Controller.SetTargetWheelAngle(ReScaller.ReScale(ref x, -100, 100, -20, 20));
         }
 
         void Model_evAlertBrake(object sender, EventArgs e)
