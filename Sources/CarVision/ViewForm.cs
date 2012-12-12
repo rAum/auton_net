@@ -23,7 +23,6 @@ namespace CarVision
 {
     public partial class ViewForm : Form
     {
-        //GrayVideoSource<byte> videoSource;
         ColorVideoSource<byte> colorVideoSource;
         HsvFilter filter;
 
@@ -31,13 +30,14 @@ namespace CarVision
         VisualiseSimpleRoadModel visRoad;
         PerspectiveCorrectionRgb invPerp;
 
-        //VideoWriter videoWriter;
+        VideoWriter videoWriter;
+
+        const string sourceInput = @"C:/video/rec_2012-12-11_17_49_705.avi";// @"C:/video/testBlue.avi";
+                                     //"";
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Gray, Byte>> e)
         {
             ImageBox imgBox = imgDebug;
-            //if (sender == videoSource)
-            //    imgBox = imgVideoSource;
             imgBox.Image = (Image<Gray, Byte>)e.Result;
         }
 
@@ -47,7 +47,7 @@ namespace CarVision
             if (sender == invPerp)
             {
                 Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
-                imgOutput.Image = (Image<Rgb, Byte>)e.Result + cam;
+                imgOutput.Image = (Image<Rgb, Byte>)e.Result + cam * 0.5;
                 return;
             }
             else if (sender == colorVideoSource)
@@ -60,6 +60,10 @@ namespace CarVision
                 return;
             }
             imgBox.Image = (Image<Rgb, Byte>)e.Result;
+            if (videoWriter != null && sender == colorVideoSource)
+            {
+                videoWriter.WriteFrame(((Image<Rgb, Byte>)e.Result).Convert<Bgr, byte>());
+            }
         }
 
         private Hsv ColorToHsv(Color col)
@@ -72,18 +76,17 @@ namespace CarVision
         {
             InitializeComponent();
 
-            //videoSource = new GrayVideoSource<byte>(@"D:/niebieskie.avi");
-            //videoSource.ResultReady += DisplayVideo;
-            colorVideoSource = new ColorVideoSource<byte>(@"C:/video/testBlue.avi");
+            colorVideoSource = new ColorVideoSource<byte>(sourceInput);
             colorVideoSource.ResultReady += DisplayVideo;
 
-            Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);
-            Hsv maxColor = new Hsv(222.0 / 2.0, 0.61 * 255.0, 0.78 * 255.0);
+            //Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);
+            //Hsv maxColor = new Hsv(222.0 / 2.0, 0.61 * 255.0, 0.78 * 255.0);
+
+            Hsv minColor = new Hsv(150.0 / 2.0, 0.02 * 255.0, 0.7 * 255.0);
+            Hsv maxColor = new Hsv(242.0 / 2.0, 0.19 * 255.0, 1.0 * 255.0);
 
             filter = new HsvFilter(colorVideoSource, minColor, maxColor);
-            //filter.ResultReady += DisplayVideo;
             roadDetector = new RoadCenterDetector(filter);
-           // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
 
             visRoad = new VisualiseSimpleRoadModel(roadDetector.Perceptor.roadDetector);
             visRoad.ResultReady += DisplayVideo;
@@ -91,17 +94,13 @@ namespace CarVision
             invPerp = new PerspectiveCorrectionRgb(visRoad, CamModel.dstPerspective, CamModel.srcPerspective);
             invPerp.ResultReady += DisplayVideo;
 
-            //videoSource.Start();
             colorVideoSource.Start();
         }
 
         private void ViewForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //videoSource.Stop();
-
             colorVideoSource.Stop();
             colorVideoSource.ResultReady -= DisplayVideo;
-            //videoSource.ResultReady -= DisplayVideo;
             invPerp.ResultReady -= DisplayVideo;
             visRoad.ResultReady -= DisplayVideo;
         }
@@ -146,6 +145,33 @@ namespace CarVision
 
             filter.lower = ColorToHsv(colLower);
             filter.upper = ColorToHsv(colUpper);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Button b = sender as Button;
+
+            if (b.Text == "REC")
+            {
+                string filename = String.Format("C:/video/rec_{0}_{1}_{2}.avi", DateTime.Now.ToShortDateString(),
+                DateTime.Now.ToShortTimeString().ToString().Replace(':', '_'), DateTime.Now.Millisecond.ToString());
+
+                videoWriter = new VideoWriter(filename, 25, CamModel.Width, CamModel.Height, true);
+
+                b.Text = "STOP";
+
+                System.Console.Out.WriteLine("NAGRYWANIE");
+                System.Console.Out.WriteLine(filename);
+            }
+            else
+            {
+                videoWriter.Dispose();
+                videoWriter = null;
+                b.Text = "REC";
+
+                System.Console.Out.WriteLine("KONIEC NAGRYWANIA");
+            }
+            
         }
     }
 }

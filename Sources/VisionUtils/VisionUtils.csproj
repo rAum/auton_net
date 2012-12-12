@@ -92,6 +92,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CatmullRom.cs" />
     <Compile Include="DrawingUtils.cs" />
     <Compile Include="MathUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -17,6 +17,7 @@ namespace VisionFilters.Output
     {
         private int[] samplePoints; // in pixels
         private VisionPerceptor perceptor;
+        KalmanPVA km;
 
         // for dbg purpose
         public VisionPerceptor Perceptor
@@ -38,6 +39,8 @@ namespace VisionFilters.Output
 
             perceptor = new VisionPerceptor(input);
             perceptor.ActualRoadModel += NewRoadModel;
+
+            km = new KalmanPVA();
         }
 
         private void Setup()
@@ -65,6 +68,10 @@ namespace VisionFilters.Output
         {
             PointF[] samples = samplePoints.Select(p => { return new PointF((float)roadModel.value(p), (float)p); }).ToArray();
 
+            //km.Measurment(samples[1].Y, 1.0f);
+
+            //Console.Out.WriteLine(String.Format("Kalman: meas: {0} pred: {1} estimation: {2}"), samples[1].Y, km.Prediction, km.Estimation);
+
             System.Console.Write("New measurements: ");
             foreach (var p in samples)
             {
@@ -73,10 +80,8 @@ namespace VisionFilters.Output
             System.Console.Out.WriteLine();
 
             if (RoadCenterSupply == null)
-            {
-                //Helpers.Logger.Log(this, "Nobody is waiting for road center.", 5);
                 return;
-            }
+
             RoadCenterSupply.Invoke(this, new RoadCenterEvent(samples));
         }
     }

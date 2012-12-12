@@ -30,6 +30,7 @@ namespace RANSAC
             Parabola best_fit = null;
             double best_error = double.MaxValue;
             double model_error;
+            double err;
 
             for (int i = 0; i < iterations; ++i)
             {
@@ -38,7 +39,6 @@ namespace RANSAC
                 if (model == null) continue;
                 List<Point> consensus_set = new List<Point>();
                 
-                double err;
                 model_error = 0;
                 foreach (var p in inputData)
                 {
@@ -57,7 +57,6 @@ namespace RANSAC
                         best_error = model_error;
                     }
                 }
-
             }
 
             return best_fit;

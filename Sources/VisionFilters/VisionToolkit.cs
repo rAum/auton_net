@@ -9,35 +9,13 @@ using Emgu.CV.CvEnum;
 
 namespace VisionFilters
 {
+
     /// <summary>
     /// Set of some handy functions which share nothing in common
     /// yet it's good to have them.
     /// </summary>
     public class VisionToolkit
     {
-        /// <summary>
-        /// CatmullRom spline.
-        /// It's passing through b and c points.
-        /// Point a and d is been used to determine tangents.
-        /// </summary>
-        /// <param name="t">[0,1]</param>
-        /// <param name="a">first control (tangent) point</param>
-        /// <param name="b">first point [interpolated]</param>
-        /// <param name="c">second point [interpolated]</param>
-        /// <param name="d">second control (tangent) point</param>
-        /// <returns></returns>
-        public static PointF CatmullRom(float t, PointF a, PointF b, PointF c, PointF d)
-        {
-            float c0 = t * ((2.0f - t) * t - 1.0f);
-            float c1 = (t * t * (3.0f * t - 5.0f) + 2.0f);
-            float c2 = t * ((4.0f - 3.0f * t) * t + 1.0f);
-            float c3 = (t - 1.0f) * t * t;
-            return new PointF(
-                0.5f * (c0 * a.X + c1 * b.X + c2 * c.X + c3 * d.X),
-                0.5f * (c0 * a.Y + c1 * b.Y + c2 * c.Y + c3 * d.Y)
-                );
-        }
-
         /// <summary>
         /// Converts line in angle/distance [theta/rho] representation to vector (line segment) form which can be drawn.
         /// </summary>
