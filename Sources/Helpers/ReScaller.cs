@@ -9,10 +9,10 @@ namespace Helpers
     {
         public static double ReScale(ref double value, double currMinValue, double currMaxValue, double targetMinValue, double targetMaxValue)
         {
-            if(value < currMinValue || value > currMaxValue)
-            {
-                throw new ArgumentException("calue is not in current range");
-            }
+            //if (value < currMinValue || value > currMaxValue)
+            //{
+            //    throw new ArgumentException("calue is not in current range");
+            //}
 
             return value = (value - currMinValue) * (targetMaxValue - targetMinValue) / (currMaxValue - currMinValue) + targetMinValue;
         }
