@@ -26,7 +26,7 @@ namespace autonomiczny_samochod
         private const int TIMER_INTERVAL_IN_MS = 10;
 
         private const int TARGET_BRAKE_SETTING_WHEN_MANUAL_BRAKING_ON = 100;
-        private const int BRAKE_ACTIVATION_TIME_ON_SPACE_PRESSING_IN_MS = 100;
+        private const int BRAKE_ACTIVATION_TIME_ON_SPACE_PRESSING_IN_MS = 500; //its much too much, but smaller values blinks at start
         private const int MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_ = 7; //in what??? //TODO: make it working well
         private const int MAX_BACKWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_ = -5; //it should be < 0 !
         private const int MAX_WHEEL_ANGLE_CHANGE_PER_SEC_WHEN_DRIVING_ON_GAMEPAD = 5;
@@ -41,9 +41,8 @@ namespace autonomiczny_samochod
         private bool GamePadBrakingButtonPressed = false;
 
         System.Windows.Forms.Timer wheelAngleChangingWithGamePadTimer;
-        private bool gamePadTurningActive = false;
 
-        private double gamePadCurrentTurningPerTickSpeed = 0.0;
+        private double gamePadCurrentTurningPerTick = 0.0;
 
 
         public MainWindow()
@@ -65,7 +64,7 @@ namespace autonomiczny_samochod
         private void ExternalEventsHandlingInit()
         {
             brakingTimer = new System.Timers.Timer();
-            brakingTimer.Disposed += new EventHandler(brakingTimer_Disposed);
+            brakingTimer.Elapsed += new System.Timers.ElapsedEventHandler(brakingTimer_Elapsed);
 
             Controller.Model.evTargetSpeedChanged += new TargetSpeedChangedEventHandler(Model_evTargetSpeedChanged);
             Controller.Model.CarComunicator.evSpeedInfoReceived += new SpeedInfoReceivedEventHander(CarComunicator_evSpeedInfoReceived);
@@ -82,6 +81,7 @@ namespace autonomiczny_samochod
 
             wheelAngleChangingWithGamePadTimer = new System.Windows.Forms.Timer();
             wheelAngleChangingWithGamePadTimer.Interval = WHEEL_ANGLE_CHANGING_WITH_GAMEPAD_TIMER_INTERVAL_IN_MS;
+            wheelAngleChangingWithGamePadTimer.Tick += new EventHandler(wheelAngleChangingWithGamePadTimer_Tick);
             //please dont start me (wheelAngleChangingWithGamePadTimer) in here //it really should not be started in here
 
             gamePad = new GamePad();
@@ -90,12 +90,17 @@ namespace autonomiczny_samochod
 
         }
 
-        void brakingTimer_Disposed(object sender, EventArgs e)
+        void brakingTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             if (!GamePadBrakingButtonPressed)
             {
                 Controller.EndTargetBrakeSteeringOverriding();
             }
+        }
+
+        void wheelAngleChangingWithGamePadTimer_Tick(object sender, EventArgs e)
+        {
+            Controller.ChangeTargetWheelAngle(gamePadCurrentTurningPerTick);
         }
 
         void gamePad_evNewGamePadButtonInfoAcquired(object sender, int buttonNo, bool pressed)
@@ -124,7 +129,7 @@ namespace autonomiczny_samochod
             //Controller.SetTargetWheelAngle(ReScaller.ReScale(ref x, -100, 100, -1 * MAX_WHEEL_ANGLE_CHANGE_PER_SEC_WHEN_DRIVING_ON_GAMEPAD, MAX_WHEEL_ANGLE_CHANGE_PER_SEC_WHEN_DRIVING_ON_GAMEPAD));
             if (Math.Abs(y) > MIN_GAMEPAD_Y_TO_START_TURNING_WHEEL_IN_PERCENTS)
             {
-                gamePadCurrentTurningPerTickSpeed = y * MAX_WHEEL_ANGLE_CHANGE_PER_SEC_WHEN_DRIVING_ON_GAMEPAD * WHEEL_ANGLE_CHANGING_WITH_GAMEPAD_TIMER_INTERVAL_IN_MS / 1000;
+                gamePadCurrentTurningPerTick = y * MAX_WHEEL_ANGLE_CHANGE_PER_SEC_WHEN_DRIVING_ON_GAMEPAD * WHEEL_ANGLE_CHANGING_WITH_GAMEPAD_TIMER_INTERVAL_IN_MS / 1000;
                 wheelAngleChangingWithGamePadTimer.Start();
             }
             else
