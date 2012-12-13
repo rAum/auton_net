@@ -83,7 +83,7 @@ namespace BrainProject
             Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);
             Hsv maxColor = new Hsv(222.0 / 2.0, 0.61 * 255.0, 0.78 * 255.0);
 
-            filter = new HsvFilter(colorVideoSource, minColor, maxColor, false);
+            filter = new HsvFilter(colorVideoSource, minColor, maxColor);
             //filter.ResultReady += DisplayVideo;
             roadDetector = new RoadCenterDetector(filter);
             // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;

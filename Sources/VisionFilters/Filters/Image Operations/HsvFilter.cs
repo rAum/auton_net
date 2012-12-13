@@ -17,24 +17,15 @@ namespace VisionFilters.Filters.Image_Operations
         Supplier<Image<Rgb, byte>> supplier;
         public Hsv lower, upper;
         Image<Gray, byte> filtered;
-        bool skip;
-
-        private bool inRange(double v, double min, double max)
-        {
-            if (v >= min && v <= max) return true;
-            return false;
-        }
 
         private void GetChannel(Image<Rgb, byte> image)
         {
-            if (!skip)
-                LastResult = image.Convert<Hsv, byte>().InRange(lower, upper).Dilate(4).Erode(5); // filtered;
-            else
-                LastResult = image.Convert<Gray, byte>().Not();
+            LastResult = image.Convert<Hsv, byte>().InRange(lower, upper).Dilate(4).Erode(5); // filtered;
+            //LastResult = image.Convert<Gray, byte>();
             PostComplete();
         }
 
-        public HsvFilter(Supplier<Image<Rgb, byte>> supplier_, Hsv lower_, Hsv upper_, bool skip_)
+        public HsvFilter(Supplier<Image<Rgb, byte>> supplier_, Hsv lower_, Hsv upper_)
         {
             filtered = new Image<Gray, byte>(CamModel.Width, CamModel.Height);
             supplier = supplier_;
@@ -42,7 +33,6 @@ namespace VisionFilters.Filters.Image_Operations
 
             lower = lower_;
             upper = upper_;
-            skip = skip_;
             Process += GetChannel;
         }
     }

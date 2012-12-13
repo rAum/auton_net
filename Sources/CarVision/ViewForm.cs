@@ -93,7 +93,7 @@ namespace CarVision
             Hsv minColor = new Hsv(95 / 2, 0.6 * 255, 0.5 * 255);
             Hsv maxColor = new Hsv(180 / 2, 255, 0.74 * 255);
 
-            filter = new HsvFilter(colorVideoSource, minColor, maxColor, false);
+            filter = new HsvFilter(colorVideoSource, minColor, maxColor);
             //filter.ResultReady += DisplayVideo;
             roadDetector = new RoadCenterDetector(filter);
            // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;

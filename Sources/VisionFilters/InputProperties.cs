@@ -37,8 +37,8 @@ namespace VisionFilters
             // 100 - 
             // 120
             dst = new PointF[] { 
-                    new PointF(offset,         80), 
-                    new PointF(width - offset, 80), 
+                    new PointF(offset,         200), 
+                    new PointF(width - offset, 200), 
                     new PointF(width - offset, height- 20),
                     new PointF(offset, height - 20)
                 };

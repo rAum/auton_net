@@ -13,7 +13,10 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
     public class ClusterLanes : ThreadSupplier<Image<Gray, Byte>, SimpleRoadModel> 
     {
         private Supplier<Image<Gray, Byte>> supplier;
-        private double roadCenterDistAvg = 180;
+        private double roadCenterDistAvg = 180; // estimated relative road distance [half of width]
+
+        const int MinPointsForOnlyOne = 50;
+        const int MinPointsForEach    = 30;
 
         private void ObtainSimpleModel(Image<Gray, Byte> img)
         {
@@ -38,8 +41,8 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             Parabola rightLane  = null;
             Parabola roadCenter = null;
 
-            if (lanes.Count > 8)
-                roadCenter = RANSAC.RANSAC.fit(1000, 8, (int)(lanes.Count * 0.75), 5, lanes);
+            if (lanes.Count > MinPointsForOnlyOne)
+                roadCenter = RANSAC.RANSAC.fit(800, 8, (int)(lanes.Count * 0.75), 6, lanes);
 
             if (roadCenter != null) 
             {
@@ -60,17 +63,17 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             else // no one line mark can be matched. trying to find left and right and then again trying to find model.
             {
                 // try to cluster data to distinguish left and right lane
-                List<Point> first = new List<Point>(100);
-                List<Point> second = new List<Point>(100);
+                List<Point> first = new List<Point>(512);
+                List<Point> second = new List<Point>(512);
                 VisionToolkit.Two_Means_Clustering(lanes, ref first, ref second);
 
                 //////////////////////////////////////////////////////////////
 
-                if (first.Count > 8)
-                    leftLane = RANSAC.RANSAC.fit(1100, 8, (int)(first.Count * 0.7), 5, first);
+                if (first.Count > MinPointsForEach)
+                    leftLane = RANSAC.RANSAC.fit(800, 8, (int)(first.Count * 0.75), 6, first);
 
-                if (second.Count > 8)
-                    rightLane = RANSAC.RANSAC.fit(1100, 8, (int)(second.Count * 0.7), 5, second);
+                if (second.Count > MinPointsForEach)
+                    rightLane = RANSAC.RANSAC.fit(800, 8, (int)(second.Count * 0.75), 6, second);
 
                 if (leftLane != null && rightLane != null)
                 {
