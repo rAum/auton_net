@@ -6,10 +6,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Auton.CarVision.Video;
 using Auton.CarVision.Video.Filters;
+
 using VisionFilters.Output;
 using Emgu.CV.UI;
 using VisionFilters.Filters.Lane_Mark_Detector;
@@ -113,7 +115,7 @@ namespace BrainProject
         void brain_evNewTargetSpeedCalculated(object sender, double speed)
         {
             Invoke(new Action<Label, double>(
-                (labl, val) => labl.Text = String.Format("{0:0.###}", val)),
+                (labl, val) => labl.Text = String.Format("{0:0.###}", val.ToString())),
                 label_TargetSpeed,
                 speed
             );
@@ -127,7 +129,7 @@ namespace BrainProject
         void brain_evNewTargetWheelAngeCalculated(object sender, double angle)
         {
             Invoke(new Action<Label, double>(
-                (labl, val) => labl.Text = String.Format("{0:0.###}", val)), 
+                (labl, val) => labl.Text = String.Format("{0:0.###}", val.ToString())), 
                 label_targetWheelAngle,
                 angle
             );
