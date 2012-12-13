@@ -6,12 +6,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Auton.CarVision.Video;
 using Auton.CarVision.Video.Filters;
-
 using VisionFilters.Output;
 using Emgu.CV.UI;
 using VisionFilters.Filters.Lane_Mark_Detector;
