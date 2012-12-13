@@ -17,7 +17,6 @@ namespace VisionFilters.Output
     {
         private int[] samplePoints; // in pixels
         private VisionPerceptor perceptor;
-        KalmanPVA km;
 
         // for dbg purpose
         public VisionPerceptor Perceptor
@@ -39,8 +38,6 @@ namespace VisionFilters.Output
 
             perceptor = new VisionPerceptor(input);
             perceptor.ActualRoadModel += NewRoadModel;
-
-            km = new KalmanPVA();
         }
 
         private void Setup()
