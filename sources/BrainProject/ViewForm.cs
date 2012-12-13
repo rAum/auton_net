@@ -17,6 +17,7 @@ using Emgu.CV.UI;
 using VisionFilters.Filters.Lane_Mark_Detector;
 using VisionFilters.Filters.Image_Operations;
 using VisionFilters;
+using autonomiczny_samochod;
 
 
 namespace BrainProject
@@ -32,6 +33,9 @@ namespace BrainProject
         PerspectiveCorrectionRgb invPerp;
 
         FollowTheRoadBrainCentre brain;
+
+        CarController carController;
+        MainWindow steeringWindow;
 
         //VideoWriter videoWriter;
         private delegate void InvokeHandler();
@@ -75,9 +79,14 @@ namespace BrainProject
         {
             InitializeComponent();
 
+            carController = new autonomiczny_samochod.CarController();
+            steeringWindow = new autonomiczny_samochod.MainWindow(carController);
+            steeringWindow.Show();
+            steeringWindow.Activate();
+
             //videoSource = new GrayVideoSource<byte>(@"D:/niebieskie.avi");
             //videoSource.ResultReady += DisplayVideo;
-            colorVideoSource = new ColorVideoSource<byte>(@"D:\testBlue.avi");
+            colorVideoSource = new ColorVideoSource<byte>();//@"D:\testBlue.avi");
             colorVideoSource.ResultReady += DisplayVideo;
 
             Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);
@@ -96,18 +105,39 @@ namespace BrainProject
 
             brain = new FollowTheRoadBrainCentre(roadDetector);
             brain.evNewTargetWheelAngeCalculated += new FollowTheRoadBrainCentre.newTargetWheelAngeCalculatedEventHandler(brain_evNewTargetWheelAngeCalculated);
+            brain.evNewTargetSpeedCalculated += new FollowTheRoadBrainCentre.newTargetSpeedCalculatedEventHandler(brain_evNewTargetSpeedCalculated);
 
             //videoSource.Start();
             colorVideoSource.Start();
         }
 
+
+        void brain_evNewTargetSpeedCalculated(object sender, double speed)
+        {
+            Invoke(new Action<Label, double>(
+                (labl, val) => labl.Text = String.Format("{0:0.###}", val.ToString())),
+                label_TargetSpeed,
+                speed
+            );
+
+            if (automaticSteeringEnabled)
+            {
+                carController.SetTargetSpeed(speed);
+            }
+        }
+
         void brain_evNewTargetWheelAngeCalculated(object sender, double angle)
         {
             Invoke(new Action<Label, double>(
-                (labl, val) => labl.Text =  String.Format("{0:0.###}", val.ToString())), 
+                (labl, val) => labl.Text = String.Format("{0:0.###}", val.ToString())), 
                 label_targetWheelAngle,
                 angle
             );
+
+            if (automaticSteeringEnabled)
+            {
+                carController.SetTargetWheelAngle(angle);
+            }
         }
 
         private void ViewForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -166,6 +196,21 @@ namespace BrainProject
         private void ViewForm_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private bool automaticSteeringEnabled = false;
+        private void button_EnableAutomaticSteering_Click(object sender, EventArgs e)
+        {
+            if (automaticSteeringEnabled)
+            {
+                automaticSteeringEnabled = false;
+                button_EnableAutomaticSteering.Text = "Enable automatic steering";
+            }
+            else
+            {
+                automaticSteeringEnabled = true;
+                button_EnableAutomaticSteering.Text = "Disable automatic steering";
+            }
         }
     }
 }

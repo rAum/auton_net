@@ -33,6 +33,8 @@
             this.gbOutput = new System.Windows.Forms.GroupBox();
             this.imgOutput = new Emgu.CV.UI.ImageBox();
             this.grpDebug = new System.Windows.Forms.GroupBox();
+            this.label_targetWheelAngle = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.imgDebug = new Emgu.CV.UI.ImageBox();
             this.imgVideoSource = new Emgu.CV.UI.ImageBox();
             this.gbVideoSource = new System.Windows.Forms.GroupBox();
@@ -40,8 +42,9 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label_targetWheelAngle = new System.Windows.Forms.Label();
+            this.button_EnableAutomaticSteering = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label_TargetSpeed = new System.Windows.Forms.Label();
             this.gbOutput.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgOutput)).BeginInit();
             this.grpDebug.SuspendLayout();
@@ -78,6 +81,9 @@
             this.grpDebug.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpDebug.Controls.Add(this.label_TargetSpeed);
+            this.grpDebug.Controls.Add(this.label4);
+            this.grpDebug.Controls.Add(this.button_EnableAutomaticSteering);
             this.grpDebug.Controls.Add(this.label_targetWheelAngle);
             this.grpDebug.Controls.Add(this.label1);
             this.grpDebug.Controls.Add(this.imgDebug);
@@ -87,6 +93,24 @@
             this.grpDebug.TabIndex = 4;
             this.grpDebug.TabStop = false;
             this.grpDebug.Text = "Dbg View";
+            // 
+            // label_targetWheelAngle
+            // 
+            this.label_targetWheelAngle.AutoSize = true;
+            this.label_targetWheelAngle.Location = new System.Drawing.Point(369, 56);
+            this.label_targetWheelAngle.Name = "label_targetWheelAngle";
+            this.label_targetWheelAngle.Size = new System.Drawing.Size(22, 13);
+            this.label_targetWheelAngle.TabIndex = 4;
+            this.label_targetWheelAngle.Text = "0.0";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(346, 28);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(94, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "target wheel angle";
             // 
             // imgDebug
             // 
@@ -159,23 +183,33 @@
             this.colorDialog.AnyColor = true;
             this.colorDialog.Color = System.Drawing.Color.Turquoise;
             // 
-            // label1
+            // button_EnableAutomaticSteering
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(343, 28);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "target wheel angle";
+            this.button_EnableAutomaticSteering.Location = new System.Drawing.Point(487, 28);
+            this.button_EnableAutomaticSteering.Name = "button_EnableAutomaticSteering";
+            this.button_EnableAutomaticSteering.Size = new System.Drawing.Size(143, 23);
+            this.button_EnableAutomaticSteering.TabIndex = 5;
+            this.button_EnableAutomaticSteering.Text = "Enable Automatic Steering";
+            this.button_EnableAutomaticSteering.UseVisualStyleBackColor = true;
+            this.button_EnableAutomaticSteering.Click += new System.EventHandler(this.button_EnableAutomaticSteering_Click);
             // 
-            // label_targetWheelAngle
+            // label4
             // 
-            this.label_targetWheelAngle.AutoSize = true;
-            this.label_targetWheelAngle.Location = new System.Drawing.Point(346, 60);
-            this.label_targetWheelAngle.Name = "label_targetWheelAngle";
-            this.label_targetWheelAngle.Size = new System.Drawing.Size(35, 13);
-            this.label_targetWheelAngle.TabIndex = 4;
-            this.label_targetWheelAngle.Text = "label2";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(346, 111);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(66, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "target speed";
+            // 
+            // label_TargetSpeed
+            // 
+            this.label_TargetSpeed.AutoSize = true;
+            this.label_TargetSpeed.Location = new System.Drawing.Point(369, 137);
+            this.label_TargetSpeed.Name = "label_TargetSpeed";
+            this.label_TargetSpeed.Size = new System.Drawing.Size(22, 13);
+            this.label_TargetSpeed.TabIndex = 7;
+            this.label_TargetSpeed.Text = "0.0";
             // 
             // ViewForm
             // 
@@ -220,5 +254,8 @@
         private System.Windows.Forms.ColorDialog colorDialog;
         private System.Windows.Forms.Label label_targetWheelAngle;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button_EnableAutomaticSteering;
+        private System.Windows.Forms.Label label_TargetSpeed;
+        private System.Windows.Forms.Label label4;
     }
 }

@@ -13,7 +13,7 @@ namespace Helpers
         private static bool isItFirstLog = true;
         private const int MAX_PRIORITY = 10;
         private const int MIN_PRIORITY_TO_SHOW_IN_CONSOLE = 1; //in range[0, 10]
-        private const int MIN_PRIORITY_TO_WRINT_IN_FILE = 1;
+        private const int MIN_PRIORITY_TO_WRINT_IN_FILE = 10; //10 = disabled
 
         /// <summary>
         /// 
