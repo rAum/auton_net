@@ -115,7 +115,7 @@ namespace BrainProject
         void brain_evNewTargetSpeedCalculated(object sender, double speed)
         {
             Invoke(new Action<Label, double>(
-                (labl, val) => labl.Text = String.Format("{0:0.###}", val.ToString())),
+                (labl, val) => labl.Text = String.Format("{0:0.###}", val)),
                 label_TargetSpeed,
                 speed
             );
@@ -129,7 +129,7 @@ namespace BrainProject
         void brain_evNewTargetWheelAngeCalculated(object sender, double angle)
         {
             Invoke(new Action<Label, double>(
-                (labl, val) => labl.Text = String.Format("{0:0.###}", val.ToString())), 
+                (labl, val) => labl.Text = String.Format("{0:0.###}", val)), 
                 label_targetWheelAngle,
                 angle
             );

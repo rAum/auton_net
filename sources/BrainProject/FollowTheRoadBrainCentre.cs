@@ -96,7 +96,6 @@ namespace BrainProject
         }
 
         double[] pointsWages = new double[3] { 1.0, 1.0, 1.0 };
-        const double MIDDLE_OF_THE_ROAD_IN_PIX = 320; //img_width/2
         void roadDetector_RoadCenterSupply(object sender, RoadCenterEvent e)
         {
             double currentValue = 0;
