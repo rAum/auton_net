@@ -24,6 +24,8 @@ namespace autonomiczny_samochod.Model.Car
 
         public RealCar(CarController parent)
         {
+            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Highest;
+
             Controller = parent;
             CarInfo = new CarInformations();
 

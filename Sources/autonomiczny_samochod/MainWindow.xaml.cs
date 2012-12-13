@@ -29,11 +29,11 @@ namespace autonomiczny_samochod
         private const int BRAKE_ACTIVATION_TIME_ON_SPACE_PRESSING_IN_MS = 500; //its much too much, but smaller values blinks at start
         private const int MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_ = 7; //in what??? //TODO: make it working well
         private const int MAX_BACKWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_ = -5; //it should be < 0 !
-        private const int MAX_WHEEL_ANGLE_CHANGE_PER_SEC_WHEN_DRIVING_ON_GAMEPAD = 5;
+        private const int MAX_WHEEL_ANGLE_CHANGE_PER_SEC_WHEN_DRIVING_ON_GAMEPAD = 10;
         private const int WHEEL_ANGLE_CHANGING_WITH_GAMEPAD_TIMER_INTERVAL_IN_MS = 50;
         private const double MIN_GAMEPAD_Y_TO_START_TURNING_WHEEL_IN_PERCENTS = 5.0;
-        private const int SPEED_CHANGE_PER_UP_DOWN_ARR_CLICK = 1;
-        private const int WHEEL_ANGLE_CHANGE_PER_LEFT_RIGHT_ARR_CLICK = 1;
+        private const double SPEED_CHANGE_PER_UP_DOWN_ARR_CLICK = 2.5;
+        private const double WHEEL_ANGLE_CHANGE_PER_LEFT_RIGHT_ARR_CLICK = 2;
 
         private GamePad gamePad;
 
@@ -44,11 +44,32 @@ namespace autonomiczny_samochod
 
         private double gamePadCurrentTurningPerTick = 0.0;
 
-
+        
+        /// <summary>
+        /// constructor which is initializing CarController on itself
+        /// </summary>
         public MainWindow()
         {
+            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.AboveNormal;
             Controller = new CarController();
             
+            InitializeComponent();
+
+            ExternalEventsHandlingInit();
+            
+            this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
+
+            //initialize timer
+            mTimer.Interval = TIMER_INTERVAL_IN_MS;
+            mTimer.Tick += new EventHandler(mTimer_Tick);
+            mTimer.Start();
+        }
+
+        public MainWindow(CarController _controller)
+        {
+            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.AboveNormal;
+            Controller = _controller;
+
             InitializeComponent();
 
             ExternalEventsHandlingInit();
@@ -107,7 +128,8 @@ namespace autonomiczny_samochod
         {
             switch(buttonNo)
             {
-                case 1:
+                case 5:
+                case 6:
                     if (pressed)
                     {
                         Controller.OverrideTargetBrakeSetting(TARGET_BRAKE_SETTING_WHEN_MANUAL_BRAKING_ON);
@@ -169,7 +191,12 @@ namespace autonomiczny_samochod
 
         void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.Key)
+            HandleKeyDown(e);
+        }
+
+        private void HandleKeyDown(KeyEventArgs key)
+        {
+            switch (key.Key)
             {
                 case Key.Up:
                 case Key.W:
@@ -200,7 +227,7 @@ namespace autonomiczny_samochod
                     brakingTimer.Interval = BRAKE_ACTIVATION_TIME_ON_SPACE_PRESSING_IN_MS;
                     brakingTimer.Start();
                     break;
-                    
+
             }
         }
 
