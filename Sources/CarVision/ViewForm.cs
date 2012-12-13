@@ -32,8 +32,12 @@ namespace CarVision
 
         VideoWriter videoWriter;
 
-        const string sourceInput = @"C:/video/rec_2012-12-11_17_49_705.avi";// @"C:/video/testBlue.avi";
+        const string sourceInput = @"C:/video/rec_2012-12-13_14_36_390.avi";
                                      //"";
+
+        // perspektywa
+        //180 cm od niebieskiej
+        //179 cm
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Gray, Byte>> e)
         {
@@ -47,7 +51,7 @@ namespace CarVision
             if (sender == invPerp)
             {
                 Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
-                imgOutput.Image = (Image<Rgb, Byte>)e.Result + cam * 0.5;
+                imgOutput.Image = (Image<Rgb, Byte>)e.Result;// +cam * 0.5;
                 return;
             }
             else if (sender == colorVideoSource)
@@ -82,10 +86,14 @@ namespace CarVision
             //Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);
             //Hsv maxColor = new Hsv(222.0 / 2.0, 0.61 * 255.0, 0.78 * 255.0);
 
-            Hsv minColor = new Hsv(150.0 / 2.0, 0.02 * 255.0, 0.7 * 255.0);
-            Hsv maxColor = new Hsv(242.0 / 2.0, 0.19 * 255.0, 1.0 * 255.0);
+            ///Hsv minColor = new Hsv(150.0 / 2.0, 0.02 * 255.0, 0.7 * 255.0);
+            //Hsv maxColor = new Hsv(242.0 / 2.0, 0.19 * 255.0, 1.0 * 255.0);
 
-            filter = new HsvFilter(colorVideoSource, minColor, maxColor);
+            // light green lines
+            Hsv minColor = new Hsv(95 / 2, 0.6 * 255, 0.5 * 255);
+            Hsv maxColor = new Hsv(180 / 2, 255, 0.74 * 255);
+
+            filter = new HsvFilter(colorVideoSource, minColor, maxColor, false);
             //filter.ResultReady += DisplayVideo;
             roadDetector = new RoadCenterDetector(filter);
            // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
@@ -93,7 +101,8 @@ namespace CarVision
             visRoad = new VisualiseSimpleRoadModel(roadDetector.Perceptor.roadDetector);
             visRoad.ResultReady += DisplayVideo;
 
-            invPerp = new PerspectiveCorrectionRgb(visRoad, CamModel.dstPerspective, CamModel.srcPerspective);
+            //invPerp = new PerspectiveCorrectionRgb(visRoad, CamModel.dstPerspective, CamModel.srcPerspective);
+            invPerp = new PerspectiveCorrectionRgb(colorVideoSource, CamModel.srcPerspective, CamModel.dstPerspective);
             invPerp.ResultReady += DisplayVideo;
 
             colorVideoSource.Start();
@@ -174,6 +183,12 @@ namespace CarVision
                 System.Console.Out.WriteLine("KONIEC NAGRYWANIA");
             }
             
+        }
+
+        int num = 80;
+        private void button4_Click(object sender, EventArgs e)
+        {
+            imgVideoSource.Image.Bitmap.Save(String.Format("C:/video/persp{0}.png", ++num));
         }
     }
 }
