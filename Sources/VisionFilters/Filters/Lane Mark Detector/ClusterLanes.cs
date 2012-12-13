@@ -13,7 +13,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
     public class ClusterLanes : ThreadSupplier<Image<Gray, Byte>, SimpleRoadModel> 
     {
         private Supplier<Image<Gray, Byte>> supplier;
-        private double roadCenterDistAvg = 120;
+        private double roadCenterDistAvg = 180;
 
         private void ObtainSimpleModel(Image<Gray, Byte> img)
         {
@@ -64,8 +64,11 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                     rightLane = leftLane;
                 }
 
-                if (Math.Abs(leftLane.c - rightLane.c) < roadCenterDistAvg * 0.35)
+                if (Math.Abs(leftLane.c - rightLane.c) < roadCenterDistAvg * 0.3) // two lines are too near...
                 {
+                    first.AddRange(second);
+                    leftLane = RANSAC.RANSAC.fit(800, 8, (int)(first.Count * 0.65), 6, first);
+                    System.Console.Out.WriteLine("Two lines are too near!");
                     roadCenter = new Parabola(leftLane.a, leftLane.b, leftLane.c + (leftLane.c > CamModel.Width? -roadCenterDistAvg : roadCenterDistAvg));
                 }
                 else

@@ -63,6 +63,7 @@ namespace Auton.CarVision.Video.Filters
                 }
             }
 
+            //LastResult = dst;
             LastResult = dst;
             PostComplete();
         }
@@ -72,9 +73,9 @@ namespace Auton.CarVision.Video.Filters
             supplier = supplier_;
             supplier.ResultReady += MaterialReady;
 
-            Tau = 10;
-            Threshold = 200;
-            VerticalOffset = 120;
+            Tau = 6;
+            Threshold = 100;
+            VerticalOffset = 0;
 
             Process += DetectLaneMark;
         }
