@@ -69,11 +69,11 @@ namespace BrainProject
             }
         }
 
-        public FollowTheRoadBrainCentre(RoadCenterDetector _roadDetector)
+        public FollowTheRoadBrainCentre(RoadCenterDetector _roadDetector, CarController _carController)
         {
             roadDetector = _roadDetector;
 
-            carController = new CarController();
+            carController = _carController;
             carController.SetTargetSpeed(0);
             carController.SetTargetWheelAngle(0);
 

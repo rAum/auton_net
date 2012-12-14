@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		auton.vsmdi = auton.vsmdi
 		GLOBAL_TODO_LIST.txt = GLOBAL_TODO_LIST.txt
 		Local.testsettings = Local.testsettings
+		Performance1.psess = Performance1.psess
+		Performance2.psess = Performance2.psess
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject

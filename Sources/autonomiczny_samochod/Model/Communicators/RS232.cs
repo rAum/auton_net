@@ -34,10 +34,10 @@ namespace autonomiczny_samochod
 
         private const bool DIAGNOSIS_ENABLED = false;
 
-        private const int WHEEL_OUTPUT_WHEN_MAX_RIGHT = 15490; //increased by 100
+        private const int WHEEL_OUTPUT_WHEN_MAX_RIGHT = 15000; //increased by 100
         private const double WHEEL_ANGLE_ON_MAX_RIGHT = 30.0; //IMPORTANT: TODO: check it in documentation
 
-        private const int WHEEL_OUTPUT_WHEN_MAX_LEFT = 1250; //decreased by 100
+        private const int WHEEL_OUTPUT_WHEN_MAX_LEFT = 2066; //decreased by 100
         private const double WHEEL_ANGLE_ON_MAX_LEFT = -30.0; //IMPORTANT: TODO: check it in documentation
 
         //brake

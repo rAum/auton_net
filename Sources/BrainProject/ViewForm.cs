@@ -24,7 +24,6 @@ namespace BrainProject
 {
     public partial class ViewForm : Form
     {
-        //GrayVideoSource<byte> videoSource;
         ColorVideoSource<byte> colorVideoSource;
         HsvFilter filter;
 
@@ -43,8 +42,6 @@ namespace BrainProject
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Gray, Byte>> e)
         {
             ImageBox imgBox = imgDebug;
-            //if (sender == videoSource)
-            //    imgBox = imgVideoSource;
             imgBox.Image = (Image<Gray, Byte>)e.Result;
         }
 
@@ -54,7 +51,7 @@ namespace BrainProject
             if (sender == invPerp)
             {
                 Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
-                imgOutput.Image = (Image<Rgb, Byte>)e.Result + cam;
+                imgOutput.Image = (Image<Rgb, Byte>)e.Result + cam * 0.6;
                 return;
             }
             else if (sender == colorVideoSource)
@@ -84,13 +81,11 @@ namespace BrainProject
             steeringWindow.Show();
             steeringWindow.Activate();
 
-            //videoSource = new GrayVideoSource<byte>(@"D:/niebieskie.avi");
-            //videoSource.ResultReady += DisplayVideo;
             colorVideoSource = new ColorVideoSource<byte>();//@"D:\testBlue.avi");
             colorVideoSource.ResultReady += DisplayVideo;
 
-            Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);
-            Hsv maxColor = new Hsv(222.0 / 2.0, 0.61 * 255.0, 0.78 * 255.0);
+            Hsv minColor = new Hsv(95 / 2, 0.6 * 255, 0.5 * 255);
+            Hsv maxColor = new Hsv(180 / 2, 255, 0.74 * 255);
 
             filter = new HsvFilter(colorVideoSource, minColor, maxColor);
             //filter.ResultReady += DisplayVideo;
@@ -103,7 +98,7 @@ namespace BrainProject
             invPerp = new PerspectiveCorrectionRgb(visRoad, CamModel.dstPerspective, CamModel.srcPerspective);
             invPerp.ResultReady += DisplayVideo;
 
-            brain = new FollowTheRoadBrainCentre(roadDetector);
+            brain = new FollowTheRoadBrainCentre(roadDetector, carController);
             brain.evNewTargetWheelAngeCalculated += new FollowTheRoadBrainCentre.newTargetWheelAngeCalculatedEventHandler(brain_evNewTargetWheelAngeCalculated);
             brain.evNewTargetSpeedCalculated += new FollowTheRoadBrainCentre.newTargetSpeedCalculatedEventHandler(brain_evNewTargetSpeedCalculated);
 

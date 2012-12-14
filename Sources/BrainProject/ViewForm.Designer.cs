@@ -33,16 +33,15 @@
             this.gbOutput = new System.Windows.Forms.GroupBox();
             this.imgOutput = new Emgu.CV.UI.ImageBox();
             this.grpDebug = new System.Windows.Forms.GroupBox();
+            this.imgDebug = new Emgu.CV.UI.ImageBox();
             this.label_TargetSpeed = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.button_EnableAutomaticSteering = new System.Windows.Forms.Button();
             this.label_targetWheelAngle = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.imgDebug = new Emgu.CV.UI.ImageBox();
             this.imgVideoSource = new Emgu.CV.UI.ImageBox();
             this.gbVideoSource = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -91,6 +90,18 @@
             this.grpDebug.TabStop = false;
             this.grpDebug.Text = "Dbg View";
             // 
+            // imgDebug
+            // 
+            this.imgDebug.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imgDebug.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
+            this.imgDebug.Location = new System.Drawing.Point(3, 16);
+            this.imgDebug.MaximumSize = new System.Drawing.Size(314, 221);
+            this.imgDebug.Name = "imgDebug";
+            this.imgDebug.Size = new System.Drawing.Size(314, 221);
+            this.imgDebug.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.imgDebug.TabIndex = 2;
+            this.imgDebug.TabStop = false;
+            // 
             // label_TargetSpeed
             // 
             this.label_TargetSpeed.AutoSize = true;
@@ -137,18 +148,6 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "target wheel angle";
             // 
-            // imgDebug
-            // 
-            this.imgDebug.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imgDebug.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
-            this.imgDebug.Location = new System.Drawing.Point(3, 16);
-            this.imgDebug.MaximumSize = new System.Drawing.Size(314, 221);
-            this.imgDebug.Name = "imgDebug";
-            this.imgDebug.Size = new System.Drawing.Size(314, 221);
-            this.imgDebug.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.imgDebug.TabIndex = 2;
-            this.imgDebug.TabStop = false;
-            // 
             // imgVideoSource
             // 
             this.imgVideoSource.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -175,23 +174,12 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 490);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1322, 58);
             this.panel1.TabIndex = 5;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(12, 17);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(199, 27);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Define Line Color Range";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
@@ -263,7 +251,6 @@
         private System.Windows.Forms.GroupBox gbVideoSource;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ColorDialog colorDialog;
         private System.Windows.Forms.Label label_targetWheelAngle;
         private System.Windows.Forms.Label label1;
