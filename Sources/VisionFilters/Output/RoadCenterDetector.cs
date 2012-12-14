@@ -18,6 +18,8 @@ namespace VisionFilters.Output
         private int[] samplePoints; // in pixels
         private VisionPerceptor perceptor;
 
+        Kalman2D kalman;
+
         // for dbg purpose
         public VisionPerceptor Perceptor
         {
@@ -50,6 +52,8 @@ namespace VisionFilters.Output
             };
 
             samplePoints = samplePointsDistance.Select(p => { return CamModel.ToPixels(p); }).ToArray();
+
+            kalman = new Kalman2D();
         }
 
         private void NewRoadModel(object sender, RoadModelEvent e)
@@ -64,6 +68,9 @@ namespace VisionFilters.Output
         private void RoadCenterFounded(Parabola roadModel)
         {
             PointF[] samples = samplePoints.Select(p => { return new PointF((float)roadModel.value(p), (float)p); }).ToArray();
+
+            kalman.Update();
+            kalman.Measurment(samples[1]);
 
             //km.Measurment(samples[1].Y, 1.0f);
 
