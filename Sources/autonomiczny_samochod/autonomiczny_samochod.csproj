@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E23EBE5E-CF61-479E-AA5E-3BE971E03653}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>autonomiczny_samochod</RootNamespace>
     <AssemblyName>autonomiczny_samochod</AssemblyName>
@@ -95,6 +95,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\Communicators\SafeRS232Communicator.cs" />
     <Compile Include="Model\Regulators\SimpleBrakeRegulator.cs" />
     <Compile Include="Test\Fakes\CarWithFakeCommunicator.cs" />
     <Compile Include="Test\Fakes\CarWithFakeRegulators.cs" />

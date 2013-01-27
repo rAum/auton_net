@@ -107,7 +107,7 @@ namespace VisionFilters.Output
         {
             if (file == "")
             {
-                capture = new Capture();
+                capture = new Capture(); //was empty
                 sleepTime = 0;
             }
             else

@@ -15,10 +15,10 @@ namespace autonomiczny_samochod
         private SerialPort port = new SerialPort("COM4", 9600, Parity.None, 8, StopBits.One); //TODO: add choosing COM no from form
 
         //messages
-        char[] giveMeSteeringWheelAngleMsg = new char[] { '1', 'P', (char)13 }; //TODO: try changing it to byte[] //not necessery, but char[] probably wont work for values > 127...
-        char[] giveMeBrakeAngleMsg = new char[] { '2', 'P', (char)13 };
-        char[] giveMeSteeringWheelDiagnosisMsg = new char[] { '1', 'D', (char)13 };
-        char[] giveMeBrakeDiagnosisMsg = new char[] { '2', 'D', (char)13 };
+        readonly char[] giveMeSteeringWheelAngleMsg = new char[] { '1', 'P', (char)13 }; //TODO: try changing it to byte[] //not necessery, but char[] probably wont work for values > 127...
+        readonly char[] giveMeBrakeAngleMsg = new char[] { '2', 'P', (char)13 };
+        readonly char[] giveMeSteeringWheelDiagnosisMsg = new char[] { '1', 'D', (char)13 };
+        readonly char[] giveMeBrakeDiagnosisMsg = new char[] { '2', 'D', (char)13 };
 
         //consts
         private TimeSpan SLEEP_PER_READ_LOOP = new TimeSpan(0, 0, 0, 0, 10); //10ms
@@ -349,55 +349,6 @@ namespace autonomiczny_samochod
             }
         }
      
-
-        //TODO: REMOVE BELOW CODE AFTER TESTING THAT CURRENT CODE WORKS
-     /* it has been rewriten below due to reciving values > 127 problems //and that it was piece shit written in garage
-
-    private volatile string inBuffer = string.Empty;
-    private volatile string receivedWord = string.Empty;
-
-    /// <summary>
-    /// its NOT THREAD-SAFE - cant work on different threads
-    /// uses volatile vars "inBuffer" and "receivedWord"
-    /// </summary>
-    /// <returns></returns>
-    private string readWordFromRS232()
-    {
-        while (receivedWord == string.Empty)
-            System.Threading.Thread.Sleep(SLEEP_WHILE_WAITING_FOR_READ_IN_MS);
-
-        string temp = receivedWord;
-        receivedWord = string.Empty;
-
-        return temp;
-    }
-
-        
-    //http://stackoverflow.com/questions/5848907/received-byte-never-over-127-in-serial-port <--- use just read();
-    private void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-    {
-        string temp = port.ReadExisting(); //<-------- to nie dziala -> powyzej 128 daje 63
-        //int temp = port.ReadChar();
-        Console.WriteLine(temp);
-        //inBuffer = inBuffer + Convert.ToChar(temp);
-        inBuffer = inBuffer + temp;
-        if (inBuffer != string.Empty)
-        {
-            if (inBuffer[inBuffer.Length - 1] == 13)
-            //if(temp == 13)
-            {
-                if (receivedWord != string.Empty)
-                {
-                    Logger.Log(this, String.Format("message from RS232 was not read: {0}", receivedWord), 1);
-                }
-                receivedWord = inBuffer;
-                inBuffer = string.Empty;
-            }
-        }
-    }
-    */
-        
-
         /// <summary>
         /// this is rewriten function from above
         /// IMPORTANT: TODO: TEST IT!!!!!
@@ -414,33 +365,33 @@ namespace autonomiczny_samochod
              * due to StackOverflow:
              * only Read() should be used (returns byte, not char - chars bugs the code!)
              */
-                if (!RS232dataIsBeingRead)
-                { //TODO: think about doing it in new thread
-                    RS232dataIsBeingRead = true;
-                    int byteRead;
-                    try
+            if (!RS232dataIsBeingRead)
+            { //TODO: think about doing it in new thread
+                RS232dataIsBeingRead = true;
+                int byteRead;
+                try
+                {
+                    while ((byteRead = port.ReadByte()) != -1) //-1 is when there is end of stream
                     {
-                        while ((byteRead = port.ReadByte()) != -1) //-1 is when there is end of stream
-                        {
-                            RS232SignalsInputList.AddLast(byteRead);
-                        }
-                        RS232dataIsBeingRead = false;
+                        RS232SignalsInputList.AddLast(byteRead);
                     }
-                    catch (System.TimeoutException)
-                    {
-                        RS232SignalsInputList.Clear(); //clearing list on timeout should prevent desync
-                        Logger.Log(this, "RS232 timeout has occured", 2);
-                    }
-                    catch (Exception)
-                    {
-                       // Logger.Log(this, String.Format("RS232 error: {0}, {1}", e.Message, e.StackTrace)); //TODO: //IMPORTANT: tempporary
-                    }
-                    finally
-                    {
-                        RS232dataIsBeingRead = false;
-                    }
+                    RS232dataIsBeingRead = false;
                 }
-                //else just end 
+                catch (System.TimeoutException)
+                {
+                    RS232SignalsInputList.Clear(); //clearing list on timeout should prevent desync
+                    Logger.Log(this, "RS232 timeout has occured", 2);
+                }
+                catch (Exception)
+                {
+                    // Logger.Log(this, String.Format("RS232 error: {0}, {1}", e.Message, e.StackTrace)); //TODO: //IMPORTANT: tempporary
+                }
+                finally
+                {
+                    RS232dataIsBeingRead = false;
+                }
+            }
+            //else just end 
         }
 
         /// <summary>
