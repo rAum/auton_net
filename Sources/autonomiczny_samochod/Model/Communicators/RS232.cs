@@ -9,6 +9,7 @@ using Helpers;
 
 namespace autonomiczny_samochod
 {
+    [Obsolete("use SafeRS232Controller instead")]
     public class RS232Controller
     {
         // Create the serial port with basic settings 
@@ -205,6 +206,7 @@ namespace autonomiczny_samochod
                     }
                     else
                     {
+                        //ITS A BUG - 'E' MSG is 1 byte long - cannot get here - this class is obsolete anyway so bug is not fixed!
                         if (readMsg[0] == 'E') //check that condition
                         {
                             Logger.Log(this, "RS232 received an errror from brakes", 2);
