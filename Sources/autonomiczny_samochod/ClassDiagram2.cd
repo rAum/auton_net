@@ -86,7 +86,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="autonomiczny_samochod.Properties.Resources" Collapsed="true">
-    <Position X="4.25" Y="0.5" Width="1.5" />
+    <Position X="4" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
     </TypeIdentifier>
@@ -221,12 +221,12 @@
   <Class Name="car_communicator.ServoDriver" Collapsed="true">
     <Position X="25.25" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAgABAAAAAQQAAAAAAAAAQBAAgAEAAAgAQAAAAAA=</HashCode>
+      <HashCode>AAACCgABAAAAAQUCAIAAAAAAQBAAgIEAAIgAQAAAAAA=</HashCode>
       <FileName>Model\Communicators\ServoDriver.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="car_communicator.USB4702" Collapsed="true">
-    <Position X="23.5" Y="4" Width="1.5" />
+    <Position X="23.25" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAIEACIDQAEAAQIIIABIQAQIAAEAAhYAAgBAAAEGgAE=</HashCode>
       <FileName>Model\Communicators\USB4702.cs</FileName>
@@ -272,7 +272,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="autonomiczny_samochod.Model.Communicators.Device" Collapsed="true">
-    <Position X="27.5" Y="2.75" Width="1.5" />
+    <Position X="25.25" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAEAAAAAAQACAIAAgAAAAAAAAIAEAAgAAAAAAAA=</HashCode>
       <FileName>Model\Communicators\Device.cs</FileName>

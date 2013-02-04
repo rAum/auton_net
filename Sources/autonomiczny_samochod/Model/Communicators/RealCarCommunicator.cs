@@ -52,14 +52,17 @@ namespace autonomiczny_samochod
             }
 
             extentionCardCommunicator = new USB4702();
+
+
             servoDriver = new ServoDriver();
+            deviceManager.RegisterDevice(servoDriver);
+
             //angleAndSpeedMeter = new RS232Controller(this); //OBSOLETE
             angleAndSpeedMeter = new SafeRS232Controller(this, "COM4");
             deviceManager.RegisterDevice(angleAndSpeedMeter);
 
             //TODO: make thread for every initialization //its actually done for angleAndSpeedMeter
             extentionCardCommunicator.Initialize();
-            servoDriver.Initialize();
             //angleAndSpeedMeter.Initialize(); //OBSOLETE - now its device managers job
 
             deviceManager.Initialize();

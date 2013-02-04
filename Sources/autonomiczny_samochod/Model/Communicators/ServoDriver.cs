@@ -6,12 +6,13 @@ using Pololu.UsbWrapper;
 using Pololu.Usc;
 using Helpers;
 using autonomiczny_samochod;
+using autonomiczny_samochod.Model.Communicators;
 
 //Created by Mateusz Nowakowski
 //Refactored and merged by Maciej (Spawek) Oziebly 
 namespace car_communicator
 {
-    public class ServoDriver
+    public class ServoDriver : Device
     {
         public const int GEARBOX_CHANNEL = 0;
         public const int THROTTLE_CHANNEL = 1;
@@ -27,7 +28,11 @@ namespace car_communicator
 
         Usc Driver = null;
 
-        public void Initialize()
+        private bool effectorsActive = false;
+        private Gear lastGearWantedToBeSet = Gear.neutral; //this gear could not been set because effectors could be not active
+        private double lastThrottleInPercentsWantedToBeSet = 0.0; //this throttle could not been set because effectors could be not active
+
+        public override void  Initialize()
         {
             List<DeviceListItem> list = Usc.getConnectedDevices();
 
@@ -44,60 +49,94 @@ namespace car_communicator
                 Logger.Log(this, "there are more than 1 USC devices - trying to connect last of them", 2);
                 Driver = new Usc(list[list.Count - 1]); //last device
                 //TODO: add device recognising
+                this.state = DeviceState.Warrning;
             }
+        }
+
+        public override void StartSensors()
+        {
+            //no sensors in here
+        }
+
+        public override void StartEffectors()
+        {
+            effectorsActive = true;
+            setGear(lastGearWantedToBeSet);
+            setThrottle(lastThrottleInPercentsWantedToBeSet);
+        }
+
+        public override void PauseEffectors()
+        {
+            effectorsActive = false;
+            setGear(Gear.neutral);
+            setThrottle(0.0);
+        }
+
+        public override void EmergencyStop()
+        {
+            effectorsActive = false;
+            setGear(Gear.neutral);
+            setThrottle(0.0);
         }
 
         private void setTarget(byte channel, ushort target)
         {
-            if (Driver != null) //checking if ServoDriver is Initialized
-            {
-                if (channel == GEARBOX_CHANNEL)
+
+                if (Driver != null) //checking if ServoDriver is Initialized
                 {
-                    if (!(target == GEAR_P || target == GEAR_R || target == GEAR_N_WHEN_LAST_WAS_D || target == GEAR_N_WHEN_LAST_WAS_R_OR_P || target == GEAR_D))
+                    if (channel == GEARBOX_CHANNEL)
                     {
-                        throw new ApplicationException("wrong target");
+                        if (!(target == GEAR_P || target == GEAR_R || target == GEAR_N_WHEN_LAST_WAS_D || target == GEAR_N_WHEN_LAST_WAS_R_OR_P || target == GEAR_D))
+                        {
+                            throw new ApplicationException("wrong target");
+                        }
                     }
-                }
-                else if (channel == THROTTLE_CHANNEL)
-                {
-                    if (target < MIN_THROTTLE || target > MAX_THROTTLE)
+                    else if (channel == THROTTLE_CHANNEL)
                     {
-                        throw new ApplicationException("wrong target");
+                        if (target < MIN_THROTTLE || target > MAX_THROTTLE)
+                        {
+                            throw new ApplicationException("wrong target");
+                        }
+                    }
+                    else
+                    {
+                        throw new ApplicationException("unknown channel");
+                    }
+
+                    try
+                    {
+                        Driver.setTarget(channel, target);
+                    }
+                    catch (Exception)
+                    {
+                        Logger.Log(this, "couldnt send msg to servo!", 2);
                     }
                 }
                 else
                 {
-                    throw new ApplicationException("unknown channel");
+                    Logger.Log(this, "target was not set, because ServoDriver is not initialized", 1);
                 }
 
-                try
-                {
-                    Driver.setTarget(channel, target);
-                }
-                catch (Exception)
-                {
-                    Logger.Log(this, "couldnt send msg to servo!", 2);
-                }
-            }
-            else
-            {
-                Logger.Log(this, "target was not set, because ServoDriver is not initialized", 1);
-            }
         }
 
         public void setThrottle(double valueInPercents)
         {
-            if(valueInPercents < 0 || valueInPercents > 100)
-                throw new ApplicationException("wrong values - it should be in range 0 to 100%");
+            if (effectorsActive)
+            {
+                if (valueInPercents < 0 || valueInPercents > 100)
+                    throw new ApplicationException("wrong values - it should be in range 0 to 100%");
 
-            Helpers.ReScaller.ReScale(ref valueInPercents, 0, 100, (double)MIN_THROTTLE, (double)MAX_THROTTLE);
+                Helpers.ReScaller.ReScale(ref valueInPercents, 0, 100, (double)MIN_THROTTLE, (double)MAX_THROTTLE);
 
-            setTarget(THROTTLE_CHANNEL, (ushort)valueInPercents);
+                setTarget(THROTTLE_CHANNEL, (ushort)valueInPercents);
+            }
+            else
+            {
+                Logger.Log(this, "target throttle was not set, effectors are disabled", 1);
+            }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <summary></summary>
         /// <param name="gear">
         /// p - parking
         /// r - reverse
@@ -105,39 +144,46 @@ namespace car_communicator
         /// d - tylko 1 bieg
         /// </param>
         Gear lastGear = Gear.neutral;
-        public void setGear(Gear gear) //TODO: make some enum
+        public void setGear(Gear gear)
         {
-            switch(gear)
+            lastGearWantedToBeSet = gear;
+            if (effectorsActive)
             {
-                case Gear.parking:
-                    setTarget(GEARBOX_CHANNEL, GEAR_P);
-                    break;
+                switch (gear)
+                {
+                    case Gear.parking:
+                        setTarget(GEARBOX_CHANNEL, GEAR_P);
+                        break;
 
-                case Gear.reverse:
-                    setTarget(GEARBOX_CHANNEL, GEAR_R);
-                    break;
+                    case Gear.reverse:
+                        setTarget(GEARBOX_CHANNEL, GEAR_R);
+                        break;
 
-                case Gear.neutral:
-                    if (lastGear == Gear.reverse || lastGear == Gear.parking)
-                    {
-                        setTarget(GEARBOX_CHANNEL, GEAR_N_WHEN_LAST_WAS_R_OR_P);
-                    }
-                    else
-                    {
-                        setTarget(GEARBOX_CHANNEL, GEAR_N_WHEN_LAST_WAS_D);
-                    }
-                    break;
-                
-                case Gear.drive:
-                    setTarget(GEARBOX_CHANNEL, GEAR_D);
-                    break;
+                    case Gear.neutral:
+                        if (lastGear == Gear.reverse || lastGear == Gear.parking)
+                        {
+                            setTarget(GEARBOX_CHANNEL, GEAR_N_WHEN_LAST_WAS_R_OR_P);
+                        }
+                        else
+                        {
+                            setTarget(GEARBOX_CHANNEL, GEAR_N_WHEN_LAST_WAS_D);
+                        }
+                        break;
 
-                default:
-                    Logger.Log(this, String.Format("trying to set not-existing gear", gear), 2);
-                    break;
+                    case Gear.drive:
+                        setTarget(GEARBOX_CHANNEL, GEAR_D);
+                        break;
+
+                    default:
+                        Logger.Log(this, String.Format("trying to set not-existing gear", gear), 2);
+                        break;
+                }
+                lastGear = gear;
             }
-
-            lastGear = gear;
+            else
+            {
+                Logger.Log(this, "target gear was not set, effectors are disabled", 1);
+            }
         }
 
     }
