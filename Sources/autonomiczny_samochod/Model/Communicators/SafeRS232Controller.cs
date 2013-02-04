@@ -7,7 +7,12 @@ using Helpers;
 
 namespace autonomiczny_samochod.Model.Communicators
 {
-    class SafeRS232Controller
+    /// <summary>
+    /// class which controlls RS232 communication - it has 2 tasks:
+    ///     1) receive wheels angle (by measuring steering wheel angle)
+    ///     2) receive 
+    /// </summary>
+    class SafeRS232Controller : Device
     {
         private SafeRS232Communicator RS232; 
         private RealCarCommunicator communicator;
@@ -97,18 +102,41 @@ namespace autonomiczny_samochod.Model.Communicators
             COMName = COMPortName;
         }
 
-        public void Initialize()
+
+        public override void Initialize()
         {
             RS232 = new SafeRS232Communicator(COMName);
 
-            DiagnoseBrakeSensors();
-            DiagnoseSteeringWheelSensors();
+            try
+            {
+                DiagnoseBrakeSensors();
+                DiagnoseSteeringWheelSensors();
+            }
+            catch (autonomiczny_samochod.Model.Communicators.SafeRS232Communicator.MaxTriesToConnectRS232ExceededException)
+            {
+                state = DeviceState.Error;
+            }
         }
 
-        public void Start()
+        public override void StartSensors()
         {
             deviceQueringThread = new Thread(new ThreadStart(StartTransmission));
             deviceQueringThread.Start();
+        }
+
+        public override void StartEffectors()
+        {
+            //no effectors in here
+        }
+
+        public override void PauseEffectors()
+        {
+            //no effectors in here
+        }
+
+        public override void EmergencyStop()
+        {
+            //no effectors in here - no danger - sensors still can work
         }
 
         private void DiagnoseSteeringWheelSensors()
@@ -197,12 +225,20 @@ namespace autonomiczny_samochod.Model.Communicators
         {
             while (true)
             {
-                ReadSteeringWheelSensor();
-                Thread.Sleep(SLEEP_BETWEEN_2_READS_IN_MS);
+                try
+                {
+                    ReadSteeringWheelSensor();
+                    Thread.Sleep(SLEEP_BETWEEN_2_READS_IN_MS);
 
-                ReadBrakesSensors();
-                Thread.Sleep(SLEEP_BETWEEN_2_READS_IN_MS);
+                    ReadBrakesSensors();
+                    Thread.Sleep(SLEEP_BETWEEN_2_READS_IN_MS);
+                }
+                catch (autonomiczny_samochod.Model.Communicators.SafeRS232Communicator.MaxTriesToConnectRS232ExceededException)
+                {
+                    state = DeviceState.Error;
+                }
             }
+
         }
 
         private void ReadBrakesSensors()
@@ -262,5 +298,6 @@ namespace autonomiczny_samochod.Model.Communicators
                 }
             }
         }
+
     }
 }

@@ -78,5 +78,11 @@ namespace autonomiczny_samochod
         {
             throw new NotImplementedException();
         }
+
+
+        public Model.Communicators.DeviceManager deviceManager
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

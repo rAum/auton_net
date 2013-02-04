@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using autonomiczny_samochod.Model.Communicators;
 
 
 
@@ -25,7 +26,7 @@ namespace autonomiczny_samochod
 
     //needed for evTargetSteeringWheelAngleChanged
     public delegate void TargetSteeringWheelAngleChangedEventHandler(object sender, TargetSteeringWheelAngleChangedEventArgs args);
-    public class TargetSteeringWheelAngleChangedEventArgs
+    public class TargetSteeringWheelAngleChangedEventArgs : EventArgs
     {
         private double targetAngle;
         public TargetSteeringWheelAngleChangedEventArgs(double angle)
@@ -68,6 +69,11 @@ namespace autonomiczny_samochod
         }
 
         IBrakeRegulator BrakeRegulator
+        {
+            get;
+        }
+
+        DeviceManager deviceManager
         {
             get;
         }

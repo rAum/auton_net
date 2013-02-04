@@ -15,7 +15,7 @@ namespace autonomiczny_samochod
     }
     //evSpeedInfoReceived
     public delegate void SpeedInfoReceivedEventHander(object sender, SpeedInfoReceivedEventArgs args);
-    public class SpeedInfoReceivedEventArgs
+    public class SpeedInfoReceivedEventArgs : EventArgs
     {
         private double speedInfo;
 
@@ -32,7 +32,7 @@ namespace autonomiczny_samochod
 
     //evSteeringWheelAngleInfoReceived
     public delegate void SteeringWheelAngleInfoReceivedEventHandler(object sender, SteeringWheelAngleInfoReceivedEventArgs args);
-    public class SteeringWheelAngleInfoReceivedEventArgs
+    public class SteeringWheelAngleInfoReceivedEventArgs : EventArgs
     {
         private double wheelAngleInfo;
 
@@ -49,7 +49,7 @@ namespace autonomiczny_samochod
     
     //evBrakePositionInfoReceived
     public delegate void BrakePositionReceivedEventHandler(object sender, BrakePositionReceivedEventArgs args);
-    public class BrakePositionReceivedEventArgs
+    public class BrakePositionReceivedEventArgs : EventArgs
     {
         //from 0 to 100[%];
         private double brakePosition;

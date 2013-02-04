@@ -6,7 +6,7 @@ using System.Text;
 namespace autonomiczny_samochod
 {
     public delegate void NewBrakeSettingCalculatedEventHandler(object sender, NewBrakeSettingCalculatedEventArgs args);
-    public class NewBrakeSettingCalculatedEventArgs
+    public class NewBrakeSettingCalculatedEventArgs : EventArgs
     {
         private double brakeSetting;
         

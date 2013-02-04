@@ -15,12 +15,10 @@ namespace Helpers
         private const int MIN_PRIORITY_TO_SHOW_IN_CONSOLE = 1; //in range[0, 10]
         private const int MIN_PRIORITY_TO_WRINT_IN_FILE = 10; //10 = disabled
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <summary></summary>
         /// <param name="loggingObj"></param>
         /// <param name="msg"></param>
-        /// <param name="priority">0 = lowest, more -> bigger priority</param>
+        /// <param name="priority">0 = lowest, more -> bigger priority (MAX=10)</param>
         public static void Log(Object loggingObj, string msg, int priority = 0)
         {
             if (priority > MAX_PRIORITY)

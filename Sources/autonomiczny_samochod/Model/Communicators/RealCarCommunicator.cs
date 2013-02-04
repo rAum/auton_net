@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using car_communicator;
+using autonomiczny_samochod.Model.Communicators;
 
 namespace autonomiczny_samochod
 {
@@ -12,27 +13,10 @@ namespace autonomiczny_samochod
         public event SteeringWheelAngleInfoReceivedEventHandler evSteeringWheelAngleInfoReceived;
         public event BrakePositionReceivedEventHandler evBrakePositionReceived;
 
-        public ISpeedRegulator ISpeedRegulator 
-        { 
-            get
-            {
-                return ICar.SpeedRegulator;
-            } 
-        }
-        public ISteeringWheelAngleRegulator ISteeringWheelAngleRegulator
-        { 
-            get
-            {
-                return ICar.SteeringWheelAngleRegulator;
-            }
-        }
-        public IBrakeRegulator BrakeRegulator
-        {
-            get
-            {
-                return ICar.BrakeRegulator;
-            }
-        }
+        public ISpeedRegulator ISpeedRegulator { get { return ICar.SpeedRegulator; } }
+        public ISteeringWheelAngleRegulator ISteeringWheelAngleRegulator { get { return ICar.SteeringWheelAngleRegulator; } }
+        public IBrakeRegulator BrakeRegulator { get { return ICar.BrakeRegulator; } }
+        public DeviceManager deviceManager { get { return ICar.deviceManager; } }
 
         public ICar ICar { get; private set; }
 
@@ -47,7 +31,8 @@ namespace autonomiczny_samochod
        // private BrakePedalCommunicator brakePedalCommunicator { get; set; } //obsolete
         private USB4702 extentionCardCommunicator { get; set; }
         private ServoDriver servoDriver { get; set; }
-        private RS232Controller angleAndSpeedMeter { get; set; }
+        //private RS232Controller angleAndSpeedMeter { get; set; } //OBSOLETE
+        private SafeRS232Controller angleAndSpeedMeter { get; set; }
 
 
         //car speed receiving
@@ -61,19 +46,24 @@ namespace autonomiczny_samochod
         {
             ICar = parent;
 
-            for(int i = 0; i < lastTicksMeasurements.Length; i++)
+            for(int i = 0; i < lastTicksMeasurements.Length; i++) //TODO: MOVE IT FROM HERE!!! (create speed measurer class)
             {
                 lastTicksMeasurements[i] = 0;
             }
 
             extentionCardCommunicator = new USB4702();
             servoDriver = new ServoDriver();
-            angleAndSpeedMeter = new RS232Controller(this);
+            //angleAndSpeedMeter = new RS232Controller(this); //OBSOLETE
+            angleAndSpeedMeter = new SafeRS232Controller(this, "COM4");
+            deviceManager.RegisterDevice(angleAndSpeedMeter);
 
             //TODO: make thread for every initialization //its actually done for angleAndSpeedMeter
             extentionCardCommunicator.Initialize();
             servoDriver.Initialize();
-            angleAndSpeedMeter.Initialize();
+            //angleAndSpeedMeter.Initialize(); //OBSOLETE - now its device managers job
+
+            deviceManager.Initialize();
+            deviceManager.StartSensors();
             
             SpeedMeasuringTimer.Interval = SPEED_MEASURING_TIMER_INTERVAL_IN_MS;
             SpeedMeasuringTimer.Tick += new EventHandler(SpeedMeasuringTimer_Tick);

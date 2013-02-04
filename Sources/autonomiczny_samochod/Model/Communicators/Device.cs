@@ -6,7 +6,7 @@ using System.Text;
 namespace autonomiczny_samochod.Model.Communicators
 {
     public delegate void DeviceStateHasChangedEventHandler(object sender, DeviceStateHasChangedEventArgs args);
-    public class DeviceStateHasChangedEventArgs
+    public class DeviceStateHasChangedEventArgs : EventArgs
     {
         private DeviceState deviceState;
 
@@ -53,12 +53,6 @@ namespace autonomiczny_samochod.Model.Communicators
             }
         }
         private DeviceState __STATE__ = DeviceState.OK;
-
-        //public void RegisterDeviceManager(DeviceManager manager)
-        //{
-        //    devManager = manager;
-        //    manager.RegisterDevice(this);
-        //}
 
         public abstract void Initialize();
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Helpers;
 using autonomiczny_samochod.Model.Regulators;
+using autonomiczny_samochod.Model.Communicators;
 
 namespace autonomiczny_samochod.Model.Car
 {
@@ -18,6 +19,7 @@ namespace autonomiczny_samochod.Model.Car
         public ISpeedRegulator SpeedRegulator { get; private set; }
         public ISteeringWheelAngleRegulator SteeringWheelAngleRegulator { get; private set; }
         public IBrakeRegulator BrakeRegulator { get; private set; }
+        public DeviceManager deviceManager { get; private set; }
 
         public bool IsAlertBrakeActive { get; private set; }
         public CarInformations CarInfo { get; private set; }
@@ -30,6 +32,8 @@ namespace autonomiczny_samochod.Model.Car
             CarInfo = new CarInformations();
 
             IsAlertBrakeActive = false;
+
+            deviceManager = new DeviceManager();
 
             //regulators and communicator initiation 
             CarComunicator = new RealCarCommunicator(this); // = new RealCarCommunicator(this);
@@ -103,5 +107,6 @@ namespace autonomiczny_samochod.Model.Car
         {
             BrakeRegulator.EndTargetBrakeSteeringOverriding();
         }
+
     }
 }

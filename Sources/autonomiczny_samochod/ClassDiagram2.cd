@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram MajorVersion="1" MinorVersion="1">
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
   <Comment CommentText="MVC">
     <Position X="18.976" Y="3.186" Height="0.521" Width="0.971" />
   </Comment>
   <Comment CommentText="Event Handlers">
-    <Position X="1.572" Y="4.096" Height="0.386" Width="1.026" />
+    <Position X="1.601" Y="3.065" Height="0.386" Width="1.026" />
   </Comment>
   <Comment CommentText="Event Args">
-    <Position X="5.358" Y="4.086" Height="0.386" Width="1.026" />
+    <Position X="5.284" Y="3.026" Height="0.386" Width="1.026" />
   </Comment>
   <Comment CommentText="Data received">
     <Position X="8.118" Y="5.474" Height="0.419" Width="1.025" />
@@ -17,6 +17,12 @@
   </Comment>
   <Comment CommentText="new Setting calculated">
     <Position X="8.109" Y="10.259" Height="0.419" Width="1.314" />
+  </Comment>
+  <Comment CommentText="OBSOLETE">
+    <Position X="27.149" Y="0.574" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Device manager">
+    <Position X="8.042" Y="3.932" Height="0.419" Width="1.229" />
   </Comment>
   <Class Name="autonomiczny_samochod.App" Collapsed="true">
     <Position X="2.25" Y="0.5" Width="1.5" />
@@ -74,13 +80,13 @@
   <Class Name="autonomiczny_samochod.RealCarCommunicator" Collapsed="true" HideInheritanceLine="true">
     <Position X="23.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CogALBAAAIAEAAAJAGAAEAFAAAgBAABAAAABICgmAAA=</HashCode>
+      <HashCode>CogALBAAAIAEAAAJAGAAEAFAAAgBgABAAAABICgmAAA=</HashCode>
       <FileName>Model\Communicators\RealCarCommunicator.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="autonomiczny_samochod.Properties.Resources" Collapsed="true">
-    <Position X="4" Y="0.5" Width="1.5" />
+    <Position X="4.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
     </TypeIdentifier>
@@ -176,7 +182,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="autonomiczny_samochod.Model.Regulators.PIDBrakeRegulator" Collapsed="true">
-    <Position X="16.5" Y="13.25" Width="1.5" />
+    <Position X="16.75" Y="13.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AIAQARAMAAACSAAAAAAgEAgCAIAAAAAAAAAAACACAAI=</HashCode>
       <FileName>Model\Regulators\PIDBrakeRegulator.cs</FileName>
@@ -191,7 +197,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="autonomiczny_samochod.RS232Controller" Collapsed="true">
-    <Position X="25.25" Y="4" Width="1.5" />
+    <Position X="25.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QECAgJAQAkQAJyABCBgcymJEAAQgQBggAAACDQBIgEA=</HashCode>
       <FileName>Model\Communicators\RS232.cs</FileName>
@@ -205,15 +211,15 @@
     </TypeIdentifier>
   </Class>
   <Class Name="autonomiczny_samochod.Model.Car.RealCar" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="13" Y="5.5" Width="1.5" />
+    <Position X="13" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ACAAAAIIAQAAgEABABAAMAgABJEAAEAAAEAAAAAEAAA=</HashCode>
+      <HashCode>ACAAAAIIAQAAgEABABAAMAgABJEAgEAAAEAAAAAEAAA=</HashCode>
       <FileName>Model\Car\RealCar.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="car_communicator.ServoDriver" Collapsed="true">
-    <Position X="27" Y="4" Width="1.5" />
+    <Position X="25.25" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAgABAAAAAQQAAAAAAAAAQBAAgAEAAAgAQAAAAAA=</HashCode>
       <FileName>Model\Communicators\ServoDriver.cs</FileName>
@@ -235,24 +241,24 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="autonomiczny_samochod.CarInformations" Collapsed="true">
-    <Position X="14.5" Y="3.25" Width="1.5" />
+    <Position X="14.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAgAAAAAAAAgAAAAAAAgAEBBAAIAAACAAIAAAEAA=</HashCode>
       <FileName>Model\Car\CarInformations.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="autonomiczny_samochod.CarWithFakeCommunicator" Collapsed="true">
-    <Position X="14.25" Y="6.5" Width="2.25" />
+    <Position X="14.25" Y="7.25" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAIIAQAAgAABABAAMAgABIAAAEAAAEAAAAAEAAA=</HashCode>
+      <HashCode>AAAAAAIIAQAAgAABABAAMAgABIAAgEAAAEAAAAAEAAA=</HashCode>
       <FileName>Test\Fakes\CarWithFakeCommunicator.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="autonomiczny_samochod.CarWithFakeRegulators" Collapsed="true">
-    <Position X="12" Y="6.5" Width="2" />
+    <Position X="12" Y="7.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAIIAQAAgAABABAAMAgABIAAAEAAAEAAAAAEAAA=</HashCode>
+      <HashCode>AAAAAAIIAQAAgAABABAAMAgABIAAgEAAAEAAAAAEAAA=</HashCode>
       <FileName>Test\Fakes\CarWithFakeRegulators.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -265,11 +271,56 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
+  <Class Name="autonomiczny_samochod.Model.Communicators.Device" Collapsed="true">
+    <Position X="27.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAQACAIAAgAAAAAAAAIAEAAgAAAAAAAA=</HashCode>
+      <FileName>Model\Communicators\Device.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="autonomiczny_samochod.Model.Communicators.DeviceManager" Collapsed="true">
+    <Position X="15" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIIAAAEAAAAEAQACAIAAAAAAAIAAAIAAACgAAAAAAAA=</HashCode>
+      <FileName>Model\Communicators\DeviceManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="autonomiczny_samochod.Model.Communicators.SafeRS232Communicator" Collapsed="true">
+    <Position X="30" Y="4" Width="1.5" />
+    <NestedTypes>
+      <Class Name="autonomiczny_samochod.Model.Communicators.SafeRS232Communicator.MaxTriesToConnectRS232ExceededException" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Model\Communicators\SafeRS232Communicator.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AIAAgBAQAAAAAAAAAAAAQACEAAgAAAgAAAAADoHgCAA=</HashCode>
+      <FileName>Model\Communicators\SafeRS232Communicator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="autonomiczny_samochod.Model.Communicators.SafeRS232Controller" Collapsed="true">
+    <Position X="27.25" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>QQGAAIgAAgQAJyADAIgUgqJAAIAAAJAAAAgAEQAAAEA=</HashCode>
+      <FileName>Model\Communicators\SafeRS232Controller.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="RS232" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="autonomiczny_samochod.Model.Communicators.DeviceStateHasChangedEventArgs" Collapsed="true">
+    <Position X="4.25" Y="3.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAgAA=</HashCode>
+      <FileName>Model\Communicators\Device.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Interface Name="autonomiczny_samochod.ICar">
     <Position X="17" Y="5" Width="1.75" />
     <AssociationLine Name="SteeringWheelAngleRegulator" Type="autonomiczny_samochod.ISteeringWheelAngleRegulator" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="18.656" Y="8.161" />
+        <Point X="18.656" Y="7.709" />
         <Point X="18.656" Y="8.75" />
         <Point X="19.25" Y="8.75" />
       </Path>
@@ -279,7 +330,7 @@
     </AssociationLine>
     <AssociationLine Name="SpeedRegulator" Type="autonomiczny_samochod.ISpeedRegulator" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="17.125" Y="8.161" />
+        <Point X="17.125" Y="7.709" />
         <Point X="17.125" Y="8.438" />
         <Point X="15.5" Y="8.438" />
       </Path>
@@ -291,21 +342,37 @@
     </AssociationLine>
     <AssociationLine Name="CarComunicator" Type="autonomiczny_samochod.ICarCommunicator" FixedFromPoint="true">
       <Path>
-        <Point X="18.75" Y="5.996" />
-        <Point X="20.25" Y="5.996" />
+        <Point X="18.75" Y="5.854" />
+        <Point X="20.25" Y="5.854" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="BrakeRegulator" Type="autonomiczny_samochod.IBrakeRegulator" FixedFromPoint="true">
       <Path>
-        <Point X="17.812" Y="8.161" />
+        <Point X="17.812" Y="7.709" />
         <Point X="17.812" Y="9.25" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-1.172" Y="0.096" />
       </MemberNameLabel>
     </AssociationLine>
+    <AssociationLine Name="deviceManager" Type="autonomiczny_samochod.Model.Communicators.DeviceManager" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="17" Y="5.214" />
+        <Point X="16.75" Y="5.214" />
+        <Point X="16.75" Y="3.969" />
+        <Point X="16.5" Y="3.969" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="CarInfo" Type="autonomiczny_samochod.CarInformations" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="17" Y="5.625" />
+        <Point X="16.434" Y="5.625" />
+        <Point X="16.434" Y="4.719" />
+        <Point X="15.75" Y="4.719" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAIIAQAAgAABABAAMAgABIAAAEAAAEAAAAAEAAA=</HashCode>
+      <HashCode>AAAAAAIIAQAAgAABABAAMAgABIAAgEAAAEAAAAAEAAA=</HashCode>
       <FileName>Model\Car\ICar.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -314,6 +381,8 @@
       <Property Name="Controller" />
       <Property Name="CarComunicator" />
       <Property Name="BrakeRegulator" />
+      <Property Name="deviceManager" />
+      <Property Name="CarInfo" />
     </ShowAsAssociation>
   </Interface>
   <Interface Name="autonomiczny_samochod.ISteeringWheelAngleRegulator">
@@ -322,7 +391,7 @@
       <Path>
         <Point X="19.25" Y="8.812" />
         <Point X="18.625" Y="8.812" />
-        <Point X="18.625" Y="8.161" />
+        <Point X="18.625" Y="7.709" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="0.115" Y="0.218" />
@@ -358,7 +427,7 @@
       <Path>
         <Point X="15.5" Y="8.484" />
         <Point X="17.188" Y="8.484" />
-        <Point X="17.188" Y="8.161" />
+        <Point X="17.188" Y="7.709" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="0.961" Y="0.853" />
@@ -377,7 +446,7 @@
     <AssociationLine Name="ICar" Type="autonomiczny_samochod.ICar" FixedFromPoint="true">
       <Path>
         <Point X="17.75" Y="9.25" />
-        <Point X="17.75" Y="8.161" />
+        <Point X="17.75" Y="7.709" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
         <Position X="0.164" Y="0.625" Height="0.162" Width="0.774" />
@@ -391,11 +460,18 @@
       <Property Name="ICar" />
     </ShowAsAssociation>
   </Interface>
-  <Enum Name="autonomiczny_samochod.Gear" Collapsed="true">
-    <Position X="0.75" Y="1.75" Width="1.5" />
+  <Enum Name="autonomiczny_samochod.Gear">
+    <Position X="13" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAECgAAAAAAIAAAAAAAAAAAA=</HashCode>
       <FileName>Model\Communicators\ICarComunicator.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="autonomiczny_samochod.Model.Communicators.DeviceState">
+    <Position X="11.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgQAAAAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Model\Communicators\Device.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Delegate Name="autonomiczny_samochod.TargetSpeedChangedEventHandler" Collapsed="true">
@@ -452,6 +528,13 @@
     <TypeIdentifier>
       <HashCode>AAgAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Model\Regulators\IBrakeRegulator.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="autonomiczny_samochod.Model.Communicators.DeviceStateHasChangedEventHandler" Collapsed="true">
+    <Position X="0.5" Y="3.75" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Model\Communicators\Device.cs</FileName>
     </TypeIdentifier>
   </Delegate>
   <Font Name="Segoe UI" Size="9" />
