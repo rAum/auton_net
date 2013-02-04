@@ -53,7 +53,6 @@ namespace autonomiczny_samochod
 
             extentionCardCommunicator = new USB4702();
 
-
             servoDriver = new ServoDriver();
             deviceManager.RegisterDevice(servoDriver);
 
@@ -63,6 +62,7 @@ namespace autonomiczny_samochod
 
             //TODO: make thread for every initialization //its actually done for angleAndSpeedMeter
             extentionCardCommunicator.Initialize();
+            deviceManager.RegisterDevice(extentionCardCommunicator);
             //angleAndSpeedMeter.Initialize(); //OBSOLETE - now its device managers job
 
             deviceManager.Initialize();

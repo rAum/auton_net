@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using Automation.BDaq;
 using Helpers;
+using autonomiczny_samochod.Model.Communicators;
 
 namespace car_communicator
 {
     /// <summary>
     /// extension card connector
     /// </summary>
-    public class USB4702
+    public class USB4702 : Device
     {
         static int buffer;
         static InstantAoCtrl instantAoCtrl = new InstantAoCtrl(); //for initialize analog outputs
@@ -45,6 +46,8 @@ namespace car_communicator
         const int BRAKE_SOFT_START_ON_PORT_LEVEL = 1; //TODO: check it!
         const int BRAKE_SOFT_START_OFF_PORT_LEVEL = 0;
 
+        private bool effectorsActive = false;
+
         public void Initialize()
         {
             string deviceDescription = "USB-4702,BID#0"; // '0' -> 1st extension card
@@ -70,9 +73,30 @@ namespace car_communicator
             {
                 Logger.Log(this, "cannot initialize connection for USB4702", 2);
                 Logger.Log(this, String.Format("Exception received: {0}", e.Message), 2);
-
-                //throw; //TODO: IMPORTANT: TEMPORARY!!
+                this.state = DeviceState.Error;
             }
+        }
+
+        public override void StartSensors()
+        {
+            //no sensors in here
+        }
+
+        public override void StartEffectors()
+        {
+            effectorsActive = true;
+        }
+
+        public override void PauseEffectors()
+        {
+            effectorsActive = false;
+            SetSteeringWheel(0.0); //do not move steering wheel
+        }
+
+        public override void EmergencyStop()
+        {
+            effectorsActive = false;
+            SetSteeringWheel(0.0); //do not move steering wheel
         }
         
         /// <summary>
@@ -209,6 +233,7 @@ namespace car_communicator
             //setPortDO(BRAKE_DIRECTION_PORT_NO, BRAKE_FORWARD_PORT_LEVEL);
             //setPortAO(BRAKE_STRENGTH_SET_PORT, 2);
         }
+
     }
 
 }
