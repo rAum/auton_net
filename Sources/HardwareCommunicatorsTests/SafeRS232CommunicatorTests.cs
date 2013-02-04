@@ -54,7 +54,7 @@ namespace HardwareCommunicatorsTests
         private const int WRITE_TIMEOUT_IN_MS = 50;
 
         [ClassInitialize()]
-        public static void ClassInit(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext param)
+        public static void ClassInit(TestContext param)
         {
             fakeRS232ReadLock = new Object();
 
