@@ -213,7 +213,7 @@
   <Class Name="autonomiczny_samochod.Model.Car.RealCar" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="13" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ACAAAAIIAQAAgEABABAAMAgABJEAgEAAAEAAAAAEAAA=</HashCode>
+      <HashCode>ACAAAAIIAQAAgkABABAAMAgABJEAgEAAAEAAAAAEAAA=</HashCode>
       <FileName>Model\Car\RealCar.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -228,7 +228,7 @@
   <Class Name="car_communicator.USB4702" Collapsed="true">
     <Position X="23.25" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAIEACIDQAEAAQIIIABIQAQIAAEAAhYAAgBAAAEGgAE=</HashCode>
+      <HashCode>IAIECCIDQAEAAQIKIIBIQAQIAAEAApYAAghAAAEGgAE=</HashCode>
       <FileName>Model\Communicators\USB4702.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -281,19 +281,12 @@
   <Class Name="autonomiczny_samochod.Model.Communicators.DeviceManager" Collapsed="true">
     <Position X="15" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIIAAAEAAAAEAQACAIAAAAAAAIAAAIAAACgAAAAAAAA=</HashCode>
+      <HashCode>AIIAAAEAAAAEAQACAIAAAAAAAICAAIAIACgAAAAAAAA=</HashCode>
       <FileName>Model\Communicators\DeviceManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="autonomiczny_samochod.Model.Communicators.SafeRS232Communicator" Collapsed="true">
     <Position X="30" Y="4" Width="1.5" />
-    <NestedTypes>
-      <Class Name="autonomiczny_samochod.Model.Communicators.SafeRS232Communicator.MaxTriesToConnectRS232ExceededException" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Model\Communicators\SafeRS232Communicator.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AIAAgBAQAAAAAAAAAAAAQACEAAgAAAgAAAAADoHgCAA=</HashCode>
       <FileName>Model\Communicators\SafeRS232Communicator.cs</FileName>
@@ -321,17 +314,17 @@
     <AssociationLine Name="SteeringWheelAngleRegulator" Type="autonomiczny_samochod.ISteeringWheelAngleRegulator" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="18.656" Y="7.709" />
-        <Point X="18.656" Y="8.75" />
         <Point X="19.25" Y="8.75" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-1.245" Y="0.663" />
+        <Position X="0.663" Y="-1.245" />
       </MemberNameLabel>
     </AssociationLine>
     <AssociationLine Name="SpeedRegulator" Type="autonomiczny_samochod.ISpeedRegulator" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="17.125" Y="7.709" />
-        <Point X="17.125" Y="8.438" />
+        <Point X="16.826" Y="7.843" Type="JumpStart" />
+        <Point X="16.674" Y="7.911" Type="JumpEnd" />
         <Point X="15.5" Y="8.438" />
       </Path>
     </AssociationLine>
@@ -346,10 +339,18 @@
         <Point X="20.25" Y="5.854" />
       </Path>
     </AssociationLine>
+    <AssociationLine Name="CarInfo" Type="autonomiczny_samochod.CarInformations" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="17" Y="5.625" />
+        <Point X="16.434" Y="5.625" />
+        <Point X="16.434" Y="4.719" />
+        <Point X="15.75" Y="4.719" />
+      </Path>
+    </AssociationLine>
     <AssociationLine Name="BrakeRegulator" Type="autonomiczny_samochod.IBrakeRegulator" FixedFromPoint="true">
       <Path>
         <Point X="17.812" Y="7.709" />
-        <Point X="17.812" Y="9.25" />
+        <Point X="17.5" Y="9.25" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-1.172" Y="0.096" />
@@ -363,14 +364,6 @@
         <Point X="16.5" Y="3.969" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="CarInfo" Type="autonomiczny_samochod.CarInformations" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="17" Y="5.625" />
-        <Point X="16.434" Y="5.625" />
-        <Point X="16.434" Y="4.719" />
-        <Point X="15.75" Y="4.719" />
-      </Path>
-    </AssociationLine>
     <TypeIdentifier>
       <HashCode>AAAAAAIIAQAAgAABABAAMAgABIAAgEAAAEAAAAAEAAA=</HashCode>
       <FileName>Model\Car\ICar.cs</FileName>
@@ -380,9 +373,9 @@
       <Property Name="SpeedRegulator" />
       <Property Name="Controller" />
       <Property Name="CarComunicator" />
+      <Property Name="CarInfo" />
       <Property Name="BrakeRegulator" />
       <Property Name="deviceManager" />
-      <Property Name="CarInfo" />
     </ShowAsAssociation>
   </Interface>
   <Interface Name="autonomiczny_samochod.ISteeringWheelAngleRegulator">
@@ -390,7 +383,6 @@
     <AssociationLine Name="Car" Type="autonomiczny_samochod.ICar" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="19.25" Y="8.812" />
-        <Point X="18.625" Y="8.812" />
         <Point X="18.625" Y="7.709" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
@@ -426,7 +418,8 @@
     <AssociationLine Name="Car" Type="autonomiczny_samochod.ICar" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="15.5" Y="8.484" />
-        <Point X="17.188" Y="8.484" />
+        <Point X="16.674" Y="7.945" Type="JumpStart" />
+        <Point X="16.826" Y="7.875" Type="JumpEnd" />
         <Point X="17.188" Y="7.709" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
@@ -446,10 +439,15 @@
     <AssociationLine Name="ICar" Type="autonomiczny_samochod.ICar" FixedFromPoint="true">
       <Path>
         <Point X="17.75" Y="9.25" />
-        <Point X="17.75" Y="7.709" />
+        <Point X="17.75" Y="8.436" />
+        <Point X="17.748" Y="8.436" Type="JumpStart" />
+        <Point X="17.582" Y="8.436" Type="JumpEnd" />
+        <Point X="16.75" Y="8.436" />
+        <Point X="16.75" Y="6.698" />
+        <Point X="17" Y="6.698" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
-        <Position X="0.164" Y="0.625" Height="0.162" Width="0.774" />
+        <Position X="0.625" Y="0.164" Height="0.162" Width="0.774" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>

@@ -54,6 +54,28 @@ namespace autonomiczny_samochod.Model.Car
             evAlertBrake += new EventHandler(ExampleFakeCar_evAlertBrake);
             evTargetSpeedChanged += new TargetSpeedChangedEventHandler(ExampleFakeCar_evTargetSpeedChanged);
             evTargetSteeringWheelAngleChanged += new TargetSteeringWheelAngleChangedEventHandler(ExampleFakeCar_evTargetSteeringWheelAngleChanged);
+            deviceManager.evDeviceStateHasChanged += deviceManager_evDeviceStateHasChanged;
+        }
+
+        void deviceManager_evDeviceStateHasChanged(object sender, DeviceStateHasChangedEventArgs args)
+        {
+            switch (args.GetDeviceState())
+            {
+                case DeviceState.Error:
+                    OverrideTargetBrakeSetting(100.0);
+                    break;
+
+                case DeviceState.OK:
+                    EndTargetBrakeSteeringOverriding();
+                    break;
+
+                case DeviceState.Warrning:
+                    //do nothing
+                    break;
+
+                default:
+                    throw new ApplicationException("unhandled device state");
+            }
         }
 
         private void ExampleFakeCar_evTargetSteeringWheelAngleChanged(object sender, TargetSteeringWheelAngleChangedEventArgs args)

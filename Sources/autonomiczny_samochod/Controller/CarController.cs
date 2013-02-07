@@ -19,10 +19,8 @@ namespace autonomiczny_samochod
         private System.Windows.Forms.Timer mStatsCollectorTimer = new System.Windows.Forms.Timer();
         private const int TIMER_INTERVAL_IN_MS = 10;
 
-
         public CarController()
         {
-
             //Model = new ExampleFakeCar(this);
             Model = new autonomiczny_samochod.Model.Car.RealCar(this);
             //Model = new CarWithFakeRegulators(this);

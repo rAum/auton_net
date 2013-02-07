@@ -48,7 +48,7 @@ namespace car_communicator
 
         private bool effectorsActive = false;
 
-        public void Initialize()
+        public override void Initialize()
         {
             string deviceDescription = "USB-4702,BID#0"; // '0' -> 1st extension card
 

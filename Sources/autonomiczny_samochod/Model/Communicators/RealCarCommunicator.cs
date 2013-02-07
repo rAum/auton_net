@@ -23,7 +23,7 @@ namespace autonomiczny_samochod
         //CONST
         const int SPEED_MEASURING_TIMER_INTERVAL_IN_MS = 10; //in ms
         const int SPEED_TABLE_SIZE = 30;
-        const double WHEEL_CIRCUIT_IN_M = 1.3822996; //44cm * pi //TODO: check it - its probably wrong
+        const double WHEEL_CIRCUIT_IN_M = 0.548 * Math.PI; //informacja of Filipa Godlewskiego z grupy mechaniki - oby prawdziwa ;)
         const int NO_OF_HAAL_METERS = 5;
         const int TICKS_TO_RESTART = 10000; 
 
@@ -67,6 +67,7 @@ namespace autonomiczny_samochod
 
             deviceManager.Initialize();
             deviceManager.StartSensors();
+            deviceManager.StartEffectors(); //temp only - make a button out of it
             
             SpeedMeasuringTimer.Interval = SPEED_MEASURING_TIMER_INTERVAL_IN_MS;
             SpeedMeasuringTimer.Tick += new EventHandler(SpeedMeasuringTimer_Tick);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using Helpers;
 
 namespace autonomiczny_samochod.Model.Communicators
@@ -35,6 +36,11 @@ namespace autonomiczny_samochod.Model.Communicators
             }
         }
         private DeviceState __OVERALLSTATE__ = DeviceState.OK;
+
+        public DeviceManager()
+        {
+
+        }
 
         public void RegisterDevice(Device dev)
         {
