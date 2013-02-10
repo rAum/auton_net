@@ -1,0 +1,93 @@
+jeœli (x,y) to wspó³¿êdne œrodka samochodu
+
+(x_fl, y_fl) - wspó³¿êdne przedniego lewego ko³a
+(x_fr, y_fr) - wspó³¿êdne przedniego prawego ko³a
+(x_rl, y_rl) - wspó³¿êdne tylnego lewego ko³a
+(x,rr, y_rr) - wspó³¿êdne tylnego prawego ko³a
+
+w = width = rozstaw kó³ (przedni) = 1470 mm = 1,47m //constant
+l = length = rozstaw osi = 2460 mm = 2,46m //constant
+
+//dok³adne dane (na t¹ chwilê nie s¹ u¿ywane)
+Toyota Yaris II wymiary nadwozia.
+	Model	Toyota Yaris II	
+	Wymiary nadwozia		
+	D³ugoœæ	3750 mm	 //wa¿ne - nie u¿ywane na t¹ chwilê
+	Szerokoœæ	1695 mm	//wa¿ne - nie u¿ywane na t¹ chwilê
+	Szerokoœæ z lusterkami	--	//wa¿ne - nie u¿ywane na t¹ chwilê
+	Wysokoœæ	1530 mm	
+	Rozstaw osi	2460 mm	
+	Rozstaw kó³: przód	1470 mm	
+	Rozstaw kó³: ty³	1460 mm	 // raczej ma³o wa¿na ró¿nica
+	Zwis przedni	565 mm	
+	Zwis tylny	565 mm	
+	K¹t natarcia	--	
+	K¹t zejœcia	--	
+	Przeœwit	--
+
+alfa - skrêt przedniej osi samochodu (zgodnie z ruchem wskazówek zegara)
+beta - obrót samochodu od osi y (zgodnie z ruchem wskazówek zegara)
+
+
+Mo¿na wyznaczyæ wspó³¿êdne ka¿dego z kó³ w zale¿noœci od :
+	po³o¿enia œrodka samochodu (x,y) 
+	k¹ta obrotu samochodu (beta)
+	d³ugoœci samochodu (length) //constant
+	szerokoœci samochodu (width) //constant
+	__ k¹t skrêtu kó³ jest tutaj nieistotny ___ (alfa)
+		obliczenia:
+			DO SPRAWDZENIA!!!
+			front dodaje: 
+				x + Sin(beta)*length/2
+				y + Cos(beta)*length/2
+				
+			right dodaje:
+				x + Cos(beta)*width/2
+				y - Sin(beta)*width/2
+				
+			w 2 stronê dodaj¹ przeciwn¹ wartoœæ
+			
+		wyniki:			
+			xfr[x_[t],y_[t],beta_[t]] := x[t] + Sin[beta[t]]*length/2 + Cos[beta[t]]*width/2
+			yfr[x_[t],y_[t],beta_[t]] := y[t] + Cos[beta[t]]*length/2 - Sin[beta[t]]*width/2
+			
+			xfl[x_[t],y_[t],beta_[t]] := x[t] + Sin[beta[t]]*length/2 - Cos[beta[t]]*width/2
+			yfl[x_[t],y_[t],beta_[t]] := y[t] + Cos[beta[t]]*length/2 + Sin[beta[t]]*width/2
+			
+			xrr[x_[t],y_[t],beta_[t]] := x[t] - Sin[beta[t]]*length/2 + Cos[beta[t]]*width/2
+			yrr[x_[t],y_[t],beta_[t]] := y[t] - Cos[beta[t]]*length/2 - Sin[beta[t]]*width/2
+			
+			xrl[x_[t],y_[t],beta_[t]] := x[t] - Sin[beta[t]]*length/2 - Cos[beta[t]]*width/2
+			yrl[x_[t],y_[t],beta_[t]] := y[t] - Cos[beta[t]]*length/2 + Sin[beta[t]]*width/2
+
+		z tego mo¿na wyznaczyæ prêdkoœci chwilowe ka¿dego ko³a:
+			
+			vxfr[x_[t],y_[t],beta_[t]] := D[xfr[x[t], y[t], beta[t]], t]
+			vyfr[x_[t],y_[t],beta_[t]] := D[yfr[x[t], y[t], beta[t]], t]
+			
+			vxfl[x_[t],y_[t],beta_[t]] := D[xfl[x[t], y[t], beta[t]], t]
+			vyfl[x_[t],y_[t],beta_[t]] := D[yfl[x[t], y[t], beta[t]], t]
+			
+			vxrr[x_[t],y_[t],beta_[t]] := D[xrr[x[t], y[t], beta[t]], t]
+			vyrr[x_[t],y_[t],beta_[t]] := D[yrr[x[t], y[t], beta[t]], t]
+			
+			vxrl[x_[t],y_[t],beta_[t]] := D[xrl[x[t], y[t], beta[t]], t]
+			vyrl[x_[t],y_[t],beta_[t]] := D[yrl[x[t], y[t], beta[t]], t]
+			
+	
+
+	Za³o¿enie braku poœlizgu bocznego
+		vx*Sin(k¹ta) - vy*Cos(k¹ta) = 0
+		
+		na przednich ko³ach:
+			NoSlide_fr[x_[t],y_[t],beta_[t]] := FullSimplify[vxfr[x[t],y[t],beta[t]]*Sin[alfa[t]+beta[t]] - vyfr[x[t],y[t],beta[t]]*Cos[alfa[t]+beta[t]] == 0]
+			NoSlide_fl[x_[t],y_[t],beta_[t]] := FullSimplify[vxfl[x[t],y[t],beta[t]]*Sin[alfa[t]+beta[t]] - vyfl[x[t],y[t],beta[t]]*Cos[alfa[t]+beta[t]] == 0]
+
+		wychodzi:
+			front-right:
+				1/2 ((width Cos[alfa[t] + 2 beta[t]] + length Sin[alfa[t] + 2 beta[t]]) Derivative[1][beta][t] + 2 Sin[alfa[t] + beta[t]] Derivative[1][x][t] - 2 Cos[alfa[t] + beta[t]] Derivative[1][y][t])
+			w wersji dla normalnych ludzi (pogl¹dnowe - nieprzejrzane):
+				1/2 B'(width*Cos[alfa + 2*beta) + L*sin(alfa + 2*beta) + 2*x'*sin(alfa + beta)- 2*y'*cos(alfa+beta) = 0
+				
+				
+				
