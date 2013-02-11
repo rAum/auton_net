@@ -43,14 +43,14 @@ namespace car_communicator
             else if (list.Count == 0)
             {
                 Logger.Log(this, "there are no connected USC devices - servo driver can't start", 2);
-                this.state = DeviceState.Error;
+                this.overallState = DeviceOverallState.Error;
             }
             else //more than 1 device
             {
                 Logger.Log(this, "there are more than 1 USC devices - trying to connect last of them", 2);
                 Driver = new Usc(list[list.Count - 1]); //last device
                 //TODO: add device recognising
-                this.state = DeviceState.Warrning;
+                this.overallState = DeviceOverallState.Warrning;
             }
         }
 

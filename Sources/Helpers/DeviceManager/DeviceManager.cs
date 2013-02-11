@@ -32,7 +32,7 @@ namespace Helpers
         /// 
         /// default value is DeviceState.OK
         /// </summary>
-        public DeviceState overallState
+        public DeviceOverallState overallState
         {
             get { return __OVERALLSTATE__; }
             private set
@@ -48,7 +48,7 @@ namespace Helpers
                 }
             }
         }
-        private DeviceState __OVERALLSTATE__ = DeviceState.OK;
+        private DeviceOverallState __OVERALLSTATE__ = DeviceOverallState.OK;
 
         public DeviceManager()
         {
@@ -73,31 +73,31 @@ namespace Helpers
 
             switch (args.GetDeviceState())
             {
-                case DeviceState.Error:
-                    overallState = DeviceState.Error;
+                case DeviceOverallState.Error:
+                    overallState = DeviceOverallState.Error;
                     EmergencyStop();
                     break;
 
-                case DeviceState.Warrning:
-                    if (overallState == DeviceState.OK)
+                case DeviceOverallState.Warrning:
+                    if (overallState == DeviceOverallState.OK)
                     {
                         PauseEffectors();
-                        overallState = DeviceState.Warrning;
+                        overallState = DeviceOverallState.Warrning;
                     }
                     break;
 
-                case DeviceState.OK:
+                case DeviceOverallState.OK:
                     bool isEverythingOk = true;
                     foreach (Device dev in devicesList)
                     {
-                        if (dev.state != DeviceState.OK)
+                        if (dev.overallState != DeviceOverallState.OK)
                         {
                             isEverythingOk = false;
                         }
                     }
                     if (isEverythingOk)
                     {
-                        overallState = DeviceState.OK;
+                        overallState = DeviceOverallState.OK;
                     }
                     break;
 

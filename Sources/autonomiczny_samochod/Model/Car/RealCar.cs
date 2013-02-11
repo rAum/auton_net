@@ -61,15 +61,15 @@ namespace autonomiczny_samochod.Model.Car
         {
             switch (args.GetDeviceState())
             {
-                case DeviceState.Error:
+                case DeviceOverallState.Error:
                     OverrideTargetBrakeSetting(100.0);
                     break;
 
-                case DeviceState.OK:
+                case DeviceOverallState.OK:
                     EndTargetBrakeSteeringOverriding();
                     break;
 
-                case DeviceState.Warrning:
+                case DeviceOverallState.Warrning:
                     //do nothing
                     break;
 

@@ -114,7 +114,7 @@ namespace autonomiczny_samochod.Model.Communicators
             }
             catch (autonomiczny_samochod.Model.Communicators.SafeRS232Communicator.MaxTriesToConnectRS232ExceededException)
             {
-                state = DeviceState.Error;
+                overallState = DeviceOverallState.Error;
             }
         }
 
@@ -235,7 +235,7 @@ namespace autonomiczny_samochod.Model.Communicators
                 }
                 catch (autonomiczny_samochod.Model.Communicators.SafeRS232Communicator.MaxTriesToConnectRS232ExceededException)
                 {
-                    state = DeviceState.Error;
+                    overallState = DeviceOverallState.Error;
                 }
             }
 

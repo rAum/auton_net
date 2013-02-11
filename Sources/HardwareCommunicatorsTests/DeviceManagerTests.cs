@@ -34,12 +34,12 @@ namespace HardwareCommunicatorsTests
 
         public void FakeError()
         {
-            this.state = DeviceState.Error;
+            this.overallState = DeviceOverallState.Error;
         }
 
         public void FakeWarrning()
         {
-            this.state = DeviceState.Warrning;
+            this.overallState = DeviceOverallState.Warrning;
         }
     }
 

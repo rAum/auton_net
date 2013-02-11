@@ -73,7 +73,7 @@ namespace car_communicator
             {
                 Logger.Log(this, "cannot initialize connection for USB4702", 2);
                 Logger.Log(this, String.Format("Exception received: {0}", e.Message), 2);
-                this.state = DeviceState.Error;
+                this.overallState = DeviceOverallState.Error;
             }
         }
 
