@@ -48,7 +48,7 @@ namespace car_communicator
 
         private bool effectorsActive = false;
 
-        public override void Initialize()
+        protected override void Initialize()
         {
             string deviceDescription = "USB-4702,BID#0"; // '0' -> 1st extension card
 
@@ -73,27 +73,27 @@ namespace car_communicator
             {
                 Logger.Log(this, "cannot initialize connection for USB4702", 2);
                 Logger.Log(this, String.Format("Exception received: {0}", e.Message), 2);
-                this.state = DeviceState.Error;
+                this.overallState = DeviceOverallState.Error;
             }
         }
 
-        public override void StartSensors()
+        protected override void StartSensors()
         {
             //no sensors in here
         }
 
-        public override void StartEffectors()
+        protected override void StartEffectors()
         {
             effectorsActive = true;
         }
 
-        public override void PauseEffectors()
+        protected override void PauseEffectors()
         {
             effectorsActive = false;
             SetSteeringWheel(0.0); //do not move steering wheel
         }
 
-        public override void EmergencyStop()
+        protected override void EmergencyStop()
         {
             effectorsActive = false;
             SetSteeringWheel(0.0); //do not move steering wheel

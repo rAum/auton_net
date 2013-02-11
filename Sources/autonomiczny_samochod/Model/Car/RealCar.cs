@@ -33,7 +33,7 @@ namespace autonomiczny_samochod.Model.Car
 
             IsAlertBrakeActive = false;
 
-            deviceManager = new DeviceManager();
+            deviceManager = DeviceManager.GlobalDeviceManager;
 
             //regulators and communicator initiation 
             CarComunicator = new RealCarCommunicator(this); // = new RealCarCommunicator(this);
@@ -61,15 +61,15 @@ namespace autonomiczny_samochod.Model.Car
         {
             switch (args.GetDeviceState())
             {
-                case DeviceState.Error:
+                case DeviceOverallState.Error:
                     OverrideTargetBrakeSetting(100.0);
                     break;
 
-                case DeviceState.OK:
+                case DeviceOverallState.OK:
                     EndTargetBrakeSteeringOverriding();
                     break;
 
-                case DeviceState.Warrning:
+                case DeviceOverallState.Warrning:
                     //do nothing
                     break;
 

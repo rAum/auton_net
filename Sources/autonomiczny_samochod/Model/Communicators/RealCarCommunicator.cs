@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using car_communicator;
 using autonomiczny_samochod.Model.Communicators;
+using Helpers;
 
 namespace autonomiczny_samochod
 {
@@ -61,7 +62,6 @@ namespace autonomiczny_samochod
             deviceManager.RegisterDevice(angleAndSpeedMeter);
 
             //TODO: make thread for every initialization //its actually done for angleAndSpeedMeter
-            extentionCardCommunicator.Initialize();
             deviceManager.RegisterDevice(extentionCardCommunicator);
             //angleAndSpeedMeter.Initialize(); //OBSOLETE - now its device managers job
 

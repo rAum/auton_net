@@ -32,7 +32,7 @@ namespace car_communicator
         private Gear lastGearWantedToBeSet = Gear.neutral; //this gear could not been set because effectors could be not active
         private double lastThrottleInPercentsWantedToBeSet = 0.0; //this throttle could not been set because effectors could be not active
 
-        public override void  Initialize()
+        protected override void Initialize()
         {
             List<DeviceListItem> list = Usc.getConnectedDevices();
 
@@ -43,37 +43,37 @@ namespace car_communicator
             else if (list.Count == 0)
             {
                 Logger.Log(this, "there are no connected USC devices - servo driver can't start", 2);
-                this.state = DeviceState.Error;
+                this.overallState = DeviceOverallState.Error;
             }
             else //more than 1 device
             {
                 Logger.Log(this, "there are more than 1 USC devices - trying to connect last of them", 2);
                 Driver = new Usc(list[list.Count - 1]); //last device
                 //TODO: add device recognising
-                this.state = DeviceState.Warrning;
+                this.overallState = DeviceOverallState.Warrning;
             }
         }
 
-        public override void StartSensors()
+        protected override void StartSensors()
         {
             //no sensors in here
         }
 
-        public override void StartEffectors()
+        protected override void StartEffectors()
         {
             effectorsActive = true;
             setGear(lastGearWantedToBeSet);
             setThrottle(lastThrottleInPercentsWantedToBeSet);
         }
 
-        public override void PauseEffectors()
+        protected override void PauseEffectors()
         {
             effectorsActive = false;
             setGear(Gear.neutral);
             setThrottle(0.0);
         }
 
-        public override void EmergencyStop()
+        protected override void EmergencyStop()
         {
             effectorsActive = false;
             setGear(Gear.neutral);
