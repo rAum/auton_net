@@ -31,7 +31,7 @@ namespace CarVision
 
         VideoWriter videoWriter;
 
-        const string sourceInput = "";//@"C:/video/rec_2012-12-13_14_36_390.avi";
+        const string sourceInput = @"C:/video/rec_2012-12-14_10_40_442.avi";
                                      //"";
 
         // perspektywa

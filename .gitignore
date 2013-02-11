@@ -2,3 +2,8 @@
 Sources/auton.suo
 *.suo
 *.user
+
+Sources/*.psess
+*.app.ctl
+*.krn.ctl
+Sources/*.vsp
