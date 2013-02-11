@@ -31,25 +31,26 @@ namespace RANSAC
             double best_error = double.MaxValue;
             double model_error;
             double err;
+            int consensus_set;
 
             for (int i = 0; i < iterations; ++i)
             {
-                List<Point> initial = GetRandomSample(inputData, init_samples);
-                Parabola model = Parabola.fit(initial);
+                ShuffleAtBegin(ref inputData, init_samples);
+                Parabola model = Parabola.fit(inputData, init_samples);
                 if (model == null) continue;
-                List<Point> consensus_set = new List<Point>();
-                
+
+                consensus_set = 0;
                 model_error = 0;
                 foreach (var p in inputData)
                 {
                     err = model.value(p.Y) - p.X;
                     if (Math.Abs(err) < error_threshold ) {
-                        consensus_set.Add(p);
-                        model_error += err;
+                        consensus_set += 1;
+                        model_error   += err;
                     }
                 }
 
-                if (consensus_set.Count > n)
+                if (consensus_set >= n)
                 {
                     if (model_error < best_error)
                     {
@@ -63,30 +64,22 @@ namespace RANSAC
         }
 
         /// <summary>
-        /// Gets random sample of points, at most samplesCount.
+        /// Shuffle at begin #count objects in-place
         /// </summary>
-        /// <param name="input">Input points</param>
-        /// <param name="samplesCount">how many points take</param>
-        /// <returns>random subset of input</returns>
-        public static List<Point> GetRandomSample(List<Point> input, int samplesCount)
+        /// <param name="input">list of objects</param>
+        /// <param name="count">how many objects shuffle</param>
+        public static void ShuffleAtBegin(ref List<Point> input, int count)
         {
-            List<Point> sample = new List<Point>(samplesCount);
-
-            List<int> indexToTake = new List<int>(input.Count);
-            for (int i = 0; i < input.Count; ++i)
-                indexToTake.Add(i);
-
             Random rnd = new Random();
-            int choice;
-            int limit = Math.Min(input.Count, samplesCount);
-            for (int i = 0; i < limit; ++i)
+            int max = input.Count - 1;
+            Point p;
+            for (int i = 0; i < count; ++i)
             {
-                choice = rnd.Next(indexToTake.Count);
-                sample.Add(input[indexToTake[choice]]);
-                indexToTake.RemoveAt(choice);
+                int j = rnd.Next(i, max);
+                p = input[j];
+                input[j] = input[i];
+                input[i] = p;
             }
-
-            return sample;
         }
     }
 }

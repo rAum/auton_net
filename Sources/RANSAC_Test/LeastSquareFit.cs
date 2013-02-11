@@ -73,7 +73,7 @@ namespace RANSAC_Test
                 new Point(8,1)
             };
 
-            Parabola result = Parabola.fit(points);
+            Parabola result = Parabola.fit(points, points.Count);
 
             Parabola correct = new Parabola(1.5, -9.5, 16.0);
 
@@ -92,7 +92,7 @@ namespace RANSAC_Test
                 new Point(5,3)
             };
 
-            Parabola result = Parabola.fit(points);
+            Parabola result = Parabola.fit(points, points.Count);
             Parabola correct = new Parabola(0.0, 1.0, 2.0);
 
             Assert.AreEqual(result.a, correct.a, delta, "coefficient 'a' is wrong.");
@@ -115,7 +115,7 @@ namespace RANSAC_Test
                 new Point(-25, 3)
             };
 
-            Parabola result = Parabola.fit(points);
+            Parabola result = Parabola.fit(points, points.Count);
             Parabola correct = new Parabola(-0.02011, 1.08419, -14.2176);
 
             Assert.AreEqual(result.a, correct.a, delta, "coefficient 'a' is wrong.");
@@ -137,7 +137,7 @@ namespace RANSAC_Test
                 new Point(240, 323)
             };
 
-            Parabola result = Parabola.fit(points);
+            Parabola result = Parabola.fit(points, points.Count);
             Parabola correct = new Parabola(-0.010085, 9.47823, -1583.3);
 
             Assert.AreEqual(result.a, correct.a, delta, "coefficient 'a' is wrong.");

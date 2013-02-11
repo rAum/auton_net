@@ -65,28 +65,5 @@ namespace RANSAC_Test
         //}
         //
         #endregion
-
-
-        /// <summary>
-        ///A test for GetRandomSample
-        ///</summary>
-        [TestMethod()]
-        public void GetRandomSampleSimpleTest()
-        {
-            List<Point> input = new List<Point>()
-            {
-                new Point(1,1),
-                new Point(2,2),
-                new Point(3,3),
-                new Point(4,4)
-            };
-
-            int samplesCount = 2;
-            List<Point> actual;
-            actual = RANSAC.RANSAC.GetRandomSample(input, samplesCount);
-
-            Assert.AreEqual(actual.Count, samplesCount, "number of random samples mismatch.");
-            Assert.AreNotEqual(actual[0], actual[1], "the same points are in the set.");
-        }
     }
 }
