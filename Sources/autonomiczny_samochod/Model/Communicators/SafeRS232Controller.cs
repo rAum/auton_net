@@ -103,7 +103,7 @@ namespace autonomiczny_samochod.Model.Communicators
         }
 
 
-        public override void Initialize()
+        protected override void Initialize()
         {
             RS232 = new SafeRS232Communicator(COMName);
 
@@ -118,23 +118,23 @@ namespace autonomiczny_samochod.Model.Communicators
             }
         }
 
-        public override void StartSensors()
+        protected override void StartSensors()
         {
             deviceQueringThread = new Thread(new ThreadStart(StartTransmission));
             deviceQueringThread.Start();
         }
 
-        public override void StartEffectors()
+        protected override void StartEffectors()
         {
             //no effectors in here
         }
 
-        public override void PauseEffectors()
+        protected override void PauseEffectors()
         {
             //no effectors in here
         }
 
-        public override void EmergencyStop()
+        protected override void EmergencyStop()
         {
             //no effectors in here - no danger - sensors still can work
         }

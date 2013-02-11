@@ -18,7 +18,6 @@ using VisionFilters.Filters.Lane_Mark_Detector;
 using VisionFilters.Filters.Image_Operations;
 using VisionFilters;
 
-
 namespace CarVision
 {
     public partial class ViewForm : Form

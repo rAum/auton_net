@@ -33,7 +33,7 @@ namespace autonomiczny_samochod.Model.Car
 
             IsAlertBrakeActive = false;
 
-            deviceManager = new DeviceManager();
+            deviceManager = DeviceManager.GlobalDeviceManager;
 
             //regulators and communicator initiation 
             CarComunicator = new RealCarCommunicator(this); // = new RealCarCommunicator(this);

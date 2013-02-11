@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Helpers;
 
 namespace autonomiczny_samochod
 {
@@ -70,7 +71,7 @@ namespace autonomiczny_samochod
         }
 
 
-        public Model.Communicators.DeviceManager deviceManager
+        public DeviceManager deviceManager
         {
             get { throw new NotImplementedException(); }
         }

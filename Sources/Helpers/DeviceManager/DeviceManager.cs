@@ -4,12 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using Helpers;
 
-namespace autonomiczny_samochod.Model.Communicators
+namespace Helpers
 {
     public class DeviceManager
     {
+        private static DeviceManager __GLOBAL_DEVICE_MANAGER__ = null;
+        public static DeviceManager GlobalDeviceManager
+        {
+            get
+            {
+                if (__GLOBAL_DEVICE_MANAGER__ == null)
+                {
+                    __GLOBAL_DEVICE_MANAGER__ = new DeviceManager();
+                }
+                return __GLOBAL_DEVICE_MANAGER__;
+            }
+            private set { __GLOBAL_DEVICE_MANAGER__ = value; }
+        }
+
         private List<Device> devicesList = new List<Device>();
 
         public event DeviceStateHasChangedEventHandler evDeviceStateHasChanged;
@@ -99,7 +112,7 @@ namespace autonomiczny_samochod.Model.Communicators
             Parallel.ForEach(devicesList, dev =>
             {
                 Logger.Log(this, String.Format("Device initialization: {0}", dev.ToString()), 1);
-                dev.Initialize();
+                dev.InitializeWithPreAndPostWork();
             });
         }
 
@@ -108,7 +121,7 @@ namespace autonomiczny_samochod.Model.Communicators
             Parallel.ForEach(devicesList, dev =>
             {
                 Logger.Log(this, String.Format("Device sensors starting: {0}", dev.ToString()), 1);
-                dev.StartSensors();
+                dev.StartSensorsWithPreAndPostWork();
             });
         }
 
@@ -117,7 +130,7 @@ namespace autonomiczny_samochod.Model.Communicators
             Parallel.ForEach(devicesList, dev =>
             {
                 Logger.Log(this, String.Format("Device effectors starting: {0}", dev.ToString()), 1);
-                dev.StartEffectors();
+                dev.StartEffectorsWithPreAndPostWork();
             });
         }
 
@@ -126,7 +139,7 @@ namespace autonomiczny_samochod.Model.Communicators
             Parallel.ForEach(devicesList, dev =>
             {
                 Logger.Log(this, String.Format("Device effectors pausing: {0}", dev.ToString()), 2);
-                dev.PauseEffectors();
+                dev.PauseEffectorsWithPreAndPostWork();
             });
         }
 
@@ -135,7 +148,7 @@ namespace autonomiczny_samochod.Model.Communicators
             Parallel.ForEach(devicesList, dev =>
             {
                 Logger.Log(this, String.Format("Device emergency stop: {0}", dev.ToString()), 2);
-                dev.EmergencyStop();
+                dev.EmergencyStopWithPreAndPostWork();
             });
         }
     }

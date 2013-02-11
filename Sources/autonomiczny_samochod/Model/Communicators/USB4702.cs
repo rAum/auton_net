@@ -48,7 +48,7 @@ namespace car_communicator
 
         private bool effectorsActive = false;
 
-        public override void Initialize()
+        protected override void Initialize()
         {
             string deviceDescription = "USB-4702,BID#0"; // '0' -> 1st extension card
 
@@ -77,23 +77,23 @@ namespace car_communicator
             }
         }
 
-        public override void StartSensors()
+        protected override void StartSensors()
         {
             //no sensors in here
         }
 
-        public override void StartEffectors()
+        protected override void StartEffectors()
         {
             effectorsActive = true;
         }
 
-        public override void PauseEffectors()
+        protected override void PauseEffectors()
         {
             effectorsActive = false;
             SetSteeringWheel(0.0); //do not move steering wheel
         }
 
-        public override void EmergencyStop()
+        protected override void EmergencyStop()
         {
             effectorsActive = false;
             SetSteeringWheel(0.0); //do not move steering wheel

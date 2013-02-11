@@ -32,7 +32,7 @@ namespace car_communicator
         private Gear lastGearWantedToBeSet = Gear.neutral; //this gear could not been set because effectors could be not active
         private double lastThrottleInPercentsWantedToBeSet = 0.0; //this throttle could not been set because effectors could be not active
 
-        public override void  Initialize()
+        protected override void Initialize()
         {
             List<DeviceListItem> list = Usc.getConnectedDevices();
 
@@ -54,26 +54,26 @@ namespace car_communicator
             }
         }
 
-        public override void StartSensors()
+        protected override void StartSensors()
         {
             //no sensors in here
         }
 
-        public override void StartEffectors()
+        protected override void StartEffectors()
         {
             effectorsActive = true;
             setGear(lastGearWantedToBeSet);
             setThrottle(lastThrottleInPercentsWantedToBeSet);
         }
 
-        public override void PauseEffectors()
+        protected override void PauseEffectors()
         {
             effectorsActive = false;
             setGear(Gear.neutral);
             setThrottle(0.0);
         }
 
-        public override void EmergencyStop()
+        protected override void EmergencyStop()
         {
             effectorsActive = false;
             setGear(Gear.neutral);

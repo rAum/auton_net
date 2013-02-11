@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using autonomiczny_samochod.Model.Communicators;
+using Helpers;
 using Rhino.Mocks;
 
 namespace HardwareCommunicatorsTests
@@ -46,12 +46,12 @@ namespace HardwareCommunicatorsTests
     [TestClass]
     public class DeviceManagerTests
     {
-        private static DeviceManager devManager;
-        private static MockRepository mocks;
-        private static FakeDevice deviceMock;
+        private DeviceManager devManager;
+        private MockRepository mocks;
+        private FakeDevice deviceMock;
 
-        [ClassInitialize()]
-        public static void ClassInit(TestContext param)
+        [TestInitialize()]
+        public void TestInit()
         {
             devManager = new DeviceManager();  
             mocks = new MockRepository();
@@ -70,18 +70,23 @@ namespace HardwareCommunicatorsTests
         {
             using (mocks.Ordered())
             {
-                Expect.Call(deviceMock.Initialize);
-                Expect.Call(deviceMock.StartSensors);
-                Expect.Call(deviceMock.StartEffectors);
-                Expect.Call(deviceMock.PauseEffectors);
-                Expect.Call(deviceMock.EmergencyStop);
-
-                devManager.Initialize();
-                devManager.StartSensors();
-                devManager.StartEffectors();
-                devManager.PauseEffectors();
-                devManager.EmergencyStop();
+                Expect.Call(deviceMock.Initialize).Repeat.Once();
+                Expect.Call(deviceMock.StartSensors).Repeat.Once();
+                Expect.Call(deviceMock.StartEffectors).Repeat.Once();
+                Expect.Call(deviceMock.PauseEffectors).Repeat.Once();
+                Expect.Call(deviceMock.EmergencyStop).Repeat.Once();
             }
+
+            mocks.ReplayAll();
+
+            devManager.Initialize();
+            devManager.StartSensors();
+            devManager.StartEffectors();
+            devManager.PauseEffectors();
+            devManager.EmergencyStop();
+
+            mocks.VerifyAll();
+            
         }
 
         [TestMethod]
@@ -89,13 +94,15 @@ namespace HardwareCommunicatorsTests
         {
             using (mocks.Record())
             {
-                Expect.Call(deviceMock.EmergencyStop);
+                Expect.Call(deviceMock.EmergencyStop).Repeat.Once();
             }
 
             using (mocks.Playback())
             {
                 deviceMock.FakeError();
             }
+
+            mocks.VerifyAll();
         }
 
         [TestMethod]
@@ -103,13 +110,15 @@ namespace HardwareCommunicatorsTests
         {
             using (mocks.Record())
             {
-                Expect.Call(deviceMock.PauseEffectors);
+                Expect.Call(deviceMock.PauseEffectors).Repeat.Once();
             }
 
             using (mocks.Playback())
             {
                 deviceMock.FakeWarrning();
             }
+
+            mocks.VerifyAll();
         }
     }
 }
