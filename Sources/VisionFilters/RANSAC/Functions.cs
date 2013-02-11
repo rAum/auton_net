@@ -25,6 +25,25 @@ namespace RANSAC.Functions
         }
 
         /// <summary>
+        /// Returns average distance sampled from 4 points
+        /// </summary>
+        /// <param name="a">first parabola</param>
+        /// <param name="b">second parabola</param>
+        /// <returns>average distance</returns>
+        public static double distance(Parabola a, Parabola b)
+        {
+            double sum = 0;
+            for (double x = 10; x <= 90; x += 20)
+                sum += a.at(x) - b.at(x);
+            return sum * 0.25;
+        }
+
+        public double deriv(double x)
+        {
+            return 2.0 * x * a + b;
+        }
+
+        /// <summary>
         /// Using Least Squares for fitting quadratic curve.
         /// http://www.efunda.com/math/leastsquares/lstsqr2dcurve.cfm
         /// </summary>
@@ -77,6 +96,10 @@ namespace RANSAC.Functions
             return new Parabola((double)(Da / D), (double)(Db / D), (double)(Dc / D));
         }
 
+        public double at(double x)
+        {
+            return value(x);
+        }
         /// <summary>
         /// Returns value at point x using Horner method.
         /// </summary>

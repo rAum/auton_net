@@ -5,6 +5,7 @@ using System.Text;
 using VisionFilters.Filters;
 using System.Drawing;
 using RANSAC.Functions;
+using VisionFilters.Filters.Lane_Mark_Detector;
 
 namespace RANSAC
 {
@@ -61,6 +62,52 @@ namespace RANSAC
             }
 
             return best_fit;
+        }
+
+        public static SimpleRoadModel fit2(int iterations, int init_samples, int n, double error_threshold, List<Point> inputData)
+        {
+            Parabola best1 = null;
+            Parabola best2 = null;
+            double best_error = double.MaxValue;
+            double model_error;
+            double err1, err2;
+            int consensus_set;
+
+            Parabola model1, model2;
+            for (int i = 0; i < iterations; ++i)
+            {
+                ShuffleAtBegin(ref inputData, init_samples);
+                model1 = Parabola.fit(inputData, init_samples);
+                ShuffleAtBegin(ref inputData, init_samples);
+                model2 = Parabola.fit(inputData, init_samples);
+
+                if (model1 == null || model2 == null) continue;
+
+                consensus_set = 0;
+                model_error = 0;
+                foreach (var p in inputData)
+                {
+                    err1 = Math.Abs(model1.value(p.Y) - p.X);
+                    err2 = Math.Abs(model2.value(p.Y) - p.X);
+                    if (err1 <= error_threshold && err2 <= error_threshold)
+                    {
+                        consensus_set += 1;
+                        model_error += (err1 + err2) * 0.5;
+                    }
+                }
+
+                if (consensus_set >= n)
+                {
+                    if (model_error < best_error)
+                    {
+                        best1 = model1;
+                        best2 = model2;
+                        best_error = model_error;
+                    }
+                }
+            }
+
+            return new SimpleRoadModel(null);
         }
 
         /// <summary>
