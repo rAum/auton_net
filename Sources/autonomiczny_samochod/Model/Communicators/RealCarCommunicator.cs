@@ -64,10 +64,6 @@ namespace autonomiczny_samochod
             //TODO: make thread for every initialization //its actually done for angleAndSpeedMeter
             deviceManager.RegisterDevice(extentionCardCommunicator);
             //angleAndSpeedMeter.Initialize(); //OBSOLETE - now its device managers job
-
-            deviceManager.Initialize();
-            deviceManager.StartSensors();
-            deviceManager.StartEffectors(); //temp only - make a button out of it
             
             SpeedMeasuringTimer.Interval = SPEED_MEASURING_TIMER_INTERVAL_IN_MS;
             SpeedMeasuringTimer.Tick += new EventHandler(SpeedMeasuringTimer_Tick);

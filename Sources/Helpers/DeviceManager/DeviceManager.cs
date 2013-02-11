@@ -23,7 +23,11 @@ namespace Helpers
             private set { __GLOBAL_DEVICE_MANAGER__ = value; }
         }
 
-        private List<Device> devicesList = new List<Device>();
+        /// <summary>
+        /// public is needed by form - DO NOT USE //TODO: try to do something with it
+        /// </summary>
+        public List<Device> devicesList = new List<Device>();
+
 
         public event DeviceStateHasChangedEventHandler evDeviceStateHasChanged;
 
@@ -50,9 +54,21 @@ namespace Helpers
         }
         private DeviceOverallState __OVERALLSTATE__ = DeviceOverallState.OK;
 
+        private DeviceManagerForm deviceManagerForm;
+        private Thread formThread;
         public DeviceManager()
         {
+            formThread = new Thread(new ThreadStart(CreateForm));
+            formThread.Start();
+        }
 
+        private void CreateForm()
+        {
+            deviceManagerForm = new DeviceManagerForm(this);
+            deviceManagerForm.Activate();
+            deviceManagerForm.Show();
+
+            System.Windows.Forms.Application.Run();
         }
 
         public void RegisterDevice(Device dev)

@@ -104,6 +104,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -115,6 +116,12 @@
     <Compile Include="cEventHelper.cs" />
     <Compile Include="DeviceManager\Device.cs" />
     <Compile Include="DeviceManager\DeviceManager.cs" />
+    <Compile Include="DeviceManager\DeviceManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeviceManager\DeviceManagerForm.Designer.cs">
+      <DependentUpon>DeviceManagerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GamePad.cs" />
     <Compile Include="Limiter.cs" />
     <Compile Include="Logger.cs" />
@@ -126,6 +133,11 @@
     <Compile Include="Regulators\SimpleRegulatorSettings.cs" />
     <Compile Include="StatsCollector.cs" />
     <Compile Include="Time.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DeviceManager\DeviceManagerForm.resx">
+      <DependentUpon>DeviceManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
