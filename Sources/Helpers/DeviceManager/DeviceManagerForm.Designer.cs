@@ -34,6 +34,8 @@
             this.button_StartEffectors = new System.Windows.Forms.Button();
             this.button_PauseEffectors = new System.Windows.Forms.Button();
             this.button_EmergencyStop = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label_DeviceManagerAction = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -42,7 +44,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(12, 53);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(464, 266);
+            this.dataGridView1.Size = new System.Drawing.Size(345, 266);
             this.dataGridView1.TabIndex = 0;
             // 
             // button_initialize
@@ -95,11 +97,31 @@
             this.button_EmergencyStop.UseVisualStyleBackColor = true;
             this.button_EmergencyStop.Click += new System.EventHandler(this.button_EmergencyStop_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(315, 24);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(161, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Current Device Manager action: ";
+            // 
+            // label_DeviceManagerAction
+            // 
+            this.label_DeviceManagerAction.AutoSize = true;
+            this.label_DeviceManagerAction.Location = new System.Drawing.Point(483, 24);
+            this.label_DeviceManagerAction.Name = "label_DeviceManagerAction";
+            this.label_DeviceManagerAction.Size = new System.Drawing.Size(35, 13);
+            this.label_DeviceManagerAction.TabIndex = 7;
+            this.label_DeviceManagerAction.Text = "label2";
+            // 
             // DeviceManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(613, 452);
+            this.Controls.Add(this.label_DeviceManagerAction);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.button_EmergencyStop);
             this.Controls.Add(this.button_PauseEffectors);
             this.Controls.Add(this.button_StartEffectors);
@@ -110,6 +132,7 @@
             this.Text = "DeviceManagerForm";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -121,5 +144,7 @@
         private System.Windows.Forms.Button button_StartEffectors;
         private System.Windows.Forms.Button button_PauseEffectors;
         private System.Windows.Forms.Button button_EmergencyStop;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label_DeviceManagerAction;
     }
 }

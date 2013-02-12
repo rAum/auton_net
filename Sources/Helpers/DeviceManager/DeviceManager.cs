@@ -56,6 +56,9 @@ namespace Helpers
 
         private DeviceManagerForm deviceManagerForm;
         private Thread formThread;
+        private Thread actionThread = null; //e.g. starting sensors or pausing effectors
+        public string currentActionName = "Idle";
+
         public DeviceManager()
         {
             formThread = new Thread(new ThreadStart(CreateForm));
@@ -125,47 +128,129 @@ namespace Helpers
 
         public void Initialize()
         {
+            if (actionThread == null)
+            {
+                currentActionName = "Initialization";
+                actionThread = new Thread(new ThreadStart(ParallelInitialization));
+                actionThread.Start();
+            }
+            else
+            {
+                Logger.Log(this, "action couldn't be started, because other action was executing!", 3);
+            }
+        }
+
+        private void ParallelInitialization()
+        {
             Parallel.ForEach(devicesList, dev =>
             {
                 Logger.Log(this, String.Format("Device initialization: {0}", dev.ToString()), 1);
                 dev.InitializeWithPreAndPostWork();
             });
+            currentActionName = "Idle";
+            actionThread = null;
         }
 
         public void StartSensors()
+        {
+            if (actionThread == null)
+            {
+                currentActionName = "Starting Sensors";
+                actionThread = new Thread(new ThreadStart(ParallelStartingSensors));
+                actionThread.Start();
+            }
+            else
+            {
+                Logger.Log(this, "action couldn't be started, because other action was executing!", 3);
+            }
+
+        }
+
+        private void ParallelStartingSensors()
         {
             Parallel.ForEach(devicesList, dev =>
             {
                 Logger.Log(this, String.Format("Device sensors starting: {0}", dev.ToString()), 1);
                 dev.StartSensorsWithPreAndPostWork();
             });
+            currentActionName = "Idle";
+            actionThread = null;
         }
 
         public void StartEffectors()
+        {
+            if (actionThread == null)
+            {
+                currentActionName = "Starting Effectors";
+                actionThread = new Thread(new ThreadStart(ParallelStartingEffectors));
+                actionThread.Start();
+            }
+            else
+            {
+                Logger.Log(this, "action couldn't be started, because other action was executing!", 3);
+            }
+        }
+
+        private void ParallelStartingEffectors()
         {
             Parallel.ForEach(devicesList, dev =>
             {
                 Logger.Log(this, String.Format("Device effectors starting: {0}", dev.ToString()), 1);
                 dev.StartEffectorsWithPreAndPostWork();
             });
+            currentActionName = "Idle";
+            actionThread = null;
         }
 
         public void PauseEffectors()
+        {
+            if (actionThread == null)
+            {
+                currentActionName = "Pausing Effectors";
+                actionThread = new Thread(new ThreadStart(ParallelPausingEffectors));
+                actionThread.Start();
+            }
+            else
+            {
+                Logger.Log(this, "action couldn't be started, because other action was executing!", 3);
+            }
+        }
+
+        private void ParallelPausingEffectors()
         {
             Parallel.ForEach(devicesList, dev =>
             {
                 Logger.Log(this, String.Format("Device effectors pausing: {0}", dev.ToString()), 2);
                 dev.PauseEffectorsWithPreAndPostWork();
             });
+            currentActionName = "Idle";
+            actionThread = null;
         }
 
+
         public void EmergencyStop()
+        {
+            if (actionThread == null)
+            {
+                currentActionName = "Emergency Stopping!";
+                actionThread = new Thread(new ThreadStart(ParallelEmergencyStop));
+                actionThread.Start();
+            }
+            else
+            {
+                Logger.Log(this, "action couldn't be started, because other action was executing!", 3);
+            }
+        }
+
+        private void ParallelEmergencyStop()
         {
             Parallel.ForEach(devicesList, dev =>
             {
                 Logger.Log(this, String.Format("Device emergency stop: {0}", dev.ToString()), 2);
                 dev.EmergencyStopWithPreAndPostWork();
             });
+            currentActionName = "Idle";
+            actionThread = null;
         }
     }
 }

@@ -5,13 +5,17 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Helpers
 {
     public partial class DeviceManagerForm : Form
     {
+        private const int UPDATER_TIMER_INTERVAL_IN_MS = 100;
+
         private DeviceManager deviceManager;
+        private System.Windows.Forms.Timer updaterTimer;
 
         public DeviceManagerForm(DeviceManager devManager)
         {
@@ -19,23 +23,61 @@ namespace Helpers
 
             InitializeComponent();
 
-
             dataGridView1.Columns.Add("device name", "device name");
             dataGridView1.Columns.Add("overall state", "overall state");
             dataGridView1.Columns.Add("initialization state", "initialization state");
 
-            foreach(var item in deviceManager.devicesList)
+            updaterTimer = new System.Windows.Forms.Timer();
+            updaterTimer.Interval = UPDATER_TIMER_INTERVAL_IN_MS;
+            updaterTimer.Tick += updaterTimer_Tick;
+            updaterTimer.Start();
+        }
+
+        void updaterTimer_Tick(object sender, EventArgs e)
+        {
+            UpdateForm();
+        }
+
+        delegate void UpdateFormDelegate();
+        private void UpdateForm() //TODO: in some future make it event based (not timer based)
+        {
+            if (label1.InvokeRequired)
             {
-                string[] row = new string[] { item.ToString(), item.overallState.ToString(), item.initializationState.ToString() };
-
-                
-                //row.Cells["device name"].Value = item.ToString();
-                //row.Cells["overall state"].Value = item.overallState.ToString();
-                //row.Cells["initialization state"].Value = item.initializationState.ToString();
-
-                dataGridView1.Rows.Add(row);
+                // this is worker thread
+                UpdateFormDelegate del = new UpdateFormDelegate(UpdateForm);
+                label1.Invoke(del, new object[] {});
             }
+            else
+            {
+                // this is UI thread
+                label_DeviceManagerAction.Text = deviceManager.currentActionName;
 
+                for (int i = 0; i < deviceManager.devicesList.Count; i++)
+                {
+                    if (dataGridView1.Rows.Count < i + 1)
+                    {
+                        dataGridView1.Rows.Add();
+                    }
+
+                    //update device name
+                    if ((string)dataGridView1.Rows[i].Cells[0].Value != deviceManager.devicesList[i].ToString())
+                    {
+                        dataGridView1.Rows[i].Cells[0].Value = deviceManager.devicesList[i].ToString();
+                    }
+
+                    //update overall device state
+                    if ((string)dataGridView1.Rows[i].Cells[1].Value != deviceManager.devicesList[i].overallState.ToString())
+                    {
+                        dataGridView1.Rows[i].Cells[1].Value = deviceManager.devicesList[i].overallState.ToString();
+                    }
+
+                    //update initialization device state
+                    if ((string)dataGridView1.Rows[i].Cells[2].Value != deviceManager.devicesList[i].initializationState.ToString())
+                    {
+                        dataGridView1.Rows[i].Cells[2].Value = deviceManager.devicesList[i].initializationState.ToString();
+                    }
+                }
+            } 
         }
 
         private void button_initialize_Click(object sender, EventArgs e)
