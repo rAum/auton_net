@@ -14,6 +14,12 @@ namespace car_communicator
 {
     public class ServoDriver : Device
     {
+
+        public override string ToString()
+        {
+            return "Servo Driver";
+        }
+
         public const int GEARBOX_CHANNEL = 0;
         public const int THROTTLE_CHANNEL = 1;
 

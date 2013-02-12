@@ -28,6 +28,11 @@ namespace autonomiczny_samochod.Model.Communicators
     /// </summary>
     public class SafeRS232Communicator
     {
+        public override string ToString()
+        {
+            return "RS232 communicator";
+        }
+
         private SerialPort port;
 
         private Object readLock = new Object();
@@ -43,19 +48,19 @@ namespace autonomiczny_samochod.Model.Communicators
         private const int END_OF_STREAM = -1;
         private const char END_OF_MESSAGE = (char)13;
         /* end of COM connected constants */
-        
-        private const int SLEEP_ON_FAILED_PORT_OPPENING_BEFORE_NEXT_TRY_AT_APP_INIT_IN_MS = 1000;
+
+        private const int SLEEP_ON_FAILED_PORT_OPPENING_BEFORE_NEXT_TRY_AT_APP_INIT_IN_MS = 10;
         private const int SLEEP_ON_FAILED_PORT_OPPENING_BEFORE_NEXT_TRY_AT_APP_WORKING_IN_MS = 0; //needed ASAP
 #if DEBUG
         private const int uC_QUERY_TIMEOUT_IN_MS = 200;
         private const int READ_TIMEOUT_IN_MS = 2000;
         private const int WRITE_TIMEOUT_IN_MS = 2000;
 #else
-        private const int uC_QUERY_TIMEOUT_IN_MS = 50;
-        private const int READ_TIMEOUT_IN_MS = 50;
-        private const int WRITE_TIMEOUT_IN_MS = 50;
+        private const int uC_QUERY_TIMEOUT_IN_MS = 500;
+        private const int READ_TIMEOUT_IN_MS = 500;
+        private const int WRITE_TIMEOUT_IN_MS = 500;
 #endif
-        private const int DEFAULT_MAX_OPPENING_TRIES_NO = 300;
+        private const int DEFAULT_MAX_OPPENING_TRIES_NO = 60;
 
 
 
@@ -203,21 +208,25 @@ namespace autonomiczny_samochod.Model.Communicators
 
         private void TryOppeningPortUntilItSucceds(int waitBeforeNextTryInMs, int triesLeft = DEFAULT_MAX_OPPENING_TRIES_NO)
         {
-            if (triesLeft < 0)
+            bool initializationFinished = false;
+            while (!initializationFinished)
             {
-                Logger.Log(this, "Max tries number to connect RS232 port has been exceeded!");
-                throw new MaxTriesToConnectRS232ExceededException();
-            }
+                if (--triesLeft < 0)
+                {
+                    Logger.Log(this, "Max tries number to connect RS232 port has been exceeded!");
+                    throw new MaxTriesToConnectRS232ExceededException();
+                }
 
-            try
-            {
-                port.Open();
-            }
-            catch (Exception)
-            {
-                Logger.Log(this, String.Format("RS232 port oppening failed, waiting {0}ms before next try, {1} tries left", waitBeforeNextTryInMs, triesLeft), 2);
-                Thread.Sleep(waitBeforeNextTryInMs);
-                TryOppeningPortUntilItSucceds(waitBeforeNextTryInMs, triesLeft-1);
+                try
+                {
+                    port.Open();
+                    initializationFinished = true; //if program goes here and no exception has been thrown everything is ok
+                }
+                catch (Exception)
+                {
+                    Logger.Log(this, String.Format("RS232 port oppening failed, waiting {0}ms before next try, {1} tries left", waitBeforeNextTryInMs, triesLeft), 2);
+                    Thread.Sleep(waitBeforeNextTryInMs);
+                }
             }
         }
 

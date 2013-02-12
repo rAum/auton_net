@@ -14,6 +14,11 @@ namespace autonomiczny_samochod.Model.Communicators
     /// </summary>
     class SafeRS232Controller : Device
     {
+        public override string ToString()
+        {
+            return "RS232 controller";
+        } 
+
         private SafeRS232Communicator RS232; 
         private RealCarCommunicator communicator;
         private Thread deviceQueringThread;
@@ -105,10 +110,9 @@ namespace autonomiczny_samochod.Model.Communicators
 
         protected override void Initialize()
         {
-            RS232 = new SafeRS232Communicator(COMName);
-
             try
             {
+                RS232 = new SafeRS232Communicator(COMName);
                 DiagnoseBrakeSensors();
                 DiagnoseSteeringWheelSensors();
             }

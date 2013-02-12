@@ -13,6 +13,12 @@ namespace car_communicator
     /// </summary>
     public class USB4702 : Device
     {
+
+        public override string ToString()
+        {
+            return "USB4702";    
+        }
+
         static int buffer;
         static InstantAoCtrl instantAoCtrl = new InstantAoCtrl(); //for initialize analog outputs
         static InstantDoCtrl instantDoCtrl = new InstantDoCtrl(); //for initialize digital outputs
@@ -20,7 +26,7 @@ namespace car_communicator
 
         const string USB4702_DEVICE_DESCRIPTION_STRING = "USB-4702,BID#0"; // '0' -> 1st extension card
 
-        const int MAX_TRIES_TO_INITIALIZE_BEFORE_ERROR = 300;
+        const int MAX_TRIES_TO_INITIALIZE_BEFORE_ERROR = 60;
         const int SLEEP_BEETWEEN_TRIES_TO_INITIALIZE_IN_MS = 10; //needed, because initialization uses all the system resources when it is in initialization loop
 
         const int STEERING_WHEEL_SET_PORT = 0;
@@ -60,14 +66,15 @@ namespace car_communicator
 
         private void TryToInitializeUntillItSucceds()
         {
-            bool initializedCorrectly = false;
+            bool initializationFinished = false;
             int tries = 0;
             do
             {
                 if (++tries > MAX_TRIES_TO_INITIALIZE_BEFORE_ERROR)
                 {
-                    this.overallState = DeviceOverallState.Error;
                     Logger.Log(this, "USB4702 could not be initialized - max tries no hes been exceeded", 3);
+                    this.overallState = DeviceOverallState.Error;
+                    initializationFinished = true; //it failed, but its end of trying
                 }
                 try
                 {
@@ -86,14 +93,14 @@ namespace car_communicator
                     setPortDO(BRAKE_ENABLE_PORT_NO, BRAKE_ENABLE_ON_PORT_LEVEL); //enabling brake engine
                     setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_OFF_PORT_LEVEL);
 
-                    initializedCorrectly = true; //no exceptions and get here - everything is ok!
+                    initializationFinished = true; //no exceptions and get here - everything is ok!
                 }
                 catch (Exception e)
                 {
                     Logger.Log(this, String.Format("cannot initialize connection for USB4702, tries left: {0}", MAX_TRIES_TO_INITIALIZE_BEFORE_ERROR - tries), 2);
                     Logger.Log(this, String.Format("Exception received: {0}", e.Message), 2);
                 }
-            } while (!initializedCorrectly);
+            } while (!initializationFinished);
         }
 
         protected override void StartSensors()
