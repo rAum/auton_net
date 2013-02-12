@@ -18,6 +18,11 @@ namespace car_communicator
         static InstantDoCtrl instantDoCtrl = new InstantDoCtrl(); //for initialize digital outputs
         static EventCounterCtrl eventSpeedCounterCtrl = new EventCounterCtrl(); // for initialize counter
 
+        const string USB4702_DEVICE_DESCRIPTION_STRING = "USB-4702,BID#0"; // '0' -> 1st extension card
+
+        const int MAX_TRIES_TO_INITIALIZE_BEFORE_ERROR = 300;
+        const int SLEEP_BEETWEEN_TRIES_TO_INITIALIZE_IN_MS = 10; //needed, because initialization uses all the system resources when it is in initialization loop
+
         const int STEERING_WHEEL_SET_PORT = 0;
         const double STEERING_WHEEL_MIN_SET_VALUE_IN_VOLTS = 1.2; //1.0 can cause error but its teoretical min
         const double STEERING_WHEEL_MID_SET_VALUE_IN_VOLTS = 2.5; // środek
@@ -50,31 +55,45 @@ namespace car_communicator
 
         protected override void Initialize()
         {
-            string deviceDescription = "USB-4702,BID#0"; // '0' -> 1st extension card
+            TryToInitializeUntillItSucceds();
+        }
 
-            try
+        private void TryToInitializeUntillItSucceds()
+        {
+            bool initializedCorrectly = false;
+            int tries = 0;
+            do
             {
-                //Analog outputs
-                instantAoCtrl.SelectedDevice = new DeviceInformation(deviceDescription); // AO0
+                if (++tries > MAX_TRIES_TO_INITIALIZE_BEFORE_ERROR)
+                {
+                    this.overallState = DeviceOverallState.Error;
+                    Logger.Log(this, "USB4702 could not be initialized - max tries no hes been exceeded", 3);
+                }
+                try
+                {
+                    //Analog outputs
+                    instantAoCtrl.SelectedDevice = new DeviceInformation(USB4702_DEVICE_DESCRIPTION_STRING); // AO0
 
-                //Digital output
-                instantDoCtrl.SelectedDevice = new DeviceInformation(deviceDescription);
+                    //Digital output
+                    instantDoCtrl.SelectedDevice = new DeviceInformation(USB4702_DEVICE_DESCRIPTION_STRING);
 
-                //Counter
-                eventSpeedCounterCtrl.SelectedDevice = new DeviceInformation(deviceDescription);
+                    //Counter
+                    eventSpeedCounterCtrl.SelectedDevice = new DeviceInformation(USB4702_DEVICE_DESCRIPTION_STRING);
 
-                eventSpeedCounterCtrl.Channel = 0;
-                eventSpeedCounterCtrl.Enabled = true; //IMPORTANT: was ----> // false; // block counter
+                    eventSpeedCounterCtrl.Channel = 0;
+                    eventSpeedCounterCtrl.Enabled = true; //IMPORTANT: was ----> // false; // block counter
 
-                setPortDO(BRAKE_ENABLE_PORT_NO, BRAKE_ENABLE_ON_PORT_LEVEL); //enabling brake engine
-                setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_OFF_PORT_LEVEL);
-            }
-            catch (Exception e)
-            {
-                Logger.Log(this, "cannot initialize connection for USB4702", 2);
-                Logger.Log(this, String.Format("Exception received: {0}", e.Message), 2);
-                this.overallState = DeviceOverallState.Error;
-            }
+                    setPortDO(BRAKE_ENABLE_PORT_NO, BRAKE_ENABLE_ON_PORT_LEVEL); //enabling brake engine
+                    setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_OFF_PORT_LEVEL);
+
+                    initializedCorrectly = true; //no exceptions and get here - everything is ok!
+                }
+                catch (Exception e)
+                {
+                    Logger.Log(this, String.Format("cannot initialize connection for USB4702, tries left: {0}", MAX_TRIES_TO_INITIALIZE_BEFORE_ERROR - tries), 2);
+                    Logger.Log(this, String.Format("Exception received: {0}", e.Message), 2);
+                }
+            } while (!initializedCorrectly);
         }
 
         protected override void StartSensors()
@@ -106,16 +125,23 @@ namespace car_communicator
         /// <param name="value">0-5V (will be checked anyway - throws if bad)</param>
         private void setPortAO(int channel, double value)
         {
-            if (value > 5 || value < 0)
-                throw new ArgumentException("value is not in range", "value");
+            if (effectorsActive)
+            {
+                if (value > 5 || value < 0)
+                    throw new ArgumentException("value is not in range", "value");
 
-            try
-            {
-                instantAoCtrl.Write(channel, value);
+                try
+                {
+                    instantAoCtrl.Write(channel, value);
+                }
+                catch (InvalidCastException)
+                {
+                    Logger.Log(this, "msg couldn't been send via USB4702 - probably because of no connection", 2);
+                }
             }
-            catch (InvalidCastException)
+            else
             {
-                Logger.Log(this, "msg couldn't been send via USB4702 - probably because of no connection", 2);
+                Logger.Log(this, "analog port was not set, because effectors are no active");
             }
         }
 
@@ -126,27 +152,34 @@ namespace car_communicator
         /// <param name="level">0/1</param>
         private void setPortDO(int port, byte level) //TODO: shouldn't it be just bool???
         {
-            try
+            if (effectorsActive)
             {
-                if (level == 1)
+                try
                 {
-                    buffer |= (1 << port);
-                    instantDoCtrl.Write(0, (byte)buffer);
-                }
-                else if (level == 0)
-                {
-                    buffer &= ~(1 << port);
-                    instantDoCtrl.Write(0, (byte)buffer);
-                }
-                else
-                {
-                    throw new ArgumentException("wrong level value - it should be 0/1", "level");
-                }
+                    if (level == 1)
+                    {
+                        buffer |= (1 << port);
+                        instantDoCtrl.Write(0, (byte)buffer);
+                    }
+                    else if (level == 0)
+                    {
+                        buffer &= ~(1 << port);
+                        instantDoCtrl.Write(0, (byte)buffer);
+                    }
+                    else
+                    {
+                        throw new ArgumentException("wrong level value - it should be 0/1", "level");
+                    }
 
+                }
+                catch (Exception)
+                {
+                    Logger.Log(this, "msg couldn't been send via USB4702 - probably because of no connection", 2);
+                }
             }
-            catch (Exception)
+            else
             {
-                Logger.Log(this, "msg couldn't been send via USB4702 - probably because of no connection", 2);
+                Logger.Log(this, "analog port was not set, because effectors are no active");
             }
         }
 
