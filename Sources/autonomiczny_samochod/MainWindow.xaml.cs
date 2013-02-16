@@ -27,8 +27,8 @@ namespace autonomiczny_samochod
 
         private const int TARGET_BRAKE_SETTING_WHEN_MANUAL_BRAKING_ON = 100;
         private const int BRAKE_ACTIVATION_TIME_ON_SPACE_PRESSING_IN_MS = 500; //its much too much, but smaller values blinks at start
-        private const int MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_ = 7; //in what??? //TODO: make it working well
-        private const int MAX_BACKWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_ = -5; //it should be < 0 !
+        private const int MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS = 7; 
+        private const int MAX_BACKWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS = -5; //it should be < 0 !
         private const int MAX_WHEEL_ANGLE_CHANGE_PER_SEC_WHEN_DRIVING_ON_GAMEPAD = 10;
         private const int WHEEL_ANGLE_CHANGING_WITH_GAMEPAD_TIMER_INTERVAL_IN_MS = 50;
         private const double MIN_GAMEPAD_Y_TO_START_TURNING_WHEEL_IN_PERCENTS = 5.0;
@@ -146,7 +146,7 @@ namespace autonomiczny_samochod
 
         void gamePad_evNevGamePadInfoAcquired(object sender, double x, double y)
         {
-            Controller.SetTargetSpeed(ReScaller.ReScale(ref y, -100, 100, MAX_BACKWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_, MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_));
+            Controller.SetTargetSpeed(ReScaller.ReScale(ref y, -100, 100, MAX_BACKWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS, MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS));
 
             //Controller.SetTargetWheelAngle(ReScaller.ReScale(ref x, -100, 100, -1 * MAX_WHEEL_ANGLE_CHANGE_PER_SEC_WHEN_DRIVING_ON_GAMEPAD, MAX_WHEEL_ANGLE_CHANGE_PER_SEC_WHEN_DRIVING_ON_GAMEPAD));
             if (Math.Abs(y) > MIN_GAMEPAD_Y_TO_START_TURNING_WHEEL_IN_PERCENTS)

@@ -22,10 +22,8 @@ namespace autonomiczny_samochod
         public ICar ICar { get; private set; }
 
         //sub-communicators
-        //private BrakePedalCommunicator brakePedalCommunicator { get; set; } //obsolete
         private USB4702 extentionCardCommunicator { get; set; }
         private ServoDriver servoDriver { get; set; }
-        //private RS232Controller angleAndSpeedMeter { get; set; } //OBSOLETE
         private SafeRS232Controller angleAndSpeedMeter { get; set; }
         private Speedometer speedometer { get; set; }
 
@@ -87,22 +85,6 @@ namespace autonomiczny_samochod
             {
                 servoDriver.setThrottle(0.0);
             }
-        }
-
-        public void SendNewSpeedSettingMessage(double speedSetting)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SendNewSteeringWheelAngleSettingMessage(double angleSetting)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsInitiated()
-        {
-            return true; //TODO: fix it
-           // return (brakePedalCommunicator.IsInitiated() && accelerationPedalCommunivator.IsInitiated() && steeringWheelCommunicator.IsInitiated());
         }
 
         internal void WheelAngleAcquired(double angle)

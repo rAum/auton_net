@@ -7,7 +7,6 @@ using Helpers;
 
 namespace autonomiczny_samochod
 {
-    //TODO: provide some logs
     public class CarController
     {
         public ICar Model { get; private set; }
@@ -63,7 +62,7 @@ namespace autonomiczny_samochod
         private void SpeedRegulator_evNewSpeedSettingCalculated(object sender, NewSpeedSettingCalculatedEventArgs args)
         {
             Model.CarInfo.SpeedSteering = args.getSpeedSetting();
-            Model.CarInfo.TargetBrake = args.getSpeedSetting() * -1; //TODO: check this
+            Model.CarInfo.TargetBrake = args.getSpeedSetting() * -1; 
         }
         private void CarComunicator_evBrakePositionReceived(object sender, BrakePositionReceivedEventArgs args)
         {

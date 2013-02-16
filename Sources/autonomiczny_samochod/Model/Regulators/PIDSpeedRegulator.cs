@@ -37,7 +37,7 @@ namespace autonomiczny_samochod
                     }
                     else if (Mode == RideMode.standStill)
                     {
-                        __speedSteering__ = Math.Abs(value) * -1; //this value has to be < 0 - only braking is allowed, its not dependent on direction of current move; //TODO: check it
+                        __speedSteering__ = Math.Abs(value) * -1; //this value has to be < 0 - only braking is allowed, its not dependent on direction of current move;
                     }
                 }
 
@@ -95,7 +95,7 @@ namespace autonomiczny_samochod
                             break;
 
                         case RideMode.standStill:
-                            Car.CarComunicator.SetGear(Gear.neutral); //it should be better than park - no blocade -> //TODO: check it
+                            Car.CarComunicator.SetGear(Gear.neutral);
                             break;
 
                         case RideMode.backward:

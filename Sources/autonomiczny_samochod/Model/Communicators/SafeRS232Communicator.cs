@@ -125,8 +125,6 @@ namespace autonomiczny_samochod.Model.Communicators
                     if (lastReceivedMessage == null)
                         throw new TimeoutException("RS232 communicator timeout - no message has been received in time");
 
-                    //TODO: handle timeout exception
-
                     return lastReceivedMessage;
                 }
                 finally

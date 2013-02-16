@@ -32,7 +32,6 @@ namespace autonomiczny_samochod
         public double SteeringWheelAngle{ get; private set; }
         public double WheelAngle { get; private set; }
         public double BrakePosition { get; private set; }
-        //TODO: implement accessors/mutators for car parameters
 
         //model constants
         private const double SLOWING_DOWN_FACTOR = 0.991;

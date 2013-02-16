@@ -35,22 +35,19 @@ namespace autonomiczny_samochod.Model.Car
 
             deviceManager = DeviceManager.GlobalDeviceManager;
 
-            //regulators and communicator initiation 
-            CarComunicator = new RealCarCommunicator(this); // = new RealCarCommunicator(this);
+            CarComunicator = new RealCarCommunicator(this);
 
             SpeedRegulator = new PIDSpeedRegulator(this);
-            //SpeedRegulator = new FakeSpeedRegulator();
-
-            //SteeringWheelAngleRegulator = new SimpleSteeringWheelRegulator(this);
             SteeringWheelAngleRegulator = new PIDSteeringWheelAngleRegulator(this);
-            //SteeringWheelAngleRegulator = new FakeSteeringWheelRegulator();
-
-            //BrakeRegulator = new PIDBrakeRegulator(this);
             BrakeRegulator = new SimpleBrakeRegulator(this);
 
             CarComunicator.InitRegulatorsEventsHandling();  //TODO: REFACTOR THIS SHIT!!! //for now this is needed, because reagulators does not exists when communicator constructor is invoked
 
-            //internal event handling initialization
+            InternalEventHandlingInitialization();
+        }
+
+        private void InternalEventHandlingInitialization()
+        {
             evAlertBrake += new EventHandler(ExampleFakeCar_evAlertBrake);
             evTargetSpeedChanged += new TargetSpeedChangedEventHandler(ExampleFakeCar_evTargetSpeedChanged);
             evTargetSteeringWheelAngleChanged += new TargetSteeringWheelAngleChangedEventHandler(ExampleFakeCar_evTargetSteeringWheelAngleChanged);

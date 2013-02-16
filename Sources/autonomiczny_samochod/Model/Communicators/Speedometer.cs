@@ -9,6 +9,11 @@ namespace autonomiczny_samochod.Model.Communicators
 {
     class Speedometer : Device
     {
+        public override string ToString()
+        {
+            return "Speedometer";
+        }
+
         public event SpeedInfoReceivedEventHander evSpeedInfoReceived;
 
         private USB4702 extentionCardCommunicator;

@@ -81,13 +81,7 @@ namespace autonomiczny_samochod
             get;
         }
 
-        void SendNewSpeedSettingMessage(double speedSetting);
-
-        void SendNewSteeringWheelAngleSettingMessage(double angleSetting);
-
         void InitRegulatorsEventsHandling();
-
-        bool IsInitiated();
 
         void SetGear(Gear gear);
     }

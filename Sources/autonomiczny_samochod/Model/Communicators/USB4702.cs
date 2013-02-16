@@ -53,8 +53,8 @@ namespace car_communicator
         const int BRAKE_BACKWARD_PORT_LEVEL = 1; 
         const int BRAKE_FORWARD_PORT_LEVEL = 0;
 
-        const int BRAKE_SOFT_START_PORT_NO = 3; //TODO: check it!
-        const int BRAKE_SOFT_START_ON_PORT_LEVEL = 1; //TODO: check it!
+        const int BRAKE_SOFT_START_PORT_NO = 3; 
+        const int BRAKE_SOFT_START_ON_PORT_LEVEL = 1;
         const int BRAKE_SOFT_START_OFF_PORT_LEVEL = 0;
 
         private bool effectorsActive = false;
@@ -157,7 +157,7 @@ namespace car_communicator
         /// </summary>
         /// <param name="port">port no</param>
         /// <param name="level">0/1</param>
-        private void setPortDO(int port, byte level) //TODO: shouldn't it be just bool???
+        private void setPortDO(int port, byte level)
         {
             if (effectorsActive)
             {

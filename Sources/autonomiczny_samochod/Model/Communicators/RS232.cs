@@ -13,10 +13,10 @@ namespace autonomiczny_samochod
     public class RS232Controller
     {
         // Create the serial port with basic settings 
-        private SerialPort port = new SerialPort("COM4", 9600, Parity.None, 8, StopBits.One); //TODO: add choosing COM no from form
+        private SerialPort port = new SerialPort("COM4", 9600, Parity.None, 8, StopBits.One); //ITS OBSOLETE ANYWAY  //TO DO: add choosing COM no from form
 
         //messages
-        readonly char[] giveMeSteeringWheelAngleMsg = new char[] { '1', 'P', (char)13 }; //TODO: try changing it to byte[] //not necessery, but char[] probably wont work for values > 127...
+        readonly char[] giveMeSteeringWheelAngleMsg = new char[] { '1', 'P', (char)13 }; //ITS OBSOLETE ANYWAY  //TO DO: try changing it to byte[] //not necessery, but char[] probably wont work for values > 127...
         readonly char[] giveMeBrakeAngleMsg = new char[] { '2', 'P', (char)13 };
         readonly char[] giveMeSteeringWheelDiagnosisMsg = new char[] { '1', 'D', (char)13 };
         readonly char[] giveMeBrakeDiagnosisMsg = new char[] { '2', 'D', (char)13 };
@@ -36,10 +36,10 @@ namespace autonomiczny_samochod
         private const bool DIAGNOSIS_ENABLED = false;
 
         private const int WHEEL_OUTPUT_WHEN_MAX_RIGHT = 15000; //increased by 100
-        private const double WHEEL_ANGLE_ON_MAX_RIGHT = 30.0; //IMPORTANT: TODO: check it in documentation
+        private const double WHEEL_ANGLE_ON_MAX_RIGHT = 30.0; //ITS OBSOLETE ANYWAY //IMPORTANT: TO DO: check it in documentation
 
         private const int WHEEL_OUTPUT_WHEN_MAX_LEFT = 2066; //decreased by 100
-        private const double WHEEL_ANGLE_ON_MAX_LEFT = -30.0; //IMPORTANT: TODO: check it in documentation
+        private const double WHEEL_ANGLE_ON_MAX_LEFT = -30.0; //ITS OBSOLETE ANYWAY //IMPORTANT: TO DO: check it in documentation
 
         //brake
         private const int BRAKE_OUTPUT_MAX_PUSHED = 11070; //was checked to be 11170 when max but decreased to improve steering
@@ -156,7 +156,7 @@ namespace autonomiczny_samochod
                 catch (TimeoutException)
                 {
                     Logger.Log(this, "RS232 timout has occured", 1);
-                    //TODO: some timout handling???
+                    //ITS OBSOLETE ANYWAY //TO DO: some timout handling???
                 }
                 catch (Exception e)
                 {
@@ -183,7 +183,7 @@ namespace autonomiczny_samochod
             catch (Exception e)
             {
                 Logger.Log(this, String.Format("RS232 communication error: \nMsg:{0} \nStackTrace:{1}", e.Message, e.StackTrace), 2);
-                //TODO: errors handling
+                //ITS OBSOLETE ANYWAY //TO DO: errors handling
             }
         }
 
@@ -210,7 +210,7 @@ namespace autonomiczny_samochod
                         if (readMsg[0] == 'E') //check that condition
                         {
                             Logger.Log(this, "RS232 received an errror from brakes", 2);
-                            //TODO: some handling?
+                            //ITS OBSOLETE ANYWAY //TO DO: some handling?
                         }
 
                         port.DiscardInBuffer();
@@ -244,7 +244,7 @@ namespace autonomiczny_samochod
                         if (readMsg[0] == 'E') //check that condition
                         {
                             Logger.Log(this, "RS232 received an errror from steering wheel", 2);
-                            //TODO: some handling?
+                            //ITS OBSOLETE ANYWAY  //TO DO: some handling?
                         }
 
                         port.DiscardInBuffer();
@@ -266,7 +266,7 @@ namespace autonomiczny_samochod
             catch (Exception e)
             {
                 Logger.Log(this, String.Format("RS232 communication error: \nMsg:{0} \nStackTrace:{1}", e.Message, e.StackTrace), 2);
-                //TODO: errors handling
+                //ITS OBSOLETE ANYWAY //TO DO: errors handling
             }
         }
 
@@ -353,7 +353,7 @@ namespace autonomiczny_samochod
      
         /// <summary>
         /// this is rewriten function from above
-        /// IMPORTANT: TODO: TEST IT!!!!!
+        /// //ITS OBSOLETE ANYWAY //IMPORTANT: TO DO: TEST IT!!!!!
         /// </summary>
         volatile LinkedList<int> RS232SignalsInputList = new LinkedList<int>();
         volatile bool RS232dataIsBeingRead = false; //to dont allow data reading start twice
@@ -368,7 +368,7 @@ namespace autonomiczny_samochod
              * only Read() should be used (returns byte, not char - chars bugs the code!)
              */
             if (!RS232dataIsBeingRead)
-            { //TODO: think about doing it in new thread
+            {//ITS OBSOLETE ANYWAY  //TO DO: think about doing it in new thread
                 RS232dataIsBeingRead = true;
                 int byteRead;
                 try
@@ -386,7 +386,7 @@ namespace autonomiczny_samochod
                 }
                 catch (Exception)
                 {
-                    // Logger.Log(this, String.Format("RS232 error: {0}, {1}", e.Message, e.StackTrace)); //TODO: //IMPORTANT: tempporary
+                    // Logger.Log(this, String.Format("RS232 error: {0}, {1}", e.Message, e.StackTrace)); //ITS OBSOLETE ANYWAY  //TO  DO: //IMPORTANT: tempporary
                 }
                 finally
                 {
@@ -456,7 +456,7 @@ namespace autonomiczny_samochod
             catch (TimeoutException)
             {
                 RS232SignalsInputList.Clear(); //clearing list on timeout should prevent desync
-                Logger.Log(this, "timeout on write has occured, message was not sent", 1); //TODO: real exceptions handling
+                Logger.Log(this, "timeout on write has occured, message was not sent", 1); //ITS OBSOLETE ANYWAY //TO DO: real exceptions handling
             }
             catch(Exception)
             {

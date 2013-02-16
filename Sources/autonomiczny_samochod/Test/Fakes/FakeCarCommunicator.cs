@@ -115,25 +115,6 @@ namespace autonomiczny_samochod
             evSteeringWheelAngleInfoReceived.Invoke(this, new SteeringWheelAngleInfoReceivedEventArgs(0.0));
         }
 
-        public void SendNewSpeedSettingMessage(double speedSetting)
-        {
-            Logger.Log(this, String.Format("new speed setting has been send: {0}", speedSetting));
-
-            model.SpeedSteering = speedSetting;
-        }
-
-        public void SendNewSteeringWheelAngleSettingMessage(double angleSetting)
-        {
-            Logger.Log(this, String.Format("new steering angle setting has been send: {0}", angleSetting));
-
-            model.WheelAngleSteering = angleSetting;
-        }
-
-        public bool IsInitiated()
-        {
-            return true; //its fake anyway
-        }
-
         public void SetGear(Gear gear)
         {
             model.Gear = gear;
