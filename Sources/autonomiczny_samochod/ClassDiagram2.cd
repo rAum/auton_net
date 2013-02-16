@@ -24,7 +24,7 @@
   <Comment CommentText="Device manager">
     <Position X="8.042" Y="3.932" Height="0.419" Width="1.229" />
   </Comment>
-  <Comment CommentText="PID regulator is actually useless in here">
+  <Comment CommentText="PID regulator is actually useless in brake regulating">
     <Position X="18.38" Y="13.25" Height="0.75" Width="1.7" />
   </Comment>
   <Class Name="autonomiczny_samochod.App" Collapsed="true">

@@ -169,26 +169,6 @@ namespace autonomiczny_samochod
             );
         }
 
-        void CarComunicator_evBrakePositionReceived(object sender, BrakePositionReceivedEventArgs args)
-        {
-            this.Dispatcher.Invoke(
-                new Action<TextBlock, string>((textBox, val)
-                    => textBox.Text = val),
-                        textBlock_currentBrake,
-                        String.Format("{0:0.###}", args.GetPosition())
-            );
-        }
-
-        void BrakeRegulator_evNewBrakeSettingCalculated(object sender, NewBrakeSettingCalculatedEventArgs args)
-        {
-            this.Dispatcher.Invoke(
-                new Action<TextBlock, string>((textBox, val)
-                    => textBox.Text = val),
-                        textBlock_steeringBrake,
-                        String.Format("{0:0.###}", args.GetBrakeSetting())
-            );
-        }
-
         void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             HandleKeyDown(e);
@@ -236,24 +216,81 @@ namespace autonomiczny_samochod
             textBlock_time.Text = String.Format(@"{0:mm\:ss\:ff}", Time.GetTimeFromProgramBeginnig());
         }
 
-        void SteeringWheelAngleRegulator_evNewSteeringWheelSettingCalculated(object sender, NewSteeringWheelSettingCalculateddEventArgs args)
+
+
+        private class LabelData
         {
-            this.Dispatcher.Invoke(
-                new Action<TextBlock, string>((textBox, val)
-                    => textBox.Text = val),
-                        textBlock_steeringAngle,
-                        String.Format("{0:0.###}", args.getSteeringWheelAngleSetting())
-            );
+            public double newValue;
+            public double setValue;
+            public bool labelSetInvokeAwaiting;
+
+            public LabelData()
+            {
+                newValue = Double.NegativeInfinity;
+                setValue = Double.NegativeInfinity;
+                labelSetInvokeAwaiting = false;
+            }
         }
 
+        /// <summary>
+        /// this method updates label with new value,
+        ///     you can use this method as much as you want (e.g. 10000 times per second) 
+        ///     it wont lead to stackoverflow (standard invoke would lead to stack overflow (and did it!))
+        ///     
+        /// the reason this method has sense is events which are updating textblock values sometimes are 
+        /// invoked very frequently (like few hundred times a second)
+        /// </summary>
+        /// <param name="textBlock"></param>
+        /// <param name="valueToSet"></param>
+        /// <param name="labelData"></param>
+        private void UpdateTextBlock(TextBlock textBlock, double valueToSet, LabelData labelData)
+        {
+            labelData.newValue = valueToSet;
+            if (labelData.newValue != labelData.setValue)
+            {
+                if (!labelData.labelSetInvokeAwaiting)
+                {
+                    labelData.labelSetInvokeAwaiting = true;
+                    this.Dispatcher.Invoke(
+                        new Action<TextBlock, double>((textBox, val) =>
+                        {
+                            textBox.Text = String.Format("{0:0.###}", val);
+                            labelData.setValue = val;
+                            labelData.labelSetInvokeAwaiting = false;
+                        }),
+                            textBlock,
+                            labelData.newValue
+                    );
+                }
+            }
+        }
+
+        /* 
+         * below actions are done in order to fix stack overflow error which was happening in here
+         *      (when there was just invoke on event like commented bellow)
+         *      
+         * when there were a lot of invoked events on every event window thread saved an information (on stack)
+         * that something has to be done (usually label changed), when machine had a lot of computing to do it
+         * ended in stack overflow in here (in window...)
+         */
+        LabelData steeringWheelSettingLabelData = new LabelData();
+        void SteeringWheelAngleRegulator_evNewSteeringWheelSettingCalculated(object sender, NewSteeringWheelSettingCalculateddEventArgs args)
+        {
+            UpdateTextBlock(textBlock_steeringAngle, args.getSteeringWheelAngleSetting(), steeringWheelSettingLabelData);
+            
+            //this.Dispatcher.Invoke(
+            //    new Action<TextBlock, string>((textBox, val)
+            //        => textBox.Text = val),
+            //            textBlock_steeringAngle,
+            //            String.Format("{0:0.###}", args.getSteeringWheelAngleSetting())
+            //);
+        }
+
+        LabelData steeringSpeedLabelData = new LabelData();
+        LabelData targetBrakeLabelData = new LabelData();
         void SpeedRegulator_evNewSpeedSettingCalculated(object sender, NewSpeedSettingCalculatedEventArgs args)
         {
-            this.Dispatcher.Invoke(
-                new Action<TextBlock, string>((textBox, val)
-                    => textBox.Text = val),
-                        textBlock_steeringSpeed,
-                        String.Format("{0:0.###}", args.getSpeedSetting())
-            );
+            UpdateTextBlock(textBlock_steeringSpeed, args.getSpeedSetting(), steeringSpeedLabelData);
 
             //target for brake regulator
             double targetBrake = args.getSpeedSetting();
@@ -265,52 +302,43 @@ namespace autonomiczny_samochod
             {
                 targetBrake = 0;
             }
-            this.Dispatcher.Invoke(
-                new Action<TextBlock, string>((textBlock, val)
-                    => textBlock.Text = val),
-                        textBlock_targetBrake,
-                        String.Format("{0:0.###}", targetBrake)
-            );
+            UpdateTextBlock(textBlock_targetBrake, targetBrake, targetBrakeLabelData);
         }
 
+        LabelData currentAngleLabelData = new LabelData();
         void CarComunicator_evSteeringWheelAngleInfoReceived(object sender, SteeringWheelAngleInfoReceivedEventArgs args)
         {
-            this.Dispatcher.Invoke(
-                new Action<TextBlock, string>((textBox, val)
-                    => textBox.Text = val),
-                        textBlock_currentAngle,
-                        String.Format("{0:0.###}", args.GetAngle())
-            );
+            UpdateTextBlock(textBlock_currentAngle, args.GetAngle(), currentAngleLabelData);
         }
 
+        LabelData targetAngleLabelData = new LabelData();
         void Model_evTargetSteeringWheelAngleChanged(object sender, TargetSteeringWheelAngleChangedEventArgs args)
         {
-            this.Dispatcher.Invoke(
-                new Action<TextBlock, string>((textBox, val)
-                    => textBox.Text = val),
-                        textBlock_targetAngle,
-                        String.Format("{0:0.###}", args.GetTargetWheelAngle())
-            );
+            UpdateTextBlock(textBlock_targetAngle, args.GetTargetWheelAngle(), targetBrakeLabelData);
         }
 
+        LabelData currentSpeedLabelData = new LabelData();
         void CarComunicator_evSpeedInfoReceived(object sender, SpeedInfoReceivedEventArgs args)
         {
-            this.Dispatcher.Invoke(
-                new Action<TextBlock, string>((textBox, val) 
-                    => textBox.Text = val), 
-                        textBlock_currentSpeed, 
-                        String.Format("{0:0.###}", args.GetSpeedInfo())
-            );
+            UpdateTextBlock(textBlock_currentSpeed, args.GetSpeedInfo(), currentSpeedLabelData);
         }
 
+        LabelData targetSpeedLabelData = new LabelData();
         void Model_evTargetSpeedChanged(object sender, TargetSpeedChangedEventArgs args)
         {
-            this.Dispatcher.Invoke(
-                new Action<TextBlock, string>((textBox, val)
-                    => textBox.Text = val),
-                        textBlock_targetSpeed,
-                        String.Format("{0:0.###}", args.GetTargetSpeed())
-            );
+            UpdateTextBlock(textBlock_targetSpeed, args.GetTargetSpeed(), targetSpeedLabelData);
+        }
+
+        LabelData currentBrakeLabelData = new LabelData();
+        void CarComunicator_evBrakePositionReceived(object sender, BrakePositionReceivedEventArgs args)
+        {
+            UpdateTextBlock(textBlock_currentBrake, args.GetPosition(), currentBrakeLabelData);
+        }
+
+        LabelData steeringBrakeLabelData = new LabelData();
+        void BrakeRegulator_evNewBrakeSettingCalculated(object sender, NewBrakeSettingCalculatedEventArgs args)
+        {
+            UpdateTextBlock(textBlock_steeringBrake, args.GetBrakeSetting(), steeringBrakeLabelData);
         }
 
         private void button_saveStats_Click(object sender, RoutedEventArgs e)
