@@ -97,6 +97,7 @@
     </ApplicationDefinition>
     <Compile Include="Model\Communicators\SafeRS232Communicator.cs" />
     <Compile Include="Model\Communicators\SafeRS232Controller.cs" />
+    <Compile Include="Model\Communicators\Speedometer.cs" />
     <Compile Include="Model\Regulators\SimpleBrakeRegulator.cs" />
     <Compile Include="Test\Fakes\CarWithFakeCommunicator.cs" />
     <Compile Include="Test\Fakes\CarWithFakeRegulators.cs" />

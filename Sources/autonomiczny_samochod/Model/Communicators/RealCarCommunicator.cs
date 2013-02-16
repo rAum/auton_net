@@ -21,80 +21,40 @@ namespace autonomiczny_samochod
 
         public ICar ICar { get; private set; }
 
-        //CONST
-        const int SPEED_MEASURING_TIMER_INTERVAL_IN_MS = 10; //in ms
-        const int SPEED_TABLE_SIZE = 30;
-        const double WHEEL_CIRCUIT_IN_M = 0.548 * Math.PI; //informacja of Filipa Godlewskiego z grupy mechaniki - oby prawdziwa ;)
-        const int NO_OF_HAAL_METERS = 5;
-        const int TICKS_TO_RESTART = 10000; 
-
         //sub-communicators
-       // private BrakePedalCommunicator brakePedalCommunicator { get; set; } //obsolete
+        //private BrakePedalCommunicator brakePedalCommunicator { get; set; } //obsolete
         private USB4702 extentionCardCommunicator { get; set; }
         private ServoDriver servoDriver { get; set; }
         //private RS232Controller angleAndSpeedMeter { get; set; } //OBSOLETE
         private SafeRS232Controller angleAndSpeedMeter { get; set; }
-
-
-        //car speed receiving
-        System.Windows.Forms.Timer SpeedMeasuringTimer = new System.Windows.Forms.Timer();
-        int [] lastTicksMeasurements = new int[SPEED_TABLE_SIZE];
-        int tickTableIterator = 0;
-        int lastTicks = 0;
-
+        private Speedometer speedometer { get; set; }
 
         public RealCarCommunicator(ICar parent)
         {
             ICar = parent;
 
-            for(int i = 0; i < lastTicksMeasurements.Length; i++) //TODO: MOVE IT FROM HERE!!! (create speed measurer class)
-            {
-                lastTicksMeasurements[i] = 0;
-            }
-
-            extentionCardCommunicator = new USB4702();
-
             servoDriver = new ServoDriver();
             deviceManager.RegisterDevice(servoDriver);
 
-            //angleAndSpeedMeter = new RS232Controller(this); //OBSOLETE
             angleAndSpeedMeter = new SafeRS232Controller(this, "COM4");
             deviceManager.RegisterDevice(angleAndSpeedMeter);
 
-            //TODO: make thread for every initialization //its actually done for angleAndSpeedMeter
+            extentionCardCommunicator = new USB4702();
             deviceManager.RegisterDevice(extentionCardCommunicator);
-            //angleAndSpeedMeter.Initialize(); //OBSOLETE - now its device managers job
-            
-            SpeedMeasuringTimer.Interval = SPEED_MEASURING_TIMER_INTERVAL_IN_MS;
-            SpeedMeasuringTimer.Tick += new EventHandler(SpeedMeasuringTimer_Tick);
-            SpeedMeasuringTimer.Start();
+
+            speedometer = new Speedometer(extentionCardCommunicator);
+            deviceManager.RegisterDevice(speedometer);
+
+            speedometer.evSpeedInfoReceived += speedometer_evSpeedInfoReceived;
         }
 
-        void SpeedMeasuringTimer_Tick(object sender, EventArgs e)
+        void speedometer_evSpeedInfoReceived(object sender, SpeedInfoReceivedEventArgs args)
         {
-            //read
- 	        int ticks = extentionCardCommunicator.getSpeedCounterStatus();
-
-            //calculations
-            lastTicksMeasurements[tickTableIterator] = ticks - lastTicks;
-            
-            tickTableIterator = (tickTableIterator + 1) % SPEED_TABLE_SIZE;
-
-            double speed = Convert.ToDouble(WHEEL_CIRCUIT_IN_M) / Convert.ToDouble(NO_OF_HAAL_METERS) * Convert.ToDouble(lastTicksMeasurements.Sum()) / (Convert.ToDouble(SPEED_TABLE_SIZE) * Convert.ToDouble(SPEED_MEASURING_TIMER_INTERVAL_IN_MS) / 1000.0);
-
-            if(ticks > TICKS_TO_RESTART)
+            SpeedInfoReceivedEventHander temp = evSpeedInfoReceived;
+            if (temp != null)
             {
-                extentionCardCommunicator.RestartSpeedCounter();
-                lastTicks = 0;
+                temp(this, new SpeedInfoReceivedEventArgs(args.GetSpeedInfo()));
             }
-
-            //sending event
-            SpeedInfoReceivedEventHander SpeedEvent = evSpeedInfoReceived;
-            if (SpeedEvent != null)
-            {
-                SpeedEvent(this, new SpeedInfoReceivedEventArgs(speed));
-            }
-            lastTicks = ticks;
         }
 
         /// <summary>

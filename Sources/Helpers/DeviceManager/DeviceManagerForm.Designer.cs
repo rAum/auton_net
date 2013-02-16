@@ -44,12 +44,12 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(12, 53);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(345, 266);
+            this.dataGridView1.Size = new System.Drawing.Size(349, 266);
             this.dataGridView1.TabIndex = 0;
             // 
             // button_initialize
             // 
-            this.button_initialize.Location = new System.Drawing.Point(482, 65);
+            this.button_initialize.Location = new System.Drawing.Point(372, 53);
             this.button_initialize.Name = "button_initialize";
             this.button_initialize.Size = new System.Drawing.Size(104, 23);
             this.button_initialize.TabIndex = 1;
@@ -59,7 +59,7 @@
             // 
             // button_StartSensors
             // 
-            this.button_StartSensors.Location = new System.Drawing.Point(482, 107);
+            this.button_StartSensors.Location = new System.Drawing.Point(372, 95);
             this.button_StartSensors.Name = "button_StartSensors";
             this.button_StartSensors.Size = new System.Drawing.Size(104, 23);
             this.button_StartSensors.TabIndex = 2;
@@ -69,7 +69,7 @@
             // 
             // button_StartEffectors
             // 
-            this.button_StartEffectors.Location = new System.Drawing.Point(482, 156);
+            this.button_StartEffectors.Location = new System.Drawing.Point(372, 144);
             this.button_StartEffectors.Name = "button_StartEffectors";
             this.button_StartEffectors.Size = new System.Drawing.Size(104, 23);
             this.button_StartEffectors.TabIndex = 3;
@@ -79,7 +79,7 @@
             // 
             // button_PauseEffectors
             // 
-            this.button_PauseEffectors.Location = new System.Drawing.Point(482, 199);
+            this.button_PauseEffectors.Location = new System.Drawing.Point(372, 187);
             this.button_PauseEffectors.Name = "button_PauseEffectors";
             this.button_PauseEffectors.Size = new System.Drawing.Size(104, 23);
             this.button_PauseEffectors.TabIndex = 4;
@@ -89,7 +89,7 @@
             // 
             // button_EmergencyStop
             // 
-            this.button_EmergencyStop.Location = new System.Drawing.Point(482, 245);
+            this.button_EmergencyStop.Location = new System.Drawing.Point(372, 233);
             this.button_EmergencyStop.Name = "button_EmergencyStop";
             this.button_EmergencyStop.Size = new System.Drawing.Size(104, 23);
             this.button_EmergencyStop.TabIndex = 5;
@@ -100,7 +100,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(315, 24);
+            this.label1.Location = new System.Drawing.Point(235, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(161, 13);
             this.label1.TabIndex = 6;
@@ -109,7 +109,7 @@
             // label_DeviceManagerAction
             // 
             this.label_DeviceManagerAction.AutoSize = true;
-            this.label_DeviceManagerAction.Location = new System.Drawing.Point(483, 24);
+            this.label_DeviceManagerAction.Location = new System.Drawing.Point(403, 21);
             this.label_DeviceManagerAction.Name = "label_DeviceManagerAction";
             this.label_DeviceManagerAction.Size = new System.Drawing.Size(35, 13);
             this.label_DeviceManagerAction.TabIndex = 7;
@@ -119,7 +119,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(613, 452);
+            this.ClientSize = new System.Drawing.Size(493, 330);
             this.Controls.Add(this.label_DeviceManagerAction);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button_EmergencyStop);
