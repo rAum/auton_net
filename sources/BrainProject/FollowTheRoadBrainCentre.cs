@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Helpers;
-using autonomiczny_samochod;
+using CarController;
 using System.Threading;
-using Helpers;
 using VisionFilters;
 
 using Emgu.CV;
@@ -26,7 +25,7 @@ namespace BrainProject
 
     public class FollowTheRoadBrainCentre
     {
-        private CarController carController;
+        private DefaultCarController carController;
         private PIDRegulator regulator;
         private RoadCenterDetector roadDetector;
 
@@ -69,7 +68,7 @@ namespace BrainProject
             }
         }
 
-        public FollowTheRoadBrainCentre(RoadCenterDetector _roadDetector, CarController _carController)
+        public FollowTheRoadBrainCentre(RoadCenterDetector _roadDetector, DefaultCarController _carController)
         {
             roadDetector = _roadDetector;
 

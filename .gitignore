@@ -1,6 +1,7 @@
 
 Sources/auton.suo
 *.suo
+*.user
 
 Sources/*.psess
 *.app.ctl

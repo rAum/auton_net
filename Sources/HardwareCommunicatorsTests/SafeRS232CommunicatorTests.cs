@@ -3,7 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using autonomiczny_samochod.Model.Communicators;
+using CarController.Model.Communicators;
 using System.IO.Ports;
 using System.Threading;
 

@@ -17,7 +17,7 @@ using Emgu.CV.UI;
 using VisionFilters.Filters.Lane_Mark_Detector;
 using VisionFilters.Filters.Image_Operations;
 using VisionFilters;
-using autonomiczny_samochod;
+using CarController;
 
 
 namespace BrainProject
@@ -33,7 +33,7 @@ namespace BrainProject
 
         FollowTheRoadBrainCentre brain;
 
-        CarController carController;
+        DefaultCarController carController;
         MainWindow steeringWindow;
 
         //VideoWriter videoWriter;
@@ -76,8 +76,8 @@ namespace BrainProject
         {
             InitializeComponent();
 
-            carController = new autonomiczny_samochod.CarController();
-            steeringWindow = new autonomiczny_samochod.MainWindow(carController);
+            carController = new CarController.DefaultCarController();
+            steeringWindow = new CarController.MainWindow(carController);
             steeringWindow.Show();
             steeringWindow.Activate();
 
