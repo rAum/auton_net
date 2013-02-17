@@ -132,7 +132,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\autonomiczny_samochod\CarController.csproj">
+    <ProjectReference Include="..\CarController\CarController.csproj">
       <Project>{E23EBE5E-CF61-479E-AA5E-3BE971E03653}</Project>
       <Name>CarController</Name>
     </ProjectReference>
