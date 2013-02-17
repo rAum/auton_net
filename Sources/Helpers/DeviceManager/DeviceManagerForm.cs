@@ -87,7 +87,7 @@ namespace Helpers
 
         private void button_StartSensors_Click(object sender, EventArgs e)
         {
-            deviceManager.StartEffectors();
+            deviceManager.StartSensors();
         }
 
         private void button_StartEffectors_Click(object sender, EventArgs e)
@@ -104,7 +104,6 @@ namespace Helpers
         {
             deviceManager.EmergencyStop();
         }
-
 
     }
 }

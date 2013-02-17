@@ -57,7 +57,7 @@
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AKgBAAayAQACoAEQAEAAAhAAgAIhAIAhAEAACACEAgI=</HashCode>
+      <HashCode>CKgBAAayAUAioAEQAGAAAhCAgAIhAIAhIEEACACWAgI=</HashCode>
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -307,7 +307,7 @@
     <Position X="17" Y="5" Width="1.75" />
     <AssociationLine Name="SteeringWheelAngleRegulator" Type="autonomiczny_samochod.ISteeringWheelAngleRegulator" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="18.562" Y="7.709" />
+        <Point X="18.562" Y="8.161" />
         <Point X="18.562" Y="8.719" />
         <Point X="19.25" Y="8.719" />
       </Path>
@@ -317,7 +317,7 @@
     </AssociationLine>
     <AssociationLine Name="SpeedRegulator" Type="autonomiczny_samochod.ISpeedRegulator" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="17.188" Y="7.709" />
+        <Point X="17.188" Y="8.161" />
         <Point X="17.188" Y="8.625" />
         <Point X="15.5" Y="8.625" />
       </Path>
@@ -329,13 +329,13 @@
     </AssociationLine>
     <AssociationLine Name="CarComunicator" Type="autonomiczny_samochod.ICarCommunicator" FixedFromPoint="true">
       <Path>
-        <Point X="18.75" Y="5.732" />
-        <Point X="20.25" Y="5.732" />
+        <Point X="18.75" Y="5.854" />
+        <Point X="20.25" Y="5.854" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="CarInfo" Type="autonomiczny_samochod.CarInformations" ManuallyRouted="true" FixedFromPoint="true">
       <Path>
-        <Point X="17" Y="5.5" />
+        <Point X="17" Y="5.583" />
         <Point X="15.75" Y="5.469" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
@@ -344,20 +344,12 @@
     </AssociationLine>
     <AssociationLine Name="BrakeRegulator" Type="autonomiczny_samochod.IBrakeRegulator" FixedFromPoint="true">
       <Path>
-        <Point X="17.75" Y="7.709" />
-        <Point X="17.75" Y="9.25" />
+        <Point X="17.875" Y="8.161" />
+        <Point X="17.875" Y="9.25" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-1.172" Y="0.096" />
       </MemberNameLabel>
-    </AssociationLine>
-    <AssociationLine Name="deviceManager" Type="Helpers.DeviceManager" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="17" Y="5.188" />
-        <Point X="16.625" Y="5.188" />
-        <Point X="16.625" Y="4.031" />
-        <Point X="16.25" Y="4.031" />
-      </Path>
     </AssociationLine>
     <TypeIdentifier>
       <HashCode>AAAAAAIIAQAAgAABABAAMAgABIAAgEAAAEAAAAAEAAA=</HashCode>
@@ -370,7 +362,6 @@
       <Property Name="CarComunicator" />
       <Property Name="CarInfo" />
       <Property Name="BrakeRegulator" />
-      <Property Name="deviceManager" />
     </ShowAsAssociation>
   </Interface>
   <Interface Name="autonomiczny_samochod.ISteeringWheelAngleRegulator">
@@ -379,7 +370,7 @@
       <Path>
         <Point X="19.25" Y="8.625" />
         <Point X="18.688" Y="8.625" />
-        <Point X="18.688" Y="7.709" />
+        <Point X="18.688" Y="8.161" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="0.218" Y="0.115" />
@@ -415,7 +406,7 @@
       <Path>
         <Point X="15.5" Y="8.812" />
         <Point X="17.375" Y="8.812" />
-        <Point X="17.375" Y="7.709" />
+        <Point X="17.375" Y="8.161" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="0.961" Y="0.853" />
@@ -433,8 +424,10 @@
     <Position X="16.5" Y="9.25" Width="2" />
     <AssociationLine Name="ICar" Type="autonomiczny_samochod.ICar" FixedToPoint="true">
       <Path>
-        <Point X="17.875" Y="9.25" />
-        <Point X="17.875" Y="7.709" />
+        <Point X="17.156" Y="9.25" />
+        <Point X="17.156" Y="8.812" />
+        <Point X="17.875" Y="8.812" />
+        <Point X="17.875" Y="8.161" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
         <Position X="0.164" Y="0.625" Height="0.162" Width="0.774" />

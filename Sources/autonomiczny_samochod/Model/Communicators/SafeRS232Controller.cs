@@ -237,9 +237,13 @@ namespace autonomiczny_samochod.Model.Communicators
                     ReadBrakesSensors();
                     Thread.Sleep(SLEEP_BETWEEN_2_READS_IN_MS);
                 }
-                catch (autonomiczny_samochod.Model.Communicators.SafeRS232Communicator.MaxTriesToConnectRS232ExceededException)
+                catch (autonomiczny_samochod.Model.Communicators.SafeRS232Communicator.MaxTriesToConnectRS232ExceededException) //TODO: to nie lapiue tego wyjatku
                 {
                     overallState = DeviceOverallState.Error;
+                }
+                catch (Exception)
+                {
+                    overallState = DeviceOverallState.Warrning;
                 }
             }
 

@@ -52,9 +52,9 @@ namespace autonomiczny_samochod.Model.Communicators
         private const int SLEEP_ON_FAILED_PORT_OPPENING_BEFORE_NEXT_TRY_AT_APP_INIT_IN_MS = 10;
         private const int SLEEP_ON_FAILED_PORT_OPPENING_BEFORE_NEXT_TRY_AT_APP_WORKING_IN_MS = 0; //needed ASAP
 #if DEBUG
-        private const int uC_QUERY_TIMEOUT_IN_MS = 200;
-        private const int READ_TIMEOUT_IN_MS = 2000;
-        private const int WRITE_TIMEOUT_IN_MS = 2000;
+        private const int uC_QUERY_TIMEOUT_IN_MS = 1000;
+        private const int READ_TIMEOUT_IN_MS = 1000;
+        private const int WRITE_TIMEOUT_IN_MS = 1000;
 #else
         private const int uC_QUERY_TIMEOUT_IN_MS = 500;
         private const int READ_TIMEOUT_IN_MS = 500;
