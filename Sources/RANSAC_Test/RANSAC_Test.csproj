@@ -110,7 +110,6 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CatmullRomTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LeastSquareFit.cs" />
     <Compile Include="RANSACTest.cs" />

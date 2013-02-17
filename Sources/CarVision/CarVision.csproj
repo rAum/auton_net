@@ -165,10 +165,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MainMDIWindow\MainMDIWindow.csproj">
-      <Project>{ad3f18e1-6bac-444e-92a4-8054ee48ca15}</Project>
-      <Name>MainMDIWindow</Name>
-    </ProjectReference>
     <ProjectReference Include="..\VisionFilters\VisionPerception.csproj">
       <Project>{03833D47-DF5A-4B24-ABDB-19601109D523}</Project>
       <Name>VisionPerception</Name>
