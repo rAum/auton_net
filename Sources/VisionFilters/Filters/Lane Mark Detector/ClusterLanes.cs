@@ -10,43 +10,28 @@ using RANSAC.Functions;
 
 namespace VisionFilters.Filters.Lane_Mark_Detector
 {
-    public class ClusterLanes : ThreadSupplier<Image<Gray, Byte>, SimpleRoadModel> 
+    public class ClusterLanes : ThreadSupplier<List<Point>, SimpleRoadModel> 
     {
-        private Supplier<Image<Gray, Byte>> supplier;
+        private Supplier<List<Point>> supplier;
         private double roadCenterDistAvg = 180; // estimated relative road distance [half of width]
 
         const int MinPointsForOnlyOne = 50;
         const int MinPointsForEach    = 30;
+        int imgWidth  = CamModel.Width;
+        int imgHeight = CamModel.Height;
 
-        private void ObtainSimpleModel(Image<Gray, Byte> img)
+        private void ObtainSimpleModel(List<Point> lanes)
         {
-            List<Point> lanes = new List<Point>(200);
-
-            // find pixels which can be on lane mark
-            byte[,,] raw = img.Data;
-            for (int y = 0; y < img.Height; ++y)
-            {
-                for (int x = 0; x < img.Width; ++x)
-                {
-                    if (raw[y,x,0] == 255)
-                    {
-                        lanes.Add(new Point(x, y));
-                    }
-                }
-            }
-
-            //////////////////////////////////////////////////////////////////
-
             Parabola leftLane   = null;
             Parabola rightLane  = null;
             Parabola roadCenter = null;
 
             if (lanes.Count > MinPointsForOnlyOne)
-                roadCenter = RANSAC.RANSAC.fit(800, 8, (int)(lanes.Count * 0.75), 6, lanes);
+                roadCenter = RANSAC.RANSAC.fit(1000, 8, (int)(lanes.Count * 0.75), 6, lanes);
 
             if (roadCenter != null) 
             {
-                double x = roadCenter.value(CamModel.Height - 20);
+                double x = roadCenter.value(imgHeight - 20);
                 if (x > CamModel.Width) // WARNING !!! MAY BE FUCKUP @@@
                 {
                     leftLane = roadCenter;
@@ -70,15 +55,15 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 //////////////////////////////////////////////////////////////
 
                 if (first.Count > MinPointsForEach)
-                    leftLane = RANSAC.RANSAC.fit(800, 8, (int)(first.Count * 0.75), 6, first);
+                    leftLane = RANSAC.RANSAC.fit(1000, 8, (int)(first.Count * 0.75), 6, first);
 
                 if (second.Count > MinPointsForEach)
-                    rightLane = RANSAC.RANSAC.fit(800, 8, (int)(second.Count * 0.75), 6, second);
+                    rightLane = RANSAC.RANSAC.fit(1000, 8, (int)(second.Count * 0.75), 6, second);
 
                 if (leftLane != null && rightLane != null)
                 {
                     // swap lanes if necessary
-                    if (leftLane.value(img.Height) > rightLane.value(img.Height))
+                    if (leftLane.value(imgHeight) > rightLane.value(imgHeight))
                     {
                         var t = leftLane;
                         leftLane = rightLane;
@@ -97,7 +82,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 else if (leftLane != null)
                 {
                     // check if this is really a left lane
-                    if (leftLane.value(img.Height - 8) > img.Width - 5) // this is right lane!!
+                    if (leftLane.value(imgHeight - 8) > imgWidth - 5) // this is right lane!!
                     {
                         rightLane = leftLane;
                         leftLane = null;
@@ -109,7 +94,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 else if (rightLane != null)
                 {
                     // check if this is really a left lane
-                    if (rightLane.value(img.Height - 8) < img.Width + 5) // this is left lane!!
+                    if (rightLane.value(imgHeight - 8) < imgWidth + 5) // this is left lane!!
                     {
                         leftLane = rightLane;
                         rightLane = null;
@@ -124,7 +109,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             PostComplete();
         }
 
-        public ClusterLanes(Supplier<Image<Gray, Byte>> supplier_)
+        public ClusterLanes(Supplier<List<Point>> supplier_)
         {
             supplier = supplier_;
             supplier.ResultReady += MaterialReady;

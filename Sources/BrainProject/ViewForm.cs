@@ -158,12 +158,12 @@ namespace BrainProject
             if (next == 1)
             {
                 visRoad.ResultReady -= DisplayVideo;
-                roadDetector.Perceptor.laneDetector.ResultReady += DisplayVideo;
+                //roadDetector.Perceptor.laneDetector.ResultReady += DisplayVideo;
             }
             else
             {
                 visRoad.ResultReady += DisplayVideo;
-                roadDetector.Perceptor.laneDetector.ResultReady -= DisplayVideo;
+                //roadDetector.Perceptor.laneDetector.ResultReady -= DisplayVideo;
             }
 
         }
