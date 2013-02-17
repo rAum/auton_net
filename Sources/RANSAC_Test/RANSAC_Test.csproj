@@ -116,6 +116,10 @@
     <Compile Include="TakeRandomTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CarController\CarController.csproj">
+      <Project>{e23ebe5e-cf61-479e-aa5e-3be971e03653}</Project>
+      <Name>CarController</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VisionFilters\VisionPerception.csproj">
       <Project>{03833D47-DF5A-4B24-ABDB-19601109D523}</Project>
       <Name>VisionPerception</Name>

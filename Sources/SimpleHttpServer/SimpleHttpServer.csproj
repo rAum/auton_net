@@ -65,9 +65,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\autonomiczny_samochod\CarController.csproj">
+    <ProjectReference Include="..\CarController\CarController.csproj">
       <Project>{e23ebe5e-cf61-479e-aa5e-3be971e03653}</Project>
-      <Name>autonomiczny_samochod</Name>
+      <Name>CarController</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
