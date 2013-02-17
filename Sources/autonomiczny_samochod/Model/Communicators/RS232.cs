@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Threading;
 using Helpers;
 
-namespace autonomiczny_samochod
+namespace CarController
 {
     [Obsolete("use SafeRS232Controller instead")]
     public class RS232Controller
@@ -127,7 +127,7 @@ namespace autonomiczny_samochod
 
         /// <summary>
         /// note: must work as a new thread
-        /// Datasheet in repo: "autonomiczny_samochod\docs\Dane techniczne - czujnik kąta.pdf"
+        /// Datasheet in repo: "CarController\docs\Dane techniczne - czujnik kąta.pdf"
         /// in case of any problems contact "Korad Zawada" and Electronics group
         /// </summary>
         private void startDataTransmission()

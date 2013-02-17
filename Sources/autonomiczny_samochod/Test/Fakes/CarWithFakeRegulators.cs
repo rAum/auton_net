@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Helpers;
 
-namespace autonomiczny_samochod
+namespace CarController
 {
     public class CarWithFakeRegulators : ICar
     {
@@ -16,11 +16,11 @@ namespace autonomiczny_samochod
         public ISpeedRegulator SpeedRegulator { get; private set; }
         public IBrakeRegulator BrakeRegulator { get; private set; }
 
-        public CarController Controller { get; private set; }
+        public DefaultCarController Controller { get; private set; }
         public ICarCommunicator CarComunicator { get; private set; }
         public CarInformations CarInfo { get; private set; }
 
-        public CarWithFakeRegulators(CarController parent)
+        public CarWithFakeRegulators(DefaultCarController parent)
         {
             Controller = parent;
             CarInfo = new CarInformations();

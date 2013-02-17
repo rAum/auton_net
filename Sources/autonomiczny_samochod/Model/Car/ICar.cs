@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using autonomiczny_samochod.Model.Communicators;
+using CarController.Model.Communicators;
 using Helpers;
 
 
 
-namespace autonomiczny_samochod
+namespace CarController
 {
     //needed for evTargetSpeedChanged
     public delegate void TargetSpeedChangedEventHandler(object sender, TargetSpeedChangedEventArgs args);
@@ -55,7 +55,7 @@ namespace autonomiczny_samochod
         {
             get;
         }
-        CarController Controller
+        DefaultCarController Controller
         {
             get;
         }

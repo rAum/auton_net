@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Automation.BDaq;
 using Helpers;
-using autonomiczny_samochod.Model.Communicators;
+using CarController.Model.Communicators;
 
 namespace car_communicator
 {

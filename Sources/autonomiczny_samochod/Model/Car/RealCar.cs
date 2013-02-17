@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Helpers;
-using autonomiczny_samochod.Model.Regulators;
-using autonomiczny_samochod.Model.Communicators;
+using CarController.Model.Regulators;
+using CarController.Model.Communicators;
 
-namespace autonomiczny_samochod.Model.Car
+namespace CarController.Model.Car
 {
     public class RealCar : ICar
     {
@@ -15,7 +15,7 @@ namespace autonomiczny_samochod.Model.Car
         public event TargetSteeringWheelAngleChangedEventHandler evTargetSteeringWheelAngleChanged;
 
         public ICarCommunicator CarComunicator { get; private set; }
-        public CarController Controller { get; private set; }
+        public DefaultCarController Controller { get; private set; }
         public ISpeedRegulator SpeedRegulator { get; private set; }
         public ISteeringWheelAngleRegulator SteeringWheelAngleRegulator { get; private set; }
         public IBrakeRegulator BrakeRegulator { get; private set; }
@@ -24,7 +24,7 @@ namespace autonomiczny_samochod.Model.Car
         public bool IsAlertBrakeActive { get; private set; }
         public CarInformations CarInfo { get; private set; }
 
-        public RealCar(CarController parent)
+        public RealCar(DefaultCarController parent)
         {
             System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Highest;
 

@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 
-namespace autonomiczny_samochod
+namespace CarController
 {
     /// <summary>
     /// Interaction logic for App.xaml

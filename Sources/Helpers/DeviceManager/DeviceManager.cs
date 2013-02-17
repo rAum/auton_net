@@ -59,10 +59,13 @@ namespace Helpers
         private Thread actionThread = null; //e.g. starting sensors or pausing effectors
         public string currentActionName = "Idle";
 
-        public DeviceManager()
+        public DeviceManager(bool doYouWantDeviceManagerWindow = true)
         {
-            formThread = new Thread(new ThreadStart(CreateForm));
-            formThread.Start();
+            if (doYouWantDeviceManagerWindow)
+            {
+                formThread = new Thread(new ThreadStart(CreateForm));
+                formThread.Start();
+            }
         }
 
         private void CreateForm()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace autonomiczny_samochod
+namespace CarController
 {
     public delegate void NewBrakeSettingCalculatedEventHandler(object sender, NewBrakeSettingCalculatedEventArgs args);
     public class NewBrakeSettingCalculatedEventArgs : EventArgs

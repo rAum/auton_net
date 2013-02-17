@@ -5,8 +5,8 @@ using System.Text;
 using Pololu.UsbWrapper;
 using Pololu.Usc;
 using Helpers;
-using autonomiczny_samochod;
-using autonomiczny_samochod.Model.Communicators;
+using CarController;
+using CarController.Model.Communicators;
 
 //Created by Mateusz Nowakowski
 //Refactored and merged by Maciej (Spawek) Oziebly 

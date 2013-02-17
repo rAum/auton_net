@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using autonomiczny_samochod;
+using CarController;
+using CarController.Model.Car;
 using Helpers;
 
-namespace autonomiczny_samochod
+namespace CarController
 {
-    public class CarController
+    public class DefaultCarController
     {
         public ICar Model { get; private set; }
         private System.Threading.Thread mFakeSignalsSenderThread;
@@ -18,10 +19,10 @@ namespace autonomiczny_samochod
         private System.Windows.Forms.Timer mStatsCollectorTimer = new System.Windows.Forms.Timer();
         private const int TIMER_INTERVAL_IN_MS = 10;
 
-        public CarController()
+        public DefaultCarController()
         {
             //Model = new ExampleFakeCar(this);
-            Model = new autonomiczny_samochod.Model.Car.RealCar(this);
+            Model = new RealCar(this);
             //Model = new CarWithFakeRegulators(this);
             //Model = new CarWithFakeCommunicator(this);
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using Helpers;
 
-namespace autonomiczny_samochod
+namespace CarController
 {
     public class FakeCarCommunicator : ICarCommunicator
     {

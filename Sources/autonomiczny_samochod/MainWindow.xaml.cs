@@ -13,14 +13,14 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Helpers;
 
-namespace autonomiczny_samochod
+namespace CarController
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        public CarController Controller { get; private set; }
+        public DefaultCarController Controller { get; private set; }
 
         private System.Windows.Forms.Timer mTimer = new System.Windows.Forms.Timer();
         private const int TIMER_INTERVAL_IN_MS = 10;
@@ -51,7 +51,7 @@ namespace autonomiczny_samochod
         public MainWindow()
         {
             System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.AboveNormal;
-            Controller = new CarController();
+            Controller = new DefaultCarController();
             
             InitializeComponent();
 
@@ -65,7 +65,7 @@ namespace autonomiczny_samochod
             mTimer.Start();
         }
 
-        public MainWindow(CarController _controller)
+        public MainWindow(DefaultCarController _controller)
         {
             System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.AboveNormal;
             Controller = _controller;

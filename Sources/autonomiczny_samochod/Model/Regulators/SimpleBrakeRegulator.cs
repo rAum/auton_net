@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Helpers;
 
-namespace autonomiczny_samochod.Model.Regulators
+namespace CarController.Model.Regulators
 {
     class SimpleBrakeRegulator : IBrakeRegulator
     {

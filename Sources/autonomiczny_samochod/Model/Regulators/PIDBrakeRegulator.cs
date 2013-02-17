@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Helpers;
 
-namespace autonomiczny_samochod.Model.Regulators
+namespace CarController.Model.Regulators
 {
     /// <summary>
     /// calculates new steering whenever new target is set or new brake possition is received

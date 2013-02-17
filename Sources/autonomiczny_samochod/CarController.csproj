@@ -8,8 +8,8 @@
     <ProjectGuid>{E23EBE5E-CF61-479E-AA5E-3BE971E03653}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>autonomiczny_samochod</RootNamespace>
-    <AssemblyName>autonomiczny_samochod</AssemblyName>
+    <RootNamespace>CarController</RootNamespace>
+    <AssemblyName>CarController</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>

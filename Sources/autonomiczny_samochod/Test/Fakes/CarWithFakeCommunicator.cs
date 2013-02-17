@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using autonomiczny_samochod.Model.Regulators;
+using CarController.Model.Regulators;
 using Helpers;
 
-namespace autonomiczny_samochod
+namespace CarController
 {
     public class CarWithFakeCommunicator : ICar
     {
@@ -17,11 +17,11 @@ namespace autonomiczny_samochod
         public ISpeedRegulator SpeedRegulator { get; private set; }
         public IBrakeRegulator BrakeRegulator { get; private set; }
 
-        public CarController Controller { get; private set; }
+        public DefaultCarController Controller { get; private set; }
         public ICarCommunicator CarComunicator { get; private set; }
         public CarInformations CarInfo { get; set; }
 
-        public CarWithFakeCommunicator(CarController parent)
+        public CarWithFakeCommunicator(DefaultCarController parent)
         {
             Controller = parent;
             CarInfo = new CarInformations();

@@ -6,8 +6,20 @@ using System.IO.Ports;
 using System.Threading;
 using Helpers;
 
-namespace autonomiczny_samochod.Model.Communicators
+namespace CarController.Model.Communicators
 {
+    [Serializable]
+    public class MaxTriesToConnectRS232ExceededException : Exception
+    {
+        public MaxTriesToConnectRS232ExceededException() { }
+        public MaxTriesToConnectRS232ExceededException(string message) : base(message) { }
+        public MaxTriesToConnectRS232ExceededException(string message, Exception inner) : base(message, inner) { }
+        protected MaxTriesToConnectRS232ExceededException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context)
+            : base(info, context) { }
+    }
+
     /// <summary>
     /// THIS CLASS IS THREAD-SAFE
     /// 
@@ -57,8 +69,6 @@ namespace autonomiczny_samochod.Model.Communicators
         private const int WRITE_TIMEOUT_IN_MS = 500;
 
         private const int DEFAULT_MAX_OPPENING_TRIES_NO = 60;
-
-
 
         public SafeRS232Communicator(
             string portName,
@@ -186,18 +196,6 @@ namespace autonomiczny_samochod.Model.Communicators
                     readingActive = false;
                 }
             }
-        }
-
-        [Serializable]
-        public class MaxTriesToConnectRS232ExceededException : Exception
-        {
-            public MaxTriesToConnectRS232ExceededException() { }
-            public MaxTriesToConnectRS232ExceededException(string message) : base(message) { }
-            public MaxTriesToConnectRS232ExceededException(string message, Exception inner) : base(message, inner) { }
-            protected MaxTriesToConnectRS232ExceededException(
-              System.Runtime.Serialization.SerializationInfo info,
-              System.Runtime.Serialization.StreamingContext context)
-                : base(info, context) { }
         }
 
         private void TryOppeningPortUntilItSucceds(int waitBeforeNextTryInMs, int triesLeft = DEFAULT_MAX_OPPENING_TRIES_NO)

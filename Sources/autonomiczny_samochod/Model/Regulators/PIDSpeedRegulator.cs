@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Helpers;
-using autonomiczny_samochod.Model.Regulators;
+using CarController.Model.Regulators;
 
-namespace autonomiczny_samochod
+namespace CarController
 {
     public class PIDSpeedRegulator : ISpeedRegulator
     {

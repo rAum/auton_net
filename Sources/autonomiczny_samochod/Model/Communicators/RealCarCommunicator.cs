@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using car_communicator;
-using autonomiczny_samochod.Model.Communicators;
+using CarController.Model.Communicators;
 using Helpers;
 
-namespace autonomiczny_samochod
+namespace CarController
 {
     public class RealCarCommunicator : ICarCommunicator
     {

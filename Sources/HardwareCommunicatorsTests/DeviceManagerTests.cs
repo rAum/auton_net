@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Helpers;
 using Rhino.Mocks;
+using System.Threading;
 
 namespace HardwareCommunicatorsTests
 {
@@ -80,7 +81,7 @@ namespace HardwareCommunicatorsTests
         [TestInitialize()]
         public void TestInit()
         {
-            devManager = new DeviceManager();  
+            devManager = new DeviceManager(false);  
             mocks = new MockRepository();
             dummyDevice = new FakeDevice();
             deviceMock = mocks.DynamicMock<FakeDevice>(); //like niceMock in googletest
@@ -163,18 +164,32 @@ namespace HardwareCommunicatorsTests
         [TestMethod]
         public void DeviceStateIsChangingCorrectly()
         {
+            int maxStateChangeTimeinMs = 50; //states are changed on different thread //TODO: RLY?!? sleeps in test? it looks bad
+
             Assert.AreEqual(DeviceInitializationState.NotInitialized, dummyDevice.initializationState);
+
             devManager.Initialize();
+            Thread.Sleep(maxStateChangeTimeinMs);
             Assert.AreEqual(DeviceInitializationState.Initialized, dummyDevice.initializationState);
+
             devManager.StartSensors();
+            Thread.Sleep(maxStateChangeTimeinMs);
             Assert.AreEqual(DeviceInitializationState.SensorsStarted, dummyDevice.initializationState);
+
             devManager.StartEffectors();
+            Thread.Sleep(maxStateChangeTimeinMs);
             Assert.AreEqual(DeviceInitializationState.EffectorsStarted, dummyDevice.initializationState);
+
             devManager.PauseEffectors();
+            Thread.Sleep(maxStateChangeTimeinMs);
             Assert.AreEqual(DeviceInitializationState.EffectorsPaused, dummyDevice.initializationState);
+
             devManager.StartEffectors();
+            Thread.Sleep(maxStateChangeTimeinMs);
             Assert.AreEqual(DeviceInitializationState.EffectorsStarted, dummyDevice.initializationState);
+
             devManager.EmergencyStop();
+            Thread.Sleep(maxStateChangeTimeinMs);
             Assert.AreEqual(DeviceInitializationState.EmergencyStopped, dummyDevice.initializationState);
         }
 

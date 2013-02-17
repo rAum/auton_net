@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using Helpers;
 
-namespace autonomiczny_samochod.Model.Communicators
+namespace CarController.Model.Communicators
 {
     /// <summary>
     /// class which controlls RS232 communication - it has 2 tasks:
@@ -116,7 +116,7 @@ namespace autonomiczny_samochod.Model.Communicators
                 DiagnoseBrakeSensors();
                 DiagnoseSteeringWheelSensors();
             }
-            catch (autonomiczny_samochod.Model.Communicators.SafeRS232Communicator.MaxTriesToConnectRS232ExceededException)
+            catch (MaxTriesToConnectRS232ExceededException)
             {
                 overallState = DeviceOverallState.Error;
             }
@@ -237,13 +237,16 @@ namespace autonomiczny_samochod.Model.Communicators
                     ReadBrakesSensors();
                     Thread.Sleep(SLEEP_BETWEEN_2_READS_IN_MS);
                 }
-                catch (autonomiczny_samochod.Model.Communicators.SafeRS232Communicator.MaxTriesToConnectRS232ExceededException) //TODO: to nie lapiue tego wyjatku
+                catch (MaxTriesToConnectRS232ExceededException) //TODO: to nie lapiue tego wyjatku
                 {
                     overallState = DeviceOverallState.Error;
+                    Logger.Log(this, "RS232 exceeded max tries to connect - fatal error", 4);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     overallState = DeviceOverallState.Warrning;
+                    Logger.Log(this, String.Format("RS232 exception message: {0}", e.Message), 3);
+                    Logger.Log(this, String.Format("RS232 exception stack: {0}", e.StackTrace), 2);
                 }
             }
 

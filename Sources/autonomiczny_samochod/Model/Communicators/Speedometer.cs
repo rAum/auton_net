@@ -5,7 +5,7 @@ using System.Text;
 using car_communicator;
 using Helpers;
 
-namespace autonomiczny_samochod.Model.Communicators
+namespace CarController.Model.Communicators
 {
     class Speedometer : Device
     {
