@@ -43,6 +43,22 @@ namespace RANSAC.Functions
             return 2.0 * x * a + b;
         }
 
+        public Parabola move_this(double up)
+        {
+            double bb = -2 * a * up + b;
+            double cc = a * up * up - b * up + c;
+            b = bb;
+            c = cc;
+            return this;
+        }
+
+        public Parabola move(double up)
+        {
+            double bb = -2 * a * up + b;
+            double cc = a * up * up - b * up + c;
+            return new Parabola(a, bb, cc);
+        }
+
         /// <summary>
         /// Using Least Squares for fitting quadratic curve.
         /// http://www.efunda.com/math/leastsquares/lstsqr2dcurve.cfm

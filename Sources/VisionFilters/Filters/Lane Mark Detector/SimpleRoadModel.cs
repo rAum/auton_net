@@ -16,10 +16,11 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
         {
             TwoLane,
             OneLane,
-            CenterOnly
+            CenterOnly,
+            Invalid // not founded for example
         };
 
-        RoadModel type;
+        RoadModel type = RoadModel.Invalid;
         public RoadModel Type
         {
             get
@@ -37,7 +38,9 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
         /// <param name="a2">second parabola</param>
         public SimpleRoadModel(Parabola a1, Parabola a2)
         {
-            if (Parabola.distance(a1, a2) <= TooNearThreshold)
+            if (a1 == null || a2 == null)
+                type = RoadModel.Invalid;
+            else if (Parabola.distance(a1, a2) <= TooNearThreshold)
             {
                 Parabola merge = new Parabola((a1.a + a2.a * 0.5), (a1.b + a2.b * 0.5), (a1.c + a2.c * 0.5));
                 leftLane = merge;
@@ -65,17 +68,26 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
         public SimpleRoadModel(Parabola center_)
         {
-            type = RoadModel.CenterOnly;
+            if (center_ == null)
+                type = RoadModel.Invalid;
+            else 
+                type = RoadModel.CenterOnly;
             center = center_;
             leftLane = rightLane = null;
         }
 
         public SimpleRoadModel(Parabola center_, Parabola left_, Parabola right_)
         {
+            if (center_ == null || left_ == null || right_ == null)
+                type = RoadModel.Invalid;
+            else
+                type = RoadModel.CenterOnly;
+
             center = center_;
             leftLane = left_;
             rightLane = right_;
             type = RoadModel.TwoLane;
         }
+
     }
 }
