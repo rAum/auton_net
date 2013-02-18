@@ -107,7 +107,7 @@ namespace RANSAC
                 }
             }
 
-            return new SimpleRoadModel(null);
+            return new SimpleRoadModel(best1, best2);
         }
 
         /// <summary>

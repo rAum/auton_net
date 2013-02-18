@@ -70,7 +70,6 @@
     <Compile Include="Filters\Image Operations\Canny.cs" />
     <Compile Include="Filters\Initial Model\CHEVP.cs" />
     <Compile Include="Filters\Lane Mark Detector\ClusterLanes.cs" />
-    <Compile Include="Filters\BarcodeDetector.cs" />
     <Compile Include="Filters\Lane Mark Detector\LaneMarkDetector.cs" />
     <Compile Include="Filters\Lane Mark Detector\LineModel.cs" />
     <Compile Include="Filters\Image Operations\PerspectiveCorrection.cs" />

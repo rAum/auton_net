@@ -68,7 +68,7 @@ namespace RANSAC.Functions
         public static Parabola fit(List<Point> input, int count)
         {
             // Sjk = sum of p.x^j * p.y^k
-            float
+            decimal
                 s00 = count,
                 s01 = 0,
                 s10 = 0,
@@ -77,14 +77,14 @@ namespace RANSAC.Functions
                 s20 = 0,
                 s30 = 0,
                 s40 = 0;
-            float x, xx, y;
+            decimal x, xx, y;
 
             Point p;
             for (int i = 0; i < count;  ++i)
             {
                 p = input[i];
-                x = (float)p.Y;
-                y = (float)p.X;
+                x = (decimal)p.Y;
+                y = (decimal)p.X;
                 xx = x * x;
                 //s00 += 1; //s00 = input.Count
                 s10 += x;
@@ -98,16 +98,16 @@ namespace RANSAC.Functions
             }
 
             // Cramer method:    
-            float s20s00_s10s10 = s20 * s00 - s10 * s10;
-            float s30s00_s10s20 = s30 * s00 - s10 * s20;
-            float s30s10_s20s20 = s30 * s10 - s20 * s20;
+            decimal s20s00_s10s10 = s20 * s00 - s10 * s10;
+            decimal s30s00_s10s20 = s30 * s00 - s10 * s20;
+            decimal s30s10_s20s20 = s30 * s10 - s20 * s20;
 
-            float D = s40 * s20s00_s10s10 - s30 * s30s00_s10s20 + s20 * s30s10_s20s20;
+            decimal D = s40 * s20s00_s10s10 - s30 * s30s00_s10s20 + s20 * s30s10_s20s20;
             if (D == 0)
                 return null;
-            float Da = s21 * s20s00_s10s10 - s11 * s30s00_s10s20 + s01 * s30s10_s20s20; // <- blad!!!!
-            float Db = s40 * (s11 * s00 - s01 * s10) - s30 * (s21 * s00 - s01 * s20) + s20 * (s21 * s10 - s11 * s20);
-            float Dc = s40 * (s20 * s01 - s10 * s11) - s30 * (s30 * s01 - s10 * s21) + s20 * (s30 * s11 - s20 * s21);
+            decimal Da = s21 * s20s00_s10s10 - s11 * s30s00_s10s20 + s01 * s30s10_s20s20; // <- blad!!!!
+            decimal Db = s40 * (s11 * s00 - s01 * s10) - s30 * (s21 * s00 - s01 * s20) + s20 * (s21 * s10 - s11 * s20);
+            decimal Dc = s40 * (s20 * s01 - s10 * s11) - s30 * (s30 * s01 - s10 * s21) + s20 * (s30 * s11 - s20 * s21);
 
             return new Parabola((double)(Da / D), (double)(Db / D), (double)(Dc / D));
         }

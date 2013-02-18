@@ -50,7 +50,7 @@ namespace CarVision
             if (sender == invPerp)
             {
                 Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
-                imgOutput.Image = (Image<Rgb, Byte>)e.Result;// +cam * 0.5;
+                imgOutput.Image = (Image<Rgb, Byte>)e.Result +cam;
                 return;
             }
             else if (sender == colorVideoSource)
@@ -100,8 +100,8 @@ namespace CarVision
             visRoad = new VisualiseSimpleRoadModel(roadDetector.Perceptor.roadDetector);
             visRoad.ResultReady += DisplayVideo;
 
-            //invPerp = new PerspectiveCorrectionRgb(visRoad, CamModel.dstPerspective, CamModel.srcPerspective);
-            invPerp = new PerspectiveCorrectionRgb(colorVideoSource, CamModel.srcPerspective, CamModel.dstPerspective);
+            invPerp = new PerspectiveCorrectionRgb(visRoad, CamModel.dstPerspective, CamModel.srcPerspective);
+            //invPerp = new PerspectiveCorrectionRgb(colorVideoSource, CamModel.srcPerspective, CamModel.dstPerspective);
             invPerp.ResultReady += DisplayVideo;
 
             colorVideoSource.Start();

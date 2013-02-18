@@ -13,26 +13,31 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
     public class ClusterLanes : ThreadSupplier<List<Point>, SimpleRoadModel> 
     {
         private Supplier<List<Point>> supplier;
-        private double roadCenterDistAvg = 180; // estimated relative road distance [half of width]
+        private double roadCenterDistAvg = 190; // estimated relative road distance [half of width]
 
         const int MinPointsForOnlyOne = 50;
         const int MinPointsForEach    = 30;
         int imgWidth  = CamModel.Width;
         int imgHeight = CamModel.Height;
+        Parabola last = null;
 
         private void ObtainSimpleModel(List<Point> lanes)
         {
+            //SimpleRoadModel road;
+
+            //return;
+
             Parabola leftLane   = null;
             Parabola rightLane  = null;
             Parabola roadCenter = null;
 
             if (lanes.Count > MinPointsForOnlyOne)
-                roadCenter = RANSAC.RANSAC.fit(1000, 8, (int)(lanes.Count * 0.75), 6, lanes);
+                roadCenter = RANSAC.RANSAC.fit(900, 8, (int)(lanes.Count * 0.8), 6, lanes);
 
             if (roadCenter != null) 
             {
-                double x = roadCenter.value(imgHeight - 20);
-                if (x > CamModel.Width) // WARNING !!! MAY BE FUCKUP @@@
+                double x = roadCenter.value(imgHeight - 50);
+                if (x < imgWidth / 2) // WARNING !!! MAY BE FUCKUP @@@
                 {
                     leftLane = roadCenter;
                     roadCenter = new Parabola(leftLane.a, leftLane.b, leftLane.c + roadCenterDistAvg);
@@ -48,17 +53,17 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             else // no one line mark can be matched. trying to find left and right and then again trying to find model.
             {
                 // try to cluster data to distinguish left and right lane
-                List<Point> first = new List<Point>(512);
-                List<Point> second = new List<Point>(512);
+                List<Point> first = new List<Point>(1024);
+                List<Point> second = new List<Point>(1024);
                 VisionToolkit.Two_Means_Clustering(lanes, ref first, ref second);
 
                 //////////////////////////////////////////////////////////////
 
                 if (first.Count > MinPointsForEach)
-                    leftLane = RANSAC.RANSAC.fit(1000, 8, (int)(first.Count * 0.75), 6, first);
+                    leftLane = RANSAC.RANSAC.fit(900, 8, (int)(first.Count * 0.8), 6, first);
 
                 if (second.Count > MinPointsForEach)
-                    rightLane = RANSAC.RANSAC.fit(1000, 8, (int)(second.Count * 0.75), 6, second);
+                    rightLane = RANSAC.RANSAC.fit(900, 8, (int)(second.Count * 0.8), 6, second);
 
                 if (leftLane != null && rightLane != null)
                 {
@@ -77,7 +82,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                         0.5 * (leftLane.c + rightLane.c)
                         );
 
-                    roadCenterDistAvg = (rightLane.c - roadCenter.c) * 0.75 + roadCenterDistAvg * 0.25; // reestimate road center
+                    //roadCenterDistAvg = (rightLane.c - roadCenter.c) * 0.1 + (roadCenter.c - leftLane.c) * 0.1 + roadCenterDistAvg * 0.8; // reestimate road center
                 }
                 else if (leftLane != null)
                 {
@@ -105,6 +110,32 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 }
             }
 
+            if (leftLane == null || rightLane == null)
+            {
+                if (last != null)
+                {
+                    double d = roadCenter.at(imgHeight - 80) - last.at(imgHeight - 80);
+                    System.Console.WriteLine("Distance: " + d.ToString());
+                    if (Math.Abs(d) > 50) // wtf...
+                    {
+                        if (leftLane != null)
+                        {
+                            rightLane = leftLane;
+                            leftLane = null;
+                            roadCenter = new Parabola(rightLane.a, rightLane.b, rightLane.c + roadCenterDistAvg);
+                        }
+                        else if (rightLane != null)
+                        {
+                            leftLane = rightLane;
+                            rightLane = null;
+                            roadCenter = new Parabola(leftLane.a, leftLane.b, leftLane.c + roadCenterDistAvg);
+                        }
+                    }
+                        
+                }
+            }
+            if (last != null)
+                last = roadCenter;
             LastResult = new SimpleRoadModel(roadCenter, leftLane, rightLane);
             PostComplete();
         }
