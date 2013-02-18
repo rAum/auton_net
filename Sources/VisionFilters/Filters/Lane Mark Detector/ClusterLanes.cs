@@ -7,6 +7,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using System.Drawing;
 using RANSAC.Functions;
+using System.Diagnostics;
 
 namespace VisionFilters.Filters.Lane_Mark_Detector
 {
@@ -26,8 +27,10 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             Parabola rightLane  = null;
             Parabola roadCenter = null;
 
+            Stopwatch sw = new Stopwatch();
+
             if (lanes.Count > MinPointsForOnlyOne)
-                roadCenter = RANSAC.RANSAC.fit(1000, 6, (int)(lanes.Count * 0.8), 6, lanes);
+                roadCenter = RANSAC.RANSAC.fit(800, 6, (int)(lanes.Count * 0.8), 6, lanes);
 
             if (roadCenter != null) 
             {
@@ -50,16 +53,20 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 // try to cluster data to distinguish left and right lane
                 List<Point> first = new List<Point>(1024);
                 List<Point> second = new List<Point>(1024);
+
+                sw.Start();
                 VisionToolkit.Two_Means_Clustering(lanes, ref first, ref second);
+                sw.Stop();
+                
 
                 //////////////////////////////////////////////////////////////
-
+                
                 if (first.Count > MinPointsForEach)
-                    leftLane = RANSAC.RANSAC.fit(1000, 6, (int)(first.Count * 0.8), 6, first);
-
+                    leftLane = RANSAC.RANSAC.fit(800, 6, (int)(first.Count * 0.8), 6, first);
+                
                 if (second.Count > MinPointsForEach)
-                    rightLane = RANSAC.RANSAC.fit(1000, 6, (int)(second.Count * 0.8), 6, second);
-
+                    rightLane = RANSAC.RANSAC.fit(800, 6, (int)(second.Count * 0.8), 6, second);
+                
                 if (leftLane != null && rightLane != null)
                 {
                     // swap lanes if necessary
@@ -104,7 +111,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                         roadCenter = new Parabola(rightLane.a, rightLane.b, rightLane.c + roadCenterDistAvg);
                 }
             }
-
+            Console.WriteLine("Time elapsed: {0}", sw.Elapsed);
             LastResult = new SimpleRoadModel(roadCenter, leftLane, rightLane);
             PostComplete();
         }
