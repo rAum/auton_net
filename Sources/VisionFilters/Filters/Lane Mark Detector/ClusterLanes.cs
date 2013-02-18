@@ -13,20 +13,15 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
     public class ClusterLanes : ThreadSupplier<List<Point>, SimpleRoadModel> 
     {
         private Supplier<List<Point>> supplier;
-        private double roadCenterDistAvg = 190; // estimated relative road distance [half of width]
+        private double roadCenterDistAvg = 200; // estimated relative road distance [half of width]
 
         const int MinPointsForOnlyOne = 50;
         const int MinPointsForEach    = 30;
         int imgWidth  = CamModel.Width;
         int imgHeight = CamModel.Height;
-        Parabola last = null;
 
         private void ObtainSimpleModel(List<Point> lanes)
         {
-            //SimpleRoadModel road;
-
-            //return;
-
             Parabola leftLane   = null;
             Parabola rightLane  = null;
             Parabola roadCenter = null;
@@ -82,7 +77,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                         0.5 * (leftLane.c + rightLane.c)
                         );
 
-                    //roadCenterDistAvg = (rightLane.c - roadCenter.c) * 0.1 + (roadCenter.c - leftLane.c) * 0.1 + roadCenterDistAvg * 0.8; // reestimate road center
+                    roadCenterDistAvg = (rightLane.c - roadCenter.c) * 0.05 + (roadCenter.c - leftLane.c) * 0.05 + roadCenterDistAvg * 0.9; // reestimate road center
                 }
                 else if (leftLane != null)
                 {
@@ -110,32 +105,6 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 }
             }
 
-            if (leftLane == null || rightLane == null)
-            {
-                if (last != null)
-                {
-                    double d = roadCenter.at(imgHeight - 80) - last.at(imgHeight - 80);
-                    System.Console.WriteLine("Distance: " + d.ToString());
-                    if (Math.Abs(d) > 50) // wtf...
-                    {
-                        if (leftLane != null)
-                        {
-                            rightLane = leftLane;
-                            leftLane = null;
-                            roadCenter = new Parabola(rightLane.a, rightLane.b, rightLane.c + roadCenterDistAvg);
-                        }
-                        else if (rightLane != null)
-                        {
-                            leftLane = rightLane;
-                            rightLane = null;
-                            roadCenter = new Parabola(leftLane.a, leftLane.b, leftLane.c + roadCenterDistAvg);
-                        }
-                    }
-                        
-                }
-            }
-            if (last != null)
-                last = roadCenter;
             LastResult = new SimpleRoadModel(roadCenter, leftLane, rightLane);
             PostComplete();
         }
