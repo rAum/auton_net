@@ -67,8 +67,6 @@
   <ItemGroup>
     <Compile Include="Filters\Image Operations\CamUndistort.cs" />
     <Compile Include="Filters\Image Operations\HsvFilter.cs" />
-    <Compile Include="Filters\Image Operations\Canny.cs" />
-    <Compile Include="Filters\Initial Model\CHEVP.cs" />
     <Compile Include="Filters\Lane Mark Detector\ClusterLanes.cs" />
     <Compile Include="Filters\Lane Mark Detector\LaneMarkDetector.cs" />
     <Compile Include="Filters\Lane Mark Detector\LineModel.cs" />
@@ -99,6 +97,9 @@
       <Project>{19924303-E2DE-4948-8AA5-AEBF488F2A97}</Project>
       <Name>VisionUtils</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Filters\Initial Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

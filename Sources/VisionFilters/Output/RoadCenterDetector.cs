@@ -76,13 +76,6 @@ namespace VisionFilters.Output
 
             //Console.Out.WriteLine(String.Format("Kalman: meas: {0} pred: {1} estimation: {2}"), samples[1].Y, km.Prediction, km.Estimation);
 
-            System.Console.Write("New measurements: ");
-            foreach (var p in samples)
-            {
-                System.Console.Out.Write(p + " ");
-            }
-            System.Console.Out.WriteLine();
-
             if (RoadCenterSupply == null)
                 return;
 

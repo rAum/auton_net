@@ -15,8 +15,8 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
         private Supplier<List<Point>> supplier;
         private double roadCenterDistAvg = 200; // estimated relative road distance [half of width]
 
-        const int MinPointsForOnlyOne = 50;
-        const int MinPointsForEach    = 30;
+        const int MinPointsForOnlyOne = 300;
+        const int MinPointsForEach    = 280;
         int imgWidth  = CamModel.Width;
         int imgHeight = CamModel.Height;
 
@@ -27,7 +27,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             Parabola roadCenter = null;
 
             if (lanes.Count > MinPointsForOnlyOne)
-                roadCenter = RANSAC.RANSAC.fit(900, 8, (int)(lanes.Count * 0.8), 6, lanes);
+                roadCenter = RANSAC.RANSAC.fit(1000, 6, (int)(lanes.Count * 0.8), 6, lanes);
 
             if (roadCenter != null) 
             {
@@ -55,10 +55,10 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 //////////////////////////////////////////////////////////////
 
                 if (first.Count > MinPointsForEach)
-                    leftLane = RANSAC.RANSAC.fit(900, 8, (int)(first.Count * 0.8), 6, first);
+                    leftLane = RANSAC.RANSAC.fit(1000, 6, (int)(first.Count * 0.8), 6, first);
 
                 if (second.Count > MinPointsForEach)
-                    rightLane = RANSAC.RANSAC.fit(900, 8, (int)(second.Count * 0.8), 6, second);
+                    rightLane = RANSAC.RANSAC.fit(1000, 6, (int)(second.Count * 0.8), 6, second);
 
                 if (leftLane != null && rightLane != null)
                 {
