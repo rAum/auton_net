@@ -27,10 +27,8 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             Parabola rightLane  = null;
             Parabola roadCenter = null;
 
-            Stopwatch sw = new Stopwatch();
-
             if (lanes.Count > MinPointsForOnlyOne)
-                roadCenter = RANSAC.RANSAC.fit(800, 6, (int)(lanes.Count * 0.8), 6, lanes);
+                roadCenter = RANSAC.RANSAC.fit(850, 6, (int)(lanes.Count * 0.8), 5, lanes);
 
             if (roadCenter != null) 
             {
@@ -48,24 +46,25 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                     leftLane = new Parabola(rightLane.a, rightLane.b, rightLane.c - 2 * roadCenterDistAvg);
                 }
             }
-            else // no one line mark can be matched. trying to find left and right and then again trying to find model.
+            else if (lanes.Count > MinPointsForEach)// no one line mark can be matched. trying to find left and right and then again trying to find model.
             {
                 // try to cluster data to distinguish left and right lane
                 List<Point> first = new List<Point>(1024);
                 List<Point> second = new List<Point>(1024);
 
-                sw.Start();
                 VisionToolkit.Two_Means_Clustering(lanes, ref first, ref second);
-                sw.Stop();
-                
 
-                //////////////////////////////////////////////////////////////
-                
+                ////////////////////////////////////////////////////////////////
+
                 if (first.Count > MinPointsForEach)
-                    leftLane = RANSAC.RANSAC.fit(800, 6, (int)(first.Count * 0.8), 6, first);
-                
+                    leftLane = RANSAC.RANSAC.fit(800, 6, (int)(first.Count * 0.8), 5, first);
+
                 if (second.Count > MinPointsForEach)
-                    rightLane = RANSAC.RANSAC.fit(800, 6, (int)(second.Count * 0.8), 6, second);
+                    rightLane = RANSAC.RANSAC.fit(800, 6, (int)(second.Count * 0.8), 5, second);
+
+                //var p = RANSAC.RANSAC.fit2(6000, 6, (int)(lanes.Count * 0.3), 4, lanes);
+                //leftLane  = p[0];
+                //rightLane = p[1];
                 
                 if (leftLane != null && rightLane != null)
                 {
@@ -111,7 +110,6 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                         roadCenter = new Parabola(rightLane.a, rightLane.b, rightLane.c + roadCenterDistAvg);
                 }
             }
-            Console.WriteLine("Time elapsed: {0}", sw.Elapsed);
             LastResult = new SimpleRoadModel(roadCenter, leftLane, rightLane);
             PostComplete();
         }

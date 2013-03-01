@@ -64,14 +64,17 @@ namespace RANSAC
             return best_fit;
         }
 
-        public static SimpleRoadModel fit2(int iterations, int init_samples, int n, double error_threshold, List<Point> inputData)
+        public static List<Parabola> fit2(int iterations, int init_samples, int n, double error_threshold, List<Point> inputData)
         {
             Parabola best1 = null;
             Parabola best2 = null;
-            double best_error = double.MaxValue;
-            double model_error;
+            double best_error1 = double.MaxValue;
+            double best_error2 = double.MaxValue;
+            double model_error1;
+            double model_error2;
             double err1, err2;
-            int consensus_set;
+            int consensus_set1;
+            int consensus_set2;
 
             Parabola model1, model2;
             for (int i = 0; i < iterations; ++i)
@@ -81,33 +84,55 @@ namespace RANSAC
                 ShuffleAtBegin(ref inputData, init_samples);
                 model2 = Parabola.fit(inputData, init_samples);
 
-                if (model1 == null || model2 == null) continue;
+                consensus_set1 = consensus_set2 = 0;
+                model_error1 = model_error2 = 0;
 
-                consensus_set = 0;
-                model_error = 0;
-                foreach (var p in inputData)
+                if (model1 != null)
                 {
-                    err1 = Math.Abs(model1.value(p.Y) - p.X);
-                    err2 = Math.Abs(model2.value(p.Y) - p.X);
-                    if (err1 <= error_threshold && err2 <= error_threshold)
+                    foreach (var p in inputData)
                     {
-                        consensus_set += 1;
-                        model_error += (err1 + err2) * 0.5;
+                        err1 = Math.Abs(model1.value(p.Y) - p.X);
+                        if (err1 <= error_threshold)
+                        {
+                            consensus_set1 += 1;
+                            model_error1 += err1;
+                        }
+                    }
+
+                    if (consensus_set1 >= n)
+                    {
+                        if (model_error1 < best_error1)
+                        {
+                            best1 = model1;
+                            best_error1 = model_error1;
+                        }
+                    }
+                }
+                if (model2 != null)
+                {
+                    foreach (var p in inputData)
+                    {
+                        err2 = Math.Abs(model2.value(p.Y) - p.X);
+                        if (err2 <= error_threshold)
+                        {
+                            consensus_set2 += 1;
+                            model_error2 += err2;
+                        }
+                    }
+
+                    if (consensus_set2 >= n)
+                    {
+                        if (model_error2 < best_error2)
+                        {
+                            best2 = model2;
+                            best_error2 = model_error2;
+                        }
                     }
                 }
 
-                if (consensus_set >= n)
-                {
-                    if (model_error < best_error)
-                    {
-                        best1 = model1;
-                        best2 = model2;
-                        best_error = model_error;
-                    }
-                }
             }
-
-            return new SimpleRoadModel(best1, best2);
+            return new List<Parabola>() { best1, best2 };
+            //return new SimpleRoadModel(best1, best2);
         }
 
         /// <summary>
