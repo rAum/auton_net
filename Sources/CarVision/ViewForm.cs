@@ -31,8 +31,8 @@ namespace CarVision
 
         VideoWriter videoWriter;
 
-        const string sourceInput = @"C:/video/rec_2012-12-14_10_40_442.avi";
-                                     //"";
+        const string sourceInput = //@"C:/video/rec_2012-12-14_10_40_442.avi";
+                                   @"C:/video/rec_2013-03-02_18_15_239.avi";
 
         // perspektywa
         //180 cm od niebieskiej
@@ -92,12 +92,12 @@ namespace CarVision
             //Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);
             //Hsv maxColor = new Hsv(222.0 / 2.0, 0.61 * 255.0, 0.78 * 255.0);
 
-            ///Hsv minColor = new Hsv(150.0 / 2.0, 0.02 * 255.0, 0.7 * 255.0);
-            //Hsv maxColor = new Hsv(242.0 / 2.0, 0.19 * 255.0, 1.0 * 255.0);
+            Hsv minColor = new Hsv(150.0 / 2.0, 0.02 * 255.0, 0.7 * 255.0);
+            Hsv maxColor = new Hsv(242.0 / 2.0, 0.19 * 255.0, 1.0 * 255.0);
 
             // light green lines
-            Hsv minColor = new Hsv(95 / 2, 0.6 * 255, 0.5 * 255);
-            Hsv maxColor = new Hsv(180 / 2, 255, 0.74 * 255);
+            //Hsv minColor = new Hsv(95 / 2, 0.6 * 255, 0.5 * 255);
+            //Hsv maxColor = new Hsv(180 / 2, 255, 0.74 * 255);
 
             filter = new HsvFilter(colorVideoSource, minColor, maxColor);
             //filter.ResultReady += DisplayVideo;

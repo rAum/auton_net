@@ -199,11 +199,12 @@
       <FileName>Model\Communicators\ICarComunicator.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CarController.RS232Controller" Collapsed="true">
+  <Class Name="CarController_old.RS232Controller" Collapsed="true">
     <Position X="25.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QECAgJAQAkQAJyABCBgcymJEAAQgQBggAAACDQBIgEA=</HashCode>
-      <FileName>Model\Communicators\RS232.cs</FileName>
+      <HashCode>QECAgJAQAkQAJyADCJgcymJEAAQgQJggAAgCDQBIgEA=</HashCode>
+      <FileName>Model\Communicators\RS232_old.cs</FileName>
+      <NewMemberFileName>Model\Communicators\RS232.cs</NewMemberFileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CarController.NewBrakeSettingCalculatedEventArgs" Collapsed="true">
@@ -231,7 +232,7 @@
   <Class Name="car_communicator.USB4702" Collapsed="true">
     <Position X="23.25" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAIECCIDUAEAAQIOIIBIQAQIIAEAApYAAhhACAEGgAE=</HashCode>
+      <HashCode>IAIEDCODUREQAQYOJMJIQAQIIAGCIpYAAplACgEGkAE=</HashCode>
       <FileName>Model\Communicators\USB4702.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -277,14 +278,14 @@
   <Class Name="CarController.Model.Communicators.SafeRS232Communicator" Collapsed="true">
     <Position X="30" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIAAgBAQAAAAAAAEAAAAQACEAAgAAAgAAAAADoHgCAI=</HashCode>
+      <HashCode>AIAAgBAQAAAAAQAEAAAAQACEAAgAAAgAAAAADoHgCAI=</HashCode>
       <FileName>Model\Communicators\SafeRS232Communicator.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CarController.Model.Communicators.SafeRS232Controller" Collapsed="true">
     <Position X="27.25" Y="4" Width="2" />
     <TypeIdentifier>
-      <HashCode>QQGAAIgAAgQAJyAHAIgUgqJAAIAAAJAAAAgAEQAAAEA=</HashCode>
+      <HashCode>QQGAAIgAAgQAJyAHAIgUgqJAAIAAAJAAAAgAAQAAAEA=</HashCode>
       <FileName>Model\Communicators\SafeRS232Controller.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -345,7 +346,9 @@
     <AssociationLine Name="BrakeRegulator" Type="CarController.IBrakeRegulator" FixedFromPoint="true">
       <Path>
         <Point X="17.875" Y="8.161" />
-        <Point X="17.875" Y="9.25" />
+        <Point X="17.875" Y="8.536" />
+        <Point X="17.844" Y="8.536" />
+        <Point X="17.844" Y="9.25" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-1.172" Y="0.096" />
@@ -424,7 +427,9 @@
     <Position X="16.5" Y="9.25" Width="2" />
     <AssociationLine Name="ICar" Type="CarController.ICar" FixedToPoint="true">
       <Path>
-        <Point X="17.625" Y="9.25" />
+        <Point X="17.141" Y="9.25" />
+        <Point X="17.141" Y="8.875" />
+        <Point X="17.625" Y="8.875" />
         <Point X="17.625" Y="8.161" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">

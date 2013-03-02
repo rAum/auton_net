@@ -24,7 +24,8 @@ namespace CarController
         //sub-communicators
         private USB4702 extentionCardCommunicator { get; set; }
         private ServoDriver servoDriver { get; set; }
-        private SafeRS232Controller angleAndSpeedMeter { get; set; }
+        //private SafeRS232Controller angleAndSpeedMeter { get; set; }
+        private CarController_old.RS232Controller angleAndSpeedMeter { get; set; }
         private Speedometer speedometer { get; set; }
 
         public RealCarCommunicator(ICar parent)
@@ -34,7 +35,10 @@ namespace CarController
             servoDriver = new ServoDriver();
             deviceManager.RegisterDevice(servoDriver);
 
-            angleAndSpeedMeter = new SafeRS232Controller(this, "COM4");
+            //angleAndSpeedMeter = new SafeRS232Controller(this, new SafeRS232Communicator("COM4"));
+            //deviceManager.RegisterDevice(angleAndSpeedMeter);
+
+            angleAndSpeedMeter = new CarController_old.RS232Controller(this);
             deviceManager.RegisterDevice(angleAndSpeedMeter);
 
             extentionCardCommunicator = new USB4702();
@@ -87,7 +91,7 @@ namespace CarController
             }
         }
 
-        internal void WheelAngleAcquired(double angle)
+        public void WheelAngleAcquired(double angle) //TODO: refactor it to use external event
         {
             SteeringWheelAngleInfoReceivedEventHandler evWheelAngleReceived = evSteeringWheelAngleInfoReceived;
             if (evWheelAngleReceived != null)
@@ -96,7 +100,7 @@ namespace CarController
             }
         }
 
-        internal void BrakePositionsAcquired(double position)
+        public void BrakePositionsAcquired(double position) //TODO: refactor it to use external event
         {
             BrakePositionReceivedEventHandler brakePosReceived = evBrakePositionReceived;
             if (brakePosReceived != null)
