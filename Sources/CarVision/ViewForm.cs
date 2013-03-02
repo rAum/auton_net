@@ -46,26 +46,33 @@ namespace CarVision
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Rgb, Byte>> e)
         {
-            ImageBox imgBox = imgDebug;
-            if (sender == invPerp)
+            try
             {
-                Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
-                imgOutput.Image = (Image<Rgb, Byte>)e.Result +cam;
-                return;
+                ImageBox imgBox = imgDebug;
+                if (sender == invPerp)
+                {
+                    Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
+                    imgOutput.Image = (Image<Rgb, Byte>)e.Result + cam;
+                    return;
+                }
+                else if (sender == colorVideoSource)
+                {
+                    imgBox = imgVideoSource;
+                }
+                if (imgBox == null)
+                {
+                    System.Console.Out.WriteLine("No receiver registered!!");
+                    return;
+                }
+                imgBox.Image = (Image<Rgb, Byte>)e.Result;
+                if (videoWriter != null && sender == colorVideoSource)
+                {
+                    videoWriter.WriteFrame(((Image<Rgb, Byte>)e.Result).Convert<Bgr, byte>());
+                }
             }
-            else if (sender == colorVideoSource)
+            catch (Exception ex)
             {
-                imgBox = imgVideoSource;
-            }
-            if (imgBox == null)
-            {
-                System.Console.Out.WriteLine("No receiver registered!!");
-                return;
-            }
-            imgBox.Image = (Image<Rgb, Byte>)e.Result;
-            if (videoWriter != null && sender == colorVideoSource)
-            {
-                videoWriter.WriteFrame(((Image<Rgb, Byte>)e.Result).Convert<Bgr, byte>());
+                System.Console.WriteLine("Bad thing happened in display video :( -" + ex.Message);
             }
         }
 
@@ -113,6 +120,9 @@ namespace CarVision
             colorVideoSource.ResultReady -= DisplayVideo;
             invPerp.ResultReady -= DisplayVideo;
             visRoad.ResultReady -= DisplayVideo;
+
+            // wait a bit...
+            System.Threading.Thread.Sleep(1000);
         }
 
         private void ViewForm_Resize(object sender, EventArgs e)

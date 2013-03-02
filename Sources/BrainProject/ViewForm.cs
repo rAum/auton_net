@@ -47,23 +47,30 @@ namespace BrainProject
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Rgb, Byte>> e)
         {
-            ImageBox imgBox = imgDebug;
-            if (sender == invPerp)
+            try
             {
-                Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
-                imgOutput.Image = (Image<Rgb, Byte>)e.Result + cam * 0.6;
-                return;
+                ImageBox imgBox = imgDebug;
+                if (sender == invPerp)
+                {
+                    Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
+                    imgOutput.Image = (Image<Rgb, Byte>)e.Result + cam * 0.6;
+                    return;
+                }
+                else if (sender == colorVideoSource)
+                {
+                    imgBox = imgVideoSource;
+                }
+                if (imgBox == null)
+                {
+                    System.Console.Out.WriteLine("No receiver registered!!");
+                    return;
+                }
+                imgBox.Image = (Image<Rgb, Byte>)e.Result;
             }
-            else if (sender == colorVideoSource)
+            catch (Exception ex)
             {
-                imgBox = imgVideoSource;
+                System.Console.WriteLine("Bad thing happened in display video :( -" + ex.Message);
             }
-            if (imgBox == null)
-            {
-                System.Console.Out.WriteLine("No receiver registered!!");
-                return;
-            }
-            imgBox.Image = (Image<Rgb, Byte>)e.Result;
         }
 
         private Hsv ColorToHsv(Color col)
@@ -144,6 +151,9 @@ namespace BrainProject
             //videoSource.ResultReady -= DisplayVideo;
             invPerp.ResultReady -= DisplayVideo;
             visRoad.ResultReady -= DisplayVideo;
+
+            // wait a bit
+            System.Threading.Thread.Sleep(1000);
         }
 
         private void ViewForm_Resize(object sender, EventArgs e)
