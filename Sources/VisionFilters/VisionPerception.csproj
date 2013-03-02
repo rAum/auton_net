@@ -74,6 +74,7 @@
     <Compile Include="Filters\Image Operations\Smoothener.cs" />
     <Compile Include="Filters\Lane Mark Detector\SimpleRoadModel.cs" />
     <Compile Include="Filters\Lane Mark Detector\VisualiseSimpleRoadModel.cs" />
+    <Compile Include="Filters\PedestrianDetection\PedestrianDetection.cs" />
     <Compile Include="InputProperties.cs" />
     <Compile Include="KalmanFilter.cs" />
     <Compile Include="Output\RoadCenterEvent.cs" />

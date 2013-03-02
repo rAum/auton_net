@@ -17,6 +17,7 @@ using Emgu.CV.UI;
 using VisionFilters.Filters.Lane_Mark_Detector;
 using VisionFilters.Filters.Image_Operations;
 using VisionFilters;
+using VisionFilters.Filters;
 
 namespace CarVision
 {
@@ -28,6 +29,8 @@ namespace CarVision
         RoadCenterDetector roadDetector;
         VisualiseSimpleRoadModel visRoad;
         PerspectiveCorrectionRgb invPerp;
+        PedestrianDetection pedestrianDet;
+        Rectangle[] peds = new Rectangle[]{};
 
         VideoWriter videoWriter;
 
@@ -46,27 +49,52 @@ namespace CarVision
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Rgb, Byte>> e)
         {
-            ImageBox imgBox = imgDebug;
-            if (sender == invPerp)
+            try
             {
-                Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
-                imgOutput.Image = (Image<Rgb, Byte>)e.Result +cam;
-                return;
+                ImageBox imgBox = imgDebug;
+                if (sender == invPerp)
+                {
+                    Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
+                    Image<Rgb, Byte> t = (Image<Rgb, Byte>)e.Result + cam;
+
+                        //foreach (var p in peds)
+                        //    t.Draw(p, new Rgb(Color.Red), 2);
+                    imgOutput.Image = t;
+                    return;
+                }
+                else if (sender == colorVideoSource)
+                {
+                    imgBox = imgVideoSource;
+                }
+                if (imgBox == null)
+                {
+                    System.Console.Out.WriteLine("No receiver registered!!");
+                    return;
+                }
+                imgBox.Image = (Image<Rgb, Byte>)e.Result;
+                if (videoWriter != null && sender == colorVideoSource)
+                {
+                    videoWriter.WriteFrame(((Image<Rgb, Byte>)e.Result).Convert<Bgr, byte>());
+                }
             }
-            else if (sender == colorVideoSource)
+            catch (Exception ex)
             {
-                imgBox = imgVideoSource;
+                System.Console.WriteLine("Ugly problem: " + ex.Message);
             }
-            if (imgBox == null)
-            {
-                System.Console.Out.WriteLine("No receiver registered!!");
-                return;
-            }
-            imgBox.Image = (Image<Rgb, Byte>)e.Result;
-            if (videoWriter != null && sender == colorVideoSource)
-            {
-                videoWriter.WriteFrame(((Image<Rgb, Byte>)e.Result).Convert<Bgr, byte>());
-            }
+        }
+
+        private void Pedestrian(object sender, ResultReadyEventArgs<Rectangle[]> e)
+        {
+                //peds = e.Result;
+                //if (peds.Length > 0)
+                //{
+                //    System.Console.WriteLine("\nPedestrians detected!:");
+                //    foreach (var r in peds)
+                //    {
+                //        System.Console.Write('\t');
+                //        System.Console.WriteLine(r);
+                //    }
+                //}
         }
 
         private Hsv ColorToHsv(Color col)
@@ -81,6 +109,9 @@ namespace CarVision
 
             colorVideoSource = new ColorVideoSource<byte>(sourceInput);
             colorVideoSource.ResultReady += DisplayVideo;
+
+            pedestrianDet = new PedestrianDetection(colorVideoSource);
+            pedestrianDet.ResultReady += Pedestrian;
 
             //Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);
             //Hsv maxColor = new Hsv(222.0 / 2.0, 0.61 * 255.0, 0.78 * 255.0);
@@ -110,9 +141,13 @@ namespace CarVision
         private void ViewForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             colorVideoSource.Stop();
+            pedestrianDet.ResultReady -= Pedestrian;
             colorVideoSource.ResultReady -= DisplayVideo;
             invPerp.ResultReady -= DisplayVideo;
             visRoad.ResultReady -= DisplayVideo;
+
+            System.Console.WriteLine("Waiting a bit before exit ...");
+            System.Threading.Thread.Sleep(1000);
         }
 
         private void ViewForm_Resize(object sender, EventArgs e)
