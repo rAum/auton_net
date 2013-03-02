@@ -112,7 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CarController\CarController.csproj">
-      <Project>{E23EBE5E-CF61-479E-AA5E-3BE971E03653}</Project>
+      <Project>{e23ebe5e-cf61-479e-aa5e-3be971e03653}</Project>
       <Name>CarController</Name>
     </ProjectReference>
     <ProjectReference Include="..\Helpers\Helpers.csproj">

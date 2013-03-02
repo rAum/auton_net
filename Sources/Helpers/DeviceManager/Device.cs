@@ -200,16 +200,7 @@ namespace Helpers
         protected abstract void PauseEffectors();
         private void PauseEffectorsPreWork()
         {
-            if (initializationState == DeviceInitializationState.EffectorsStarted)
-            {
-                Logger.Log(this, "Pausing effectors started", 1);
-            }
-            else
-            {
-#if DEBUG
-                throw new ApplicationException("Invalid state transition");
-#endif
-            }
+            Logger.Log(this, "Pausing effectors started", 1);
             initializationState = DeviceInitializationState.PausingEffectors;
         }
         private void PauseEffectorsPostWork()
