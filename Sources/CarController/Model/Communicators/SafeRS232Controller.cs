@@ -10,9 +10,9 @@ namespace CarController.Model.Communicators
     /// <summary>
     /// class which controlls RS232 communication - it has 2 tasks:
     ///     1) receive wheels angle (by measuring steering wheel angle)
-    ///     2) receive 
+    ///     2) receive brakes state (by measuring brakes pedal angle)
     /// </summary>
-    class SafeRS232Controller : Device
+    public class SafeRS232Controller : Device
     {
         public override string ToString()
         {
@@ -22,7 +22,6 @@ namespace CarController.Model.Communicators
         private SafeRS232Communicator RS232; 
         private RealCarCommunicator communicator;
         private Thread deviceQueringThread;
-        private string COMName;
 
         private char[] giveMeSteeringWheelAngleMsg = new char[] { '1', 'P', (char)13 }; //TODO: try changing it to byte[] //not necessery, but char[] probably wont work for values > 127...
         private char[] giveMeBrakeAngleMsg = new char[] { '2', 'P', (char)13 };
@@ -101,10 +100,10 @@ namespace CarController.Model.Communicators
             return ReScaller.ReScale(ref val, BRAKE_OUTPUT_MAX_PULLED, BRAKE_OUTPUT_MAX_PUSHED, BRAKE_POWER_WHEN_MAX_PULLED, BRAKE_POWER_WHEN_MAX_PUSHED);
         }
 
-        public SafeRS232Controller(RealCarCommunicator comm, string COMPortName)
+        public SafeRS232Controller(RealCarCommunicator comm, SafeRS232Communicator safeRS232Communicator) //TODO: IT SHOULD NOT RELY ON RealCarCommunicator but on ICarCommunicator //its untestable now
         {
             communicator = comm;
-            COMName = COMPortName;
+            RS232 = safeRS232Communicator;
         }
 
 
@@ -112,7 +111,7 @@ namespace CarController.Model.Communicators
         {
             try
             {
-                RS232 = new SafeRS232Communicator(COMName);
+                RS232.Initialize();
                 DiagnoseBrakeSensors();
                 DiagnoseSteeringWheelSensors();
             }

@@ -64,9 +64,9 @@ namespace CarController.Model.Communicators
         private const int SLEEP_ON_FAILED_PORT_OPPENING_BEFORE_NEXT_TRY_AT_APP_INIT_IN_MS = 10;
         private const int SLEEP_ON_FAILED_PORT_OPPENING_BEFORE_NEXT_TRY_AT_APP_WORKING_IN_MS = 0; //needed ASAP
 
-        private const int uC_QUERY_TIMEOUT_IN_MS = 500;
-        private const int READ_TIMEOUT_IN_MS = 500;
-        private const int WRITE_TIMEOUT_IN_MS = 500;
+        private const int uC_QUERY_TIMEOUT_IN_MS = 2000;
+        private const int READ_TIMEOUT_IN_MS = 5000;
+        private const int WRITE_TIMEOUT_IN_MS = 5000;
 
         private const int DEFAULT_MAX_OPPENING_TRIES_NO = 60;
 
@@ -82,7 +82,6 @@ namespace CarController.Model.Communicators
             port.Encoding = Encoding.UTF8;
             port.ReadTimeout = READ_TIMEOUT_IN_MS;
             port.WriteTimeout = WRITE_TIMEOUT_IN_MS;
-            TryOppeningPortUntilItSucceds(SLEEP_ON_FAILED_PORT_OPPENING_BEFORE_NEXT_TRY_AT_APP_INIT_IN_MS);
 
             inputList = new LinkedList<int>();
             msgReceivedARE = new AutoResetEvent(false);
@@ -129,7 +128,10 @@ namespace CarController.Model.Communicators
                     msgReceivedARE.WaitOne(uC_QUERY_TIMEOUT_IN_MS);
 
                     if (lastReceivedMessage == null)
-                        throw new TimeoutException("RS232 communicator timeout - no message has been received in time");
+                    {
+                        //throw new TimeoutException("RS232 communicator timeout - no message has been received in time"); //TEMPRARY COMMENTED
+                        return new List<int>() { (int)'E'} ;
+                    }
 
                     return lastReceivedMessage;
                 }
@@ -206,6 +208,7 @@ namespace CarController.Model.Communicators
                 if (--triesLeft < 0)
                 {
                     Logger.Log(this, "Max tries number to connect RS232 port has been exceeded!");
+                    initializationFinished = true; //failed, but finished anyway
                     throw new MaxTriesToConnectRS232ExceededException();
                 }
 
@@ -222,5 +225,10 @@ namespace CarController.Model.Communicators
             }
         }
 
+
+        public void Initialize()
+        {
+            TryOppeningPortUntilItSucceds(SLEEP_ON_FAILED_PORT_OPPENING_BEFORE_NEXT_TRY_AT_APP_INIT_IN_MS);
+        }
     }
 }

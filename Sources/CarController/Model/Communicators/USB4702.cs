@@ -5,6 +5,7 @@ using System.Text;
 using Automation.BDaq;
 using Helpers;
 using CarController.Model.Communicators;
+using System.Threading;
 
 namespace car_communicator
 {
@@ -57,6 +58,22 @@ namespace car_communicator
         const int BRAKE_SOFT_START_ON_PORT_LEVEL = 1;
         const int BRAKE_SOFT_START_OFF_PORT_LEVEL = 0;
 
+        const int IGNITION_PORT_NO = 4; //zaplon
+        const int IGNITION_ON_PORT_LEVEL = 0;
+        const int IGNITION_OFF_PORT_LEVEL = 1;
+        const int IGNTITION_OFF_TIME_IN_MS = 5000;
+        const int IGNITION_ON_TIME_IN_MS = 3500;
+
+        const int STARTER_PORT_NO = 5; //rozrusznik
+        const int STARTER_ON_PORT_LEVEL = 1;
+        const int STARTER_OFF_PORT_LEVEL = 0;
+        const int STARTER_ON_TIME_IN_MS = 3500;
+
+        const int STEERING_WHEEL_ENABLER_PORT_NO = 3; //if you dont turn it on you wouldn't be able to move wheel (it'll be set to 0 power (2,5V))
+        const int STEERING_WHEEL_ENABLER_ON_PORT_LEVEL = 1;
+        const int STEERING_WHEEL_ENABLER_OFF_PORT_LEVEL = 0;
+
+        private bool carEngineEnabled = false;
         private bool effectorsActive = false;
 
         protected override void Initialize()
@@ -110,17 +127,26 @@ namespace car_communicator
 
         protected override void StartEffectors()
         {
+            EnableSteeringWheelSteering();
+            TurnOnEngine();
+
             effectorsActive = true;
         }
 
         protected override void PauseEffectors()
         {
+            DisableSteeringWheelSteering();
+            TurnOffEngine();
+
             effectorsActive = false;
             SetSteeringWheel(0.0); //do not move steering wheel
         }
 
         protected override void EmergencyStop()
         {
+            DisableSteeringWheelSteering();
+            TurnOffEngine();
+
             effectorsActive = false;
             SetSteeringWheel(0.0); //do not move steering wheel
         }
@@ -206,6 +232,32 @@ namespace car_communicator
             }
             return eventSpeedCounterCtrl.Value;
             
+        }
+
+        private void TurnOnEngine()
+        {
+            setPortDO(IGNITION_PORT_NO, IGNITION_ON_PORT_LEVEL);
+            Thread.Sleep(IGNITION_ON_TIME_IN_MS);
+            setPortDO(STARTER_PORT_NO, STARTER_ON_PORT_LEVEL);
+            Thread.Sleep(STARTER_ON_TIME_IN_MS);
+            setPortDO(STARTER_PORT_NO, STARTER_OFF_PORT_LEVEL);
+        }
+
+        private void TurnOffEngine()
+        {
+            setPortDO(IGNITION_PORT_NO, IGNITION_ON_PORT_LEVEL);
+            Thread.Sleep(IGNTITION_OFF_TIME_IN_MS);
+            setPortDO(IGNITION_PORT_NO, IGNITION_OFF_PORT_LEVEL);
+        }
+
+        private void DisableSteeringWheelSteering()
+        {
+            setPortDO(STEERING_WHEEL_ENABLER_PORT_NO, STEERING_WHEEL_ENABLER_OFF_PORT_LEVEL);
+        }
+
+        private void EnableSteeringWheelSteering()
+        {
+            setPortDO(STEERING_WHEEL_ENABLER_PORT_NO, STEERING_WHEEL_ENABLER_ON_PORT_LEVEL);
         }
 
         /// <summary>

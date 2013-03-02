@@ -59,6 +59,7 @@ namespace HardwareCommunicatorsTests
             fakeRS232ReadLock = new Object();
 
             testedRS232 = new SafeRS232Communicator(com0comPort1);
+            testedRS232.Initialize();
 
             fakeRS232 = new SerialPort(com0comPort2, 9600, Parity.None, 8, StopBits.One);
             fakeRS232.ReadTimeout = READ_TIMEOUT_IN_MS;
