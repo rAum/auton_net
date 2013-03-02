@@ -43,7 +43,6 @@ namespace VisionFilters
         {
             perspectiveTransform = new PerspectiveCorrection(input, CamModel.srcPerspective, CamModel.dstPerspective);
             laneDetector = new LaneMarkDetector(perspectiveTransform);
-            //roadDetector = new ClusterLanes(perspectiveTransform);
             roadDetector = new ClusterLanes(laneDetector);
             roadDetector.ResultReady += PassRoadModel;
         }

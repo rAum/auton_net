@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Helpers;
+﻿using Helpers;
 using CarController;
-using System.Threading;
 using VisionFilters;
 
-using Emgu.CV;
-using Emgu.CV.Structure;
-using Auton.CarVision.Video;
-using Auton.CarVision.Video.Filters;
 
 using VisionFilters.Output;
-using Emgu.CV.UI;
-using VisionFilters.Filters.Lane_Mark_Detector;
-using VisionFilters.Filters.Image_Operations;
-using VisionFilters;
 
 
 namespace BrainProject

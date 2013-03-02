@@ -18,11 +18,12 @@ namespace Auton.CarVision.Video.Filters
     /// <summary>
     /// This class finds pixel which may be white road lane.
     /// </summary>
-    public class LaneMarkDetector : ThreadSupplier<Image<Gray, Byte>, Image<Gray, Byte>>
+    public class LaneMarkDetector : ThreadSupplier<Image<Gray, Byte>, List<Point>>
     {
         private Supplier<Image<Gray, Byte>> supplier;
         private int tau;
-        private Image<Gray, Byte> dst = null;
+
+        private const int DefaultAllocation = 1500;
 
         public int VerticalOffset { get; set; }
 
@@ -36,14 +37,12 @@ namespace Auton.CarVision.Video.Filters
 
         private void DetectLaneMark(Image<Gray, Byte> img)
         {
-            if (dst == null)
-                dst = new Image<Gray, byte>(img.Width, img.Height);
+            List<Point> candidates = new List<Point>(DefaultAllocation);
 
             int aux;
             int x, y;
             int w = img.Width - tau - 1;
             byte[, ,] raw = img.Data;
-            byte[, ,] dstRaw = dst.Data;
 
             for (y = VerticalOffset; y < img.Height; ++y)
             {
@@ -52,19 +51,17 @@ namespace Auton.CarVision.Video.Filters
                     aux = 2 * raw[y, x, 0];
                     aux -= raw[y, x - tau, 0];
                     aux -= raw[y, x + tau, 0];
-                        
+
                     aux -= Math.Abs(raw[y, x - tau, 0] - raw[y, x + tau, 0]);
                     
                     aux *= 2;// more contrast
 
-                    if (aux < Threshold || y < VerticalOffset) aux = 0;
-                    else aux = 255;
-                    dstRaw[y, x, 0] = (byte)aux;
+                    if (aux >= Threshold)
+                        candidates.Add(new Point(x, y));
                 }
             }
 
-            //LastResult = dst;
-            LastResult = dst;
+            LastResult = candidates;
             PostComplete();
         }
 
