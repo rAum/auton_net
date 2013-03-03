@@ -17,7 +17,7 @@ namespace Helpers
         SpeechRecognitionEngine listen;
         List<string> words = new List<string>()
         {
-            "yoorek", "start", "stop", "prepare"
+            "yoorek", "start"//, "stop"
         };
 
         public delegate void VoiceCommandDelegate(string cmd, float p);

@@ -47,12 +47,16 @@ namespace Helpers
             {
                 if (started == false && cmd == "start")
                 {
+                    button_initialize_Click(this, new EventArgs());
+                    Thread.Sleep(1500);
+                    button_StartSensors_Click(this, new EventArgs());
+                    Thread.Sleep(1500);
                     button_StartEffectors_Click(this, new EventArgs());
                     started = true;
                 }
                 else if (prepare == false && cmd == "prepare")
                 {
-                    button_StartSensors_Click(this, new EventArgs());
+                    //button_StartSensors_Click(this, new EventArgs());
                     started = true;
                 }
                 else if (cmd == "stop")
