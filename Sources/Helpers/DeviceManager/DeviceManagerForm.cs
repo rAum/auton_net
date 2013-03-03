@@ -36,6 +36,23 @@ namespace Helpers
             updaterTimer.Start();
 
             jurek.Say("Dzień dobry, mówi Twój najlepszy kierowca Jurek! Dokąd chcesz się dziś wybrać?");
+            jurek.StartListening(hearedCommand);
+        }
+
+        void hearedCommand(string cmd, float confidence)
+        {
+            if (confidence >= 0.8)
+            {
+                jurek.Say("Zrozumiałem!");
+                if (cmd == "start")
+                {
+                    button_StartSensors_Click(this, new EventArgs());
+                }
+                else if (cmd == "stop")
+                {
+                    button_EmergencyStop_Click(this, new EventArgs());
+                }
+            }
         }
 
         void updaterTimer_Tick(object sender, EventArgs e)
@@ -119,8 +136,8 @@ namespace Helpers
 
         private void button_EmergencyStop_Click(object sender, EventArgs e)
         {
-            jurek.Say("Oż kurwa, stop! Przycisk bezpieczeństwa użyty.");
             deviceManager.EmergencyStop();
+            jurek.Say("Oż kurwa, zatrzymać! Przycisk bezpieczeństwa użyty.");
         }
 
     }
