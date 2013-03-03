@@ -54,7 +54,7 @@ namespace car_communicator
         const int BRAKE_BACKWARD_PORT_LEVEL = 1; 
         const int BRAKE_FORWARD_PORT_LEVEL = 0;
 
-        const int BRAKE_SOFT_START_PORT_NO = 3; 
+        const int BRAKE_SOFT_START_PORT_NO = 3; // the same as STEERING_WHEEL_ENABLER_PORT_NO TODO:!
         const int BRAKE_SOFT_START_ON_PORT_LEVEL = 1;
         const int BRAKE_SOFT_START_OFF_PORT_LEVEL = 0;
 
@@ -67,7 +67,7 @@ namespace car_communicator
         const int STARTER_PORT_NO = 5; //rozrusznik
         const int STARTER_ON_PORT_LEVEL = 1;
         const int STARTER_OFF_PORT_LEVEL = 0;
-        const int STARTER_ON_TIME_IN_MS = 3500;
+        const int STARTER_ON_TIME_IN_MS = 1000;
 
         const int STEERING_WHEEL_ENABLER_PORT_NO = 3; //if you dont turn it on you wouldn't be able to move wheel (it'll be set to 0 power (2,5V))
         const int STEERING_WHEEL_ENABLER_ON_PORT_LEVEL = 1;
@@ -127,10 +127,10 @@ namespace car_communicator
 
         protected override void StartEffectors()
         {
+            effectorsActive = true;
+
             EnableSteeringWheelSteering();
             TurnOnEngine();
-
-            effectorsActive = true;
         }
 
         protected override void PauseEffectors()
@@ -236,23 +236,31 @@ namespace car_communicator
 
         private void TurnOnEngine()
         {
+            Logger.Log(this, "Starting ignition", 2);
             setPortDO(IGNITION_PORT_NO, IGNITION_ON_PORT_LEVEL);
             Thread.Sleep(IGNITION_ON_TIME_IN_MS);
+
+            Logger.Log(this, "Starting engine starter (rozrusznik)", 2);
             setPortDO(STARTER_PORT_NO, STARTER_ON_PORT_LEVEL);
             Thread.Sleep(STARTER_ON_TIME_IN_MS);
+
+            Logger.Log(this, "Stopping engine starter (rozrusznik)", 2);
             setPortDO(STARTER_PORT_NO, STARTER_OFF_PORT_LEVEL);
         }
 
         private void TurnOffEngine()
         {
-            setPortDO(IGNITION_PORT_NO, IGNITION_ON_PORT_LEVEL);
-            Thread.Sleep(IGNTITION_OFF_TIME_IN_MS);
+            Logger.Log(this, "Stopping ignition (zaplon)", 2);
             setPortDO(IGNITION_PORT_NO, IGNITION_OFF_PORT_LEVEL);
+            Thread.Sleep(IGNTITION_OFF_TIME_IN_MS);
+
+            Logger.Log(this, "Starting ignition (zaplon)", 2);
+            setPortDO(IGNITION_PORT_NO, IGNITION_ON_PORT_LEVEL);
         }
 
         private void DisableSteeringWheelSteering()
         {
-            setPortDO(STEERING_WHEEL_ENABLER_PORT_NO, STEERING_WHEEL_ENABLER_OFF_PORT_LEVEL);
+            //setPortDO(STEERING_WHEEL_ENABLER_PORT_NO, STEERING_WHEEL_ENABLER_OFF_PORT_LEVEL);
         }
 
         private void EnableSteeringWheelSteering()
@@ -270,6 +278,7 @@ namespace car_communicator
         /// </param>
         public void SetSteeringWheel(double strength)
         {
+            EnableSteeringWheelSteering(); //ITS BUG FIX - DO NOT REMOVE! w/o this we will acquire steering wheel error
             if (strength < -100 || strength > 100)
             {
                 Logger.Log(this, "steering wheel strength is not in range", 2);

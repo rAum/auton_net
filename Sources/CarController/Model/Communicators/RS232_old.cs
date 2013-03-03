@@ -35,17 +35,17 @@ namespace CarController_old
 
         private const bool DIAGNOSIS_ENABLED = false;
 
-        private const int WHEEL_OUTPUT_WHEN_MAX_RIGHT = 15000; //increased by 100
+        private const int WHEEL_OUTPUT_WHEN_MAX_RIGHT = 15487;
         private const double WHEEL_ANGLE_ON_MAX_RIGHT = 30.0; //IMPORTANT: TODO: check it in documentation
 
-        private const int WHEEL_OUTPUT_WHEN_MAX_LEFT = 2066; //decreased by 100
+        private const int WHEEL_OUTPUT_WHEN_MAX_LEFT = 1347;
         private const double WHEEL_ANGLE_ON_MAX_LEFT = -30.0; //IMPORTANT: TODO: check it in documentation
 
         //brake
         private const int BRAKE_OUTPUT_MAX_PUSHED = 11070; //was checked to be 11170 when max but decreased to improve steering
         private const double BRAKE_POWER_WHEN_MAX_PUSHED = 100;
 
-        private const int BRAKE_OUTPUT_MAX_PULLED = 10740; //was checked to be 10729 when min but increased to improve steering
+        private const int BRAKE_OUTPUT_MAX_PULLED = 10700; //ze sprezynami jest 10709; //was checked to be 10729 when min but increased to improve steering
         private const double BRAKE_POWER_WHEN_MAX_PULLED = 0;
 
         //read values
