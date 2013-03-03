@@ -15,21 +15,26 @@ namespace Helpers
     {
         SpeechSynthesizer talk;
         SpeechRecognitionEngine listen;
+        List<string> words = new List<string>()
+        {
+            "yoorek", "start", "stop", "goora", "laevo", "pravo", "doow"
+        };
 
         public delegate void VoiceCommandDelegate(string cmd, float p);
 
         private VoiceCommandDelegate del;
 
-        public Jurek()
+        public Jurek(string grammar = "")
         {
             talk = new SpeechSynthesizer();
             talk.SelectVoiceByHints(VoiceGender.Male);
 
             // Not available while using polish windows version without English package...
-            Grammar g = new Grammar("D:/jurek.xml");
             listen = createSpeechEngine("EN-us");
             listen.RequestRecognizerUpdate();
-            listen.LoadGrammar(g);
+
+            initGrammar(grammar);
+
             listen.SetInputToDefaultAudioDevice();
             listen.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(answer);
         }
@@ -47,6 +52,36 @@ namespace Helpers
             if (available == 0) throw new Exception("No speech recognition engines available. Install them.");
 
             return new SpeechRecognitionEngine();
+        }
+
+        private void initGrammar(string grammar)
+        {
+            Grammar g = null;
+
+            if (grammar == "")
+                g = buildGrammar();
+            else
+            {
+                try
+                {
+                    g = new Grammar(grammar);
+                }
+                catch (Exception)
+                {
+                    g = buildGrammar();
+                }
+            }
+
+            listen.LoadGrammar(g);
+        }
+
+        private Grammar buildGrammar()
+        {
+            Choices c = new Choices();
+            c.Add(words.ToArray());
+            GrammarBuilder grammarBuilder = new GrammarBuilder(c);
+            grammarBuilder.Culture = new System.Globalization.CultureInfo("EN-us");
+            return new Grammar(grammarBuilder);
         }
 
         public void StartListening(VoiceCommandDelegate callback)

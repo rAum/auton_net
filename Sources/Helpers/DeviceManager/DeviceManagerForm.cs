@@ -41,16 +41,34 @@ namespace Helpers
 
         void hearedCommand(string cmd, float confidence)
         {
-            if (confidence >= 0.8)
+            if (confidence >= 0.85)
             {
-                jurek.Say("Zrozumiałem!");
                 if (cmd == "start")
                 {
+                    jurek.Say("Zrozumiałem! Startujemy.");
                     button_StartSensors_Click(this, new EventArgs());
                 }
                 else if (cmd == "stop")
                 {
                     button_EmergencyStop_Click(this, new EventArgs());
+                }
+                else if (cmd == "yorek")
+                {
+                    Random rnd = new Random();
+
+                    switch (rnd.Next(6))
+                    {
+                        case 0: jurek.Say("Słucham?"); break;
+                        case 1: jurek.Say("no?"); break;
+                        case 2: jurek.Say("Słucham Cię panie?"); break;
+                        case 3: jurek.Say("Tak?"); break;
+                        default:
+                            jurek.Say("tak?"); break;
+                    }
+                }
+                else
+                {
+                    jurek.Say("Przed wyruszeniem w drogę należy zebrać drużynę.");
                 }
             }
         }
