@@ -24,6 +24,11 @@ namespace Helpers
 
         private VoiceCommandDelegate del;
 
+        public void DontListen()
+        {
+            listen.RecognizeAsyncStop();
+        }
+
         public Jurek(string grammar = "")
         {
             talk = new SpeechSynthesizer();

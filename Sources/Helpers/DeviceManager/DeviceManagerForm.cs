@@ -39,17 +39,21 @@ namespace Helpers
             jurek.StartListening(hearedCommand);
         }
 
+        bool started = false;
+        bool prepare = false;
         void hearedCommand(string cmd, float confidence)
         {
             if (confidence >= 0.6)
             {
-                if (cmd == "start")
+                if (started == false && cmd == "start")
                 {
                     button_StartEffectors_Click(this, new EventArgs());
+                    started = true;
                 }
-                else if (cmd == "prepare")
+                else if (prepare == false && cmd == "prepare")
                 {
                     button_StartSensors_Click(this, new EventArgs());
+                    started = true;
                 }
                 else if (cmd == "stop")
                 {
