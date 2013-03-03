@@ -17,7 +17,7 @@ namespace Helpers
         SpeechRecognitionEngine listen;
         List<string> words = new List<string>()
         {
-            "yoorek", "start", "stop", "goora", "laevo", "pravo", "doow"
+            "yoorek", "start", "stop", "prepare"
         };
 
         public delegate void VoiceCommandDelegate(string cmd, float p);
@@ -86,7 +86,6 @@ namespace Helpers
 
         public void StartListening(VoiceCommandDelegate callback)
         {
-            Say("Słucham Cię");
             listen.RecognizeAsync(RecognizeMode.Multiple);
             del = callback;
         }
@@ -94,7 +93,14 @@ namespace Helpers
         private void  answer(object sender, SpeechRecognizedEventArgs e)
         {
             if (del != null)
-                del(e.Result.Text, e.Result.Confidence);
+            {
+                foreach (var word in e.Result.Words)
+                {
+                    if (word.Confidence >= 0.7)
+                        del(word.Text, word.Confidence);
+                }
+                
+            }
         }
 
         public void Say(string what)

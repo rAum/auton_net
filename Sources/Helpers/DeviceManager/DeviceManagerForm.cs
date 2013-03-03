@@ -35,40 +35,43 @@ namespace Helpers
             updaterTimer.Tick += updaterTimer_Tick;
             updaterTimer.Start();
 
-            jurek.Say("Dzień dobry, mówi Twój najlepszy kierowca Jurek! Dokąd chcesz się dziś wybrać?");
+            jurek.Say("Dzień dobry, mówi Twój najlepszy kierowca Jurek!");
             jurek.StartListening(hearedCommand);
         }
 
         void hearedCommand(string cmd, float confidence)
         {
-            if (confidence >= 0.85)
+            if (confidence >= 0.6)
             {
                 if (cmd == "start")
                 {
-                    jurek.Say("Zrozumiałem! Startujemy.");
+                    button_StartEffectors_Click(this, new EventArgs());
+                }
+                else if (cmd == "prepare")
+                {
                     button_StartSensors_Click(this, new EventArgs());
                 }
                 else if (cmd == "stop")
                 {
                     button_EmergencyStop_Click(this, new EventArgs());
                 }
-                else if (cmd == "yorek")
+                else if (cmd == "yoorek")
                 {
                     Random rnd = new Random();
-
-                    switch (rnd.Next(6))
+                    int r = rnd.Next(0, 9);
+                    switch (r)
                     {
                         case 0: jurek.Say("Słucham?"); break;
                         case 1: jurek.Say("no?"); break;
                         case 2: jurek.Say("Słucham Cię panie?"); break;
                         case 3: jurek.Say("Tak?"); break;
-                        default:
-                            jurek.Say("tak?"); break;
+                        case 4: jurek.Say("Przed wyruszeniem w drogę należy zebrać drużynę!"); break;
+                        case 5: jurek.Say("Ha ha ha"); break;
+                        case 6: jurek.Say("Co robi grabaż?"); Thread.Sleep(2000); jurek.Say("Częstochowa. Ha ha ha he he"); break;
+                        case 7: jurek.Say("Jakiś problem?"); break;
+                        case 8: jurek.Say("Co robi blondynka pod drzewem?"); Thread.Sleep(2000); jurek.Say("Czeka na autograf Kory. Bu hehehe"); break;
+                        default:  jurek.Say("Kurwa"); break;
                     }
-                }
-                else
-                {
-                    jurek.Say("Przed wyruszeniem w drogę należy zebrać drużynę.");
                 }
             }
         }
@@ -136,12 +139,14 @@ namespace Helpers
 
         private void button_StartSensors_Click(object sender, EventArgs e)
         {
+            jurek.Say("Uruchamiam sensory.");
             deviceManager.StartSensors();
             jurek.Say("Sensory uruchomione.");
         }
 
         private void button_StartEffectors_Click(object sender, EventArgs e)
         {
+            jurek.Say("Uruchamiam efektory.");
             deviceManager.StartEffectors();
             jurek.Say("Efektory uruchomione.");
         }

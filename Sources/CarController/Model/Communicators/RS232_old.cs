@@ -13,7 +13,7 @@ namespace CarController_old
     public class RS232Controller : Device
     {
         // Create the serial port with basic settings 
-        private SerialPort port = new SerialPort("COM4", 9600, Parity.None, 8, StopBits.One); //TODO: add choosing COM no from form
+        private SerialPort port = new SerialPort("COM7", 9600, Parity.None, 8, StopBits.One); //TODO: add choosing COM no from form
 
         //messages
         char[] giveMeSteeringWheelAngleMsg = new char[] { '1', 'P', (char)13 }; //TODO: try changing it to byte[] //not necessery, but char[] probably wont work for values > 127...
