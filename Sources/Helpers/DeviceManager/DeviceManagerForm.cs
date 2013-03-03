@@ -14,6 +14,8 @@ namespace Helpers
     {
         private const int UPDATER_TIMER_INTERVAL_IN_MS = 100;
 
+        private Jurek jurek;
+
         private DeviceManager deviceManager;
         private System.Windows.Forms.Timer updaterTimer;
 
@@ -22,6 +24,7 @@ namespace Helpers
             deviceManager = devManager;
 
             InitializeComponent();
+            jurek = new Jurek();
 
             dataGridView1.Columns.Add("device name", "device name");
             dataGridView1.Columns.Add("overall state", "overall state");
@@ -31,6 +34,8 @@ namespace Helpers
             updaterTimer.Interval = UPDATER_TIMER_INTERVAL_IN_MS;
             updaterTimer.Tick += updaterTimer_Tick;
             updaterTimer.Start();
+
+            jurek.Say("Dzień dobry, mówi Twój najlepszy kierowca Jurek! Dokąd chcesz się dziś wybrać?");
         }
 
         void updaterTimer_Tick(object sender, EventArgs e)
@@ -52,56 +57,69 @@ namespace Helpers
                 // this is UI thread
                 label_DeviceManagerAction.Text = deviceManager.currentActionName;
 
-                for (int i = 0; i < deviceManager.devicesList.Count; i++)
+                try
                 {
-                    if (dataGridView1.Rows.Count < i + 1)
+                    for (int i = 0; i < deviceManager.devicesList.Count; i++)
                     {
-                        dataGridView1.Rows.Add();
-                    }
+                        if (dataGridView1.Rows.Count < i + 1)
+                        {
+                            dataGridView1.Rows.Add();
+                        }
 
-                    //update device name
-                    if ((string)dataGridView1.Rows[i].Cells[0].Value != deviceManager.devicesList[i].ToString())
-                    {
-                        dataGridView1.Rows[i].Cells[0].Value = deviceManager.devicesList[i].ToString();
-                    }
+                        //update device name
+                        if ((string)dataGridView1.Rows[i].Cells[0].Value != deviceManager.devicesList[i].ToString())
+                        {
+                            dataGridView1.Rows[i].Cells[0].Value = deviceManager.devicesList[i].ToString();
+                        }
 
-                    //update overall device state
-                    if ((string)dataGridView1.Rows[i].Cells[1].Value != deviceManager.devicesList[i].overallState.ToString())
-                    {
-                        dataGridView1.Rows[i].Cells[1].Value = deviceManager.devicesList[i].overallState.ToString();
-                    }
+                        //update overall device state
+                        if ((string)dataGridView1.Rows[i].Cells[1].Value != deviceManager.devicesList[i].overallState.ToString())
+                        {
+                            dataGridView1.Rows[i].Cells[1].Value = deviceManager.devicesList[i].overallState.ToString();
+                        }
 
-                    //update initialization device state
-                    if ((string)dataGridView1.Rows[i].Cells[2].Value != deviceManager.devicesList[i].initializationState.ToString())
-                    {
-                        dataGridView1.Rows[i].Cells[2].Value = deviceManager.devicesList[i].initializationState.ToString();
+                        //update initialization device state
+                        if ((string)dataGridView1.Rows[i].Cells[2].Value != deviceManager.devicesList[i].initializationState.ToString())
+                        {
+                            dataGridView1.Rows[i].Cells[2].Value = deviceManager.devicesList[i].initializationState.ToString();
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    // no!   
                 }
             } 
         }
 
         private void button_initialize_Click(object sender, EventArgs e)
         {
+            jurek.Say("Rozpoczynam inicjalizację.");
             deviceManager.Initialize();
+            jurek.Say("Inicjalizacja zakończona.");
         }
 
         private void button_StartSensors_Click(object sender, EventArgs e)
         {
             deviceManager.StartSensors();
+            jurek.Say("Sensory uruchomione.");
         }
 
         private void button_StartEffectors_Click(object sender, EventArgs e)
         {
             deviceManager.StartEffectors();
+            jurek.Say("Efektory uruchomione.");
         }
 
         private void button_PauseEffectors_Click(object sender, EventArgs e)
         {
+            jurek.Say("Pauzuje efektory.");
             deviceManager.PauseEffectors();
         }
 
         private void button_EmergencyStop_Click(object sender, EventArgs e)
         {
+            jurek.Say("Oż kurwa, stop! Przycisk bezpieczeństwa użyty.");
             deviceManager.EmergencyStop();
         }
 
