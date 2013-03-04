@@ -164,26 +164,6 @@ namespace CarVision
 
         }
 
-        Color colLower;
-        Color colUpper;
-        private void button2_Click(object sender, EventArgs e)
-        {
-            colorDialog.Color = colLower;
-            if (colorDialog.ShowDialog() == DialogResult.OK)
-            {
-                colLower = colorDialog.Color;
-            }
-
-            colorDialog.Color = colUpper;
-            if (colorDialog.ShowDialog() == DialogResult.OK)
-            {
-                colUpper = colorDialog.Color;
-            }
-
-            filter.lower = ColorToHsv(colLower);
-            filter.upper = ColorToHsv(colUpper);
-        }
-
         private void button3_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
@@ -217,6 +197,7 @@ namespace CarVision
             imgVideoSource.Image.Bitmap.Save(String.Format("C:/video/persp{0}.png", ++num));
         }
 
+        Hsv color = new Hsv(67, 128, 148);
         private void imgVideoSource_Click(object sender, EventArgs e)
         {
             if (colorCapture)
@@ -224,36 +205,46 @@ namespace CarVision
                 try
                 {
                     lColorPrev.BackColor = ExtractPixel(sender);
-                    Hsv color = ColorToHsv(lColorPrev.BackColor);
-                    label2.Text = String.Format("H: {0,3}  S: {1,3}  V: {2,3}", (int)Math.Round(color.Hue), (int)Math.Round(color.Satuation), (int)Math.Round(color.Value));
-
-                    int h = (int)nud1.Value / 2,
-                        s = (int)nud1.Value,
-                        v = (int)nud1.Value;
-
-                    Hsv min = new Hsv(),
-                        max = new Hsv();
-
-                    min.Hue = Math.Max(color.Hue - h, 0);
-                    min.Satuation = Math.Max(color.Satuation - h, 0);
-                    min.Value = Math.Max(color.Value - h, 0);
-
-                    max.Hue = Math.Min(color.Hue + h, 180);
-                    max.Satuation = Math.Min(color.Satuation + h, 255);
-                    max.Value = Math.Min(color.Value + h, 255);
-
-                    if (filter != null)
-                    {
-                        filter.lower = new Hsv(Math.Min(min.Hue, max.Hue), Math.Min(min.Satuation, max.Satuation), Math.Min(min.Value, max.Value));
-                        filter.upper = new Hsv(Math.Max(min.Hue, max.Hue), Math.Max(min.Satuation, max.Satuation), Math.Max(min.Value, max.Value));
-                    }
-
+                    color = ColorToHsv(lColorPrev.BackColor);
+                    SetHsvFilter(color);
                 }
                 catch (Exception)
                 {
                     //no.
                 }
             }
+        }
+
+        private void SetHsvFilter(Hsv color)
+        {
+            int h = (int)nud1.Value,
+                s = (int)nud2.Value,
+                v = (int)nud3.Value;
+
+            Hsv min = new Hsv(),
+                max = new Hsv();
+
+            min.Hue = Math.Max(color.Hue - h, 0) / 2;
+            min.Satuation = Math.Max(color.Satuation - s, 0);
+            min.Value = Math.Max(color.Value - v, 0);
+
+            max.Hue = Math.Min(color.Hue + h, 255) / 2;
+            max.Satuation = Math.Min(color.Satuation + s, 255);
+            max.Value = Math.Min(color.Value + v, 255);
+
+            Hsv a = new Hsv(Math.Min(min.Hue, max.Hue), Math.Min(min.Satuation, max.Satuation), Math.Min(min.Value, max.Value)), 
+                b = new Hsv(Math.Max(min.Hue, max.Hue), Math.Max(min.Satuation, max.Satuation), Math.Max(min.Value, max.Value));
+
+            if (filter != null)
+            {
+                filter.lower = a;
+                filter.upper = b;
+            }
+
+            tbColor.Text = String.Format("Hsv minColor = new Hsv({0,3}, {1,3}, {2,3});\r\nHsv maxColor = new Hsv({3,3}, {4,3}, {5,3});",
+                                            (int)Math.Round(a.Hue), (int)Math.Round(a.Satuation), (int)Math.Round(a.Value),
+                                            (int)Math.Round(b.Hue), (int)Math.Round(b.Satuation), (int)Math.Round(b.Value)
+                                        );
         }
 
         private Color ExtractPixel(object sender)
@@ -298,6 +289,14 @@ namespace CarVision
             else
                 colorVideoSource.Start();
             pause = !pause;
+        }
+
+        private void nud1_ValueChanged(object sender, EventArgs e)
+        {
+            if (colorCapture)
+            {
+                SetHsvFilter(color);
+            }
         }
     }
 }
