@@ -33,6 +33,7 @@ namespace RANSAC
             double model_error;
             double err;
             int consensus_set;
+            double penalize = 0; // penalization for being to far from straight line [EXPERIMENTAL!]
 
             for (int i = 0; i < iterations; ++i)
             {
@@ -50,6 +51,9 @@ namespace RANSAC
                         model_error   += err;
                     }
                 }
+
+                penalize = Math.Abs(model.a)*4 + Math.Abs(model.b);
+                model_error += penalize * penalize;
 
                 if (consensus_set >= n)
                 {
