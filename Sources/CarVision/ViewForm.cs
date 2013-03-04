@@ -29,10 +29,15 @@ namespace CarVision
         VisualiseSimpleRoadModel visRoad;
         PerspectiveCorrectionRgb invPerp;
 
+        DrawPoints filtered;
+
         VideoWriter videoWriter;
 
-        const string sourceInput = //@"C:/video/rec_2012-12-14_10_40_442.avi";
-                                   @"C:/video/rec_2013-03-02_18_15_239.avi";
+        const string sourceInput = @"C:/video2/rec_2012-12-14_10_40_442.avi";
+                                   //@"C:/video/rec_2013-03-02_18_15_239.avi";
+
+        bool colorCapture;
+        bool perspCapture;
 
         // perspektywa
         //180 cm od niebieskiej
@@ -40,8 +45,15 @@ namespace CarVision
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Gray, Byte>> e)
         {
-            ImageBox imgBox = imgDebug;
-            imgBox.Image = (Image<Gray, Byte>)e.Result;
+            try
+            {
+                ImageBox imgBox = imgDebug;
+                imgBox.Image = (Image<Gray, Byte>)e.Result;
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine("Bad thing happened in display gray video :( -" + ex.Message);
+            }
         }
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Rgb, Byte>> e)
@@ -59,11 +71,13 @@ namespace CarVision
                 {
                     imgBox = imgVideoSource;
                 }
+
                 if (imgBox == null)
                 {
                     System.Console.Out.WriteLine("No receiver registered!!");
                     return;
                 }
+
                 imgBox.Image = (Image<Rgb, Byte>)e.Result;
                 if (videoWriter != null && sender == colorVideoSource)
                 {
@@ -92,17 +106,18 @@ namespace CarVision
             //Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);
             //Hsv maxColor = new Hsv(222.0 / 2.0, 0.61 * 255.0, 0.78 * 255.0);
 
-            Hsv minColor = new Hsv(150.0 / 2.0, 0.02 * 255.0, 0.7 * 255.0);
-            Hsv maxColor = new Hsv(242.0 / 2.0, 0.19 * 255.0, 1.0 * 255.0);
+            //Hsv minColor = new Hsv(150.0 / 2.0, 0.02 * 255.0, 0.7 * 255.0);
+            //Hsv maxColor = new Hsv(242.0 / 2.0, 0.19 * 255.0, 1.0 * 255.0);
 
             // light green lines
-            //Hsv minColor = new Hsv(95 / 2, 0.6 * 255, 0.5 * 255);
-            //Hsv maxColor = new Hsv(180 / 2, 255, 0.74 * 255);
+            Hsv minColor = new Hsv(95 / 2, 0.6 * 255, 0.5 * 255);
+            Hsv maxColor = new Hsv(180 / 2, 255, 0.74 * 255);
 
             filter = new HsvFilter(colorVideoSource, minColor, maxColor);
             //filter.ResultReady += DisplayVideo;
             roadDetector = new RoadCenterDetector(filter);
            // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
+            filtered = new DrawPoints(roadDetector.Perceptor.laneDetector);
 
             visRoad = new VisualiseSimpleRoadModel(roadDetector.Perceptor.roadDetector);
             visRoad.ResultReady += DisplayVideo;
@@ -137,12 +152,14 @@ namespace CarVision
             if (next == 1)
             {
                 visRoad.ResultReady -= DisplayVideo;
-                //roadDetector.Perceptor.laneDetector.ResultReady += DisplayVideo;
+                filtered.Active = true;
+                filtered.ResultReady += DisplayVideo;
             }
             else
             {
+                filtered.Active = false;
                 visRoad.ResultReady += DisplayVideo;
-                //roadDetector.Perceptor.laneDetector.ResultReady -= DisplayVideo;
+                filtered.ResultReady -= DisplayVideo;
             }
 
         }
@@ -198,6 +215,89 @@ namespace CarVision
         private void button4_Click(object sender, EventArgs e)
         {
             imgVideoSource.Image.Bitmap.Save(String.Format("C:/video/persp{0}.png", ++num));
+        }
+
+        private void imgVideoSource_Click(object sender, EventArgs e)
+        {
+            if (colorCapture)
+            {
+                try
+                {
+                    lColorPrev.BackColor = ExtractPixel(sender);
+                    Hsv color = ColorToHsv(lColorPrev.BackColor);
+                    label2.Text = String.Format("H: {0,3}  S: {1,3}  V: {2,3}", (int)Math.Round(color.Hue), (int)Math.Round(color.Satuation), (int)Math.Round(color.Value));
+
+                    int h = (int)nud1.Value / 2,
+                        s = (int)nud1.Value,
+                        v = (int)nud1.Value;
+
+                    Hsv min = new Hsv(),
+                        max = new Hsv();
+
+                    min.Hue = Math.Max(color.Hue - h, 0);
+                    min.Satuation = Math.Max(color.Satuation - h, 0);
+                    min.Value = Math.Max(color.Value - h, 0);
+
+                    max.Hue = Math.Min(color.Hue + h, 180);
+                    max.Satuation = Math.Min(color.Satuation + h, 255);
+                    max.Value = Math.Min(color.Value + h, 255);
+
+                    if (filter != null)
+                    {
+                        filter.lower = new Hsv(Math.Min(min.Hue, max.Hue), Math.Min(min.Satuation, max.Satuation), Math.Min(min.Value, max.Value));
+                        filter.upper = new Hsv(Math.Max(min.Hue, max.Hue), Math.Max(min.Satuation, max.Satuation), Math.Max(min.Value, max.Value));
+                    }
+
+                }
+                catch (Exception)
+                {
+                    //no.
+                }
+            }
+        }
+
+        private Color ExtractPixel(object sender)
+        {
+            Emgu.CV.UI.ImageBox pb = sender as Emgu.CV.UI.ImageBox;
+            Bitmap img = pb.Image.Bitmap;
+            Point p = pb.PointToClient(Cursor.Position);
+            return img.GetPixel(p.X, p.Y);
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            colorCapture = !colorCapture;
+        }
+
+        private void imgVideoSource_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (colorCapture)
+            {
+                try
+                {
+                    lColorPrev2.BackColor = ExtractPixel(sender);
+                }
+                catch (Exception)
+                {
+                    // no.
+                }
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            colorVideoSource.RestartVideo();
+            pause = false;
+        }
+
+        bool pause = false;
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (pause == false)
+                colorVideoSource.Pause();
+            else
+                colorVideoSource.Start();
+            pause = !pause;
         }
     }
 }
