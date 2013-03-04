@@ -138,18 +138,7 @@
             // 
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
-            "Camera",
-            "rec_2012-12-14_10_40_442",
-            "rec_2012-12-14_10_33_969",
-            "rec_2012-12-14_10_37_533",
-            "rec_2013-03-02_18_15_708",
-            "rec_2013-03-04_13_41_782",
-            "rec_2013-03-02_18_11_569",
-            "rec_2013-03-02_18_12_374",
-            "rec_2013-03-02_18_14_124",
-            "rec_2013-03-02_18_15_239",
-            "rec_2013-03-02_18_15_708",
-            "testBlue"});
+            "Camera"});
             this.comboBox1.Location = new System.Drawing.Point(550, 10);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(149, 21);

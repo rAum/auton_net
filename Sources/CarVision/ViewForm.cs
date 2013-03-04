@@ -17,6 +17,7 @@ using Emgu.CV.UI;
 using VisionFilters.Filters.Lane_Mark_Detector;
 using VisionFilters.Filters.Image_Operations;
 using VisionFilters;
+using System.IO;
 
 namespace CarVision
 {
@@ -106,12 +107,15 @@ namespace CarVision
             string src = (string)comboBox1.Items[comboBox1.SelectedIndex];
             tbVideoSource.Text = src;
             if (src == "Camera" || src == "") return "";
-            else return "C:/video/" + src + ".avi";
+            else return "C:/video/" + src;
         }
 
         public ViewForm()
         {
             InitializeComponent();
+
+            LoadVideos();
+
             comboBox1.SelectedIndex = 1; // not cam!!
             colorVideoSource = new ColorVideoSource(getVideoSource());
             colorVideoSource.ResultReady += DisplayVideo;
@@ -136,6 +140,23 @@ namespace CarVision
             invPerp.ResultReady += DisplayVideo;
 
             colorVideoSource.Start();
+        }
+
+        private void LoadVideos()
+        {
+            try
+            {
+                DirectoryInfo di = new DirectoryInfo("C:/video/");
+                var dirs = di.GetFiles("*.avi", SearchOption.AllDirectories);
+                foreach (FileInfo file in dirs)
+                {
+                    comboBox1.Items.Add(file.Name);
+                }
+            }
+            catch (Exception)
+            {
+                // no.
+            }
         }
 
         private void ViewForm_FormClosing(object sender, FormClosingEventArgs e)
