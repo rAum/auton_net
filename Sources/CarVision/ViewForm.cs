@@ -33,9 +33,6 @@ namespace CarVision
 
         VideoWriter videoWriter;
 
-        const string sourceInput = @"C:/video2/rec_2012-12-14_10_40_442.avi";
-                                   //@"C:/video/rec_2013-03-02_18_15_239.avi";
-
         bool colorCapture;
         bool perspCapture;
 
@@ -98,11 +95,19 @@ namespace CarVision
             return c;
         }
 
+        private string getVideoSource()
+        {
+            string src = (string)comboBox1.Items[comboBox1.SelectedIndex];
+            tbVideoSource.Text = src;
+            if (src == "Camera" || src == "") return "";
+            else return "C:/video/" + src + ".avi";
+        }
+
         public ViewForm()
         {
             InitializeComponent();
-
-            colorVideoSource = new ColorVideoSource<byte>(sourceInput);
+            comboBox1.SelectedIndex = 1; // not cam!!
+            colorVideoSource = new ColorVideoSource<byte>(getVideoSource());
             colorVideoSource.ResultReady += DisplayVideo;
 
             //Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);
@@ -292,6 +297,14 @@ namespace CarVision
             if (colorCapture)
             {
                 SetHsvFilter(color);
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (colorVideoSource != null)
+            {
+                colorVideoSource.ChangeVideoSource(getVideoSource());
             }
         }
     }

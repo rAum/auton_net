@@ -64,8 +64,11 @@ namespace VisionFilters.Output
 
         public void ChangeVideoSource(string _file = "")
         {
+            capture.Stop();
+            System.Threading.Thread.Sleep(1000);
             file = _file;
             Load();
+            Start();
         }
 
         public void Start()
@@ -90,7 +93,7 @@ namespace VisionFilters.Output
     public class ColorVideoSource<PixelType> : Supplier<Image<Rgb, PixelType>> where PixelType : new()
     {
         public Boolean Runs { get; private set; }
-        int sleepTime = 0;
+        int sleepTime = 5;
 
         public override Image<Rgb, PixelType> LastResult
         {
@@ -123,7 +126,7 @@ namespace VisionFilters.Output
             if (file == "")
             {
                 capture = new Capture(); //was empty
-                sleepTime = 0;
+                sleepTime = 5;
             }
             else
                 capture = new Capture(file);
@@ -142,8 +145,11 @@ namespace VisionFilters.Output
 
         public void ChangeVideoSource(string _file="")
         {
+            capture.Stop();
+            System.Threading.Thread.Sleep(1000);
             file = _file;
             Load();
+            Start();
         }
 
         public void Start()

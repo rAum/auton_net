@@ -32,6 +32,10 @@
             this.imgOutput = new Emgu.CV.UI.ImageBox();
             this.imgDebug = new Emgu.CV.UI.ImageBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.tbVideoSource = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.tbColor = new System.Windows.Forms.TextBox();
             this.button6 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
@@ -48,10 +52,6 @@
             this.button3 = new System.Windows.Forms.Button();
             this.imgVideoSource = new Emgu.CV.UI.ImageBox();
             this.imgDebug2 = new Emgu.CV.UI.ImageBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.imgOutput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDebug)).BeginInit();
             this.panel1.SuspendLayout();
@@ -85,7 +85,7 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.textBox1);
+            this.panel1.Controls.Add(this.tbVideoSource);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.comboBox1);
@@ -106,6 +106,54 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(822, 117);
             this.panel1.TabIndex = 5;
+            // 
+            // tbVideoSource
+            // 
+            this.tbVideoSource.Location = new System.Drawing.Point(550, 39);
+            this.tbVideoSource.Name = "tbVideoSource";
+            this.tbVideoSource.ReadOnly = true;
+            this.tbVideoSource.Size = new System.Drawing.Size(149, 20);
+            this.tbVideoSource.TabIndex = 20;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(500, 44);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(44, 13);
+            this.label2.TabIndex = 19;
+            this.label2.Text = "Current:";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(470, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(74, 13);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "Video Source:";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Camera",
+            "rec_2012-12-14_10_40_442",
+            "rec_2012-12-14_10_33_969",
+            "rec_2012-12-14_10_37_533",
+            "rec_2013-03-02_18_15_708",
+            "rec_2013-03-04_13_41_782",
+            "rec_2013-03-02_18_11_569",
+            "rec_2013-03-02_18_12_374",
+            "rec_2013-03-02_18_14_124",
+            "rec_2013-03-02_18_15_239",
+            "rec_2013-03-02_18_15_708",
+            "testBlue"});
+            this.comboBox1.Location = new System.Drawing.Point(550, 10);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(149, 21);
+            this.comboBox1.TabIndex = 17;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // tbColor
             // 
@@ -306,42 +354,6 @@
             this.imgDebug2.TabIndex = 7;
             this.imgDebug2.TabStop = false;
             // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Cam"});
-            this.comboBox1.Location = new System.Drawing.Point(550, 10);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(149, 21);
-            this.comboBox1.TabIndex = 17;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(470, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(74, 13);
-            this.label1.TabIndex = 18;
-            this.label1.Text = "Video Source:";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(500, 44);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(44, 13);
-            this.label2.TabIndex = 19;
-            this.label2.Text = "Current:";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(550, 39);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(149, 20);
-            this.textBox1.TabIndex = 20;
-            // 
             // ViewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -395,7 +407,7 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.TextBox tbColor;
         private Emgu.CV.UI.ImageBox imgDebug2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tbVideoSource;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox1;
