@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using car_communicator;
 using Helpers;
+using System.Timers;
 
 namespace CarController.Model.Communicators
 {
@@ -24,7 +25,7 @@ namespace CarController.Model.Communicators
         private const int NO_OF_HAAL_METERS = 5;
         private const int TICKS_TO_RESTART = 10000;
 
-        private System.Windows.Forms.Timer SpeedMeasuringTimer = new System.Windows.Forms.Timer();
+        private Timer SpeedMeasuringTimer = new Timer();
         private int[] lastTicksMeasurements = new int[SPEED_TABLE_SIZE];
         private int tickTableIterator = 0;
         private int lastTicks = 0;
@@ -39,7 +40,7 @@ namespace CarController.Model.Communicators
             }
 
             SpeedMeasuringTimer.Interval = SPEED_MEASURING_TIMER_INTERVAL_IN_MS;
-            SpeedMeasuringTimer.Tick += new EventHandler(SpeedMeasuringTimer_Tick);
+            SpeedMeasuringTimer.Elapsed += SpeedMeasuringTimer_Tick;
         }
 
         void SpeedMeasuringTimer_Tick(object sender, EventArgs e)

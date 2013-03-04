@@ -88,42 +88,40 @@ namespace car_communicator
 
         private void setTarget(byte channel, ushort target)
         {
-
-                if (Driver != null) //checking if ServoDriver is Initialized
+            if (Driver != null) //checking if ServoDriver is Initialized
+            {
+                if (channel == GEARBOX_CHANNEL)
                 {
-                    if (channel == GEARBOX_CHANNEL)
+                    if (!(target == GEAR_P || target == GEAR_R || target == GEAR_N_WHEN_LAST_WAS_D || target == GEAR_N_WHEN_LAST_WAS_R_OR_P || target == GEAR_D))
                     {
-                        if (!(target == GEAR_P || target == GEAR_R || target == GEAR_N_WHEN_LAST_WAS_D || target == GEAR_N_WHEN_LAST_WAS_R_OR_P || target == GEAR_D))
-                        {
-                            throw new ApplicationException("wrong target");
-                        }
+                        throw new ApplicationException("wrong target");
                     }
-                    else if (channel == THROTTLE_CHANNEL)
+                }
+                else if (channel == THROTTLE_CHANNEL)
+                {
+                    if (target < MIN_THROTTLE || target > MAX_THROTTLE)
                     {
-                        if (target < MIN_THROTTLE || target > MAX_THROTTLE)
-                        {
-                            throw new ApplicationException("wrong target");
-                        }
-                    }
-                    else
-                    {
-                        throw new ApplicationException("unknown channel");
-                    }
-
-                    try
-                    {
-                        Driver.setTarget(channel, target);
-                    }
-                    catch (Exception)
-                    {
-                        Logger.Log(this, "couldnt send msg to servo!", 2);
+                        throw new ApplicationException("wrong target");
                     }
                 }
                 else
                 {
-                    Logger.Log(this, "target was not set, because ServoDriver is not initialized", 1);
+                    throw new ApplicationException("unknown channel");
                 }
 
+                try
+                {
+                    Driver.setTarget(channel, target);
+                }
+                catch (Exception)
+                {
+                    Logger.Log(this, "couldnt send msg to servo!", 2);
+                }
+            }
+            else
+            {
+                Logger.Log(this, "target was not set, because ServoDriver is not initialized", 1);
+            }
         }
 
         public void setThrottle(double valueInPercents)
