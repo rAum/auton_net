@@ -73,9 +73,9 @@ namespace Auton.CarVision.Video.Filters
             Process += DoPerspectiveCorrection;
         }
     }
-    public class PerspectiveCorrectionRgb : ThreadSupplier<Image<Rgb, Byte>, Image<Rgb, Byte>>
+    public class PerspectiveCorrectionRgb : ThreadSupplier<Image<Bgr, byte>, Image<Bgr, byte>>
     {
-        private Supplier<Image<Rgb, Byte>> supplier;
+        private Supplier<Image<Bgr, byte>> supplier;
         private PointF[] srcPoints; // input points
         private PointF[] dstPoints; // output points
         private HomographyMatrix transformationMatrix;
@@ -114,13 +114,13 @@ namespace Auton.CarVision.Video.Filters
             transformationMatrix = CameraCalibration.GetPerspectiveTransform(srcPoints, dstPoints);
         }
 
-        private void DoPerspectiveCorrection(Image<Rgb, Byte> img)
+        private void DoPerspectiveCorrection(Image<Bgr, byte> img)
         {
-            LastResult = img.WarpPerspective(transformationMatrix, INTER.CV_INTER_CUBIC, WARP.CV_WARP_DEFAULT, new Rgb(0,0,0));
+            LastResult = img.WarpPerspective(transformationMatrix, INTER.CV_INTER_CUBIC, WARP.CV_WARP_DEFAULT, new Bgr(0,0,0));
             PostComplete();
         }
 
-        public PerspectiveCorrectionRgb(Supplier<Image<Rgb, Byte>> supplier_, PointF[] src, PointF[] dst)
+        public PerspectiveCorrectionRgb(Supplier<Image<Bgr, byte>> supplier_, PointF[] src, PointF[] dst)
         {
             supplier = supplier_;
             supplier.ResultReady += MaterialReady;

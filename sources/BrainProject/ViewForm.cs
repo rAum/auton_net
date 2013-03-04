@@ -25,7 +25,7 @@ namespace BrainProject
 {
     public partial class ViewForm : Form
     {
-        ColorVideoSource<byte> colorVideoSource;
+        ColorVideoSource colorVideoSource;
         HsvFilter filter;
 
         RoadCenterDetector roadDetector;
@@ -46,15 +46,15 @@ namespace BrainProject
             imgBox.Image = (Image<Gray, Byte>)e.Result;
         }
 
-        private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Rgb, Byte>> e)
+        private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Bgr, byte>> e)
         {
             try
             {
                 ImageBox imgBox = imgDebug;
                 if (sender == invPerp)
                 {
-                    Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
-                    imgOutput.Image = (Image<Rgb, Byte>)e.Result + cam * 0.6;
+                    Image<Bgr, byte> cam = new Image<Bgr, byte>(imgVideoSource.Image.Bitmap);
+                    imgOutput.Image = (Image<Bgr, byte>)e.Result + cam * 0.6;
                     return;
                 }
                 else if (sender == colorVideoSource)
@@ -66,7 +66,7 @@ namespace BrainProject
                     System.Console.Out.WriteLine("No receiver registered!!");
                     return;
                 }
-                imgBox.Image = (Image<Rgb, Byte>)e.Result;
+                imgBox.Image = (Image<Bgr, byte>)e.Result;
             }
             catch (Exception ex)
             {
@@ -89,7 +89,7 @@ namespace BrainProject
             steeringWindow.Show();
             steeringWindow.Activate();
 
-            colorVideoSource = new ColorVideoSource<byte>();//@"D:\testBlue.avi");
+            colorVideoSource = new ColorVideoSource();//@"D:\testBlue.avi");
             colorVideoSource.ResultReady += DisplayVideo;
 
             Hsv minColor = new Hsv(95 / 2, 0.6 * 255, 0.5 * 255);

@@ -12,19 +12,19 @@ namespace VisionFilters.Filters.Image_Operations
     /// <summary>
     /// Gets one channel from RGB image.
     /// </summary>
-    public class HsvFilter : ThreadSupplier<Image<Rgb, byte>, Image<Gray, Byte>>
+    public class HsvFilter : ThreadSupplier<Image<Bgr, byte>, Image<Gray, byte>>
     {
-        Supplier<Image<Rgb, byte>> supplier;
+        Supplier<Image<Bgr, byte>> supplier;
         public Hsv lower, upper;
         Image<Gray, byte> filtered;
 
-        private void GetChannel(Image<Rgb, byte> image)
+        private void GetChannel(Image<Bgr, byte> image)
         {
             LastResult = image.Convert<Hsv, byte>().InRange(lower, upper).Dilate(4).Erode(5); // filtered; 
             PostComplete();
         }
 
-        public HsvFilter(Supplier<Image<Rgb, byte>> supplier_, Hsv lower_, Hsv upper_)
+        public HsvFilter(Supplier<Image<Bgr, byte>> supplier_, Hsv lower_, Hsv upper_)
         {
             filtered = new Image<Gray, byte>(CamModel.Width, CamModel.Height);
             supplier = supplier_;

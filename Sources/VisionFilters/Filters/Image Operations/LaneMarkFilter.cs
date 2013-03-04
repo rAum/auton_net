@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace VisionFilters.Filters.Image_Operations
 {
-    class LaneMarkFilter : ThreadSupplier<Image<Rgb, byte>, List<Point>>
+    class LaneMarkFilter : ThreadSupplier<Image<Bgr, byte>, List<Point>>
     {
     }
 }

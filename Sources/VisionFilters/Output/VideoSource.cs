@@ -90,12 +90,12 @@ namespace VisionFilters.Output
         }
     }
 
-    public class ColorVideoSource<PixelType> : Supplier<Image<Rgb, PixelType>> where PixelType : new()
+    public class ColorVideoSource : Supplier<Image<Bgr, byte>>
     {
         public Boolean Runs { get; private set; }
         int sleepTime = 5;
 
-        public override Image<Rgb, PixelType> LastResult
+        public override Image<Bgr, byte> LastResult
         {
             get
             {
@@ -108,7 +108,7 @@ namespace VisionFilters.Output
 
                 System.Threading.Thread.Sleep(sleepTime);
 
-                return frame.Convert<Rgb,PixelType>().Resize(CamModel.Width, CamModel.Height, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
+                return frame.Resize(CamModel.Width, CamModel.Height, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
             }
         }
 
@@ -131,7 +131,7 @@ namespace VisionFilters.Output
             else
                 capture = new Capture(file);
             capture.ImageGrabbed +=
-                (sender, e) => { OnResultReady(new ResultReadyEventArgs<Image<Rgb, PixelType>>(LastResult)); };
+                (sender, e) => { OnResultReady(new ResultReadyEventArgs<Image<Bgr, byte>>(LastResult)); };
         }
 
         public void RestartVideo()

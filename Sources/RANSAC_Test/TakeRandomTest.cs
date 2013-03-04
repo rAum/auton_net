@@ -77,7 +77,7 @@ namespace RANSAC_Test
             {
             	TakeRandom target = new TakeRandom(max_, prime_);
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
                 Assert.Fail("Two constructor parameters failed");
             }

@@ -22,7 +22,7 @@ namespace CarVision
 {
     public partial class ViewForm : Form
     {
-        ColorVideoSource<byte> colorVideoSource;
+        ColorVideoSource colorVideoSource;
         HsvFilter filter;
 
         RoadCenterDetector roadDetector;
@@ -47,7 +47,7 @@ namespace CarVision
             {
                 if (sender == visRoad)
                     imgBox = imgDebug;
-                imgBox.Image = (Image<Gray, Byte>)e.Result;
+                imgBox.Image = (Image<Gray, byte>)e.Result;
             }
             catch (Exception ex)
             {
@@ -55,15 +55,15 @@ namespace CarVision
             }
         }
 
-        private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Rgb, Byte>> e)
+        private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Bgr, byte>> e)
         {
             try
             {
                 ImageBox imgBox = imgDebug;
                 if (sender == invPerp)
                 {
-                    Image<Rgb, Byte> cam = new Image<Rgb, Byte>(imgVideoSource.Image.Bitmap);
-                    imgOutput.Image = (Image<Rgb, Byte>)e.Result + cam;
+                    Image<Bgr, byte> cam = new Image<Bgr, byte>(imgVideoSource.Image.Bitmap);
+                    imgOutput.Image = (Image<Bgr, byte>)e.Result + cam;
                     return;
                 }
                 else if (sender == colorVideoSource)
@@ -77,10 +77,10 @@ namespace CarVision
                     return;
                 }
 
-                imgBox.Image = (Image<Rgb, Byte>)e.Result;
+                imgBox.Image = (Image<Bgr, byte>)e.Result;
                 if (videoWriter != null && sender == colorVideoSource)
                 {
-                    videoWriter.WriteFrame(((Image<Rgb, Byte>)e.Result).Convert<Bgr, byte>());
+                    videoWriter.WriteFrame(((Image<Bgr, byte>)e.Result).Convert<Bgr, byte>());
                 }
             }
             catch (Exception ex)
@@ -107,7 +107,7 @@ namespace CarVision
         {
             InitializeComponent();
             comboBox1.SelectedIndex = 1; // not cam!!
-            colorVideoSource = new ColorVideoSource<byte>(getVideoSource());
+            colorVideoSource = new ColorVideoSource(getVideoSource());
             colorVideoSource.ResultReady += DisplayVideo;
 
             //Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);

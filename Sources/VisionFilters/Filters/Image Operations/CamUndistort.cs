@@ -7,16 +7,16 @@ using Emgu.CV.Structure;
 
 namespace Auton.CarVision.Video.Filters
 {
-    class CamUndistort : ThreadSupplier<Image<Rgb, Byte>, Image<Rgb, Byte>>
+    class CamUndistort : ThreadSupplier<Image<Bgr, byte>, Image<Bgr, byte>>
     {
-        private Supplier<Image<Rgb, Byte>> supplier;
+        private Supplier<Image<Bgr, byte>> supplier;
 
-        private void Undistort(Image<Rgb, Byte> image)
+        private void Undistort(Image<Bgr, byte> image)
         {
             LastResult = image;
             PostComplete();
         }
-        public CamUndistort(Supplier<Image<Rgb, Byte>> supplier_)
+        public CamUndistort(Supplier<Image<Bgr, byte>> supplier_)
         {
             supplier = supplier_;
             supplier.ResultReady += MaterialReady;
