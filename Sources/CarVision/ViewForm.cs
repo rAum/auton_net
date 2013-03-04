@@ -54,30 +54,36 @@ namespace CarVision
                 System.Console.WriteLine("Bad thing happened in display gray video :( -" + ex.Message);
             }
         }
-
+        bool swapImages = false;
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Bgr, byte>> e)
         {
             try
             {
-                ImageBox imgBox = imgDebug;
+                ImageBox big  = imgVideoSource,
+                        small = imgDebug;
+
+                if (swapImages)
+                {
+                    ImageBox tmp = big;
+                    big = small;
+                    small = tmp;
+                }
+
+
+                if (sender == visRoad)
+                    big = imgOutput;
+
                 if (sender == invPerp)
                 {
-                    Image<Bgr, byte> cam = new Image<Bgr, byte>(imgVideoSource.Image.Bitmap);
-                    imgOutput.Image = (Image<Bgr, byte>)e.Result + cam;
+                    Image<Bgr, byte> cam = new Image<Bgr, byte>(big.Image.Bitmap);
+                    small.Image = (Image<Bgr, byte>)e.Result + cam;
                     return;
                 }
-                else if (sender == colorVideoSource)
-                {
-                    imgBox = imgVideoSource;
-                }
+                
+                // colorVideoSource
+                big.Image = (Image<Bgr, byte>)e.Result;
 
-                if (imgBox == null)
-                {
-                    System.Console.Out.WriteLine("No receiver registered!!");
-                    return;
-                }
 
-                imgBox.Image = (Image<Bgr, byte>)e.Result;
                 if (videoWriter != null && sender == colorVideoSource)
                 {
                     videoWriter.WriteFrame(((Image<Bgr, byte>)e.Result).Convert<Bgr, byte>());
@@ -109,12 +115,6 @@ namespace CarVision
             comboBox1.SelectedIndex = 1; // not cam!!
             colorVideoSource = new ColorVideoSource(getVideoSource());
             colorVideoSource.ResultReady += DisplayVideo;
-
-            //Hsv minColor = new Hsv(194.0 / 2.0, 0.19 * 255.0, 0.56 * 255.0);
-            //Hsv maxColor = new Hsv(222.0 / 2.0, 0.61 * 255.0, 0.78 * 255.0);
-
-            //Hsv minColor = new Hsv(150.0 / 2.0, 0.02 * 255.0, 0.7 * 255.0);
-            //Hsv maxColor = new Hsv(242.0 / 2.0, 0.19 * 255.0, 1.0 * 255.0);
 
             // light green lines
             Hsv minColor = new Hsv(95 / 2, 0.6 * 255, 0.5 * 255);
@@ -306,6 +306,12 @@ namespace CarVision
             {
                 colorVideoSource.ChangeVideoSource(getVideoSource());
             }
+        }
+
+        private void cbRoadPreview_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox cb = sender as CheckBox;
+            swapImages = cb.Checked;
         }
     }
 }

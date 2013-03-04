@@ -26,14 +26,14 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             var two = model.rightLane;
             var cen = model.center;
 
-            skip1 = (skip1 + 1) % 8;
-            skip2 = (skip2 + 3) % 8;
+            skip1 = (skip1 + 5) % 20;
+            skip2 = (skip2 + 10) % 30;
             if (one != null)
             {
                 for (int y = skip1; y < output.Height; y += 20)
                 {
                     output.Draw(
-                        new CircleF(new PointF((float)one.value(y), (float)y), 3.0f)
+                        new CircleF(new PointF((float)one.value(y), (float)y), 4.0f)
                         , color1 
                         , 0);
                 }
@@ -44,7 +44,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 for (int y = skip1; y < output.Height; y += 20)
                 {
                     output.Draw(
-                        new CircleF(new PointF((float)two.value(y), (float)y), 3.0f)
+                        new CircleF(new PointF((float)two.value(y), (float)y), 4.0f)
                         , color2
                         , 0);
                 }
@@ -52,10 +52,10 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
             if (cen != null)
             {
-                for (int y = skip2; y < output.Height; y += 13)
+                for (int y = skip2; y < output.Height; y += 17)
                 {
                     output.Draw(
-                        new CircleF(new PointF((float)cen.value(y), (float)y), 1.0f)
+                        new CircleF(new PointF((float)cen.value(y), (float)y), 5.0f)
                         , color3
                         , 0);
                 }

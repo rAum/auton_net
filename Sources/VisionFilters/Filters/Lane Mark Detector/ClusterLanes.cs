@@ -28,7 +28,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             Parabola roadCenter = null;
 
             if (lanes.Count > MinPointsForOnlyOne)
-                roadCenter = RANSAC.RANSAC.fit(850, 8, (int)(lanes.Count * 0.75), 7, lanes);
+                roadCenter = RANSAC.RANSAC.fit(750, 6, (int)(lanes.Count * 0.75), 5, lanes);
 
             if (roadCenter != null) 
             {
@@ -57,10 +57,10 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 ////////////////////////////////////////////////////////////////
 
                 if (first.Count > MinPointsForEach)
-                    leftLane = RANSAC.RANSAC.fit(850, 8, (int)(first.Count * 0.75), 7, first);
+                    leftLane = RANSAC.RANSAC.fit(740, 6, (int)(first.Count * 0.75), 5, first);
 
                 if (second.Count > MinPointsForEach)
-                    rightLane = RANSAC.RANSAC.fit(850, 8, (int)(second.Count * 0.75), 7, second);
+                    rightLane = RANSAC.RANSAC.fit(740, 6, (int)(second.Count * 0.75), 5, second);
 
                 //var p = RANSAC.RANSAC.fit2(6000, 6, (int)(lanes.Count * 0.3), 4, lanes);
                 //leftLane  = p[0];

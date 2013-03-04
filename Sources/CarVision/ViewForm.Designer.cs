@@ -52,6 +52,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.imgVideoSource = new Emgu.CV.UI.ImageBox();
             this.imgDebug2 = new Emgu.CV.UI.ImageBox();
+            this.cbRoadPreview = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.imgOutput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDebug)).BeginInit();
             this.panel1.SuspendLayout();
@@ -354,6 +355,17 @@
             this.imgDebug2.TabIndex = 7;
             this.imgDebug2.TabStop = false;
             // 
+            // cbRoadPreview
+            // 
+            this.cbRoadPreview.AutoSize = true;
+            this.cbRoadPreview.Location = new System.Drawing.Point(689, 388);
+            this.cbRoadPreview.Name = "cbRoadPreview";
+            this.cbRoadPreview.Size = new System.Drawing.Size(110, 17);
+            this.cbRoadPreview.TabIndex = 21;
+            this.cbRoadPreview.Text = "big lane detection";
+            this.cbRoadPreview.UseVisualStyleBackColor = true;
+            this.cbRoadPreview.CheckedChanged += new System.EventHandler(this.cbRoadPreview_CheckedChanged);
+            // 
             // ViewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -361,6 +373,7 @@
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(822, 613);
+            this.Controls.Add(this.cbRoadPreview);
             this.Controls.Add(this.imgDebug2);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.imgDebug);
@@ -383,6 +396,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.imgVideoSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDebug2)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -411,5 +425,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.CheckBox cbRoadPreview;
     }
 }
