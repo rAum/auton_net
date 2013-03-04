@@ -53,6 +53,21 @@ namespace VisionFilters.Output
                 (sender, e) => { OnResultReady(new ResultReadyEventArgs<Image<Gray, PixelType>>(LastResult)); };
         }
 
+        public void RestartVideo()
+        {
+            if (file != "")
+            {
+                capture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, 0);
+                capture.Start();
+            }
+        }
+
+        public void ChangeVideoSource(string _file = "")
+        {
+            file = _file;
+            Load();
+        }
+
         public void Start()
         {
             Runs = true;
@@ -123,6 +138,12 @@ namespace VisionFilters.Output
                 capture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, 0);
                 capture.Start();
             }
+        }
+
+        public void ChangeVideoSource(string _file="")
+        {
+            file = _file;
+            Load();
         }
 
         public void Start()

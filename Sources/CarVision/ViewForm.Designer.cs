@@ -46,9 +46,12 @@
             this.nud1 = new System.Windows.Forms.NumericUpDown();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.imgVideoSource = new Emgu.CV.UI.ImageBox();
+            this.imgDebug2 = new Emgu.CV.UI.ImageBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.imgOutput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDebug)).BeginInit();
             this.panel1.SuspendLayout();
@@ -56,13 +59,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.nud2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgVideoSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgDebug2)).BeginInit();
             this.SuspendLayout();
             // 
             // imgOutput
             // 
             this.imgOutput.BackColor = System.Drawing.Color.Transparent;
             this.imgOutput.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
-            this.imgOutput.Location = new System.Drawing.Point(658, 26);
+            this.imgOutput.Location = new System.Drawing.Point(658, 10);
             this.imgOutput.Name = "imgOutput";
             this.imgOutput.Size = new System.Drawing.Size(160, 120);
             this.imgOutput.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -72,7 +76,7 @@
             // imgDebug
             // 
             this.imgDebug.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
-            this.imgDebug.Location = new System.Drawing.Point(658, 152);
+            this.imgDebug.Location = new System.Drawing.Point(658, 136);
             this.imgDebug.Name = "imgDebug";
             this.imgDebug.Size = new System.Drawing.Size(160, 120);
             this.imgDebug.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -81,6 +85,10 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.textBox1);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Controls.Add(this.tbColor);
             this.panel1.Controls.Add(this.button6);
             this.panel1.Controls.Add(this.button5);
@@ -110,7 +118,7 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(709, 68);
+            this.button6.Location = new System.Drawing.Point(705, 39);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(113, 23);
             this.button6.TabIndex = 15;
@@ -120,7 +128,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(709, 39);
+            this.button5.Location = new System.Drawing.Point(705, 10);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(113, 23);
             this.button5.TabIndex = 7;
@@ -267,24 +275,15 @@
             // 
             // button3
             // 
+            this.button3.BackColor = System.Drawing.SystemColors.Control;
             this.button3.ForeColor = System.Drawing.Color.Red;
             this.button3.Location = new System.Drawing.Point(662, 434);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(156, 23);
             this.button3.TabIndex = 2;
             this.button3.Text = "REC";
-            this.button3.UseVisualStyleBackColor = true;
+            this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(662, 278);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(148, 40);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Toggle lane detector / road detector";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // imgVideoSource
             // 
@@ -297,14 +296,51 @@
             this.imgVideoSource.Click += new System.EventHandler(this.imgVideoSource_Click);
             this.imgVideoSource.MouseMove += new System.Windows.Forms.MouseEventHandler(this.imgVideoSource_MouseMove);
             // 
+            // imgDebug2
+            // 
+            this.imgDebug2.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
+            this.imgDebug2.Location = new System.Drawing.Point(658, 262);
+            this.imgDebug2.Name = "imgDebug2";
+            this.imgDebug2.Size = new System.Drawing.Size(160, 120);
+            this.imgDebug2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.imgDebug2.TabIndex = 7;
+            this.imgDebug2.TabStop = false;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Cam"});
+            this.comboBox1.Location = new System.Drawing.Point(550, 10);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(149, 21);
+            this.comboBox1.TabIndex = 17;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(658, 10);
+            this.label1.Location = new System.Drawing.Point(470, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Debug:";
+            this.label1.Size = new System.Drawing.Size(74, 13);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "Video Source:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(500, 44);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(44, 13);
+            this.label2.TabIndex = 19;
+            this.label2.Text = "Current:";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(550, 39);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(149, 20);
+            this.textBox1.TabIndex = 20;
             // 
             // ViewForm
             // 
@@ -313,13 +349,12 @@
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(822, 613);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.imgDebug2);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.imgDebug);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.imgOutput);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.imgVideoSource);
             this.Location = new System.Drawing.Point(200, 200);
             this.Name = "ViewForm";
@@ -334,8 +369,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nud2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgVideoSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgDebug2)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -344,11 +379,9 @@
         private Emgu.CV.UI.ImageBox imgOutput;
         private Emgu.CV.UI.ImageBox imgDebug;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private Emgu.CV.UI.ImageBox imgVideoSource;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown nud1;
         private System.Windows.Forms.Label lColorPrev;
         private System.Windows.Forms.CheckBox checkBox1;
@@ -361,5 +394,10 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.TextBox tbColor;
+        private Emgu.CV.UI.ImageBox imgDebug2;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }

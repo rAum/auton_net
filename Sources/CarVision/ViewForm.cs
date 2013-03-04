@@ -45,9 +45,11 @@ namespace CarVision
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Gray, Byte>> e)
         {
+            ImageBox imgBox = imgDebug2;
             try
             {
-                ImageBox imgBox = imgDebug;
+                if (sender == visRoad)
+                    imgBox = imgDebug;
                 imgBox.Image = (Image<Gray, Byte>)e.Result;
             }
             catch (Exception ex)
@@ -118,6 +120,8 @@ namespace CarVision
             roadDetector = new RoadCenterDetector(filter);
            // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
             filtered = new DrawPoints(roadDetector.Perceptor.laneDetector);
+            filtered.ResultReady += DisplayVideo;
+            filtered.Active = true;
 
             visRoad = new VisualiseSimpleRoadModel(roadDetector.Perceptor.roadDetector);
             visRoad.ResultReady += DisplayVideo;
@@ -142,26 +146,6 @@ namespace CarVision
 
         private void ViewForm_Resize(object sender, EventArgs e)
         {
-        }
-
-        int next = 0;
-        private void button1_Click(object sender, EventArgs e)
-        {
-            next = (next + 1) % 2;
-
-            if (next == 1)
-            {
-                visRoad.ResultReady -= DisplayVideo;
-                filtered.Active = true;
-                filtered.ResultReady += DisplayVideo;
-            }
-            else
-            {
-                filtered.Active = false;
-                visRoad.ResultReady += DisplayVideo;
-                filtered.ResultReady -= DisplayVideo;
-            }
-
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -258,6 +242,18 @@ namespace CarVision
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             colorCapture = !colorCapture;
+            if (colorCapture)
+            {
+                filtered.Active = false;
+                filter.ResultReady += DisplayVideo;
+                filtered.ResultReady -= DisplayVideo;
+            }
+            else
+            {
+                filter.ResultReady -= DisplayVideo;
+                filtered.ResultReady += DisplayVideo;
+                filtered.Active = true;
+            }
         }
 
         private void imgVideoSource_MouseMove(object sender, MouseEventArgs e)

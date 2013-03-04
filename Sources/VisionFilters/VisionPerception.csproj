@@ -68,6 +68,7 @@
     <Compile Include="Filters\Image Operations\CamUndistort.cs" />
     <Compile Include="Filters\Image Operations\DrawPoints.cs" />
     <Compile Include="Filters\Image Operations\HsvFilter.cs" />
+    <Compile Include="Filters\Image Operations\LaneMarkFilter.cs" />
     <Compile Include="Filters\Lane Mark Detector\ClusterLanes.cs" />
     <Compile Include="Filters\Lane Mark Detector\LaneMarkDetector.cs" />
     <Compile Include="Filters\Lane Mark Detector\LineModel.cs" />
