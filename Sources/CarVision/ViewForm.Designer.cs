@@ -158,7 +158,7 @@
             // 
             // tbColor
             // 
-            this.tbColor.Location = new System.Drawing.Point(0, 3);
+            this.tbColor.Location = new System.Drawing.Point(6, 1);
             this.tbColor.Multiline = true;
             this.tbColor.Name = "tbColor";
             this.tbColor.ReadOnly = true;
@@ -198,7 +198,7 @@
             // 
             this.nud3.Location = new System.Drawing.Point(109, 85);
             this.nud3.Maximum = new decimal(new int[] {
-            250,
+            255,
             0,
             0,
             0});
@@ -211,7 +211,7 @@
             this.nud3.Size = new System.Drawing.Size(42, 20);
             this.nud3.TabIndex = 13;
             this.nud3.Value = new decimal(new int[] {
-            100,
+            150,
             0,
             0,
             0});
@@ -230,7 +230,7 @@
             // 
             this.nud2.Location = new System.Drawing.Point(61, 85);
             this.nud2.Maximum = new decimal(new int[] {
-            250,
+            255,
             0,
             0,
             0});
@@ -243,7 +243,7 @@
             this.nud2.Size = new System.Drawing.Size(42, 20);
             this.nud2.TabIndex = 11;
             this.nud2.Value = new decimal(new int[] {
-            100,
+            120,
             0,
             0,
             0});
@@ -262,7 +262,7 @@
             // 
             this.lColorPrev2.AutoSize = true;
             this.lColorPrev2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lColorPrev2.Location = new System.Drawing.Point(277, 39);
+            this.lColorPrev2.Location = new System.Drawing.Point(283, 37);
             this.lColorPrev2.Name = "lColorPrev2";
             this.lColorPrev2.Size = new System.Drawing.Size(41, 20);
             this.lColorPrev2.TabIndex = 9;
@@ -283,7 +283,7 @@
             // 
             this.lColorPrev.AutoSize = true;
             this.lColorPrev.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lColorPrev.Location = new System.Drawing.Point(277, 13);
+            this.lColorPrev.Location = new System.Drawing.Point(283, 11);
             this.lColorPrev.Name = "lColorPrev";
             this.lColorPrev.Size = new System.Drawing.Size(41, 20);
             this.lColorPrev.TabIndex = 4;
@@ -293,7 +293,7 @@
             // 
             this.nud1.Location = new System.Drawing.Point(13, 85);
             this.nud1.Maximum = new decimal(new int[] {
-            250,
+            360,
             0,
             0,
             0});

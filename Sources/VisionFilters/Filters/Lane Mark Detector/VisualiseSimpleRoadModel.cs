@@ -13,11 +13,9 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
     {
         private Supplier<SimpleRoadModel> supplier;
         Image<Bgr, byte> output;
-        Bgr color1 = new Bgr(183, 210, 140),
-            color2 = new Bgr(143, 201, 143),
-            color3 = new Bgr(230, 230, 250);
-        int skip1 = 0;
-        int skip2 = 2;
+        Bgr color1 = new Bgr(183, 100, 100),
+            color2 = new Bgr(100, 170, 103),
+            color3 = new Bgr(100, 100, 200);
 
         private void CreateImage(SimpleRoadModel model)
         {
@@ -26,11 +24,9 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             var two = model.rightLane;
             var cen = model.center;
 
-            skip1 = (skip1 + 5) % 20;
-            skip2 = (skip2 + 10) % 30;
             if (one != null)
             {
-                for (int y = skip1; y < output.Height; y += 20)
+                for (int y = 0; y < output.Height; y += 20)
                 {
                     output.Draw(
                         new CircleF(new PointF((float)one.value(y), (float)y), 4.0f)
@@ -41,7 +37,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
             if (two != null)
             {
-                for (int y = skip1; y < output.Height; y += 20)
+                for (int y = 0; y < output.Height; y += 20)
                 {
                     output.Draw(
                         new CircleF(new PointF((float)two.value(y), (float)y), 4.0f)
@@ -52,7 +48,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
             if (cen != null)
             {
-                for (int y = skip2; y < output.Height; y += 17)
+                for (int y = 0; y < output.Height; y += 17)
                 {
                     output.Draw(
                         new CircleF(new PointF((float)cen.value(y), (float)y), 5.0f)

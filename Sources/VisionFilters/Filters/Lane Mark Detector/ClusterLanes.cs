@@ -14,7 +14,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
     public class ClusterLanes : ThreadSupplier<List<Point>, SimpleRoadModel> 
     {
         private Supplier<List<Point>> supplier;
-        private double roadCenterDistAvg = 184; // estimated relative road distance [half of width]
+        private double roadCenterDistAvg = 200; // estimated relative road distance [half of width]
 
         const int MinPointsForOnlyOne = 300;
         const int MinPointsForEach    = 280;
@@ -83,7 +83,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                         0.5 * (leftLane.c + rightLane.c)
                         );
 
-                    //roadCenterDistAvg = ((rightLane.c - roadCenter.c) + (roadCenter.c - leftLane.c))*0.5 * 0.05 + roadCenterDistAvg * 0.95; // reestimate road center
+                    roadCenterDistAvg = ((rightLane.c - roadCenter.c) + (roadCenter.c - leftLane.c))*0.5 * 0.005 + roadCenterDistAvg * 0.995; // reestimate road center
                 }
                 else if (leftLane != null)
                 {

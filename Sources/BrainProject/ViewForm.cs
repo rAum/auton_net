@@ -54,7 +54,7 @@ namespace BrainProject
                 if (sender == invPerp)
                 {
                     Image<Bgr, byte> cam = new Image<Bgr, byte>(imgVideoSource.Image.Bitmap);
-                    imgOutput.Image = (Image<Bgr, byte>)e.Result + cam * 0.6;
+                    imgOutput.Image = (Image<Bgr, byte>)e.Result + cam;
                     return;
                 }
                 else if (sender == colorVideoSource)
