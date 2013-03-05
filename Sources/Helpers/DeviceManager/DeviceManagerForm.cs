@@ -158,23 +158,21 @@ namespace Helpers
 
         private void button_initialize_Click(object sender, EventArgs e)
         {
-            jurek.Say("Rozpoczynam inicjalizację.");
+            jurek.Say("Inicjalizacja sterowników.");
             deviceManager.Initialize();
-            jurek.Say("Inicjalizacja zakończona.");
         }
 
         private void button_StartSensors_Click(object sender, EventArgs e)
         {
             jurek.Say("Uruchamiam sensory.");
             deviceManager.StartSensors();
-            jurek.Say("Sensory uruchomione.");
         }
 
         private void button_StartEffectors_Click(object sender, EventArgs e)
         {
             jurek.Say("Uruchamiam efektory.");
             deviceManager.StartEffectors();
-            jurek.Say("Efektory uruchomione.");
+            jurek.Say("Pojazd gotowy do jazdy.");
         }
 
         private void button_PauseEffectors_Click(object sender, EventArgs e)
@@ -186,7 +184,7 @@ namespace Helpers
         private void button_EmergencyStop_Click(object sender, EventArgs e)
         {
             deviceManager.EmergencyStop();
-            jurek.Say("Ojej, zatrzymać! Przycisk bezpieczeństwa użyty.");
+            jurek.Say("Ojej! Zatrzymać! Przycisk bezpieczeństwa użyty.");
         }
 
     }
