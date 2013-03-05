@@ -338,15 +338,20 @@ namespace CarController_old
         /// <param name="waitBeforeNextTryInMs"></param>
         private void TryOppeningPortUntilItSucceds(int waitBeforeNextTryInMs)
         {
-            try
+            bool done = false;
+
+            while (!done)
             {
-                port.Open();
-            }
-            catch (Exception)
-            {
-                Logger.Log(this, String.Format("RS232 port oppening failed, waiting {0}ms before next try", waitBeforeNextTryInMs), 2);
-                Thread.Sleep(waitBeforeNextTryInMs);
-                TryOppeningPortUntilItSucceds(waitBeforeNextTryInMs);
+                try
+                {
+                    port.Open();
+                    done = true;
+                }
+                catch (Exception)
+                {
+                    Logger.Log(this, String.Format("RS232 port oppening failed, waiting {0}ms before next try", waitBeforeNextTryInMs), 2);
+                    Thread.Sleep(waitBeforeNextTryInMs);
+                }
             }
         }
      
@@ -415,33 +420,33 @@ namespace CarController_old
              * due to StackOverflow:
              * only Read() should be used (returns byte, not char - chars bugs the code!)
              */
-                if (!RS232dataIsBeingRead)
-                { //TODO: think about doing it in new thread
-                    RS232dataIsBeingRead = true;
-                    int byteRead;
-                    try
+            if (!RS232dataIsBeingRead)
+            { //TODO: think about doing it in new thread
+                RS232dataIsBeingRead = true;
+                int byteRead;
+                try
+                {
+                    while ((byteRead = port.ReadByte()) != -1) //-1 is when there is end of stream
                     {
-                        while ((byteRead = port.ReadByte()) != -1) //-1 is when there is end of stream
-                        {
-                            RS232SignalsInputList.AddLast(byteRead);
-                        }
-                        RS232dataIsBeingRead = false;
+                        RS232SignalsInputList.AddLast(byteRead);
                     }
-                    catch (System.TimeoutException)
-                    {
-                        RS232SignalsInputList.Clear(); //clearing list on timeout should prevent desync
-                        Logger.Log(this, "RS232 timeout has occured", 2);
-                    }
-                    catch (Exception)
-                    {
-                       // Logger.Log(this, String.Format("RS232 error: {0}, {1}", e.Message, e.StackTrace)); //TODO: //IMPORTANT: tempporary
-                    }
-                    finally
-                    {
-                        RS232dataIsBeingRead = false;
-                    }
+                    RS232dataIsBeingRead = false;
                 }
-                //else just end 
+                catch (System.TimeoutException)
+                {
+                    RS232SignalsInputList.Clear(); //clearing list on timeout should prevent desync
+                    Logger.Log(this, "RS232 timeout has occured", 2);
+                }
+                catch (Exception)
+                {
+                    // Logger.Log(this, String.Format("RS232 error: {0}, {1}", e.Message, e.StackTrace)); //TODO: //IMPORTANT: tempporary
+                }
+                finally
+                {
+                    RS232dataIsBeingRead = false;
+                }
+            }
+            //else just end 
         }
 
         /// <summary>
