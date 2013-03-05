@@ -35,8 +35,26 @@ namespace Helpers
             updaterTimer.Tick += updaterTimer_Tick;
             updaterTimer.Start();
 
-            jurek.Say("Dzień dobry, mówi Twój najlepszy kierowca Jurek!");
+            JurekGreeting();
             jurek.StartListening(hearedCommand);
+        }
+
+        private void JurekGreeting()
+        {
+            Random rnd = new Random();
+            switch (rnd.Next(0, 4))
+            {
+                case 0: jurek.Say("Cześć."); break;
+                case 1: jurek.Say("Witaj."); break;
+                default: jurek.Say("Dzień dobry."); break;
+            }
+            switch (rnd.Next(0, 4))
+            {
+                case 0: jurek.Say("Jurek, kierowca. Do usług"); break;
+                case 1: jurek.Say("mówi Twój najlepszy kierowca Jurek!"); break;
+                case 2: jurek.Say("to ja, Jurek, kierowca."); break;
+                default: jurek.Say("Kierowca Jurek do usług."); break;
+            }
         }
 
         bool started = false;
@@ -78,7 +96,7 @@ namespace Helpers
                         case 6: jurek.Say("Co robi grabaż?"); Thread.Sleep(2000); jurek.Say("Częstochowa. Ha ha ha he he"); break;
                         case 7: jurek.Say("Jakiś problem?"); break;
                         case 8: jurek.Say("Co robi blondynka pod drzewem?"); Thread.Sleep(2000); jurek.Say("Czeka na autograf Kory. Bu hehehe"); break;
-                        default:  jurek.Say("Kurwa"); break;
+                        default:  jurek.Say("heh"); break;
                     }
                 }
             }
@@ -168,7 +186,7 @@ namespace Helpers
         private void button_EmergencyStop_Click(object sender, EventArgs e)
         {
             deviceManager.EmergencyStop();
-            jurek.Say("Oż kurwa, zatrzymać! Przycisk bezpieczeństwa użyty.");
+            jurek.Say("Ojej, zatrzymać! Przycisk bezpieczeństwa użyty.");
         }
 
     }

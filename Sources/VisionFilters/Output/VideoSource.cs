@@ -146,7 +146,7 @@ namespace VisionFilters.Output
         public void ChangeVideoSource(string _file="")
         {
             capture.Stop();
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(1500);
             file = _file;
             Load();
             Start();
