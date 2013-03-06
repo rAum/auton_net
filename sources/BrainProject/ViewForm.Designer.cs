@@ -105,8 +105,9 @@
             // button_EnableAutomaticSteering
             // 
             this.button_EnableAutomaticSteering.BackColor = System.Drawing.Color.DarkRed;
+            this.button_EnableAutomaticSteering.Enabled = false;
             this.button_EnableAutomaticSteering.ForeColor = System.Drawing.Color.DarkOrange;
-            this.button_EnableAutomaticSteering.Location = new System.Drawing.Point(481, 12);
+            this.button_EnableAutomaticSteering.Location = new System.Drawing.Point(778, 12);
             this.button_EnableAutomaticSteering.Name = "button_EnableAutomaticSteering";
             this.button_EnableAutomaticSteering.Size = new System.Drawing.Size(181, 38);
             this.button_EnableAutomaticSteering.TabIndex = 5;
@@ -179,7 +180,7 @@
             // 
             this.button1.BackColor = System.Drawing.Color.OliveDrab;
             this.button1.ForeColor = System.Drawing.Color.SeaShell;
-            this.button1.Location = new System.Drawing.Point(782, 12);
+            this.button1.Location = new System.Drawing.Point(591, 12);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(181, 38);
             this.button1.TabIndex = 8;

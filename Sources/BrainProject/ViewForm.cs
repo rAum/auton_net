@@ -198,6 +198,7 @@ namespace BrainProject
             CreateVisionProcess(ref setRepo);
 
             (sender as Button).Enabled = false;
+            button_EnableAutomaticSteering.Enabled = true;
         }
     }
 }
