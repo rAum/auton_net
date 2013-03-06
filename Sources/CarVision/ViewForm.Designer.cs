@@ -53,6 +53,14 @@
             this.imgVideoSource = new Emgu.CV.UI.ImageBox();
             this.imgDebug2 = new Emgu.CV.UI.ImageBox();
             this.cbRoadPreview = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.nudTau = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.nudThreshold = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
+            this.nudVOffset = new System.Windows.Forms.NumericUpDown();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.imgOutput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDebug)).BeginInit();
             this.panel1.SuspendLayout();
@@ -61,6 +69,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.nud1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgVideoSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDebug2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTau)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudThreshold)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudVOffset)).BeginInit();
             this.SuspendLayout();
             // 
             // imgOutput
@@ -86,6 +97,14 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.label9);
+            this.panel1.Controls.Add(this.nudVOffset);
+            this.panel1.Controls.Add(this.label8);
+            this.panel1.Controls.Add(this.nudThreshold);
+            this.panel1.Controls.Add(this.label7);
+            this.panel1.Controls.Add(this.nudTau);
+            this.panel1.Controls.Add(this.label6);
             this.panel1.Controls.Add(this.tbVideoSource);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label1);
@@ -110,16 +129,16 @@
             // 
             // tbVideoSource
             // 
-            this.tbVideoSource.Location = new System.Drawing.Point(484, 39);
+            this.tbVideoSource.Location = new System.Drawing.Point(495, 40);
             this.tbVideoSource.Name = "tbVideoSource";
             this.tbVideoSource.ReadOnly = true;
-            this.tbVideoSource.Size = new System.Drawing.Size(215, 20);
+            this.tbVideoSource.Size = new System.Drawing.Size(217, 20);
             this.tbVideoSource.TabIndex = 20;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(434, 44);
+            this.label2.Location = new System.Drawing.Point(450, 43);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(44, 13);
             this.label2.TabIndex = 19;
@@ -128,7 +147,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(404, 15);
+            this.label1.Location = new System.Drawing.Point(420, 14);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(74, 13);
             this.label1.TabIndex = 18;
@@ -139,9 +158,9 @@
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "Camera"});
-            this.comboBox1.Location = new System.Drawing.Point(484, 10);
+            this.comboBox1.Location = new System.Drawing.Point(494, 11);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(215, 21);
+            this.comboBox1.Size = new System.Drawing.Size(217, 21);
             this.comboBox1.TabIndex = 17;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
@@ -151,14 +170,14 @@
             this.tbColor.Multiline = true;
             this.tbColor.Name = "tbColor";
             this.tbColor.ReadOnly = true;
-            this.tbColor.Size = new System.Drawing.Size(271, 64);
+            this.tbColor.Size = new System.Drawing.Size(276, 64);
             this.tbColor.TabIndex = 16;
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(705, 39);
+            this.button6.Location = new System.Drawing.Point(718, 39);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(113, 23);
+            this.button6.Size = new System.Drawing.Size(100, 23);
             this.button6.TabIndex = 15;
             this.button6.Text = "CAM (UN)PAUSE";
             this.button6.UseVisualStyleBackColor = true;
@@ -166,9 +185,9 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(705, 10);
+            this.button5.Location = new System.Drawing.Point(718, 10);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(113, 23);
+            this.button5.Size = new System.Drawing.Size(100, 23);
             this.button5.TabIndex = 7;
             this.button5.Text = "CAM RESET";
             this.button5.UseVisualStyleBackColor = true;
@@ -177,7 +196,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(119, 69);
+            this.label5.Location = new System.Drawing.Point(110, 69);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(17, 13);
             this.label5.TabIndex = 14;
@@ -185,7 +204,7 @@
             // 
             // nud3
             // 
-            this.nud3.Location = new System.Drawing.Point(109, 85);
+            this.nud3.Location = new System.Drawing.Point(100, 85);
             this.nud3.Maximum = new decimal(new int[] {
             255,
             0,
@@ -209,7 +228,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(71, 69);
+            this.label4.Location = new System.Drawing.Point(62, 69);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(17, 13);
             this.label4.TabIndex = 12;
@@ -217,7 +236,7 @@
             // 
             // nud2
             // 
-            this.nud2.Location = new System.Drawing.Point(61, 85);
+            this.nud2.Location = new System.Drawing.Point(52, 85);
             this.nud2.Maximum = new decimal(new int[] {
             255,
             0,
@@ -241,7 +260,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(23, 69);
+            this.label3.Location = new System.Drawing.Point(14, 69);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(18, 13);
             this.label3.TabIndex = 10;
@@ -251,7 +270,7 @@
             // 
             this.lColorPrev2.AutoSize = true;
             this.lColorPrev2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lColorPrev2.Location = new System.Drawing.Point(283, 37);
+            this.lColorPrev2.Location = new System.Drawing.Point(235, 88);
             this.lColorPrev2.Name = "lColorPrev2";
             this.lColorPrev2.Size = new System.Drawing.Size(41, 20);
             this.lColorPrev2.TabIndex = 9;
@@ -260,7 +279,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(157, 86);
+            this.checkBox1.Location = new System.Drawing.Point(148, 86);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(81, 17);
             this.checkBox1.TabIndex = 8;
@@ -272,7 +291,7 @@
             // 
             this.lColorPrev.AutoSize = true;
             this.lColorPrev.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lColorPrev.Location = new System.Drawing.Point(283, 11);
+            this.lColorPrev.Location = new System.Drawing.Point(235, 69);
             this.lColorPrev.Name = "lColorPrev";
             this.lColorPrev.Size = new System.Drawing.Size(41, 20);
             this.lColorPrev.TabIndex = 4;
@@ -280,7 +299,7 @@
             // 
             // nud1
             // 
-            this.nud1.Location = new System.Drawing.Point(13, 85);
+            this.nud1.Location = new System.Drawing.Point(4, 85);
             this.nud1.Maximum = new decimal(new int[] {
             360,
             0,
@@ -355,6 +374,110 @@
             this.cbRoadPreview.UseVisualStyleBackColor = true;
             this.cbRoadPreview.CheckedChanged += new System.EventHandler(this.cbRoadPreview_CheckedChanged);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(301, 4);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(98, 13);
+            this.label6.TabIndex = 21;
+            this.label6.Text = "Lane detector filter:";
+            // 
+            // nudTau
+            // 
+            this.nudTau.Location = new System.Drawing.Point(370, 27);
+            this.nudTau.Maximum = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
+            this.nudTau.Minimum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.nudTau.Name = "nudTau";
+            this.nudTau.Size = new System.Drawing.Size(42, 20);
+            this.nudTau.TabIndex = 22;
+            this.nudTau.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.nudTau.ValueChanged += new System.EventHandler(this.nudTau_ValueChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(335, 29);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(29, 13);
+            this.label7.TabIndex = 23;
+            this.label7.Text = "Tau:";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(307, 55);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(57, 13);
+            this.label8.TabIndex = 25;
+            this.label8.Text = "Threshold:";
+            // 
+            // nudThreshold
+            // 
+            this.nudThreshold.Location = new System.Drawing.Point(370, 53);
+            this.nudThreshold.Maximum = new decimal(new int[] {
+            254,
+            0,
+            0,
+            0});
+            this.nudThreshold.Name = "nudThreshold";
+            this.nudThreshold.Size = new System.Drawing.Size(42, 20);
+            this.nudThreshold.TabIndex = 24;
+            this.nudThreshold.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.nudThreshold.ValueChanged += new System.EventHandler(this.nudThreshold_ValueChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(316, 81);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(48, 13);
+            this.label9.TabIndex = 27;
+            this.label9.Text = "V Offset:";
+            // 
+            // nudVOffset
+            // 
+            this.nudVOffset.Location = new System.Drawing.Point(370, 79);
+            this.nudVOffset.Maximum = new decimal(new int[] {
+            400,
+            0,
+            0,
+            0});
+            this.nudVOffset.Name = "nudVOffset";
+            this.nudVOffset.Size = new System.Drawing.Size(42, 20);
+            this.nudVOffset.TabIndex = 26;
+            this.nudVOffset.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.nudVOffset.ValueChanged += new System.EventHandler(this.nudVOffset_ValueChanged);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(718, 77);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(100, 32);
+            this.button1.TabIndex = 28;
+            this.button1.Text = "Export settings";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // ViewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -384,6 +507,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.nud1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgVideoSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDebug2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTau)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudThreshold)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudVOffset)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -415,5 +541,13 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.CheckBox cbRoadPreview;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.NumericUpDown nudVOffset;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown nudThreshold;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.NumericUpDown nudTau;
+        private System.Windows.Forms.Button button1;
     }
 }

@@ -33,7 +33,8 @@ namespace Auton.CarVision.Video.Filters
             set { tau = value < 1 ? 1 : value; }
         }
 
-        public byte Threshold { get; set; }
+        byte threshold;
+        public byte Threshold { get { return threshold; } set { threshold = value; } }
 
         private void DetectLaneMark(Image<Gray, byte> img)
         {
@@ -56,7 +57,7 @@ namespace Auton.CarVision.Video.Filters
                     
                     aux *= 2;// more contrast
 
-                    if (aux >= Threshold)
+                    if (aux >= threshold)
                         candidates.Add(new Point(x, y));
                 }
             }

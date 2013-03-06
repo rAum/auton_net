@@ -126,7 +126,6 @@ namespace CarVision
             Hsv maxColor = new Hsv(180 / 2, 255, 0.74 * 255);
 
             filter = new HsvFilter(colorVideoSource, minColor, maxColor);
-            //filter.ResultReady += DisplayVideo;
             roadDetector = new RoadCenterDetector(filter);
            // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
             filtered = new DrawPoints(roadDetector.Perceptor.laneDetector);
@@ -139,6 +138,10 @@ namespace CarVision
             invPerp = new PerspectiveCorrectionRgb(visRoad, CamModel.dstPerspective, CamModel.srcPerspective);
             //invPerp = new PerspectiveCorrectionRgb(colorVideoSource, CamModel.srcPerspective, CamModel.dstPerspective);
             invPerp.ResultReady += DisplayVideo;
+
+            nudTau.Value = roadDetector.Perceptor.laneDetector.Tau;
+            nudThreshold.Value = roadDetector.Perceptor.laneDetector.Threshold;
+            nudVOffset.Value = roadDetector.Perceptor.laneDetector.VerticalOffset;
 
             colorVideoSource.Start();
         }
@@ -334,6 +337,21 @@ namespace CarVision
         {
             CheckBox cb = sender as CheckBox;
             swapImages = cb.Checked;
+        }
+
+        private void nudTau_ValueChanged(object sender, EventArgs e)
+        {
+            roadDetector.Perceptor.laneDetector.Tau = (int)nudTau.Value;
+        }
+
+        private void nudThreshold_ValueChanged(object sender, EventArgs e)
+        {
+            roadDetector.Perceptor.laneDetector.Threshold = (byte)nudThreshold.Value;
+        }
+
+        private void nudVOffset_ValueChanged(object sender, EventArgs e)
+        {
+            roadDetector.Perceptor.laneDetector.VerticalOffset = (int)nudVOffset.Value;
         }
     }
 }
