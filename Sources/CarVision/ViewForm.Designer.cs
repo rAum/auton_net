@@ -32,6 +32,14 @@
             this.imgOutput = new Emgu.CV.UI.ImageBox();
             this.imgDebug = new Emgu.CV.UI.ImageBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.nudVOffset = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
+            this.nudThreshold = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.nudTau = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
             this.tbVideoSource = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -53,25 +61,18 @@
             this.imgVideoSource = new Emgu.CV.UI.ImageBox();
             this.imgDebug2 = new Emgu.CV.UI.ImageBox();
             this.cbRoadPreview = new System.Windows.Forms.CheckBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.nudTau = new System.Windows.Forms.NumericUpDown();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.nudThreshold = new System.Windows.Forms.NumericUpDown();
-            this.label9 = new System.Windows.Forms.Label();
-            this.nudVOffset = new System.Windows.Forms.NumericUpDown();
-            this.button1 = new System.Windows.Forms.Button();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
             ((System.ComponentModel.ISupportInitialize)(this.imgOutput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDebug)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudVOffset)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudThreshold)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTau)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgVideoSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDebug2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTau)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudThreshold)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudVOffset)).BeginInit();
             this.SuspendLayout();
             // 
             // imgOutput
@@ -97,6 +98,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.statusStrip);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.label9);
             this.panel1.Controls.Add(this.nudVOffset);
@@ -122,10 +124,115 @@
             this.panel1.Controls.Add(this.lColorPrev);
             this.panel1.Controls.Add(this.nud1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 496);
+            this.panel1.Location = new System.Drawing.Point(0, 503);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(822, 117);
+            this.panel1.Size = new System.Drawing.Size(822, 138);
             this.panel1.TabIndex = 5;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(718, 77);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(100, 32);
+            this.button1.TabIndex = 28;
+            this.button1.Text = "Export settings";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(316, 81);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(48, 13);
+            this.label9.TabIndex = 27;
+            this.label9.Text = "V Offset:";
+            // 
+            // nudVOffset
+            // 
+            this.nudVOffset.Location = new System.Drawing.Point(370, 79);
+            this.nudVOffset.Maximum = new decimal(new int[] {
+            400,
+            0,
+            0,
+            0});
+            this.nudVOffset.Name = "nudVOffset";
+            this.nudVOffset.Size = new System.Drawing.Size(42, 20);
+            this.nudVOffset.TabIndex = 26;
+            this.nudVOffset.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.nudVOffset.ValueChanged += new System.EventHandler(this.nudVOffset_ValueChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(307, 55);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(57, 13);
+            this.label8.TabIndex = 25;
+            this.label8.Text = "Threshold:";
+            // 
+            // nudThreshold
+            // 
+            this.nudThreshold.Location = new System.Drawing.Point(370, 53);
+            this.nudThreshold.Maximum = new decimal(new int[] {
+            254,
+            0,
+            0,
+            0});
+            this.nudThreshold.Name = "nudThreshold";
+            this.nudThreshold.Size = new System.Drawing.Size(42, 20);
+            this.nudThreshold.TabIndex = 24;
+            this.nudThreshold.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.nudThreshold.ValueChanged += new System.EventHandler(this.nudThreshold_ValueChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(335, 29);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(29, 13);
+            this.label7.TabIndex = 23;
+            this.label7.Text = "Tau:";
+            // 
+            // nudTau
+            // 
+            this.nudTau.Location = new System.Drawing.Point(370, 27);
+            this.nudTau.Maximum = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
+            this.nudTau.Minimum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.nudTau.Name = "nudTau";
+            this.nudTau.Size = new System.Drawing.Size(42, 20);
+            this.nudTau.TabIndex = 22;
+            this.nudTau.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.nudTau.ValueChanged += new System.EventHandler(this.nudTau_ValueChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(301, 4);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(98, 13);
+            this.label6.TabIndex = 21;
+            this.label6.Text = "Lane detector filter:";
             // 
             // tbVideoSource
             // 
@@ -374,109 +481,13 @@
             this.cbRoadPreview.UseVisualStyleBackColor = true;
             this.cbRoadPreview.CheckedChanged += new System.EventHandler(this.cbRoadPreview_CheckedChanged);
             // 
-            // label6
+            // statusStrip
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(301, 4);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(98, 13);
-            this.label6.TabIndex = 21;
-            this.label6.Text = "Lane detector filter:";
-            // 
-            // nudTau
-            // 
-            this.nudTau.Location = new System.Drawing.Point(370, 27);
-            this.nudTau.Maximum = new decimal(new int[] {
-            16,
-            0,
-            0,
-            0});
-            this.nudTau.Minimum = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            this.nudTau.Name = "nudTau";
-            this.nudTau.Size = new System.Drawing.Size(42, 20);
-            this.nudTau.TabIndex = 22;
-            this.nudTau.Value = new decimal(new int[] {
-            6,
-            0,
-            0,
-            0});
-            this.nudTau.ValueChanged += new System.EventHandler(this.nudTau_ValueChanged);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(335, 29);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(29, 13);
-            this.label7.TabIndex = 23;
-            this.label7.Text = "Tau:";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(307, 55);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(57, 13);
-            this.label8.TabIndex = 25;
-            this.label8.Text = "Threshold:";
-            // 
-            // nudThreshold
-            // 
-            this.nudThreshold.Location = new System.Drawing.Point(370, 53);
-            this.nudThreshold.Maximum = new decimal(new int[] {
-            254,
-            0,
-            0,
-            0});
-            this.nudThreshold.Name = "nudThreshold";
-            this.nudThreshold.Size = new System.Drawing.Size(42, 20);
-            this.nudThreshold.TabIndex = 24;
-            this.nudThreshold.Value = new decimal(new int[] {
-            6,
-            0,
-            0,
-            0});
-            this.nudThreshold.ValueChanged += new System.EventHandler(this.nudThreshold_ValueChanged);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(316, 81);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(48, 13);
-            this.label9.TabIndex = 27;
-            this.label9.Text = "V Offset:";
-            // 
-            // nudVOffset
-            // 
-            this.nudVOffset.Location = new System.Drawing.Point(370, 79);
-            this.nudVOffset.Maximum = new decimal(new int[] {
-            400,
-            0,
-            0,
-            0});
-            this.nudVOffset.Name = "nudVOffset";
-            this.nudVOffset.Size = new System.Drawing.Size(42, 20);
-            this.nudVOffset.TabIndex = 26;
-            this.nudVOffset.Value = new decimal(new int[] {
-            6,
-            0,
-            0,
-            0});
-            this.nudVOffset.ValueChanged += new System.EventHandler(this.nudVOffset_ValueChanged);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(718, 77);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 32);
-            this.button1.TabIndex = 28;
-            this.button1.Text = "Export settings";
-            this.button1.UseVisualStyleBackColor = true;
+            this.statusStrip.Location = new System.Drawing.Point(0, 116);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(822, 22);
+            this.statusStrip.TabIndex = 29;
+            this.statusStrip.Text = "statusStrip1";
             // 
             // ViewForm
             // 
@@ -484,7 +495,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(822, 613);
+            this.ClientSize = new System.Drawing.Size(822, 641);
             this.Controls.Add(this.cbRoadPreview);
             this.Controls.Add(this.imgDebug2);
             this.Controls.Add(this.button4);
@@ -502,14 +513,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.imgDebug)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudVOffset)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudThreshold)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTau)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgVideoSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDebug2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTau)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudThreshold)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudVOffset)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -549,5 +560,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown nudTau;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.StatusStrip statusStrip;
     }
 }

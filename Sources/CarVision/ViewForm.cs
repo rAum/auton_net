@@ -34,8 +34,9 @@ namespace CarVision
 
         VideoWriter videoWriter;
 
+        SettingsRepository.SettingsRepository setRepo = null;
+
         bool colorCapture;
-        bool perspCapture;
 
         // perspektywa
         //180 cm od niebieskiej
@@ -113,11 +114,19 @@ namespace CarVision
         public ViewForm()
         {
             InitializeComponent();
-
             LoadVideos();
-
             comboBox1.SelectedIndex = 0; // cam
+            PrepareVisionProcess();
 
+            setRepo = new SettingsRepository.SettingsRepository("../../../../config.xml");
+            //if (setRepo.Correct)
+            //    LoadValuesFromRepo();
+
+            colorVideoSource.Start();
+        }
+
+        private void PrepareVisionProcess()
+        {
             colorVideoSource = new ColorVideoSource(getVideoSource());
             colorVideoSource.ResultReady += DisplayVideo;
 
@@ -127,7 +136,7 @@ namespace CarVision
 
             filter = new HsvFilter(colorVideoSource, minColor, maxColor);
             roadDetector = new RoadCenterDetector(filter);
-           // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
+            // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
             filtered = new DrawPoints(roadDetector.Perceptor.laneDetector);
             filtered.ResultReady += DisplayVideo;
             filtered.Active = true;
@@ -138,12 +147,6 @@ namespace CarVision
             invPerp = new PerspectiveCorrectionRgb(visRoad, CamModel.dstPerspective, CamModel.srcPerspective);
             //invPerp = new PerspectiveCorrectionRgb(colorVideoSource, CamModel.srcPerspective, CamModel.dstPerspective);
             invPerp.ResultReady += DisplayVideo;
-
-            nudTau.Value = roadDetector.Perceptor.laneDetector.Tau;
-            nudThreshold.Value = roadDetector.Perceptor.laneDetector.Threshold;
-            nudVOffset.Value = roadDetector.Perceptor.laneDetector.VerticalOffset;
-
-            colorVideoSource.Start();
         }
 
         private void LoadVideos()
@@ -169,6 +172,11 @@ namespace CarVision
             colorVideoSource.ResultReady -= DisplayVideo;
             invPerp.ResultReady -= DisplayVideo;
             visRoad.ResultReady -= DisplayVideo;
+
+            if (MessageBox.Show("Do you want to export settings?") == DialogResult.OK) {
+                DumpVarsToRepo();
+                setRepo.Save();
+            }
 
             // wait a bit...
             System.Threading.Thread.Sleep(1000);
@@ -352,6 +360,67 @@ namespace CarVision
         private void nudVOffset_ValueChanged(object sender, EventArgs e)
         {
             roadDetector.Perceptor.laneDetector.VerticalOffset = (int)nudVOffset.Value;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            statusStrip.Text = "";
+            colorVideoSource.Pause();
+            System.Threading.Thread.Sleep(800);
+            DumpVarsToRepo();
+            colorVideoSource.Start();
+            setRepo.Save();
+
+            statusStrip.Text = "config saved.";
+        }
+
+        private void DumpVarsToRepo()
+        {
+            setRepo.Set("tau",            roadDetector.Perceptor.laneDetector.Tau);
+            setRepo.Set("threshold", (int)roadDetector.Perceptor.laneDetector.Threshold);
+            setRepo.Set("v-offset",       roadDetector.Perceptor.laneDetector.VerticalOffset);
+
+            setRepo.Set("h-range", (int)nud1.Value);
+            setRepo.Set("s-range", (int)nud2.Value);
+            setRepo.Set("v-range", (int)nud3.Value);
+
+            Hsv lower = filter.lower,
+                upper = filter.upper;
+
+            setRepo.Set("min-h", (int)Math.Round(lower.Hue));
+            setRepo.Set("min-s", (int)Math.Round(lower.Satuation));
+            setRepo.Set("min-v", (int)Math.Round(lower.Value));
+
+            setRepo.Set("max-h", (int)Math.Round(upper.Hue));
+            setRepo.Set("max-s", (int)Math.Round(upper.Satuation));
+            setRepo.Set("max-v", (int)Math.Round(upper.Value));
+        }
+
+        private void LoadValuesFromRepo()
+        {
+            roadDetector.Perceptor.laneDetector.Tau            = (int) setRepo.Get("tau");
+            roadDetector.Perceptor.laneDetector.Threshold      = (byte)setRepo.Get("threshold");
+            roadDetector.Perceptor.laneDetector.VerticalOffset = (int) setRepo.Get("v-offset");
+
+            nudTau.Value       = roadDetector.Perceptor.laneDetector.Tau;
+            nudVOffset.Value   = roadDetector.Perceptor.laneDetector.VerticalOffset;
+            nudThreshold.Value = roadDetector.Perceptor.laneDetector.Threshold;
+            
+            Hsv min = new Hsv( (int)setRepo.Get("min-h")
+                              ,(int)setRepo.Get("min-s")
+                              ,(int)setRepo.Get("min-v")),
+                max = new Hsv( (int)setRepo.Get("max-h")
+                              ,(int)setRepo.Get("max-s")
+                              ,(int)setRepo.Get("max-v"));
+
+            nud1.Value = (int)setRepo.Get("h-range");
+            nud2.Value = (int)setRepo.Get("s-range");
+            nud3.Value = (int)setRepo.Get("v-range");
+
+            nud1_ValueChanged(this, new EventArgs());
+
+            filter.lower = min;
+            filter.upper = max;
         }
     }
 }

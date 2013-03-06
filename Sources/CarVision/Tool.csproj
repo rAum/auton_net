@@ -165,6 +165,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SettingsRepository\SettingsRepository.csproj">
+      <Project>{79EDD6AD-9AE9-4216-A069-819D45A42951}</Project>
+      <Name>SettingsRepository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VisionFilters\VisionPerception.csproj">
       <Project>{03833D47-DF5A-4B24-ABDB-19601109D523}</Project>
       <Name>VisionPerception</Name>

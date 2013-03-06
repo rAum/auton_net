@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleHttpServer", "SimpleH
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarController", "CarController\CarController.csproj", "{E23EBE5E-CF61-479E-AA5E-3BE971E03653}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SettingsRepository", "SettingsRepository\SettingsRepository.csproj", "{79EDD6AD-9AE9-4216-A069-819D45A42951}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = auton.vsmdi
@@ -180,6 +182,18 @@ Global
 		{E23EBE5E-CF61-479E-AA5E-3BE971E03653}.Release|x64.Build.0 = Release|x64
 		{E23EBE5E-CF61-479E-AA5E-3BE971E03653}.Release|x86.ActiveCfg = Release|x86
 		{E23EBE5E-CF61-479E-AA5E-3BE971E03653}.Release|x86.Build.0 = Release|x86
+		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Release|x64.ActiveCfg = Release|Any CPU
+		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
