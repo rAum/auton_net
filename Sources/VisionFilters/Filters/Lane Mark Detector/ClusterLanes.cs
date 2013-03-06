@@ -20,6 +20,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
         const int MinPointsForEach    = 280;
         int imgWidth  = CamModel.Width;
         int imgHeight = CamModel.Height;
+        const int CenterProbeOffset = 10;
 
         private void ObtainSimpleModel(List<Point> lanes)
         {
@@ -32,7 +33,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
             if (roadCenter != null) 
             {
-                double x = roadCenter.value(imgHeight - 50);
+                double x = roadCenter.value(imgHeight - CenterProbeOffset);
                 if (x < imgWidth / 2) // WARNING !!! MAY BE FUCKUP @@@
                 {
                     leftLane = roadCenter;
@@ -49,23 +50,19 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             else if (lanes.Count > MinPointsForEach)// no one line mark can be matched. trying to find left and right and then again trying to find model.
             {
                 // try to cluster data to distinguish left and right lane
-                List<Point> first = new List<Point>(1024);
-                List<Point> second = new List<Point>(1024);
+                List<Point> first = new List<Point>(2048);
+                List<Point> second = new List<Point>(2048);
 
                 VisionToolkit.Two_Means_Clustering(lanes, ref first, ref second);
 
                 ////////////////////////////////////////////////////////////////
 
                 if (first.Count > MinPointsForEach)
-                    leftLane = RANSAC.RANSAC.fit(740, 6, (int)(first.Count * 0.75), 5, first);
+                    leftLane = RANSAC.RANSAC.fit(700, 6, (int)(first.Count * 0.75), 5, first);
 
                 if (second.Count > MinPointsForEach)
-                    rightLane = RANSAC.RANSAC.fit(740, 6, (int)(second.Count * 0.75), 5, second);
+                    rightLane = RANSAC.RANSAC.fit(700, 6, (int)(second.Count * 0.75), 5, second);
 
-                //var p = RANSAC.RANSAC.fit2(6000, 6, (int)(lanes.Count * 0.3), 4, lanes);
-                //leftLane  = p[0];
-                //rightLane = p[1];
-                
                 if (leftLane != null && rightLane != null)
                 {
                     // swap lanes if necessary
