@@ -35,7 +35,7 @@ namespace VisionFilters
         // this public is for dbg only!!
         public LaneMarkDetector laneDetector;
         public PerspectiveCorrection perspectiveTransform;
-        public ClusterLanes roadDetector;
+        public ClusterLanes_CatmullRom roadDetector;
 
         public event RoadModelEventHandler ActualRoadModel;
 
@@ -43,7 +43,7 @@ namespace VisionFilters
         {
             perspectiveTransform = new PerspectiveCorrection(input, CamModel.srcPerspective, CamModel.dstPerspective);
             laneDetector = new LaneMarkDetector(perspectiveTransform);
-            roadDetector = new ClusterLanes(laneDetector);
+            roadDetector = new ClusterLanes_CatmullRom(laneDetector);
             roadDetector.ResultReady += PassRoadModel;
         }
 

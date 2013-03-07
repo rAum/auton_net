@@ -65,6 +65,45 @@ namespace RANSAC
             return best_fit;
         }
 
+        public static CatmullRom fitCatmullRom(int iterations, int init_samples, int n, double error_threshold, List<Point> inputData)
+        {
+            CatmullRom best_fit = null; ;
+            double best_error = double.MaxValue;
+            double model_error;
+            double err;
+            int consensus_set;
+
+            for (int i = 0; i < iterations; ++i)
+            {
+                ShuffleAtBegin(ref inputData, init_samples);
+                CatmullRom model = CatmullRom.fit(inputData, init_samples);
+                if (model == null) continue;
+
+                consensus_set = 0;
+                model_error = 0;
+                foreach (var p in inputData)
+                {
+                    err = model.at(p.Y) - p.X;
+                    if (Math.Abs(err) < error_threshold)
+                    {
+                        consensus_set += 1;
+                        model_error += err;
+                    }
+                }
+
+                if (consensus_set >= n)
+                {
+                    if (model_error < best_error)
+                    {
+                        best_fit = model;
+                        best_error = model_error;
+                    }
+                }
+            }
+
+            return best_fit;
+        }
+
         public static Bezier fitBezier(int iterations, int init_samples, int n, double error_threshold, List<Point> inputData)
         {
             Bezier best_fit = null; ;

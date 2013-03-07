@@ -279,7 +279,7 @@ namespace RANSAC.Functions
             ylen = new double[n];
             for (int i = 0; i < n; ++i)
             {
-                ylen[i] = points[i].Y / CamModel.Height;
+                ylen[i] = points[i].Y / CamModel.Height; // TODO: optimalize [look at "at"]
             }
         }
 
@@ -291,6 +291,11 @@ namespace RANSAC.Functions
             return points[i];
         }
 
+        /// <summary>
+        /// TODO: Optimalize 
+        /// </summary>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public double at(double y)
         {
             y /= CamModel.Height;
@@ -305,14 +310,34 @@ namespace RANSAC.Functions
             return value(t, get(seg - 1), points[seg], get(seg + 1), get(seg + 2)).X;
         }
 
+        public static CatmullRom merge(CatmullRom a, CatmullRom b, double t = 0.5)
+        {
+            int jump = CamModel.Height / 8;
+            Vec2[] p = new Vec2[8];
+            for (int i = 0; i < 8; ++i)
+            {
+                double j = (i+1) * jump;
+                p[i] = new Vec2((a.at(j) + b.at(j)) * t, j);
+            }
+
+            return new CatmullRom(p);
+        }
+
         public void moveHorizontal(double off)
         {
             for (int i = 0; i < n; ++i)
                 points[i].X += off;
         }
 
+        public static CatmullRom Moved(CatmullRom cm, double offset)
+        {
+            CatmullRom cr = new CatmullRom(cm.points.ToArray());
+            cr.moveHorizontal(offset);
+            return cr;
+        }
 
-        static CatmullRom fit(List<Point> points_, int count)
+
+        public static CatmullRom fit(List<Point> points_, int count)
         {
             Vec2[] pt = new Vec2[count];
             for (int i = 0; i < count; ++i)
