@@ -119,8 +119,8 @@ namespace CarVision
             PrepareVisionProcess();
 
             setRepo = new SettingsRepository.SettingsRepository("../../../../config.xml");
-            //if (setRepo.Correct)
-            //    LoadValuesFromRepo();
+            if (setRepo.Correct)
+                LoadValuesFromRepo();
 
             colorVideoSource.Start();
         }
