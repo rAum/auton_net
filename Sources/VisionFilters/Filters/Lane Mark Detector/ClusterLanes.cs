@@ -177,9 +177,10 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             }
 
             CatmullRom cm = new CatmullRom(new Vec2[] {
-                new Vec2(carCenter, 50),
-                new Vec2(carCenter - 100, 230),
-                new Vec2(carCenter + 10, 410)
+                new Vec2(carCenter, 150),
+                new Vec2(carCenter - 100, 250),
+                new Vec2(carCenter + 10, 390),
+                new Vec2(50, 460)
             });
             LastResult = new SimpleRoadModel(cm, leftLane, rightLane);
             PostComplete();

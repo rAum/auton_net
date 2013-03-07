@@ -297,8 +297,10 @@ namespace RANSAC.Functions
             int seg = 0;
             while (seg < (n-1) && ylen[seg + 1] < y) 
                 ++seg;
-
-            double t = (y - points[seg].Y/480);// / (get(seg+1).Y - points[seg].Y);
+            double t;
+            if (seg == n - 1)
+                t = (y - points[seg].Y / 480);
+            else t = (y - ylen[seg]) / (ylen[Math.Min(seg+1,n-1)] - ylen[seg]);
 
             return value(t, get(seg - 1), points[seg], get(seg + 1), get(seg + 2)).X;
         }
