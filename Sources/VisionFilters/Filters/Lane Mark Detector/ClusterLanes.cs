@@ -15,39 +15,43 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
     {
         private Supplier<List<Point>> supplier;
         private double roadCenterDistAvg = 200; // estimated relative road distance [half of width]
-
-        const int MinPointsForOnlyOne = 300;
-        const int MinPointsForEach    = 280;
+        
+        const double ROAD_CENTER_MIN = 175;
+        const double ROAD_CENTER_MAX = 230;
+        const int CENTER_PROBE_OFFSET = 10;
+        const int MIN_POINTS_FOR_ONLY_ONE = 300;
+        const int MIN_POINTS_FOR_EACH    = 280;
         int imgWidth  = CamModel.Width;
         int imgHeight = CamModel.Height;
-        const int CenterProbeOffset = 10;
-
+        int centerProbePoint,
+            carCenter;
+        
         private void ObtainSimpleModel(List<Point> lanes)
         {
             Parabola leftLane   = null;
             Parabola rightLane  = null;
             Parabola roadCenter = null;
 
-            if (lanes.Count > MinPointsForOnlyOne)
-                roadCenter = RANSAC.RANSAC.fit(750, 6, (int)(lanes.Count * 0.75), 5, lanes);
+            if (lanes.Count > MIN_POINTS_FOR_ONLY_ONE)
+                roadCenter = RANSAC.RANSAC.fitParabola(700, 6, (int)(lanes.Count * 0.75), 5, lanes);
 
             if (roadCenter != null) 
             {
-                double x = roadCenter.value(imgHeight - CenterProbeOffset);
-                if (x < imgWidth / 2) // WARNING !!! MAY BE FUCKUP @@@
+                double x = roadCenter.at(imgHeight - CENTER_PROBE_OFFSET);
+                if (x < carCenter)
                 {
-                    leftLane = roadCenter;
-                    roadCenter = new Parabola(leftLane.a, leftLane.b, leftLane.c + roadCenterDistAvg);
-                    rightLane = new Parabola(roadCenter.a, roadCenter.b, roadCenter.c + roadCenterDistAvg);
+                    leftLane   = roadCenter;
+                    roadCenter = Parabola.Moved(leftLane,   roadCenterDistAvg);
+                    rightLane  = Parabola.Moved(roadCenter, roadCenterDistAvg);
                 }
                 else
                 {
-                    rightLane = roadCenter;
-                    roadCenter = new Parabola(rightLane.a, rightLane.b, rightLane.c - roadCenterDistAvg);
-                    leftLane = new Parabola(rightLane.a, rightLane.b, rightLane.c - 2 * roadCenterDistAvg);
+                    rightLane  = roadCenter;
+                    roadCenter = Parabola.Moved(rightLane,  -roadCenterDistAvg);
+                    leftLane   = Parabola.Moved(roadCenter, -roadCenterDistAvg);
                 }
             }
-            else if (lanes.Count > MinPointsForEach)// no one line mark can be matched. trying to find left and right and then again trying to find model.
+            else if (lanes.Count > MIN_POINTS_FOR_EACH)// no one line mark can be matched. trying to find left and right and then again trying to find model.
             {
                 // try to cluster data to distinguish left and right lane
                 List<Point> first = new List<Point>(2048);
@@ -57,16 +61,16 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
                 ////////////////////////////////////////////////////////////////
 
-                if (first.Count > MinPointsForEach)
-                    leftLane = RANSAC.RANSAC.fit(700, 6, (int)(first.Count * 0.75), 5, first);
+                if (first.Count > MIN_POINTS_FOR_EACH)
+                    leftLane = RANSAC.RANSAC.fitParabola(700, 6, (int)(first.Count * 0.75), 5, first);
 
-                if (second.Count > MinPointsForEach)
-                    rightLane = RANSAC.RANSAC.fit(700, 6, (int)(second.Count * 0.75), 5, second);
+                if (second.Count > MIN_POINTS_FOR_EACH)
+                    rightLane = RANSAC.RANSAC.fitParabola(700, 6, (int)(second.Count * 0.75), 5, second);
 
                 if (leftLane != null && rightLane != null)
                 {
                     // swap lanes if necessary
-                    if (leftLane.value(imgHeight) > rightLane.value(imgHeight))
+                    if (leftLane.at(centerProbePoint) > rightLane.at(centerProbePoint))
                     {
                         var t = leftLane;
                         leftLane = rightLane;
@@ -74,48 +78,49 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                     }
 
                     // center is between left and right lane
-                    roadCenter = new Parabola(
-                        0.5 * (leftLane.a + rightLane.a),
-                        0.5 * (leftLane.b + rightLane.b),
-                        0.5 * (leftLane.c + rightLane.c)
-                        );
+                    roadCenter = Parabola.merge(leftLane, rightLane);
 
-                    roadCenterDistAvg = ((rightLane.c - roadCenter.c) + (roadCenter.c - leftLane.c))*0.5 * 0.005 + roadCenterDistAvg * 0.995; // reestimate road center
+                    // reestimate road center
+                    double new_road_width = ((rightLane.c - roadCenter.c) + (roadCenter.c - leftLane.c))* 0.5*0.05 + roadCenterDistAvg * 0.95;
+                    roadCenterDistAvg     =  Math.Max(Math.Min(new_road_width, ROAD_CENTER_MAX), ROAD_CENTER_MAX );
                 }
-                else if (leftLane != null)
+                else if (leftLane != null) // check if this is really a left lane
                 {
-                    // check if this is really a left lane
-                    if (leftLane.value(imgHeight - 8) > imgWidth - 5) // this is right lane!!
+                    if (leftLane.at(centerProbePoint) > carCenter) // this is right lane!!
                     {
-                        rightLane = leftLane;
-                        leftLane = null;
-                        roadCenter = new Parabola(rightLane.a, rightLane.b, rightLane.c - roadCenterDistAvg);
+                        rightLane  = leftLane;
+                        leftLane   = null;
+                        roadCenter = Parabola.Moved(rightLane, -roadCenterDistAvg);
                     }
                     else
-                        roadCenter = new Parabola(leftLane.a, leftLane.b, leftLane.c + roadCenterDistAvg);
-                    }
-                else if (rightLane != null)
+                        roadCenter = Parabola.Moved(leftLane,   roadCenterDistAvg);
+                }
+                else if (rightLane != null) // check if this is really a left lane
                 {
-                    // check if this is really a left lane
-                    if (rightLane.value(imgHeight - 8) < imgWidth + 5) // this is left lane!!
+                    if (rightLane.at(centerProbePoint) <= carCenter) // this is left lane!!
                     {
                         leftLane = rightLane;
                         rightLane = null;
-                        roadCenter = new Parabola(leftLane.a, leftLane.b, leftLane.c + roadCenterDistAvg);
+                        roadCenter = Parabola.Moved(leftLane,   roadCenterDistAvg);
                     }
                     else
-                        roadCenter = new Parabola(rightLane.a, rightLane.b, rightLane.c + roadCenterDistAvg);
+                        roadCenter = Parabola.Moved(rightLane, -roadCenterDistAvg);
                 }
             }
+
             LastResult = new SimpleRoadModel(roadCenter, leftLane, rightLane);
             PostComplete();
         }
 
+        
+
         public ClusterLanes(Supplier<List<Point>> supplier_)
         {
             supplier = supplier_;
-            supplier.ResultReady += MaterialReady;
+            centerProbePoint = imgHeight - CENTER_PROBE_OFFSET;
+            carCenter = imgWidth / 2;
 
+            supplier.ResultReady += MaterialReady;
             Process += ObtainSimpleModel;
         }
     }
