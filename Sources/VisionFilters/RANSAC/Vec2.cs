@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace RANSAC.Functions
 {
-    public class Vec2
+    public class Vec2 : IComparable<Vec2>
     {
         double[] p = { 0, 0 };
 
@@ -51,6 +51,11 @@ namespace RANSAC.Functions
         public Point ToPoint()
         {
             return new Point((int)Math.Round(p[0]), (int)Math.Round(p[1]));
+        }
+
+        public int CompareTo(Vec2 v)
+        {
+            return this.Y.CompareTo(v.Y);
         }
     }
 }

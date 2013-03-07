@@ -176,7 +176,12 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 create_model_from_two_lanes(ref leftLane, ref rightLane, ref roadCenter);
             }
 
-            LastResult = new SimpleRoadModel(roadCenter, leftLane, rightLane);
+            CatmullRom cm = new CatmullRom(new Vec2[] {
+                new Vec2(carCenter, 50),
+                new Vec2(carCenter - 100, 230),
+                new Vec2(carCenter + 10, 410)
+            });
+            LastResult = new SimpleRoadModel(cm, leftLane, rightLane);
             PostComplete();
         }
 

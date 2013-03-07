@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using VisionFilters;
 
 namespace RANSAC.Functions
 {
@@ -265,14 +266,58 @@ namespace RANSAC.Functions
     /// </summary>
     public class CatmullRom : Function
     {
-        public double at(double t)
+        Vec2[] points;
+        double[] ylen;
+        int n;
+
+        public CatmullRom(Vec2[] points_)
         {
-            return 0;
+            points = points_;
+            Array.Sort(points);
+
+            n = points.Length;
+            ylen = new double[n];
+            for (int i = 0; i < n; ++i)
+            {
+                ylen[i] = points[i].Y / CamModel.Height;
+            }
+        }
+
+        public Vec2 get(int i)
+        {
+            if (i < 0) i = 0;
+            else if (i >= n) i = n-1;
+
+            return points[i];
+        }
+
+        public double at(double y)
+        {
+            y /= CamModel.Height;
+            int seg = 0;
+            while (seg < (n-1) && ylen[seg + 1] < y) 
+                ++seg;
+
+            double t = (y - points[seg].Y/480);// / (get(seg+1).Y - points[seg].Y);
+
+            return value(t, get(seg - 1), points[seg], get(seg + 1), get(seg + 2)).X;
         }
 
         public void moveHorizontal(double off)
         {
+            for (int i = 0; i < n; ++i)
+                points[i].X += off;
         }
+
+
+        static CatmullRom fit(List<Point> points_, int count)
+        {
+            Vec2[] pt = new Vec2[count];
+            for (int i = 0; i < count; ++i)
+                pt[i] = new Vec2(points_[i]);
+            return new CatmullRom(pt);
+        }
+
         /// <summary>
         /// CatmullRom spline.
         /// It's passing through b and c points.
