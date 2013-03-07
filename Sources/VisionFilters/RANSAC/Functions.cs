@@ -6,55 +6,14 @@ using System.Drawing;
 
 namespace RANSAC.Functions
 {
-    public class Vec2
+    public interface Function
     {
-        double[] p = { 0, 0 };
-
-        public double X { get { return p[0]; } set { p[0] = value; } }
-        public double Y { get { return p[1]; } set { p[1] = value; } }
-
-        public Vec2()
-        {
-        }
-
-        public Vec2(double x, double y)
-        {
-            p[0] = x; p[1] = y;
-        }
-
-        public Vec2(int x, int y)
-        {
-            p[0] = x; p[1] = y;
-        }
-
-        public Vec2(Point pt)
-        {
-            p[0] = pt.X;
-            p[1] = pt.Y;
-        }
-
-        static Vec2 operator -(Vec2 a, Vec2 b)
-        {
-            return new Vec2(a.p[0] - b.p[0], a.p[1] - b.p[1]);
-        }
-
-        static Vec2 operator +(Vec2 a, Vec2 b)
-        {
-            return new Vec2(a.p[0] + b.p[0], a.p[1] + b.p[1]);
-        }
-
-        static Vec2 operator *(double t, Vec2 a)
-        {
-            return new Vec2(t * a.p[0], t * a.p[1]);
-        }
-
-        public Point ToPoint()
-        {
-            return new Point((int)Math.Round(p[0]), (int)Math.Round(p[1]));
-        }
+        double at(double y);
+        string ToString();
+        void moveHorizontal(double offset);
     }
 
-    public class Bezier
+    public class Bezier : Function
     {
         Vec2[] points;
         double minY, maxY, rangeY;
@@ -63,25 +22,66 @@ namespace RANSAC.Functions
         {
         }
 
-        public static Bezier fit(List<Point> points_)
+        public Bezier(Vec2[] points_)
+        {
+            points = points_.ToArray();
+            findRange(this);
+        }
+
+        public static Bezier fit(List<Point> points_, int count)
         {
             Bezier b = new Bezier();
             
             b.points = (from p in points_
                         orderby p.Y // sorting unneeded?
                         select new Vec2(p)).ToArray();
-            
-            b.minY = b.points[0].Y;
-            b.maxY = b.points[b.points.Length - 1].Y;
-            b.rangeY = b.maxY - b.minY;
+
+            findRange(b);
 
             return b;
         }
 
-        public Vec2 at(int y)
+        public void moveHorizontal(double offset)
+        {
+            for (int i = 0; i < points.Length; ++i)
+                points[i].X += offset;
+        }
+
+        public static Bezier Moved(Bezier old, double offset)
+        {
+            Bezier b = new Bezier(old.points);
+            b.moveHorizontal(offset);
+            return b;
+        }
+
+        private static void findRange(Bezier b)
+        {
+            b.minY = b.points[0].Y;
+            b.maxY = b.points[b.points.Length - 1].Y;
+            b.rangeY = b.maxY - b.minY;
+        }
+
+        public double at(double y)
         {
             double t = (y - minY) / rangeY;
-            return castelijou(t);
+            return castelijou(t).X;
+        }
+
+        public int Count { get { return points.Length; } }
+
+        /// <summary>
+        /// a.Count == b.Count !!!!!!!
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static Bezier merge(Bezier a, Bezier b, double t = 0.5)
+        {
+            Vec2[] points = new Vec2[a.Count];
+            for (int i = 0; i < a.Count; ++i)
+                points[i] = t * (a.points[i] + b.points[i]);
+            return new Bezier(points);
         }
 
         private Vec2 castelijou(double t)
@@ -100,7 +100,7 @@ namespace RANSAC.Functions
             return c[0];
         }
 
-        public string ToString()
+        public override string ToString()
         {
             StringBuilder bd = new StringBuilder();
             bd.Append('[');
@@ -111,7 +111,7 @@ namespace RANSAC.Functions
         }
     }
 
-    public class Parabola
+    public class Parabola : Function
     {
         public double a { get; set; }
         public double b { get; set; }
@@ -157,11 +157,30 @@ namespace RANSAC.Functions
             return this;
         }
 
+        public static Parabola merge(Parabola a, Parabola b, double t = 0.5)
+        {
+            return new Parabola((a.a + b.a) * t,
+                                (a.b + b.b) * t,
+                                (a.c + b.c) * t);
+        }
+
         public Parabola move(double up)
         {
             double bb = -2 * a * up + b;
             double cc = a * up * up - b * up + c;
             return new Parabola(a, bb, cc);
+        }
+
+        public void moveHorizontal(double offset)
+        {
+            c += offset;
+        }
+
+        public static Parabola Moved(Parabola old, double offset)
+        {
+            Parabola b = new Parabola(old.a, old.b, old.c);
+            b.moveHorizontal(offset);
+            return b;
         }
 
         /// <summary>

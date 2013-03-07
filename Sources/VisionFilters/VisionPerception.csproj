@@ -76,6 +76,7 @@
     <Compile Include="InputProperties.cs" />
     <Compile Include="Output\RoadCenterEvent.cs" />
     <Compile Include="RANSAC\TakeRandom.cs" />
+    <Compile Include="RANSAC\Vec2.cs" />
     <Compile Include="VisionPerceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RANSAC\Functions.cs" />
