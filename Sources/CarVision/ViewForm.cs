@@ -173,7 +173,7 @@ namespace CarVision
             invPerp.ResultReady -= DisplayVideo;
             visRoad.ResultReady -= DisplayVideo;
 
-            if (MessageBox.Show("Do you want to export settings?") == DialogResult.OK) {
+            if (MessageBox.Show("Do you want to export settings?", "Saving settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.OK) {
                 DumpVarsToRepo();
                 setRepo.Save();
             }
