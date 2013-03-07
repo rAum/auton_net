@@ -27,9 +27,9 @@ namespace RANSAC
         /// <param name="error_threshold">what is the biggest error that may pass</param>
         /// <param name="inputData">observed data</param>
         /// <returns>parabola object or null if no good enough model was found.</returns>
-        public static Parabola fit(int iterations, int init_samples, int n, double error_threshold, List<Point> inputData)
+        public static Parabola fitParabola(int iterations, int init_samples, int n, double error_threshold, List<Point> inputData)
         {
-            Parabola best_fit = null;
+            Parabola best_fit = null; ;
             double best_error = double.MaxValue;
             double model_error;
             double err;
@@ -45,7 +45,7 @@ namespace RANSAC
                 model_error = 0;
                 foreach (var p in inputData)
                 {
-                    err = model.value(p.Y) - p.X;
+                    err = model.at(p.Y) - p.X;
                     if (Math.Abs(err) < error_threshold ) {
                         consensus_set += 1;
                         model_error   += err;
@@ -65,75 +65,43 @@ namespace RANSAC
             return best_fit;
         }
 
-        public static List<Parabola> fit2(int iterations, int init_samples, int n, double error_threshold, List<Point> inputData)
+        public static Bezier fitBezier(int iterations, int init_samples, int n, double error_threshold, List<Point> inputData)
         {
-            Parabola best1 = null;
-            Parabola best2 = null;
-            double best_error1 = double.MaxValue;
-            double best_error2 = double.MaxValue;
-            double model_error1;
-            double model_error2;
-            double err1, err2;
-            int consensus_set1;
-            int consensus_set2;
+            Bezier best_fit = null; ;
+            double best_error = double.MaxValue;
+            double model_error;
+            double err;
+            int consensus_set;
 
-            Parabola model1, model2;
             for (int i = 0; i < iterations; ++i)
             {
                 ShuffleAtBegin(ref inputData, init_samples);
-                model1 = Parabola.fit(inputData, init_samples);
-                ShuffleAtBegin(ref inputData, init_samples);
-                model2 = Parabola.fit(inputData, init_samples);
+                Bezier model = Bezier.fit(inputData, init_samples);
+                if (model == null) continue;
 
-                consensus_set1 = consensus_set2 = 0;
-                model_error1 = model_error2 = 0;
-
-                if (model1 != null)
+                consensus_set = 0;
+                model_error = 0;
+                foreach (var p in inputData)
                 {
-                    foreach (var p in inputData)
+                    err = model.at(p.Y) - p.X;
+                    if (Math.Abs(err) < error_threshold)
                     {
-                        err1 = Math.Abs(model1.value(p.Y) - p.X);
-                        if (err1 <= error_threshold)
-                        {
-                            consensus_set1 += 1;
-                            model_error1 += err1;
-                        }
-                    }
-
-                    if (consensus_set1 >= n)
-                    {
-                        if (model_error1 < best_error1)
-                        {
-                            best1 = model1;
-                            best_error1 = model_error1;
-                        }
-                    }
-                }
-                if (model2 != null)
-                {
-                    foreach (var p in inputData)
-                    {
-                        err2 = Math.Abs(model2.value(p.Y) - p.X);
-                        if (err2 <= error_threshold)
-                        {
-                            consensus_set2 += 1;
-                            model_error2 += err2;
-                        }
-                    }
-
-                    if (consensus_set2 >= n)
-                    {
-                        if (model_error2 < best_error2)
-                        {
-                            best2 = model2;
-                            best_error2 = model_error2;
-                        }
+                        consensus_set += 1;
+                        model_error += err;
                     }
                 }
 
+                if (consensus_set >= n)
+                {
+                    if (model_error < best_error)
+                    {
+                        best_fit = model;
+                        best_error = model_error;
+                    }
+                }
             }
-            return new List<Parabola>() { best1, best2 };
-            //return new SimpleRoadModel(best1, best2);
+
+            return best_fit;
         }
 
         /// <summary>

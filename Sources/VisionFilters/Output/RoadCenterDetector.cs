@@ -52,8 +52,6 @@ namespace VisionFilters.Output
             };
 
             samplePoints = samplePointsDistance.Select(p => { return CamModel.ToPixels(p); }).ToArray();
-
-            //kalman = new Kalman2D();
         }
 
         private void NewRoadModel(object sender, RoadModelEvent e)
@@ -65,16 +63,9 @@ namespace VisionFilters.Output
         /// Sample road center and raises event.
         /// </summary>
         /// <param name="roadModel">road center model</param>
-        private void RoadCenterFounded(Parabola roadModel)
+        private void RoadCenterFounded(Function roadModel)
         {
-            PointF[] samples = samplePoints.Select(p => { return new PointF((float)roadModel.value(p), (float)p); }).ToArray();
-
-            //kalman.Update();
-            //kalman.Measurment(samples[1]);
-
-            //km.Measurment(samples[1].Y, 1.0f);
-
-            //Console.Out.WriteLine(String.Format("Kalman: meas: {0} pred: {1} estimation: {2}"), samples[1].Y, km.Prediction, km.Estimation);
+            PointF[] samples = samplePoints.Select(p => { return new PointF((float)roadModel.at(p), (float)p); }).ToArray();
 
             if (RoadCenterSupply == null)
                 return;
