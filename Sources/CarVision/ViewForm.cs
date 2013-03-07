@@ -399,7 +399,7 @@ namespace CarVision
         private void LoadValuesFromRepo()
         {
             roadDetector.Perceptor.laneDetector.Tau            = (int) setRepo.Get("tau");
-            roadDetector.Perceptor.laneDetector.Threshold      = (byte)setRepo.Get("threshold");
+            roadDetector.Perceptor.laneDetector.Threshold      = (byte)(int)setRepo.Get("threshold");
             roadDetector.Perceptor.laneDetector.VerticalOffset = (int) setRepo.Get("v-offset");
 
             nudTau.Value       = roadDetector.Perceptor.laneDetector.Tau;

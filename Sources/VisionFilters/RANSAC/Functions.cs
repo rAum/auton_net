@@ -31,10 +31,17 @@ namespace RANSAC.Functions
         public static Bezier fit(List<Point> points_, int count)
         {
             Bezier b = new Bezier();
-            
-            b.points = (from p in points_
-                        orderby p.Y // sorting unneeded?
-                        select new Vec2(p)).ToArray();
+
+            b.points = new Vec2[count];
+            b.minY = 10000;
+            b.maxY = 0;
+            for (int i = 0; i < count; ++i)
+            {
+                b.points[i] = new Vec2(points_[i]);
+                //if (points_[i].Y < b.minY) b.minY = points_[i].Y;
+                //else if (points_[i].Y > b.maxY) b.maxY = points_[i].Y;
+            }
+            //b.rangeY = b.maxY - b.minY;
 
             findRange(b);
 
