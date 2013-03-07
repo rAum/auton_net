@@ -257,4 +257,40 @@ namespace RANSAC.Functions
             return ((a * x) + b) * x + c;
         }
     }
+
+
+    /// <summary>
+    /// CatmullRom Spline 
+    /// Points must be sorted [bigger value y first] and equidistant
+    /// </summary>
+    public class CatmullRom : Function
+    {
+        public double at(double t)
+        {
+            return 0;
+        }
+
+        public void moveHorizontal(double off)
+        {
+        }
+        /// <summary>
+        /// CatmullRom spline.
+        /// It's passing through b and c points.
+        /// Point a and d is been used to determine tangents.
+        /// </summary>
+        /// <param name="t">[0,1]</param>
+        /// <param name="a">first control (tangent) point</param>
+        /// <param name="b">first point [interpolated]</param>
+        /// <param name="c">second point [interpolated]</param>
+        /// <param name="d">second control (tangent) point</param>
+        /// <returns></returns>
+        public static Vec2 value(double t, Vec2 a, Vec2 b, Vec2 c, Vec2 d)
+        {
+            double c0 =  t * ((2.0 - t) * t - 1.0);
+            double c1 = (t * t * (3.0 * t - 5.0) + 2.0);
+            double c2 =  t * ((4.0 - 3.0 * t) * t + 1.0);
+            double c3 = (t - 1.0) * t * t;
+            return 0.5 * (c0 * a + c1 * b + c2 * c + c3 * d);
+        }
+    }
 }

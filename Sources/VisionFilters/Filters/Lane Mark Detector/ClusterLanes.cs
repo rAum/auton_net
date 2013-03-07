@@ -14,7 +14,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
     /// <summary>
     /// Road modelling using Bezier
     /// </summary>
-    public class ClusterLanes : ThreadSupplier<List<Point>, SimpleRoadModel> 
+    public class ClusterLanes_BezierExperimental : ThreadSupplier<List<Point>, SimpleRoadModel> 
     {
         private Supplier<List<Point>> supplier;
         private double roadCenterDistAvg = 184; // estimated relative road distance [half of width]
@@ -35,29 +35,30 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             Bezier rightLane  = null;
             Bezier roadCenter = null;
 
-            if (lanes.Count > MIN_POINTS_FOR_ONLY_ONE)
-                roadCenter = RANSAC.RANSAC.fitBezier(100, 3, (int)(lanes.Count * 0.75), 5, lanes);
+//             if (lanes.Count > MIN_POINTS_FOR_ONLY_ONE)
+//                 roadCenter = RANSAC.RANSAC.fitBezier(100, 3, (int)(lanes.Count * 0.75), 5, lanes);
+// 
+//             if (roadCenter != null) 
+//                 create_model_from_single_line(ref roadCenter, ref leftLane, ref rightLane);
+//             else if (lanes.Count > MIN_POINTS_FOR_EACH)// no one line mark can be matched. trying to find left and right and then again trying to find model.
+//             {
+//                 // try to cluster data to distinguish left and right lane
+//                 List<Point> first = new List<Point>(6048);
+//                 List<Point> second = new List<Point>(6048);
+// 
+//                 VisionToolkit.Two_Means_Clustering(lanes, ref first, ref second);
+// 
+//                 ////////////////////////////////////////////////////////////////
+// 
+//                 if (first.Count > MIN_POINTS_FOR_EACH)
+//                     leftLane = RANSAC.RANSAC.fitBezier(100, 8, (int)(first.Count * 0.75), 15, first);
+// 
+//                 if (second.Count > MIN_POINTS_FOR_EACH)
+//                     rightLane = RANSAC.RANSAC.fitBezier(100, 8, (int)(second.Count * 0.75), 15, second);
+// 
+//                 create_model_from_two_lanes(ref leftLane, ref rightLane, ref roadCenter);
+//             }
 
-            if (roadCenter != null) 
-                create_model_from_single_line(ref roadCenter, ref leftLane, ref rightLane);
-            else if (lanes.Count > MIN_POINTS_FOR_EACH)// no one line mark can be matched. trying to find left and right and then again trying to find model.
-            {
-                // try to cluster data to distinguish left and right lane
-                List<Point> first = new List<Point>(6048);
-                List<Point> second = new List<Point>(6048);
-
-                VisionToolkit.Two_Means_Clustering(lanes, ref first, ref second);
-
-                ////////////////////////////////////////////////////////////////
-
-                if (first.Count > MIN_POINTS_FOR_EACH)
-                    leftLane = RANSAC.RANSAC.fitBezier(100, 3, (int)(first.Count * 0.75), 85, first);
-
-                if (second.Count > MIN_POINTS_FOR_EACH)
-                    rightLane = RANSAC.RANSAC.fitBezier(100, 3, (int)(second.Count * 0.75), 85, second);
-
-                create_model_from_two_lanes(ref leftLane, ref rightLane, ref roadCenter);
-            }
 
             LastResult = new SimpleRoadModel(roadCenter, leftLane, rightLane);
             PostComplete();
@@ -114,9 +115,9 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 leftLane   = Bezier.Moved(roadCenter, -roadCenterDistAvg);
             }
         }
-        
 
-        public ClusterLanes(Supplier<List<Point>> supplier_)
+
+        public ClusterLanes_BezierExperimental(Supplier<List<Point>> supplier_)
         {
             supplier = supplier_;
             centerProbePoint = imgHeight - CENTER_PROBE_OFFSET;
@@ -130,7 +131,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
     /// <summary>
     /// Road modelling using parabolic equation
     /// </summary>
-    public class ClusterLanes_Parabolic : ThreadSupplier<List<Point>, SimpleRoadModel> 
+    public class ClusterLanes : ThreadSupplier<List<Point>, SimpleRoadModel> 
     {
         private Supplier<List<Point>> supplier;
         private double roadCenterDistAvg = 200; // estimated relative road distance [half of width]
@@ -236,7 +237,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
         }
         
 
-        public ClusterLanes_Parabolic(Supplier<List<Point>> supplier_)
+        public ClusterLanes(Supplier<List<Point>> supplier_)
         {
             supplier = supplier_;
             centerProbePoint = imgHeight - CENTER_PROBE_OFFSET;
