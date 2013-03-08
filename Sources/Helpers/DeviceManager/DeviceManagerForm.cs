@@ -47,6 +47,21 @@ namespace Helpers
             {
                 UpdateButtonsStateInCaseOfDeviceError();
             }
+
+            ChangeOverallStateLabel(args.GetDeviceState().ToString());
+        }
+
+        private void ChangeOverallStateLabel(string newState)
+        {
+            if (label1.InvokeRequired)
+            { //if this is not form thread
+                label1.Invoke((MethodInvoker)delegate { ChangeOverallStateLabel(newState); });
+            }
+            else
+            { //if this is form thead
+                label_deviceManagerOverallState.Text = newState;
+            }
+
         }
 
         /// <summary>
