@@ -17,8 +17,7 @@ namespace VisionFilters.Output
     {
         private int[] samplePoints; // in pixels
         private VisionPerceptor perceptor;
-
-        //Kalman2D kalman;
+        private KalmanFilter[] kalmanFilters;
 
         // for dbg purpose
         public VisionPerceptor Perceptor
@@ -52,6 +51,9 @@ namespace VisionFilters.Output
             };
 
             samplePoints = samplePointsDistance.Select(p => { return CamModel.ToPixels(p); }).ToArray();
+            kalmanFilters = new KalmanFilter[samplePoints.Length];
+            for (int i = 0; i < kalmanFilters.Length; ++i)
+                kalmanFilters[i] = new KalmanFilter();
         }
 
         private void NewRoadModel(object sender, RoadModelEvent e)
@@ -69,6 +71,9 @@ namespace VisionFilters.Output
 
             if (RoadCenterSupply == null)
                 return;
+
+            for (int i = 0; i < kalmanFilters.Length; ++i)
+                samples[i] = kalmanFilters[i].FeedPoint(samples[i]);
 
             RoadCenterSupply.Invoke(this, new RoadCenterEvent(samples));
         }
