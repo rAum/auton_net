@@ -110,16 +110,16 @@
             // 
             // tbVideoSource
             // 
-            this.tbVideoSource.Location = new System.Drawing.Point(550, 39);
+            this.tbVideoSource.Location = new System.Drawing.Point(484, 39);
             this.tbVideoSource.Name = "tbVideoSource";
             this.tbVideoSource.ReadOnly = true;
-            this.tbVideoSource.Size = new System.Drawing.Size(149, 20);
+            this.tbVideoSource.Size = new System.Drawing.Size(215, 20);
             this.tbVideoSource.TabIndex = 20;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(500, 44);
+            this.label2.Location = new System.Drawing.Point(434, 44);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(44, 13);
             this.label2.TabIndex = 19;
@@ -128,7 +128,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(470, 15);
+            this.label1.Location = new System.Drawing.Point(404, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(74, 13);
             this.label1.TabIndex = 18;
@@ -139,9 +139,9 @@
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "Camera"});
-            this.comboBox1.Location = new System.Drawing.Point(550, 10);
+            this.comboBox1.Location = new System.Drawing.Point(484, 10);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(149, 21);
+            this.comboBox1.Size = new System.Drawing.Size(215, 21);
             this.comboBox1.TabIndex = 17;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
