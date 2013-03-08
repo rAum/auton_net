@@ -67,7 +67,7 @@ namespace car_communicator
         const int STARTER_PORT_NO = 5; //rozrusznik
         const int STARTER_ON_PORT_LEVEL = 1;
         const int STARTER_OFF_PORT_LEVEL = 0;
-        const int STARTER_ON_TIME_IN_MS = 1000;
+        const int STARTER_ON_TIME_IN_MS = 1700;
 
         const int STEERING_WHEEL_ENABLER_PORT_NO = 3; //if you dont turn it on you wouldn't be able to move wheel (it'll be set to 0 power (2,5V))
         const int STEERING_WHEEL_ENABLER_ON_PORT_LEVEL = 1;
@@ -332,7 +332,7 @@ namespace car_communicator
             }
             //setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_OFF_PORT_LEVEL);
             //setPortDO(BRAKE_DIRECTION_PORT_NO, BRAKE_FORWARD_PORT_LEVEL);
-            //setPortAO(BRAKE_STRENGTH_SET_PORT, 2);
+            //setPortAO(BRAKE_STRENGTH_SET_PORT, 0);
         }
 
     }

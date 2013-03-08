@@ -116,7 +116,7 @@ namespace CarVision
 
             LoadVideos();
 
-            comboBox1.SelectedIndex = 1; // not cam!!
+            comboBox1.SelectedIndex = 0; // not cam!!
             colorVideoSource = new ColorVideoSource(getVideoSource());
             colorVideoSource.ResultReady += DisplayVideo;
 
