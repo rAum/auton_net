@@ -9,12 +9,12 @@ using Auton.CarVision.Video;
 
 namespace VisionFilters.Output
 {
-    public class GrayVideoSource<PixelType> : Supplier<Image<Gray, PixelType>> where PixelType : new()
+    public class GrayVideoSource : Supplier<Image<Gray, byte>>
     {
         public Boolean Runs { get; private set; }
         int sleepTime = 0;
 
-        public override Image<Gray, PixelType> LastResult
+        public override Image<Gray, byte> LastResult
         {
             get
             {
@@ -27,7 +27,7 @@ namespace VisionFilters.Output
 
                 System.Threading.Thread.Sleep(sleepTime);
 
-                return frame.Convert<Gray, PixelType>().Resize(CamModel.Width, CamModel.Height, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
+                return frame.Convert<Gray, byte>().Resize(CamModel.Width, CamModel.Height, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
             }
         }
 
@@ -50,7 +50,7 @@ namespace VisionFilters.Output
             else
                 capture = new Capture(file);
             capture.ImageGrabbed +=
-                (sender, e) => { OnResultReady(new ResultReadyEventArgs<Image<Gray, PixelType>>(LastResult)); };
+                (sender, e) => { OnResultReady(new ResultReadyEventArgs<Image<Gray, byte>>(LastResult)); };
         }
 
         public void RestartVideo()
@@ -65,7 +65,7 @@ namespace VisionFilters.Output
         public void ChangeVideoSource(string _file = "")
         {
             capture.Stop();
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(1500);
             file = _file;
             Load();
             Start();

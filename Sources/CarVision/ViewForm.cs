@@ -23,7 +23,7 @@ namespace CarVision
 {
     public partial class ViewForm : Form
     {
-        ColorVideoSource colorVideoSource;
+        ColorVideoSource videoSource;
         HsvFilter filter;
 
         RoadCenterDetector roadDetector;
@@ -86,7 +86,7 @@ namespace CarVision
                 big.Image = (Image<Bgr, byte>)e.Result;
 
 
-                if (videoWriter != null && sender == colorVideoSource)
+                if (videoWriter != null && sender == videoSource)
                 {
                     videoWriter.WriteFrame(((Image<Bgr, byte>)e.Result).Convert<Bgr, byte>());
                 }
@@ -122,19 +122,19 @@ namespace CarVision
             if (setRepo.Correct)
                 LoadValuesFromRepo();
 
-            colorVideoSource.Start();
+            videoSource.Start();
         }
 
         private void PrepareVisionProcess()
         {
-            colorVideoSource = new ColorVideoSource(getVideoSource());
-            colorVideoSource.ResultReady += DisplayVideo;
+            videoSource = new ColorVideoSource(getVideoSource());
+            videoSource.ResultReady += DisplayVideo;
 
             // light green lines
             Hsv minColor = new Hsv(95 / 2, 0.6 * 255, 0.5 * 255);
             Hsv maxColor = new Hsv(180 / 2, 255, 0.74 * 255);
 
-            filter = new HsvFilter(colorVideoSource, minColor, maxColor);
+            filter = new HsvFilter(videoSource, minColor, maxColor);
             roadDetector = new RoadCenterDetector(filter);
             // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
             filtered = new DrawPoints(roadDetector.Perceptor.laneDetector);
@@ -168,8 +168,8 @@ namespace CarVision
 
         private void ViewForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            colorVideoSource.Stop();
-            colorVideoSource.ResultReady -= DisplayVideo;
+            videoSource.Stop();
+            videoSource.ResultReady -= DisplayVideo;
             invPerp.ResultReady -= DisplayVideo;
             visRoad.ResultReady -= DisplayVideo;
 
@@ -311,7 +311,7 @@ namespace CarVision
 
         private void button5_Click(object sender, EventArgs e)
         {
-            colorVideoSource.RestartVideo();
+            videoSource.RestartVideo();
             pause = false;
         }
 
@@ -319,9 +319,9 @@ namespace CarVision
         private void button6_Click(object sender, EventArgs e)
         {
             if (pause == false)
-                colorVideoSource.Pause();
+                videoSource.Pause();
             else
-                colorVideoSource.Start();
+                videoSource.Start();
             pause = !pause;
         }
 
@@ -335,9 +335,9 @@ namespace CarVision
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (colorVideoSource != null)
+            if (videoSource != null)
             {
-                colorVideoSource.ChangeVideoSource(getVideoSource());
+                videoSource.ChangeVideoSource(getVideoSource());
             }
         }
 
@@ -365,10 +365,10 @@ namespace CarVision
         private void button1_Click(object sender, EventArgs e)
         {
             statusStrip.Text = "";
-            colorVideoSource.Pause();
+            videoSource.Pause();
             System.Threading.Thread.Sleep(800);
             DumpVarsToRepo();
-            colorVideoSource.Start();
+            videoSource.Start();
             setRepo.Save();
 
             statusStrip.Text = "config saved.";

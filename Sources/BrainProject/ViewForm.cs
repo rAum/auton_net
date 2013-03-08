@@ -25,8 +25,8 @@ namespace BrainProject
 {
     public partial class ViewForm : Form
     {
-        ColorVideoSource colorVideoSource;
-        HsvFilter filter;
+        GrayVideoSource videoSource;
+        //HsvFilter filter;
 
         RoadCenterDetector roadDetector;
         VisualiseSimpleRoadModel visRoad;
@@ -44,7 +44,22 @@ namespace BrainProject
             try
             {
                 ImageBox imgBox = imgDebug;
-                imgBox.Image = (Image<Gray, Byte>)e.Result;
+                if (sender == invPerp)
+                {
+                    Image<Gray, byte> cam = new Image<Gray, byte>(imgVideoSource.Image.Bitmap);
+                    imgOutput.Image = (Image<Gray, byte>)e.Result + cam;
+                    return;
+                }
+                else if (sender == videoSource)
+                {
+                    imgBox = imgVideoSource;
+                }
+                if (imgBox == null)
+                {
+                    System.Console.Out.WriteLine("No receiver registered!!");
+                    return;
+                }
+                imgBox.Image = (Image<Gray, byte>)e.Result;
             }
             catch (Exception ex)
             {
@@ -63,7 +78,7 @@ namespace BrainProject
                     imgOutput.Image = (Image<Bgr, byte>)e.Result + cam;
                     return;
                 }
-                else if (sender == colorVideoSource)
+                else if (sender == videoSource)
                 {
                     imgBox = imgVideoSource;
                 }
@@ -129,8 +144,8 @@ namespace BrainProject
 
         private void ViewForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            colorVideoSource.Stop();
-            colorVideoSource.ResultReady -= DisplayVideo;
+            videoSource.Stop();
+            videoSource.ResultReady -= DisplayVideo;
             invPerp.ResultReady -= DisplayVideo;
             visRoad.ResultReady -= DisplayVideo;
 
@@ -164,8 +179,8 @@ namespace BrainProject
 
         private void CreateVisionProcess(ref SettingsRepository.SettingsRepository setRepo)
         {
-            colorVideoSource = new ColorVideoSource();
-            colorVideoSource.ResultReady += DisplayVideo;
+            videoSource = new GrayVideoSource();
+            videoSource.ResultReady += DisplayVideo;
 
             Hsv min = new Hsv((int)setRepo.Get("min-h")
                               , (int)setRepo.Get("min-s")
@@ -174,8 +189,8 @@ namespace BrainProject
                               , (int)setRepo.Get("max-s")
                               , (int)setRepo.Get("max-v"));
 
-            filter = new HsvFilter(colorVideoSource, min, max);
-            roadDetector = new RoadCenterDetector(filter);
+            //filter = new HsvFilter(videoSource, min, max);
+            roadDetector = new RoadCenterDetector(videoSource);//filter);
             // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
             visRoad = new VisualiseSimpleRoadModel(roadDetector.Perceptor.roadDetector);
             invPerp = new PerspectiveCorrectionRgb(visRoad, CamModel.dstPerspective, CamModel.srcPerspective);
@@ -190,7 +205,7 @@ namespace BrainProject
 
             visRoad.ResultReady += DisplayVideo;
             invPerp.ResultReady += DisplayVideo;
-            colorVideoSource.Start();
+            videoSource.Start();
         }
 
         private void button1_Click(object sender, EventArgs e)
