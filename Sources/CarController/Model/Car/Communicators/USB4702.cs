@@ -36,7 +36,7 @@ namespace car_communicator
         const double STEERING_WHEEL_MAX_SET_VALUE_IN_VOLTS = 3.8; //4.0 is teoretical max
 
         const int BRAKE_STRENGTH_SET_PORT = 1;
-        const double BRAKE_MIN_SET_VALUE_IN_VOLTS = 0.8; //from 0
+        const double BRAKE_MIN_SET_VALUE_IN_VOLTS = 0.0; //from 0
         const double BRAKE_NEUTRAL_STRENGTH_IN_VOLTS = 2.5;
         const double BRAKE_MAX_SET_VALUE_IN_VOLST = 4.2; //from 5
 
@@ -321,18 +321,18 @@ namespace car_communicator
             if (strength < MIN_STRENGTH_FOR_BRAKE_TO_REACT_IN_PERCENTS) //strength should be always > 0 in here
             {
                 setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_ON_PORT_LEVEL);
-                setPortAO(BRAKE_STRENGTH_SET_PORT, BRAKE_NEUTRAL_STRENGTH_IN_VOLTS);
+                setPortAO(BRAKE_STRENGTH_SET_PORT, 0); //TODO: check it //BRAKE_NEUTRAL_STRENGTH_IN_VOLTS);
             }
             else
             {
                 setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_OFF_PORT_LEVEL);
                 Helpers.ReScaller.ReScale(ref strength, 0, 100, BRAKE_MIN_SET_VALUE_IN_VOLTS, BRAKE_MAX_SET_VALUE_IN_VOLST);
 
-                setPortAO(BRAKE_STRENGTH_SET_PORT, strength);
+                //setPortAO(BRAKE_STRENGTH_SET_PORT, strength);
             }
-            //setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_OFF_PORT_LEVEL);
-            //setPortDO(BRAKE_DIRECTION_PORT_NO, BRAKE_FORWARD_PORT_LEVEL);
-            //setPortAO(BRAKE_STRENGTH_SET_PORT, 0);
+            setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_OFF_PORT_LEVEL);
+            setPortDO(BRAKE_DIRECTION_PORT_NO, BRAKE_FORWARD_PORT_LEVEL);
+            setPortAO(BRAKE_STRENGTH_SET_PORT, 0);
         }
 
     }

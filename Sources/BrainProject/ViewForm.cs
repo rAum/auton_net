@@ -103,6 +103,10 @@ namespace BrainProject
             {
                 carController.SetTargetSpeed(speed);
             }
+            else
+            {
+                carController.SetTargetSpeed(0);
+            }
         }
 
         void brain_evNewTargetWheelAngeCalculated(object sender, double angle)
@@ -116,6 +120,10 @@ namespace BrainProject
             if (automaticSteeringEnabled)
             {
                 carController.SetTargetWheelAngle(angle);
+            }
+            else 
+            { 
+                carController.SetTargetWheelAngle(0); 
             }
         }
 
