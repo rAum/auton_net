@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2010
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tool", "CarVision\Tool.csproj", "{1BF1D22B-B4E6-4FB2-A1BB-F0CF811A0387}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5458D768-D9C3-47E4-9726-AFF26090ECE7}"
@@ -139,6 +139,7 @@ Global
 		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Release|x64.ActiveCfg = Release|x64
 		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Release|x64.Build.0 = Release|x64
 		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Release|x86.ActiveCfg = Release|x64
+		{6EEBC9B8-6E21-45A9-8C8A-992449DBFB39}.Release|x86.Build.0 = Release|x64
 		{CB9893D2-30E7-4192-9174-F9F34BF9F7BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CB9893D2-30E7-4192-9174-F9F34BF9F7BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB9893D2-30E7-4192-9174-F9F34BF9F7BE}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
@@ -192,7 +193,8 @@ Global
 		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Release|Any CPU.Build.0 = Release|Any CPU
 		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Release|x64.ActiveCfg = Release|Any CPU
+		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Release|x64.ActiveCfg = Release|x64
+		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Release|x64.Build.0 = Release|x64
 		{79EDD6AD-9AE9-4216-A069-819D45A42951}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
