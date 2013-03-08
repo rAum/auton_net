@@ -45,6 +45,7 @@ namespace car_communicator
             if (list.Count == 1)
             {
                 Driver = new Usc(list[0]);
+                this.overallState = DeviceOverallState.OK;
             }
             else if (list.Count == 0)
             {

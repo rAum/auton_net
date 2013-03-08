@@ -111,6 +111,7 @@ namespace car_communicator
                     setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_OFF_PORT_LEVEL);
 
                     initializationFinished = true; //no exceptions and get here - everything is ok!
+                    this.overallState = DeviceOverallState.OK;
                 }
                 catch (Exception e)
                 {

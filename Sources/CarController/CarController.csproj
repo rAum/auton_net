@@ -106,19 +106,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\Car\Communicators\RS232_old.cs" />
-    <Compile Include="Model\Car\Communicators\SafeRS232Communicator.cs" />
-    <Compile Include="Model\Car\Communicators\SafeRS232Controller.cs" />
-    <Compile Include="Model\Car\Communicators\Speedometer.cs" />
+    <Compile Include="Model\Communicators\RS232_old.cs" />
+    <Compile Include="Model\Communicators\SafeRS232Communicator.cs" />
+    <Compile Include="Model\Communicators\SafeRS232Controller.cs" />
+    <Compile Include="Model\Communicators\Speedometer.cs" />
     <Compile Include="Model\Regulators\SimpleBrakeRegulator.cs" />
     <Compile Include="Test\Fakes\CarWithFakeCommunicator.cs" />
     <Compile Include="Test\Fakes\CarWithFakeRegulators.cs" />
     <Compile Include="Test\Fakes\FakeBrakeRegulator.cs" />
     <Compile Include="Model\Car\CarInformations.cs" />
     <Compile Include="Model\Regulators\IBrakeRegulator.cs" />
-    <Compile Include="Model\Car\Communicators\RS232.cs" />
-    <Compile Include="Model\Car\Communicators\ServoDriver.cs" />
-    <Compile Include="Model\Car\Communicators\USB4702.cs" />
+    <Compile Include="Model\Communicators\RS232.cs" />
+    <Compile Include="Model\Communicators\ServoDriver.cs" />
+    <Compile Include="Model\Communicators\USB4702.cs" />
     <Compile Include="Test\Fakes\FakeSteeringWheelRegulator.cs" />
     <Compile Include="Test\Fakes\FakeSpeedRegulator.cs" />
     <Compile Include="Controller\CarController.cs" />
@@ -127,7 +127,7 @@
     <Compile Include="Test\Fakes\CarModel.cs" />
     <Compile Include="Model\Regulators\PIDSpeedRegulator.cs" />
     <Compile Include="Model\Regulators\PIDSteeringWheelAngleRegulator.cs" />
-    <Compile Include="Model\Car\Communicators\RealCarCommunicator.cs" />
+    <Compile Include="Model\Communicators\RealCarCommunicator.cs" />
     <Compile Include="Model\Regulators\ISpeedRegulator.cs" />
     <Compile Include="Model\Regulators\ISteeringWheelAngleRegulator.cs" />
     <Page Include="MainWindow.xaml">
@@ -139,7 +139,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\Car\ICar.cs" />
-    <Compile Include="Model\Car\Communicators\ICarComunicator.cs" />
+    <Compile Include="Model\Communicators\ICarComunicator.cs" />
     <Compile Include="Test\Fakes\FakeCarCommunicator.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

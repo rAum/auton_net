@@ -38,7 +38,7 @@ namespace Helpers
             JurekGreeting();
             jurek.StartListening(hearedCommand);
 
-            deviceManager.evDeviceStateHasChanged += deviceManager_evDeviceStateHasChanged;
+            deviceManager.evDeviceManagerOverallStateHasChanged += deviceManager_evDeviceStateHasChanged;
         }
 
         void deviceManager_evDeviceStateHasChanged(object sender, DeviceStateHasChangedEventArgs args)
@@ -47,8 +47,28 @@ namespace Helpers
             {
                 UpdateButtonsStateInCaseOfDeviceError();
             }
+            else if (args.GetDeviceState() == DeviceOverallState.OK && //its work arroud for bug causing wrong button enabling when initialized button was clicked in overall error state
+                deviceManager.devicesList[0].initializationState == DeviceInitializationState.Initialized || //devices are initialized or initializing
+                deviceManager.devicesList[0].initializationState == DeviceInitializationState.Initializing)
+            {
+                EnableStartSensorsButtonAndDisableInitButton();
+            }
 
             ChangeOverallStateLabel(args.GetDeviceState().ToString());
+        }
+
+        //TODO: make it in setter or something like that - not in metod
+        private void EnableStartSensorsButtonAndDisableInitButton()
+        {
+            if (label1.InvokeRequired)
+            { //if this is not form thread
+                label1.Invoke((MethodInvoker)delegate { EnableStartSensorsButtonAndDisableInitButton(); });
+            }
+            else
+            { //if this is form thead
+                button_StartSensors.Enabled = true;
+                button_initialize.Enabled = false;
+            }
         }
 
         private void ChangeOverallStateLabel(string newState)
@@ -108,9 +128,9 @@ namespace Helpers
                 if (started == false && cmd == "start")
                 {
                     button_initialize_Click(this, new EventArgs());
-                    Thread.Sleep(1500);
+                    Thread.Sleep(3500);
                     button_StartSensors_Click(this, new EventArgs());
-                    Thread.Sleep(1500);
+                    Thread.Sleep(1000);
                     button_StartEffectors_Click(this, new EventArgs());
                     started = true;
                 }
@@ -200,51 +220,80 @@ namespace Helpers
 
         private void UpdateButtonsVisibility()
         {
-            deviceManager.evDeviceStateHasChanged += delegate { };
+            deviceManager.evDeviceManagerOverallStateHasChanged += delegate { };
         }
 
         private void button_initialize_Click(object sender, EventArgs e)
         {
-            jurek.Say("Inicjalizacja sterowników.");
-            deviceManager.Initialize();
+            if (button_initialize.Enabled) //voice recognition can "click" button even if it is disabled
+            {
+                jurek.Say("Inicjalizacja sterowników.");
+                deviceManager.Initialize();
 
-            button_initialize.Enabled = false;
-            button_StartSensors.Enabled = true;
+                if (deviceManager.overallState != DeviceOverallState.Error)
+                {
+                    button_StartSensors.Enabled = true;
+                    button_initialize.Enabled = false;
+                }
+            }
         }
 
         private void button_StartSensors_Click(object sender, EventArgs e)
         {
-            jurek.Say("Uruchamiam sensory.");
-            deviceManager.StartSensors();
+            if (button_StartSensors.Enabled)
+            {
+                jurek.Say("Uruchamiam sensory.");
+                deviceManager.StartSensors();
 
-            button_StartSensors.Enabled = false;
-            button_StartEffectors.Enabled = true;
+                button_StartSensors.Enabled = false;
+                button_StartEffectors.Enabled = true;
+
+            }
         }
 
         private void button_StartEffectors_Click(object sender, EventArgs e)
         {
-            jurek.Say("Uruchamiam efektory.");
-            deviceManager.StartEffectors();
-            jurek.Say("Pojazd gotowy do jazdy.");
+            if (button_StartEffectors.Enabled)
+            {
+                jurek.Say("Uruchamiam efektory.");
+                deviceManager.StartEffectors();
+                jurek.Say("Pojazd gotowy do jazdy.");
 
-            button_StartEffectors.Enabled = false;
-            button_PauseEffectors.Enabled = true;
-            button_EmergencyStop.Enabled = true;
+                button_StartEffectors.Enabled = false;
+                button_PauseEffectors.Enabled = true;
+                button_EmergencyStop.Enabled = true;
+            }
         }
 
         private void button_PauseEffectors_Click(object sender, EventArgs e)
         {
-            jurek.Say("Pauzuje efektory.");
-            deviceManager.PauseEffectors();
+            if (button_PauseEffectors.Enabled)
+            {
+                jurek.Say("Pauzuje efektory.");
+                deviceManager.PauseEffectors();
 
-            button_PauseEffectors.Enabled = false;
-            button_StartEffectors.Enabled = true;
+                button_PauseEffectors.Enabled = false;
+                button_StartEffectors.Enabled = true;
+            }
         }
 
         private void button_EmergencyStop_Click(object sender, EventArgs e)
         {
-            deviceManager.EmergencyStop();
-            jurek.Say("Ojej! Zatrzymać! Przycisk bezpieczeństwa użyty.");
+            if (button_EmergencyStop.Enabled)
+            {
+                deviceManager.EmergencyStop();
+                jurek.Say("Ojej! Zatrzymać! Przycisk bezpieczeństwa użyty.");
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            button_initialize_Click(this, new EventArgs());
+            Thread.Sleep(1500);
+            button_StartSensors_Click(this, new EventArgs());
+            Thread.Sleep(1500);
+            button_StartEffectors_Click(this, new EventArgs());
+            started = true;
         }
 
     }
