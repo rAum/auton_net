@@ -20,7 +20,7 @@ namespace VisionFilters.Filters.Image_Operations
 
         private void GetChannel(Image<Bgr, byte> image)
         {
-            LastResult = image.Convert<Hsv, byte>().InRange(lower, upper).Dilate(4).Erode(5); // filtered; 
+            LastResult = image.Convert<Gray, byte>();// image.Convert<Hsv, byte>().InRange(lower, upper).Dilate(4).Erode(5); // filtered; 
             PostComplete();
         }
 

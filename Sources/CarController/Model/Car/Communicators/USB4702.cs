@@ -36,7 +36,7 @@ namespace car_communicator
         const double STEERING_WHEEL_MAX_SET_VALUE_IN_VOLTS = 3.8; //4.0 is teoretical max
 
         const int BRAKE_STRENGTH_SET_PORT = 1;
-        const double BRAKE_MIN_SET_VALUE_IN_VOLTS = 0.8; //from 0
+        const double BRAKE_MIN_SET_VALUE_IN_VOLTS = 0.0; //from 0
         const double BRAKE_NEUTRAL_STRENGTH_IN_VOLTS = 2.5;
         const double BRAKE_MAX_SET_VALUE_IN_VOLST = 4.2; //from 5
 

@@ -134,10 +134,10 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
     public class ClusterLanes : ThreadSupplier<List<Point>, SimpleRoadModel> 
     {
         private Supplier<List<Point>> supplier;
-        private double roadCenterDistAvg = 200; // estimated relative road distance [half of width]
+        private double roadCenterDistAvg = 150; // estimated relative road distance [half of width]
         
-        const double ROAD_CENTER_MIN = 175;
-        const double ROAD_CENTER_MAX = 230;
+        const double ROAD_CENTER_MIN = 120;
+        const double ROAD_CENTER_MAX = 200;
         const int CENTER_PROBE_OFFSET = 10;
         const int MIN_POINTS_FOR_EACH = 280;
         const int MIN_POINTS_FOR_ONLY_ONE = 300;
@@ -202,7 +202,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 roadCenter = Parabola.merge(leftLane, rightLane);
 
                 // reestimate road center
-                double new_road_width = ((rightLane.c - roadCenter.c) + (roadCenter.c - leftLane.c)) * 0.5 * 0.05 + roadCenterDistAvg * 0.95;
+                double new_road_width = ((rightLane.c - roadCenter.c) + (roadCenter.c - leftLane.c)) * 0.5 * 0.1 + roadCenterDistAvg * 0.9;
                 roadCenterDistAvg = Math.Max(Math.Min(new_road_width, ROAD_CENTER_MAX), ROAD_CENTER_MAX);
             }
             else if (leftLane != null) // check if this is really a left lane
