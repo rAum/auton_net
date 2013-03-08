@@ -20,8 +20,6 @@ namespace VisionFilters.Output
         private VisionPerceptor perceptor;
         private KalmanFilter[] kalmanFilters;
 
-        //Kalman2D kalman;
-
         // for dbg purpose
         public VisionPerceptor Perceptor
         {
@@ -54,6 +52,10 @@ namespace VisionFilters.Output
             };
 
             samplePoints = samplePointsDistance.Select(p => { return CamModel.ToPixels(p); }).ToArray();
+
+            kalmanFilters = new KalmanFilter[samplePoints.Length];
+            for (int i = 0; i < kalmanFilters.Length; ++i)
+                kalmanFilters[i] = new KalmanFilter();
 
         }
 

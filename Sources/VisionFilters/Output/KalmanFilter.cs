@@ -6,7 +6,7 @@ using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
 
-namespace VisionFilters.Filters.Image_Operations
+namespace VisionFilters.Output
 {
 
     public class KalmanFilter
