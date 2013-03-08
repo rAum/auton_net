@@ -58,10 +58,11 @@ namespace VisionFilters.Output
             PointF predictPt = new PointF(prediction[0, 0], prediction[1, 0]);
             PointF measurePt = new PointF(pt.X, pt.Y);
 
-            state[0, 0] = pt.X;
-            state[1, 0] = pt.Y;
+            Matrix<float> meas = new Matrix<float>(2, 1);
+            meas[0, 0] = pt.X;
+            meas[1, 0] = pt.Y;
 
-            Matrix<float> estimation = kalman.Correct(state);
+            Matrix<float> estimation = kalman.Correct(meas);
             currentEstimation = new PointF(estimation[0, 0], estimation[1, 0]);
 
             return currentEstimation;
