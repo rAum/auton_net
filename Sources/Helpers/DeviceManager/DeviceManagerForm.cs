@@ -37,6 +37,33 @@ namespace Helpers
 
             JurekGreeting();
             jurek.StartListening(hearedCommand);
+
+            deviceManager.evDeviceStateHasChanged += deviceManager_evDeviceStateHasChanged;
+        }
+
+        void deviceManager_evDeviceStateHasChanged(object sender, DeviceStateHasChangedEventArgs args)
+        {
+            if (args.GetDeviceState() == DeviceOverallState.Error)
+            {
+                UpdateButtonsStateInCaseOfDeviceError();
+            }
+        }
+
+        /// <summary>
+        /// disable buttons in form thread
+        /// </summary>
+        private void UpdateButtonsStateInCaseOfDeviceError()
+        {
+            if (label1.InvokeRequired)
+            { //if this is not form thread
+                label1.Invoke((MethodInvoker)delegate { UpdateButtonsStateInCaseOfDeviceError(); });
+            }
+            else
+            { //if this is form thead
+                button_StartSensors.Enabled = false;
+                button_StartEffectors.Enabled = false;
+                button_initialize.Enabled = true;
+            }
         }
 
         private void JurekGreeting()
@@ -151,21 +178,32 @@ namespace Helpers
                 }
                 catch (Exception ex)
                 {
-                    // no!   
+                    // was crashing on program exit //TODO: catch only that one exception (not important - its only window)
                 }
-            } 
+            }
+        }
+
+        private void UpdateButtonsVisibility()
+        {
+            deviceManager.evDeviceStateHasChanged += delegate { };
         }
 
         private void button_initialize_Click(object sender, EventArgs e)
         {
             jurek.Say("Inicjalizacja sterowników.");
             deviceManager.Initialize();
+
+            button_initialize.Enabled = false;
+            button_StartSensors.Enabled = true;
         }
 
         private void button_StartSensors_Click(object sender, EventArgs e)
         {
             jurek.Say("Uruchamiam sensory.");
             deviceManager.StartSensors();
+
+            button_StartSensors.Enabled = false;
+            button_StartEffectors.Enabled = true;
         }
 
         private void button_StartEffectors_Click(object sender, EventArgs e)
@@ -173,12 +211,19 @@ namespace Helpers
             jurek.Say("Uruchamiam efektory.");
             deviceManager.StartEffectors();
             jurek.Say("Pojazd gotowy do jazdy.");
+
+            button_StartEffectors.Enabled = false;
+            button_PauseEffectors.Enabled = true;
+            button_EmergencyStop.Enabled = true;
         }
 
         private void button_PauseEffectors_Click(object sender, EventArgs e)
         {
             jurek.Say("Pauzuje efektory.");
             deviceManager.PauseEffectors();
+
+            button_PauseEffectors.Enabled = false;
+            button_StartEffectors.Enabled = true;
         }
 
         private void button_EmergencyStop_Click(object sender, EventArgs e)

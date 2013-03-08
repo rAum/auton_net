@@ -59,6 +59,7 @@
             // 
             // button_StartSensors
             // 
+            this.button_StartSensors.Enabled = false;
             this.button_StartSensors.Location = new System.Drawing.Point(372, 95);
             this.button_StartSensors.Name = "button_StartSensors";
             this.button_StartSensors.Size = new System.Drawing.Size(104, 23);
@@ -69,6 +70,7 @@
             // 
             // button_StartEffectors
             // 
+            this.button_StartEffectors.Enabled = false;
             this.button_StartEffectors.Location = new System.Drawing.Point(372, 144);
             this.button_StartEffectors.Name = "button_StartEffectors";
             this.button_StartEffectors.Size = new System.Drawing.Size(104, 23);
@@ -79,6 +81,7 @@
             // 
             // button_PauseEffectors
             // 
+            this.button_PauseEffectors.Enabled = false;
             this.button_PauseEffectors.Location = new System.Drawing.Point(372, 187);
             this.button_PauseEffectors.Name = "button_PauseEffectors";
             this.button_PauseEffectors.Size = new System.Drawing.Size(104, 23);
@@ -89,6 +92,7 @@
             // 
             // button_EmergencyStop
             // 
+            this.button_EmergencyStop.Enabled = false;
             this.button_EmergencyStop.Location = new System.Drawing.Point(372, 233);
             this.button_EmergencyStop.Name = "button_EmergencyStop";
             this.button_EmergencyStop.Size = new System.Drawing.Size(104, 23);
@@ -140,11 +144,11 @@
 
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button button_initialize;
-        private System.Windows.Forms.Button button_StartSensors;
         private System.Windows.Forms.Button button_StartEffectors;
         private System.Windows.Forms.Button button_PauseEffectors;
         private System.Windows.Forms.Button button_EmergencyStop;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label_DeviceManagerAction;
+        private System.Windows.Forms.Button button_StartSensors;
     }
 }
