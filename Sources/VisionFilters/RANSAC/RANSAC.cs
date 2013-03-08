@@ -50,6 +50,9 @@ namespace RANSAC
                         consensus_set += 1;
                         model_error   += err;
                     }
+
+                    // no need to check if we have already worse error
+                    if (model_error > best_error) break; 
                 }
 
                 if (consensus_set >= n)

@@ -141,6 +141,12 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
         const int CENTER_PROBE_OFFSET = 10;
         const int MIN_POINTS_FOR_EACH = 280;
         const int MIN_POINTS_FOR_ONLY_ONE = 300;
+
+        const int RANSAC_ITERATIONS = 600;
+        const int RANSAC_MODEL_SIZE = 8;
+        const int RANSAC_ERROR_THRESHOLD = 5;
+        const double RANSAC_INLINERS = 0.75;
+
         int imgWidth  = CamModel.Width;
         int imgHeight = CamModel.Height;
         int centerProbePoint,
@@ -153,7 +159,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             Parabola roadCenter = null;
 
             if (lanes.Count > MIN_POINTS_FOR_ONLY_ONE)
-                roadCenter = RANSAC.RANSAC.fitParabola(700, 6, (int)(lanes.Count * 0.75), 5, lanes);
+                roadCenter = RANSAC.RANSAC.fitParabola(RANSAC_ITERATIONS, RANSAC_MODEL_SIZE, (int)(lanes.Count * RANSAC_INLINERS), RANSAC_ERROR_THRESHOLD, lanes);
 
             if (roadCenter != null) 
                 create_model_from_single_line(ref roadCenter, ref leftLane, ref rightLane);
@@ -168,10 +174,10 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 ////////////////////////////////////////////////////////////////
 
                 if (first.Count > MIN_POINTS_FOR_EACH)
-                    leftLane = RANSAC.RANSAC.fitParabola(700, 6, (int)(first.Count * 0.75), 5, first);
+                    leftLane = RANSAC.RANSAC.fitParabola(RANSAC_ITERATIONS, RANSAC_MODEL_SIZE, (int)(first.Count * RANSAC_INLINERS), RANSAC_ERROR_THRESHOLD, first);
 
                 if (second.Count > MIN_POINTS_FOR_EACH)
-                    rightLane = RANSAC.RANSAC.fitParabola(700, 6, (int)(second.Count * 0.75), 5, second);
+                    rightLane = RANSAC.RANSAC.fitParabola(RANSAC_ITERATIONS, RANSAC_MODEL_SIZE, (int)(second.Count * RANSAC_INLINERS), RANSAC_ERROR_THRESHOLD, second);
 
                 create_model_from_two_lanes(ref leftLane, ref rightLane, ref roadCenter);
             }
