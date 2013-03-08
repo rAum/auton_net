@@ -161,5 +161,55 @@ namespace RANSAC
                 input[i] = p;
             }
         }
+
+        internal static CatmullRom fitCatmullRom(int iterations, int init_samples, int n, double error_threshold, LanePointCloud lanes)
+        {
+            CatmullRom best_fit = null; ;
+            double best_error = double.MaxValue;
+            double model_error;
+            double err;
+            int consensus_set;
+
+            List<Point> sample = new List<Point>(init_samples);
+
+            for (int i = 0; i < iterations; ++i)
+            {
+                getRandomSamples(ref sample, init_samples, lanes);
+                CatmullRom model = CatmullRom.fit(sample, init_samples);
+                if (model == null) continue;
+
+                consensus_set = 0;
+                model_error = 0;
+                foreach (var p in lanes)
+                {
+                    err = model.at(p.Y) - p.X;
+                    if (Math.Abs(err) < error_threshold)
+                    {
+                        consensus_set += 1;
+                        model_error += err;
+                    }
+                }
+
+                if (consensus_set >= n)
+                {
+                    if (model_error < best_error)
+                    {
+                        best_fit = model;
+                        best_error = model_error;
+                    }
+                }
+            }
+
+            return best_fit;
+        }
+
+        private static void getRandomSamples(ref List<Point> sample, int init_samples, LanePointCloud lanes)
+        {
+            Random rnd = new Random();
+            for (int i = 0; i < init_samples; ++i)
+            {
+                sample.Add(lanes.GetRandom(i));
+            }
+        }
     }
 }

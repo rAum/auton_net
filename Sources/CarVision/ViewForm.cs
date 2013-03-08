@@ -137,9 +137,9 @@ namespace CarVision
             filter = new HsvFilter(colorVideoSource, minColor, maxColor);
             roadDetector = new RoadCenterDetector(filter);
             // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
-            filtered = new DrawPoints(roadDetector.Perceptor.laneDetector);
-            filtered.ResultReady += DisplayVideo;
-            filtered.Active = true;
+            //filtered = new DrawPoints(null);
+            //filtered.ResultReady += DisplayVideo;
+            //filtered.Active = true;
 
             visRoad = new VisualiseSimpleRoadModel(roadDetector.Perceptor.roadDetector);
             visRoad.ResultReady += DisplayVideo;
@@ -282,15 +282,15 @@ namespace CarVision
             colorCapture = !colorCapture;
             if (colorCapture)
             {
-                filtered.Active = false;
+                //filtered.Active = false;
                 filter.ResultReady += DisplayVideo;
-                filtered.ResultReady -= DisplayVideo;
+                //filtered.ResultReady -= DisplayVideo;
             }
             else
             {
                 filter.ResultReady -= DisplayVideo;
-                filtered.ResultReady += DisplayVideo;
-                filtered.Active = true;
+                //filtered.ResultReady += DisplayVideo;
+                //filtered.Active = true;
             }
         }
 

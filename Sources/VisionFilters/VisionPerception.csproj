@@ -70,6 +70,7 @@
     <Compile Include="Filters\Lane Mark Detector\ClusterLanesCatmullRom.cs" />
     <Compile Include="Filters\Lane Mark Detector\ClusterLanesQuadratic.cs" />
     <Compile Include="Filters\Lane Mark Detector\LaneMarkDetector.cs" />
+    <Compile Include="Filters\Lane Mark Detector\LanePointCloud.cs" />
     <Compile Include="Filters\Lane Mark Detector\LineModel.cs" />
     <Compile Include="Filters\Image Operations\PerspectiveCorrection.cs" />
     <Compile Include="Filters\Lane Mark Detector\SimpleRoadModel.cs" />

@@ -90,5 +90,39 @@ namespace VisionFilters
                     second.Add(input[i]);
             }
         }
+
+        internal static void Two_Means_Clustering(Filters.Lane_Mark_Detector.LanePointCloud lanes, ref List<Point> first, ref List<Point> second, int attempts = 3)
+        {
+            int count = lanes.Count;
+            if (count < 7)
+                return;
+
+            // formatting input data
+            float[,] samples = new float[count, 2];
+            int i = 0;
+            foreach (var p in lanes)
+            {
+                samples[i, 0] = p.X;
+                samples[i, 1] = p.Y;
+                ++i;
+            }
+
+            MCvTermCriteria term = new MCvTermCriteria();
+
+            Matrix<float> samplesMatrix = new Matrix<float>(samples);
+            Matrix<Int32> labels = new Matrix<Int32>(count, 1);
+
+            CvInvoke.cvKMeans2(samplesMatrix, 2, labels, term, attempts, IntPtr.Zero, KMeansInitType.RandomCenters, IntPtr.Zero, IntPtr.Zero);
+
+            first.Clear();
+            second.Clear();
+            for (i = 0; i < count; ++i)
+            {
+                if (labels[i, 0] == 0)
+                    first.Add(new Point((int)samples[i, 0], (int)samples[i, 1]) );
+                else
+                    second.Add(new Point((int)samples[i, 0], (int)samples[i, 1]));
+            }
+        }
     }
 }
