@@ -6,7 +6,119 @@ using System.Drawing;
 
 namespace RANSAC.Functions
 {
-    public class Parabola
+    public interface Function
+    {
+        double at(double y);
+        string ToString();
+        void moveHorizontal(double offset);
+    }
+
+    public class Bezier : Function
+    {
+        Vec2[] points;
+        double minY, maxY, rangeY;
+
+        public Bezier()
+        {
+        }
+
+        public Bezier(Vec2[] points_)
+        {
+            points = points_.ToArray();
+            findRange(this);
+        }
+
+        public static Bezier fit(List<Point> points_, int count)
+        {
+            Bezier b = new Bezier();
+
+            b.points = new Vec2[count];
+            b.minY = 10000;
+            b.maxY = 0;
+            for (int i = 0; i < count; ++i)
+            {
+                b.points[i] = new Vec2(points_[i]);
+                //if (points_[i].Y < b.minY) b.minY = points_[i].Y;
+                //else if (points_[i].Y > b.maxY) b.maxY = points_[i].Y;
+            }
+            //b.rangeY = b.maxY - b.minY;
+
+            findRange(b);
+
+            return b;
+        }
+
+        public void moveHorizontal(double offset)
+        {
+            for (int i = 0; i < points.Length; ++i)
+                points[i].X += offset;
+        }
+
+        public static Bezier Moved(Bezier old, double offset)
+        {
+            Bezier b = new Bezier(old.points);
+            b.moveHorizontal(offset);
+            return b;
+        }
+
+        private static void findRange(Bezier b)
+        {
+            b.minY = b.points[0].Y;
+            b.maxY = b.points[b.points.Length - 1].Y;
+            b.rangeY = b.maxY - b.minY;
+        }
+
+        public double at(double y)
+        {
+            double t = (y - minY) / rangeY;
+            return castelijou(t).X;
+        }
+
+        public int Count { get { return points.Length; } }
+
+        /// <summary>
+        /// a.Count == b.Count !!!!!!!
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static Bezier merge(Bezier a, Bezier b, double t = 0.5)
+        {
+            Vec2[] points = new Vec2[a.Count];
+            for (int i = 0; i < a.Count; ++i)
+                points[i] = t * (a.points[i] + b.points[i]);
+            return new Bezier(points);
+        }
+
+        private Vec2 castelijou(double t)
+        {
+            Vec2[] c = points.ToArray();
+            int n = c.Length - 1;
+            for (int i = 0; i < c.Length; ++i)
+            {
+                for (int j = 0; j < n; ++j)
+                {
+                    c[j] = c[j] + t * (c[j + 1] - c[j]);
+                }
+                --n;
+            }
+
+            return c[0];
+        }
+
+        public override string ToString()
+        {
+            StringBuilder bd = new StringBuilder();
+            bd.Append('[');
+            foreach (var p in points)
+                bd.AppendFormat(" ({0}, {1}),", p.X, p.Y);
+            bd.Append("]\n");
+            return bd.ToString();
+        }
+    }
+
+    public class Parabola : Function
     {
         public double a { get; set; }
         public double b { get; set; }
@@ -52,11 +164,30 @@ namespace RANSAC.Functions
             return this;
         }
 
+        public static Parabola merge(Parabola a, Parabola b, double t = 0.5)
+        {
+            return new Parabola((a.a + b.a) * t,
+                                (a.b + b.b) * t,
+                                (a.c + b.c) * t);
+        }
+
         public Parabola move(double up)
         {
             double bb = -2 * a * up + b;
             double cc = a * up * up - b * up + c;
             return new Parabola(a, bb, cc);
+        }
+
+        public void moveHorizontal(double offset)
+        {
+            c += offset;
+        }
+
+        public static Parabola Moved(Parabola old, double offset)
+        {
+            Parabola b = new Parabola(old.a, old.b, old.c);
+            b.moveHorizontal(offset);
+            return b;
         }
 
         /// <summary>
@@ -124,6 +255,42 @@ namespace RANSAC.Functions
         public double value(double x)
         {
             return ((a * x) + b) * x + c;
+        }
+    }
+
+
+    /// <summary>
+    /// CatmullRom Spline 
+    /// Points must be sorted [bigger value y first] and equidistant
+    /// </summary>
+    public class CatmullRom : Function
+    {
+        public double at(double t)
+        {
+            return 0;
+        }
+
+        public void moveHorizontal(double off)
+        {
+        }
+        /// <summary>
+        /// CatmullRom spline.
+        /// It's passing through b and c points.
+        /// Point a and d is been used to determine tangents.
+        /// </summary>
+        /// <param name="t">[0,1]</param>
+        /// <param name="a">first control (tangent) point</param>
+        /// <param name="b">first point [interpolated]</param>
+        /// <param name="c">second point [interpolated]</param>
+        /// <param name="d">second control (tangent) point</param>
+        /// <returns></returns>
+        public static Vec2 value(double t, Vec2 a, Vec2 b, Vec2 c, Vec2 d)
+        {
+            double c0 =  t * ((2.0 - t) * t - 1.0);
+            double c1 = (t * t * (3.0 * t - 5.0) + 2.0);
+            double c2 =  t * ((4.0 - 3.0 * t) * t + 1.0);
+            double c3 = (t - 1.0) * t * t;
+            return 0.5 * (c0 * a + c1 * b + c2 * c + c3 * d);
         }
     }
 }

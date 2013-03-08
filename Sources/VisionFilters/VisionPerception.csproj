@@ -65,28 +65,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Filters\Image Operations\CamUndistort.cs" />
     <Compile Include="Filters\Image Operations\DrawPoints.cs" />
     <Compile Include="Filters\Image Operations\HsvFilter.cs" />
-    <Compile Include="Filters\Image Operations\LaneMarkFilter.cs" />
     <Compile Include="Filters\Lane Mark Detector\ClusterLanes.cs" />
     <Compile Include="Filters\Lane Mark Detector\LaneMarkDetector.cs" />
     <Compile Include="Filters\Lane Mark Detector\LineModel.cs" />
     <Compile Include="Filters\Image Operations\PerspectiveCorrection.cs" />
-    <Compile Include="Filters\Image Operations\Smoothener.cs" />
     <Compile Include="Filters\Lane Mark Detector\SimpleRoadModel.cs" />
     <Compile Include="Filters\Lane Mark Detector\VisualiseSimpleRoadModel.cs" />
     <Compile Include="InputProperties.cs" />
-    <Compile Include="KalmanFilter.cs" />
     <Compile Include="Output\RoadCenterEvent.cs" />
     <Compile Include="RANSAC\TakeRandom.cs" />
-    <Compile Include="RoadModeling.cs" />
+    <Compile Include="RANSAC\Vec2.cs" />
     <Compile Include="VisionPerceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RANSAC\Functions.cs" />
     <Compile Include="RANSAC\RANSAC.cs" />
     <Compile Include="Output\RoadCenterDetector.cs" />
-    <Compile Include="RoadModel.cs" />
     <Compile Include="Output\VideoSource.cs" />
     <Compile Include="Supplier.cs" />
     <Compile Include="VisionToolkit.cs" />
@@ -101,7 +96,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Filters\Initial Model\" />
+    <Folder Include="Lane2\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

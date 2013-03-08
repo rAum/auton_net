@@ -122,6 +122,10 @@
       <Project>{AC8330CF-3F32-45C6-B8E8-5BE9F8AFF33D}</Project>
       <Name>Helpers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SettingsRepository\SettingsRepository.csproj">
+      <Project>{79EDD6AD-9AE9-4216-A069-819D45A42951}</Project>
+      <Name>SettingsRepository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VisionFilters\VisionPerception.csproj">
       <Project>{03833D47-DF5A-4B24-ABDB-19601109D523}</Project>
       <Name>VisionPerception</Name>

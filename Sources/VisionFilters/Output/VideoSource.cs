@@ -93,7 +93,7 @@ namespace VisionFilters.Output
     public class ColorVideoSource : Supplier<Image<Bgr, byte>>
     {
         public Boolean Runs { get; private set; }
-        int sleepTime = 5;
+        int sleepTime = 0;
 
         public override Image<Bgr, byte> LastResult
         {

@@ -37,13 +37,19 @@ namespace BrainProject
         DefaultCarController carController;
         MainWindow steeringWindow;
 
-        //VideoWriter videoWriter;
         private delegate void InvokeHandler();
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Gray, Byte>> e)
         {
-            ImageBox imgBox = imgDebug;
-            imgBox.Image = (Image<Gray, Byte>)e.Result;
+            try
+            {
+                ImageBox imgBox = imgDebug;
+                imgBox.Image = (Image<Gray, Byte>)e.Result;
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine("Bad thing happened in display video :( -" + ex.Message);
+            }
         }
 
         private void DisplayVideo(object sender, ResultReadyEventArgs<Image<Bgr, byte>> e)
@@ -74,12 +80,6 @@ namespace BrainProject
             }
         }
 
-        private Hsv ColorToHsv(Color col)
-        {
-            Hsv c  = new Hsv(col.GetHue(), col.GetSaturation() * 255, col.GetBrightness()*255);
-            return c;
-        }
-
         public ViewForm()
         {
             InitializeComponent();
@@ -88,30 +88,6 @@ namespace BrainProject
             steeringWindow = new CarController.MainWindow(carController);
             steeringWindow.Show();
             steeringWindow.Activate();
-
-            colorVideoSource = new ColorVideoSource();//@"D:\testBlue.avi");
-            colorVideoSource.ResultReady += DisplayVideo;
-
-            Hsv minColor = new Hsv(95 / 2, 0.6 * 255, 0.5 * 255);
-            Hsv maxColor = new Hsv(180 / 2, 255, 0.74 * 255);
-
-            filter = new HsvFilter(colorVideoSource, minColor, maxColor);
-            //filter.ResultReady += DisplayVideo;
-            roadDetector = new RoadCenterDetector(filter);
-            // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
-
-            visRoad = new VisualiseSimpleRoadModel(roadDetector.Perceptor.roadDetector);
-            visRoad.ResultReady += DisplayVideo;
-
-            invPerp = new PerspectiveCorrectionRgb(visRoad, CamModel.dstPerspective, CamModel.srcPerspective);
-            invPerp.ResultReady += DisplayVideo;
-
-            brain = new FollowTheRoadBrainCentre(roadDetector, carController);
-            brain.evNewTargetWheelAngeCalculated += new FollowTheRoadBrainCentre.newTargetWheelAngeCalculatedEventHandler(brain_evNewTargetWheelAngeCalculated);
-            brain.evNewTargetSpeedCalculated += new FollowTheRoadBrainCentre.newTargetSpeedCalculatedEventHandler(brain_evNewTargetSpeedCalculated);
-
-            //videoSource.Start();
-            colorVideoSource.Start();
         }
 
 
@@ -145,58 +121,17 @@ namespace BrainProject
 
         private void ViewForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //videoSource.Stop();
-
             colorVideoSource.Stop();
             colorVideoSource.ResultReady -= DisplayVideo;
-            //videoSource.ResultReady -= DisplayVideo;
             invPerp.ResultReady -= DisplayVideo;
             visRoad.ResultReady -= DisplayVideo;
 
             // wait a bit
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(1500);
         }
 
         private void ViewForm_Resize(object sender, EventArgs e)
         {
-        }
-
-        int next = 0;
-        private void button1_Click(object sender, EventArgs e)
-        {
-            next = (next + 1) % 2;
-
-            if (next == 1)
-            {
-                visRoad.ResultReady -= DisplayVideo;
-                //roadDetector.Perceptor.laneDetector.ResultReady += DisplayVideo;
-            }
-            else
-            {
-                visRoad.ResultReady += DisplayVideo;
-                //roadDetector.Perceptor.laneDetector.ResultReady -= DisplayVideo;
-            }
-
-        }
-
-        Color colLower;
-        Color colUpper;
-        private void button2_Click(object sender, EventArgs e)
-        {
-            colorDialog.Color = colLower;
-            if (colorDialog.ShowDialog() == DialogResult.OK)
-            {
-                colLower = colorDialog.Color;
-            }
-
-            colorDialog.Color = colUpper;
-            if (colorDialog.ShowDialog() == DialogResult.OK)
-            {
-                colUpper = colorDialog.Color;
-            }
-
-            filter.lower = ColorToHsv(colLower);
-            filter.upper = ColorToHsv(colUpper);
         }
 
         private void ViewForm_Load(object sender, EventArgs e)
@@ -217,6 +152,53 @@ namespace BrainProject
                 automaticSteeringEnabled = true;
                 button_EnableAutomaticSteering.Text = "Disable automatic steering";
             }
+        }
+
+        private void CreateVisionProcess(ref SettingsRepository.SettingsRepository setRepo)
+        {
+            colorVideoSource = new ColorVideoSource();
+            colorVideoSource.ResultReady += DisplayVideo;
+
+            Hsv min = new Hsv((int)setRepo.Get("min-h")
+                              , (int)setRepo.Get("min-s")
+                              , (int)setRepo.Get("min-v")),
+                max = new Hsv((int)setRepo.Get("max-h")
+                              , (int)setRepo.Get("max-s")
+                              , (int)setRepo.Get("max-v"));
+
+            filter = new HsvFilter(colorVideoSource, min, max);
+            roadDetector = new RoadCenterDetector(filter);
+            // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
+            visRoad = new VisualiseSimpleRoadModel(roadDetector.Perceptor.roadDetector);
+            invPerp = new PerspectiveCorrectionRgb(visRoad, CamModel.dstPerspective, CamModel.srcPerspective);
+
+            brain = new FollowTheRoadBrainCentre(roadDetector, carController);
+            brain.evNewTargetWheelAngeCalculated += new FollowTheRoadBrainCentre.newTargetWheelAngeCalculatedEventHandler(brain_evNewTargetWheelAngeCalculated);
+            brain.evNewTargetSpeedCalculated += new FollowTheRoadBrainCentre.newTargetSpeedCalculatedEventHandler(brain_evNewTargetSpeedCalculated);
+
+            roadDetector.Perceptor.laneDetector.Tau            = (int) setRepo.Get("tau");
+            roadDetector.Perceptor.laneDetector.Threshold      = (byte)((int)setRepo.Get("threshold"));
+            roadDetector.Perceptor.laneDetector.VerticalOffset = (int) setRepo.Get("v-offset");
+
+            visRoad.ResultReady += DisplayVideo;
+            invPerp.ResultReady += DisplayVideo;
+            colorVideoSource.Start();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SettingsRepository.SettingsRepository setRepo = new SettingsRepository.SettingsRepository("../../../../config.xml");
+
+            if (!setRepo.Correct)
+            {
+                MessageBox.Show("Invalid configuration file!\nCheck config.xml file or run tool to generate.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            CreateVisionProcess(ref setRepo);
+
+            (sender as Button).Enabled = false;
+            button_EnableAutomaticSteering.Enabled = true;
         }
     }
 }
