@@ -7,6 +7,7 @@ using System.Drawing;
 using Auton.CarVision.Video;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using VisionFilters.Filters.Image_Operations;
 
 namespace VisionFilters.Output
 {
@@ -17,6 +18,7 @@ namespace VisionFilters.Output
     {
         private int[] samplePoints; // in pixels
         private VisionPerceptor perceptor;
+        private KalmanFilter[] kalmanFilters;
 
         //Kalman2D kalman;
 
@@ -52,6 +54,7 @@ namespace VisionFilters.Output
             };
 
             samplePoints = samplePointsDistance.Select(p => { return CamModel.ToPixels(p); }).ToArray();
+
         }
 
         private void NewRoadModel(object sender, RoadModelEvent e)
@@ -66,6 +69,9 @@ namespace VisionFilters.Output
         private void RoadCenterFounded(Function roadModel)
         {
             PointF[] samples = samplePoints.Select(p => { return new PointF((float)roadModel.at(p), (float)p); }).ToArray();
+
+            for (int i = 0; i < kalmanFilters.Length; ++i)
+                samples[i] = kalmanFilters[i].FeedPoint(samples[i]);
 
             if (RoadCenterSupply == null)
                 return;
