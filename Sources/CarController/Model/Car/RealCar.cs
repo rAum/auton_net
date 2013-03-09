@@ -51,7 +51,7 @@ namespace CarController.Model.Car
             evAlertBrake += new EventHandler(ExampleFakeCar_evAlertBrake);
             evTargetSpeedChanged += new TargetSpeedChangedEventHandler(ExampleFakeCar_evTargetSpeedChanged);
             evTargetSteeringWheelAngleChanged += new TargetSteeringWheelAngleChangedEventHandler(ExampleFakeCar_evTargetSteeringWheelAngleChanged);
-            deviceManager.evDeviceStateHasChanged += deviceManager_evDeviceStateHasChanged;
+            deviceManager.evDeviceManagerOverallStateHasChanged += deviceManager_evDeviceStateHasChanged;
         }
 
         void deviceManager_evDeviceStateHasChanged(object sender, DeviceStateHasChangedEventArgs args)

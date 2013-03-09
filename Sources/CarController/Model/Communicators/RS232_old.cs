@@ -13,7 +13,7 @@ namespace CarController_old
     public class RS232Controller : Device
     {
         // Create the serial port with basic settings 
-        private SerialPort port = new SerialPort("COM7", 9600, Parity.None, 8, StopBits.One); //TODO: add choosing COM no from form
+        private SerialPort port = new SerialPort("COM4", 9600, Parity.None, 8, StopBits.One); //TODO: add choosing COM no from form
 
         //messages
         char[] giveMeSteeringWheelAngleMsg = new char[] { '1', 'P', (char)13 }; //TODO: try changing it to byte[] //not necessery, but char[] probably wont work for values > 127...
@@ -31,6 +31,7 @@ namespace CarController_old
         private const int SLEEP_WHILE_WAITING_FOR_READ_IN_MS = 2;
         private const int SLEEP_ON_FAILED_PORT_OPPENING_BEFORE_NEXT_TRY_AT_APP_INIT_IN_MS = 1000; //to dont spam so many messages when it fails anyway
         private const int SLEEP_ON_FAILED_PORT_OPPENING_BEFORE_NEXT_TRY_AT_APP_WORKING_IN_MS = 0; //needed ASAP
+        private const int MAX_CONNECTION_TRIES = 30;
         private const int SLEEP_BETWEEN_2_READS_IN_MS = 10;
 
         private const bool DIAGNOSIS_ENABLED = false;
@@ -339,8 +340,9 @@ namespace CarController_old
         private void TryOppeningPortUntilItSucceds(int waitBeforeNextTryInMs)
         {
             bool done = false;
+            int tries = 0;
 
-            while (!done)
+            while (tries++ < MAX_CONNECTION_TRIES)
             {
                 try
                 {
@@ -352,6 +354,15 @@ namespace CarController_old
                     Logger.Log(this, String.Format("RS232 port oppening failed, waiting {0}ms before next try", waitBeforeNextTryInMs), 2);
                     Thread.Sleep(waitBeforeNextTryInMs);
                 }
+            }
+
+            if (done)
+            {
+                overallState = DeviceOverallState.OK;
+            }
+            else
+            {
+                overallState = DeviceOverallState.Error;
             }
         }
      
