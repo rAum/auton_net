@@ -40,6 +40,7 @@ namespace VisionFilters.Output
             processNoise = new Matrix<float>(4, 4);
             processNoise.SetIdentity(new MCvScalar(1.0e-4));
             measurementNoise = new Matrix<float>(2, 2);
+            measurementNoise.SetIdentity(new MCvScalar(1.0e-1));
             errorCovariancePost = new Matrix<float>(4, 4);
             errorCovariancePost.SetIdentity();
 
@@ -56,7 +57,6 @@ namespace VisionFilters.Output
         {
             Matrix<float> prediction = kalman.Predict();
             PointF predictPt = new PointF(prediction[0, 0], prediction[1, 0]);
-            PointF measurePt = new PointF(pt.X, pt.Y);
 
             Matrix<float> meas = new Matrix<float>(2, 1);
             meas[0, 0] = pt.X;
