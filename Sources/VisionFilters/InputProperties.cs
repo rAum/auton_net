@@ -56,7 +56,7 @@ namespace VisionFilters
     public class CamModel
     {
         static InputProperties prop = new InputProperties();
-        static float metersToPixelsRatio = 20.0f; // 1m = 20 px
+        static float metersToPixelsRatio = 80.0f; // 1m = 20 px
 
         public static int Width
         {

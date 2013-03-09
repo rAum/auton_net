@@ -138,7 +138,7 @@ namespace car_communicator
             }
             else
             {
-                Logger.Log(this, "target throttle was not set, effectors are disabled", 1);
+                Logger.Log(this, "target throttle was not set, effectors are disabled");
             }
         }
 

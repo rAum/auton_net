@@ -134,17 +134,17 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
     public class ClusterLanes : ThreadSupplier<List<Point>, SimpleRoadModel> 
     {
         private Supplier<List<Point>> supplier;
-        private double roadCenterDistAvg = 150; // estimated relative road distance [half of width]
+        private double roadCenterDistAvg = 206; // estimated relative road distance [half of width]
         
-        const double ROAD_CENTER_MIN = 120;
-        const double ROAD_CENTER_MAX = 200;
+        const double ROAD_CENTER_MIN = 190;
+        const double ROAD_CENTER_MAX = 340;
         const int CENTER_PROBE_OFFSET = 10;
         const int MIN_POINTS_FOR_EACH = 280;
-        const int MIN_POINTS_FOR_ONLY_ONE = 300;
+        const int MIN_POINTS_FOR_ONLY_ONE = 100;
 
-        const int RANSAC_ITERATIONS = 600;
+        const int RANSAC_ITERATIONS = 650;
         const int RANSAC_MODEL_SIZE = 8;
-        const int RANSAC_ERROR_THRESHOLD = 5;
+        const int RANSAC_ERROR_THRESHOLD = 6;
         const double RANSAC_INLINERS = 0.75;
 
         int imgWidth  = CamModel.Width;
@@ -159,7 +159,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             Parabola roadCenter = null;
 
             if (lanes.Count > MIN_POINTS_FOR_ONLY_ONE)
-                roadCenter = RANSAC.RANSAC.fitParabola(RANSAC_ITERATIONS, RANSAC_MODEL_SIZE, (int)(lanes.Count * RANSAC_INLINERS), RANSAC_ERROR_THRESHOLD, lanes);
+                roadCenter = RANSAC.RANSAC.fitParabola(RANSAC_ITERATIONS + 100, RANSAC_MODEL_SIZE, (int)(lanes.Count * 0.5), 15, lanes);
 
             if (roadCenter != null) 
                 create_model_from_single_line(ref roadCenter, ref leftLane, ref rightLane);
@@ -168,7 +168,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 // try to cluster data to distinguish left and right lane
                 List<Point> first = new List<Point>(2048);
                 List<Point> second = new List<Point>(2048);
-
+                //System.Console.WriteLine("Kura");
                 VisionToolkit.Two_Means_Clustering(lanes, ref first, ref second);
 
                 ////////////////////////////////////////////////////////////////

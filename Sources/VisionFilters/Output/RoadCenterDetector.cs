@@ -45,9 +45,9 @@ namespace VisionFilters.Output
         {
             float[] samplePointsDistance = new float[] // in meters
             {
-                0.5f, 
-                1.0f,
-                1.5f
+                1.5f, 
+                2.0f,
+                2.5f
             };
 
             samplePoints = samplePointsDistance.Select(p => { return CamModel.ToPixels(p); }).ToArray();

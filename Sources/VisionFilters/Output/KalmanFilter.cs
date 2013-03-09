@@ -38,8 +38,10 @@ namespace VisionFilters.Output
                 { 0, 1, 0, 0 }
             });
             processNoise = new Matrix<float>(4, 4);
-            processNoise.SetIdentity(new MCvScalar(1.0e-4));
+            processNoise.SetIdentity(new MCvScalar(5));//1.0e-4));
+
             measurementNoise = new Matrix<float>(2, 2);
+            measurementNoise.SetIdentity(new MCvScalar(20));
             errorCovariancePost = new Matrix<float>(4, 4);
             errorCovariancePost.SetIdentity();
 
