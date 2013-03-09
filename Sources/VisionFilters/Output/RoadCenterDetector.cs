@@ -55,7 +55,7 @@ namespace VisionFilters.Output
             samplePoints = samplePointsDistance.Select(p => { return CamModel.ToPixels(p); }).ToArray();
             kalmanFilters = new KalmanFilter[samplePoints.Length];
             for (int i = 0; i < kalmanFilters.Length; ++i)
-                kalmanFilters[i] = new KalmanFilter();
+                kalmanFilters[i] = new KalmanFilter(2);
         }
 
         private void NewRoadModel(object sender, RoadModelEvent e)

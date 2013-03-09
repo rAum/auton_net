@@ -8,6 +8,7 @@ using Emgu.CV.Structure;
 using System.Drawing;
 using RANSAC.Functions;
 using System.Diagnostics;
+using VisionFilters.Output;
 
 namespace VisionFilters.Filters.Lane_Mark_Detector
 {
@@ -151,7 +152,11 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
         int imgHeight = CamModel.Height;
         int centerProbePoint,
             carCenter;
-        
+
+        private KalmanFilter leftLaneKalmanFilter;
+        private KalmanFilter rightLaneKalmanFilter;
+        private KalmanFilter roadCenterKalmanFilter;
+
         private void ObtainSimpleModel(List<Point> lanes)
         {
             Parabola leftLane   = null;
@@ -181,6 +186,12 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
                 create_model_from_two_lanes(ref leftLane, ref rightLane, ref roadCenter);
             }
+            else
+            {
+                leftLane = leftLaneKalmanFilter.PredictParabola();
+                rightLane = rightLaneKalmanFilter.PredictParabola();
+                create_model_from_two_lanes(ref leftLane, ref rightLane, ref roadCenter);
+            }
 
             LastResult = new SimpleRoadModel(roadCenter, leftLane, rightLane);
             PostComplete();
@@ -188,6 +199,19 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
         private void create_model_from_two_lanes(ref Parabola leftLane, ref Parabola rightLane, ref Parabola roadCenter)
         {
+            //////////////////////////////////////////////////////////////////////////
+            // KALMAN
+            if (leftLane != null)
+                leftLane = leftLaneKalmanFilter.FeedParabola(leftLane);
+            else
+                leftLane = leftLaneKalmanFilter.PredictParabola();
+
+            if (rightLane != null)
+                rightLane = rightLaneKalmanFilter.FeedParabola(rightLane);
+            else
+                rightLane = rightLaneKalmanFilter.PredictParabola();
+            //////////////////////////////////////////////////////////////////////////
+
             if (leftLane != null && rightLane != null)
             {
                 // swap lanes if necessary
@@ -200,6 +224,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
                 // center is between left and right lane
                 roadCenter = Parabola.merge(leftLane, rightLane);
+                roadCenter = roadCenterKalmanFilter.FeedParabola(roadCenter);
 
                 // reestimate road center
                 double new_road_width = ((rightLane.c - roadCenter.c) + (roadCenter.c - leftLane.c)) * 0.5 * 0.05 + roadCenterDistAvg * 0.95;
@@ -230,15 +255,20 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
         private void create_model_from_single_line(ref Parabola roadCenter, ref Parabola leftLane, ref Parabola rightLane)
         {
             double x = roadCenter.at(imgHeight - CENTER_PROBE_OFFSET);
+
             if (x < carCenter) {
-                leftLane   = roadCenter;
-                roadCenter = Parabola.Moved(leftLane, roadCenterDistAvg);
-                rightLane  = Parabola.Moved(roadCenter, roadCenterDistAvg);
+                leftLane = leftLaneKalmanFilter.FeedParabola(roadCenter);
+                if (rightLane == null)
+                    rightLane  = Parabola.Moved(leftLane, 2 * roadCenterDistAvg);
+
+                create_model_from_two_lanes(ref leftLane, ref rightLane, ref roadCenter);
             }
             else {
-                rightLane  = roadCenter;
-                roadCenter = Parabola.Moved(rightLane, -roadCenterDistAvg);
-                leftLane   = Parabola.Moved(roadCenter, -roadCenterDistAvg);
+                rightLane = rightLaneKalmanFilter.FeedParabola(roadCenter);
+                if (leftLane == null)
+                    leftLane  = Parabola.Moved(rightLane, -2 * roadCenterDistAvg);
+
+                create_model_from_two_lanes(ref leftLane, ref rightLane, ref roadCenter);
             }
         }
         
@@ -251,6 +281,10 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
             supplier.ResultReady += MaterialReady;
             Process += ObtainSimpleModel;
+
+            leftLaneKalmanFilter = new KalmanFilter(3);
+            rightLaneKalmanFilter = new KalmanFilter(3);
+            roadCenterKalmanFilter = new KalmanFilter(3);
         }
     }
 }
