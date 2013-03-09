@@ -203,7 +203,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
                 // reestimate road center
                 double new_road_width = ((rightLane.c - roadCenter.c) + (roadCenter.c - leftLane.c)) * 0.5 * 0.1 + roadCenterDistAvg * 0.9;
-                roadCenterDistAvg = Math.Max(Math.Min(new_road_width, ROAD_CENTER_MAX), ROAD_CENTER_MAX);
+                roadCenterDistAvg = Math.Max(Math.Min(new_road_width, ROAD_CENTER_MAX), ROAD_CENTER_MIN);
             }
             else if (leftLane != null) // check if this is really a left lane
             {
