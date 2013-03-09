@@ -18,8 +18,6 @@ namespace VisionFilters.Filters.Image_Operations
         Image<Gray, byte> image;
         bool active;
 
-        int pointSize;
-
         public bool Active
         {
             get { return active; }
@@ -37,26 +35,21 @@ namespace VisionFilters.Filters.Image_Operations
 
             Point[] points = input.ToArray();
             var c = image.Data;
-            foreach (var p in points)
-            {
-                for (int x = -pointSize; x <= pointSize; ++x)
-                    for (int y = -pointSize; y <= pointSize; ++y)
-                        c[p.Y + y, p.X + x, 0] = 255;
+            foreach (var p in points) {
+                c[p.Y, p.X, 0] = 255;
             }
 
             LastResult = image;
             PostComplete();
         }
 
-        public DrawPoints(Supplier<List<Point>> supplier_, int ptRadius = 1)
+        public DrawPoints(Supplier<List<Point>> supplier_)
         {
             image = new Image<Gray, byte>(CamModel.Width, CamModel.Height);
             supplier = supplier_;
             supplier.ResultReady += MaterialReady;
             Process += GetChannel;
             active = false;
-
-            pointSize = ptRadius - 1;
         }
     }
 }
