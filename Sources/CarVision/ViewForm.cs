@@ -78,7 +78,10 @@ namespace CarVision
                 if (sender == invPerp)
                 {
                     Image<Bgr, byte> cam = new Image<Bgr, byte>(big.Image.Bitmap);
-                    small.Image = (Image<Bgr, byte>)e.Result + cam;
+                    Image<Bgr, byte> res = (Image<Bgr, byte>)e.Result + cam;
+                    foreach (var p in probe)
+                        res.Draw(new CircleF(p, 10), new Bgr(0, 0, 255), -1);
+                    small.Image = res;
                     return;
                 }
                 
@@ -147,6 +150,14 @@ namespace CarVision
             invPerp = new PerspectiveCorrectionRgb(visRoad, CamModel.dstPerspective, CamModel.srcPerspective);
             //invPerp = new PerspectiveCorrectionRgb(colorVideoSource, CamModel.srcPerspective, CamModel.dstPerspective);
             invPerp.ResultReady += DisplayVideo;
+
+            roadDetector.RoadCenterSupply += roadCenter;
+        }
+
+        PointF[] probe = new PointF[3];
+        private void roadCenter(object sender, RoadCenterEvent arg)
+        {
+            probe = arg.road.ToArray();
         }
 
         private void LoadVideos()
@@ -316,6 +327,7 @@ namespace CarVision
         }
 
         bool pause = false;
+
         private void button6_Click(object sender, EventArgs e)
         {
             if (pause == false)
