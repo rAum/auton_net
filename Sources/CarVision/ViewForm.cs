@@ -31,6 +31,7 @@ namespace CarVision
         PerspectiveCorrectionRgb invPerp;
 
         DrawPoints filtered;
+        DrawPoints kalmanFilteredRoadCenter;
 
         VideoWriter videoWriter;
 
@@ -49,6 +50,9 @@ namespace CarVision
             {
                 if (sender == visRoad)
                     imgBox = imgDebug;
+                else if (sender == kalmanFilteredRoadCenter)
+                    imgBox = imgDebug3;
+
                 imgBox.Image = (Image<Gray, byte>)e.Result;
             }
             catch (Exception ex)
@@ -137,6 +141,12 @@ namespace CarVision
             filter = new HsvFilter(colorVideoSource, minColor, maxColor);
             roadDetector = new RoadCenterDetector(filter);
             // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
+
+            // road center points, kalman filtered
+            kalmanFilteredRoadCenter = new DrawPoints(roadDetector, 5);
+            kalmanFilteredRoadCenter.ResultReady += DisplayVideo;
+            kalmanFilteredRoadCenter.Active = true;
+
             filtered = new DrawPoints(roadDetector.Perceptor.laneDetector);
             filtered.ResultReady += DisplayVideo;
             filtered.Active = true;

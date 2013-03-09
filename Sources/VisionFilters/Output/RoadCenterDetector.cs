@@ -12,8 +12,10 @@ namespace VisionFilters.Output
 {
     /// <summary>
     /// This class provides detection of road center.
+    /// 
+    /// Also serves as a supplier for Kalman-filtered sample points.
     /// </summary>
-    public class RoadCenterDetector
+    public class RoadCenterDetector: Supplier<List<Point>>
     {
         private int[] samplePoints; // in pixels
         private VisionPerceptor perceptor;
@@ -64,16 +66,19 @@ namespace VisionFilters.Output
         /// <summary>
         /// Sample road center and raises event.
         /// </summary>
-        /// <param name="roadModel">road center model</param>
+        /// <param name="roadModel">road center model</param>   
         private void RoadCenterFounded(Function roadModel)
         {
             PointF[] samples = samplePoints.Select(p => { return new PointF((float)roadModel.at(p), (float)p); }).ToArray();
 
-            if (RoadCenterSupply == null)
-                return;
-
             for (int i = 0; i < kalmanFilters.Length; ++i)
                 samples[i] = kalmanFilters[i].FeedPoint(samples[i]);
+
+            List<Point> points = samples.Select(p => { return new Point((int)p.X, (int)p.Y); }).ToList();
+            OnResultReady(new ResultReadyEventArgs<List<Point>>(points));
+
+            if (RoadCenterSupply == null)
+                return;
 
             RoadCenterSupply.Invoke(this, new RoadCenterEvent(samples));
         }
