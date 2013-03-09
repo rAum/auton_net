@@ -139,11 +139,11 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
         const double ROAD_CENTER_MIN = 175;
         const double ROAD_CENTER_MAX = 230;
         const int CENTER_PROBE_OFFSET = 10;
-        const int MIN_POINTS_FOR_EACH = 280;
+        const int MIN_POINTS_FOR_EACH = 450;
         const int MIN_POINTS_FOR_ONLY_ONE = 300;
 
-        const int RANSAC_ITERATIONS = 600;
-        const int RANSAC_MODEL_SIZE = 8;
+        const int RANSAC_ITERATIONS = 650;
+        const int RANSAC_MODEL_SIZE = 7;
         const int RANSAC_ERROR_THRESHOLD = 5;
         const double RANSAC_INLINERS = 0.75;
 
@@ -188,6 +188,8 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
         private void create_model_from_two_lanes(ref Parabola leftLane, ref Parabola rightLane, ref Parabola roadCenter)
         {
+            // yep, hell is hot for me.
+        false_signal:
             if (leftLane != null && rightLane != null)
             {
                 // swap lanes if necessary
@@ -196,6 +198,13 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                     var t     = leftLane;
                     leftLane  = rightLane;
                     rightLane = leftLane;
+                }
+
+                if (Math.Abs(rightLane.c - leftLane.c) <= ROAD_CENTER_MIN - 50)
+                {
+                    leftLane  = Parabola.merge(rightLane, leftLane);
+                    rightLane = null; 
+                    goto false_signal;
                 }
 
                 // center is between left and right lane
