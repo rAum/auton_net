@@ -199,6 +199,10 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
         private void create_model_from_two_lanes(ref Parabola leftLane, ref Parabola rightLane, ref Parabola roadCenter)
         {
+<<<<<<< HEAD
+            // yep, hell is hot for me.
+        false_signal:
+=======
             //////////////////////////////////////////////////////////////////////////
             // KALMAN
             if (leftLane != null)
@@ -212,6 +216,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 rightLane = rightLaneKalmanFilter.PredictParabola();
             //////////////////////////////////////////////////////////////////////////
 
+>>>>>>> 1237a145cf3aaa74e60fcd421c715a1c2566d1a6
             if (leftLane != null && rightLane != null)
             {
                 // swap lanes if necessary

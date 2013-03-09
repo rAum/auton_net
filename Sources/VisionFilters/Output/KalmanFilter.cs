@@ -5,47 +5,56 @@ using System.Text;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using RANSAC.Functions;
 
 namespace VisionFilters.Output
 {
+    public class InvalidVariablesCountException: Exception
+    {
+    }
 
     public class KalmanFilter
     {
         private Kalman kalman;
-        private Matrix<float> state;
-        private Matrix<float> transitionMatrix;
-        private Matrix<float> measurementMatrix;
-        private Matrix<float> processNoise;
-        private Matrix<float> measurementNoise;
-        private Matrix<float> errorCovariancePost;
+        private int variablesCount;
+        private bool isInitialized; // true if any data has been fed
 
-        private PointF currentEstimation;
-
-        public KalmanFilter()
+        public KalmanFilter(int variables)
         {
-            state = new Matrix<float>(new float[] { 0.0f, 0.0f, 0.0f, 0.0f });
+            variablesCount = variables;
 
-            transitionMatrix = new Matrix<float>(new float[,]
+            int measurementVariables = variables;
+            int dynamicVariables = variables * 2;
+
+            float[] state = new float[dynamicVariables];
+            for (int i = 0; i < dynamicVariables; ++i)
+                state[i] = 0.0f;
+
+            Matrix<float> transitionMatrix = new Matrix<float>(dynamicVariables, dynamicVariables);
+            transitionMatrix.SetZero();
+            for (int i = 0; i < dynamicVariables; ++i)
             {
-                { 1, 0, 1, 0 },
-                { 0, 1, 0, 1 },
-                { 0, 0, 1, 0 },
-                { 0, 0, 0, 1 }
-            });
-            measurementMatrix = new Matrix<float>(new float[,]
-            {
-                { 1, 0, 0, 0 },
-                { 0, 1, 0, 0 }
-            });
-            processNoise = new Matrix<float>(4, 4);
+                transitionMatrix[i, i] = 1.0f;
+                if (i >= measurementVariables)
+                    transitionMatrix[i - measurementVariables, i] = 1;
+            }
+
+            Matrix<float> measurementMatrix = new Matrix<float>(measurementVariables, dynamicVariables);
+            measurementMatrix.SetZero();
+            for (int i = 0; i < measurementVariables; ++i)
+                measurementMatrix[i, i] = 1.0f;
+
+            Matrix<float> processNoise = new Matrix<float>(dynamicVariables, dynamicVariables);
             processNoise.SetIdentity(new MCvScalar(1.0e-4));
-            measurementNoise = new Matrix<float>(2, 2);
+
+            Matrix<float> measurementNoise = new Matrix<float>(measurementVariables, measurementVariables);
             measurementNoise.SetIdentity(new MCvScalar(1.0e-1));
-            errorCovariancePost = new Matrix<float>(4, 4);
+
+            Matrix<float> errorCovariancePost = new Matrix<float>(dynamicVariables, dynamicVariables);
             errorCovariancePost.SetIdentity();
 
-            kalman = new Kalman(4, 2, 0);
-            kalman.CorrectedState = state;
+            kalman = new Kalman(dynamicVariables, measurementVariables, 0);
+            kalman.CorrectedState = new Matrix<float>(state);
             kalman.TransitionMatrix = transitionMatrix;
             kalman.MeasurementNoiseCovariance = measurementNoise;
             kalman.ProcessNoiseCovariance = processNoise;
@@ -55,22 +64,107 @@ namespace VisionFilters.Output
 
         public PointF FeedPoint(PointF pt)
         {
-            Matrix<float> prediction = kalman.Predict();
-            PointF predictPt = new PointF(prediction[0, 0], prediction[1, 0]);
+            if (variablesCount != 2)
+                throw new InvalidVariablesCountException();
+
+            if (!isInitialized)
+            {
+                kalman.CorrectedState[0, 0] = pt.X;
+                kalman.CorrectedState[1, 0] = pt.X;
+
+                isInitialized = true;
+                return pt;
+            }
+
+            kalman.Predict();
 
             Matrix<float> meas = new Matrix<float>(2, 1);
             meas[0, 0] = pt.X;
             meas[1, 0] = pt.Y;
 
             Matrix<float> estimation = kalman.Correct(meas);
-            currentEstimation = new PointF(estimation[0, 0], estimation[1, 0]);
-
-            return currentEstimation;
+            return new PointF(estimation[0, 0], estimation[1, 0]);
         }
 
-        public PointF GetCurrentEstimation()
+        public PointF PredictPoint()
         {
-            return currentEstimation;
+            if (variablesCount != 2)
+                throw new InvalidVariablesCountException();
+
+            Matrix<float> prediction = kalman.Predict();
+            return new PointF(prediction[0, 0], prediction[1, 0]);
+        }
+
+        public float[] FeedValues(float[] vals)
+        {
+            if (variablesCount != vals.Length)
+                throw new InvalidVariablesCountException();
+
+            if (!isInitialized)
+            {
+                for (int i = 0; i < vals.Length; ++i)
+                    kalman.CorrectedState[i, 0] = vals[i];
+
+                isInitialized = true;
+                return vals;
+            }
+
+            kalman.Predict();
+
+            Matrix<float> estimation = kalman.Correct(new Matrix<float>(vals));
+            float[] ret = new float[variablesCount];
+            for (int i = 0; i < variablesCount; ++i)
+                ret[i] = estimation[i, 0];
+
+            return ret;
+        }
+
+        public float[] PredictValues()
+        {
+            Matrix<float> prediction = kalman.Predict();
+            float[] ret = new float[variablesCount];
+            for (int i = 0; i < variablesCount; ++i)
+                ret[i] = prediction[i, 0];
+
+            return ret;
+        }
+
+        public Parabola FeedParabola(Parabola parabola)
+        {
+            if (variablesCount != 3)
+                throw new InvalidVariablesCountException();
+
+            if (!isInitialized)
+            {
+                kalman.CorrectedState[0, 0] = (float)parabola.a;
+                kalman.CorrectedState[1, 0] = (float)parabola.b;
+                kalman.CorrectedState[2, 0] = (float)parabola.c;
+
+                isInitialized = true;
+                return parabola;
+            }
+
+            Matrix<float> meas = new Matrix<float>(3, 1);
+            meas[0, 0] = (float)parabola.a;
+            meas[1, 0] = (float)parabola.b;
+            meas[2, 0] = (float)parabola.c;
+
+            kalman.Predict();
+
+            Matrix<float> estimation = kalman.Correct(meas);
+            return new Parabola(estimation[0, 0], estimation[1, 0], estimation[2, 0]);
+        }
+
+        public Parabola PredictParabola()
+        {
+            if (variablesCount != 3)
+                throw new InvalidVariablesCountException();
+
+            if (!isInitialized)
+                return null;
+
+            Matrix<float> prediction = kalman.Predict();
+            return new Parabola(prediction[0, 0], prediction[1, 0], prediction[2, 0]);
         }
     }
 }
