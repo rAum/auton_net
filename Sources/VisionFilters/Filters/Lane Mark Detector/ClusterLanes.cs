@@ -164,7 +164,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             Parabola roadCenter = null;
 
             if (lanes.Count > MIN_POINTS_FOR_ONLY_ONE)
-                roadCenter = RANSAC.RANSAC.fitParabola(RANSAC_ITERATIONS, RANSAC_MODEL_SIZE, (int)(lanes.Count * RANSAC_INLINERS), RANSAC_ERROR_THRESHOLD, lanes);
+                roadCenter = RANSAC.RANSAC.fitParabola(RANSAC_ITERATIONS + 140, RANSAC_MODEL_SIZE, (int)(lanes.Count * 0.5), RANSAC_ERROR_THRESHOLD, lanes);
 
             if (roadCenter != null) 
                 create_model_from_single_line(ref roadCenter, ref leftLane, ref rightLane);
@@ -211,7 +211,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             else
                 rightLane = rightLaneKalmanFilter.PredictParabola();
             //////////////////////////////////////////////////////////////////////////
-
+            false_signal:
             if (leftLane != null && rightLane != null)
             {
                 // swap lanes if necessary
@@ -222,7 +222,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                     rightLane = leftLane;
                 }
 
-                if (Math.Abs(rightLane.c - leftLane.c) <= ROAD_CENTER_MIN - 50)
+                if (Math.Abs(rightLane.c - leftLane.c) <= ROAD_CENTER_MIN - 20)
                 {
                     leftLane  = Parabola.merge(rightLane, leftLane);
                     rightLane = null; 
@@ -234,7 +234,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 roadCenter = roadCenterKalmanFilter.FeedParabola(roadCenter);
 
                 // reestimate road center
-                double new_road_width = ((rightLane.c - roadCenter.c) + (roadCenter.c - leftLane.c)) * 0.5 * 0.05 + roadCenterDistAvg * 0.95;
+                double new_road_width = ((rightLane.c - roadCenter.c) + (roadCenter.c - leftLane.c)) * 0.5 * 0.1 + roadCenterDistAvg * 0.9;
                 roadCenterDistAvg = Math.Max(Math.Min(new_road_width, ROAD_CENTER_MAX), ROAD_CENTER_MAX);
             }
             else if (leftLane != null) // check if this is really a left lane
