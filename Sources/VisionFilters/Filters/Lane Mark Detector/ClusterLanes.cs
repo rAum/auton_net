@@ -135,18 +135,18 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
     public class ClusterLanes : ThreadSupplier<List<Point>, SimpleRoadModel> 
     {
         private Supplier<List<Point>> supplier;
-        private double roadCenterDistAvg = 200; // estimated relative road distance [half of width]
+        private double roadCenterDistAvg = 190; // estimated relative road distance [half of width]
         
-        const double ROAD_CENTER_MIN = 175;
-        const double ROAD_CENTER_MAX = 230;
+        const double ROAD_CENTER_MIN = 174;
+        const double ROAD_CENTER_MAX = 224;
         const int CENTER_PROBE_OFFSET = 10;
         const int MIN_POINTS_FOR_EACH = 450;
-        const int MIN_POINTS_FOR_ONLY_ONE = 300;
+        const int MIN_POINTS_FOR_ONLY_ONE = 320;
 
         const int RANSAC_ITERATIONS = 650;
         const int RANSAC_MODEL_SIZE = 7;
         const int RANSAC_ERROR_THRESHOLD = 5;
-        const double RANSAC_INLINERS = 0.75;
+        const double RANSAC_INLINERS = 0.65;
 
         int imgWidth  = CamModel.Width;
         int imgHeight = CamModel.Height;
@@ -164,7 +164,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             Parabola roadCenter = null;
 
             if (lanes.Count > MIN_POINTS_FOR_ONLY_ONE)
-                roadCenter = RANSAC.RANSAC.fitParabola(RANSAC_ITERATIONS + 140, RANSAC_MODEL_SIZE, (int)(lanes.Count * 0.5), RANSAC_ERROR_THRESHOLD, lanes);
+                roadCenter = RANSAC.RANSAC.fitParabola(RANSAC_ITERATIONS + 450, RANSAC_MODEL_SIZE, (int)(lanes.Count * 0.45), RANSAC_ERROR_THRESHOLD + 2, lanes);
 
             if (roadCenter != null) 
                 create_model_from_single_line(ref roadCenter, ref leftLane, ref rightLane);
@@ -222,7 +222,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                     rightLane = leftLane;
                 }
 
-                if (Math.Abs(rightLane.c - leftLane.c) <= ROAD_CENTER_MIN - 20)
+                if (Math.Abs(rightLane.c - leftLane.c) <= ROAD_CENTER_MIN - 10)
                 {
                     leftLane  = Parabola.merge(rightLane, leftLane);
                     rightLane = null; 
