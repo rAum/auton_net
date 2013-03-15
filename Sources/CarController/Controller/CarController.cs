@@ -5,6 +5,7 @@ using System.Text;
 using CarController;
 using CarController.Model.Car;
 using Helpers;
+using System.Timers;
 
 namespace CarController
 {
@@ -15,8 +16,7 @@ namespace CarController
 
         //stats collecting
         private StatsCollector statsCollector = new StatsCollector();
-        private int TICKS_TO_SAVE_STATS = 250;
-        private System.Windows.Forms.Timer mStatsCollectorTimer = new System.Windows.Forms.Timer();
+        private Timer mStatsCollectorTimer = new Timer();
         private const int TIMER_INTERVAL_IN_MS = 10;
 
         public DefaultCarController()
@@ -33,11 +33,33 @@ namespace CarController
 
             //timer init
             mStatsCollectorTimer.Interval = TIMER_INTERVAL_IN_MS;
-            mStatsCollectorTimer.Tick += new EventHandler(mStatsCollectorTimer_Tick);
+            mStatsCollectorTimer.Elapsed += mStatsCollectorTimer_Elapsed;
             mStatsCollectorTimer.Start();
 
             //mFakeSignalsSenderThread = new System.Threading.Thread(new System.Threading.ThreadStart(mFakeSignalsSenderFoo));
             //mFakeSignalsSenderThread.Start();
+        }
+
+        void mStatsCollectorTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            //stats collecting
+            statsCollector.PutNewStat("time", Time.GetTimeFromProgramBeginnig().TotalMilliseconds);
+            statsCollector.PutNewStat("current speed", Model.CarInfo.CurrentSpeed);
+            statsCollector.PutNewStat("target speed", Model.CarInfo.TargetSpeed);
+            statsCollector.PutNewStat("speed steering", Model.CarInfo.SpeedSteering);
+            statsCollector.PutNewStat("current angle", Model.CarInfo.CurrentWheelAngle);
+            statsCollector.PutNewStat("target angle", Model.CarInfo.TargetWheelAngle);
+            statsCollector.PutNewStat("angle steering", Model.CarInfo.WheelAngleSteering);
+            statsCollector.PutNewStat("current brake", Model.CarInfo.CurrentBrake);
+            statsCollector.PutNewStat("target brake", Model.CarInfo.TargetBrake);
+            statsCollector.PutNewStat("brake steering", Model.CarInfo.BrakeSteering);
+
+            //collecting speed regulator parameters
+            var speedRegulatorParameters = Model.SpeedRegulator.GetRegulatorParameters();
+            foreach (string key in speedRegulatorParameters.Keys)
+            {
+                statsCollector.PutNewStat(String.Format("SpeedRegulator_{0}", key), speedRegulatorParameters[key]);
+            }
         }
 
         private void EventHandlingForStatsCollectingInit()
@@ -49,6 +71,19 @@ namespace CarController
             Model.SteeringWheelAngleRegulator.evNewSteeringWheelSettingCalculated += new NewSteeringWheelSettingCalculatedEventHandler(SteeringWheelAngleRegulator_evNewSteeringWheelSettingCalculated);
             Model.SpeedRegulator.evNewSpeedSettingCalculated += new NewSpeedSettingCalculatedEventHandler(SpeedRegulator_evNewSpeedSettingCalculated);
             Model.BrakeRegulator.evNewBrakeSettingCalculated += new NewBrakeSettingCalculatedEventHandler(BrakeRegulator_evNewBrakeSettingCalculated);
+
+            Model.evTargetSpeedChanged += Model_evTargetSpeedChanged;
+            Model.evTargetSteeringWheelAngleChanged += Model_evTargetSteeringWheelAngleChanged;
+        }
+
+        void Model_evTargetSteeringWheelAngleChanged(object sender, TargetSteeringWheelAngleChangedEventArgs args)
+        {
+            Model.CarInfo.TargetWheelAngle = args.GetTargetWheelAngle();
+        }
+
+        void Model_evTargetSpeedChanged(object sender, TargetSpeedChangedEventArgs args)
+        {
+            Model.CarInfo.TargetSpeed = args.GetTargetSpeed();
         }
 
         private void SteeringWheelAngleRegulator_evNewSteeringWheelSettingCalculated(object sender, NewSteeringWheelSettingCalculateddEventArgs args)
@@ -76,43 +111,6 @@ namespace CarController
         private void CarComunicator_evSpeedInfoReceived(object sender, SpeedInfoReceivedEventArgs args)
         {
             Model.CarInfo.CurrentSpeed = args.GetSpeedInfo();
-        }
-
-
-        void mStatsCollectorTimer_Tick(object sender, EventArgs e)
-        {
-            //stats collecting
-            statsCollector.PutNewStat("time", Time.GetTimeFromProgramBeginnig().TotalMilliseconds);
-            statsCollector.PutNewStat("current speed", Model.CarInfo.CurrentSpeed);
-            statsCollector.PutNewStat("target speed", Model.CarInfo.TargetSpeed);
-            statsCollector.PutNewStat("speed steering", Model.CarInfo.SpeedSteering);
-            statsCollector.PutNewStat("current angle", Model.CarInfo.CurrentWheelAngle);
-            statsCollector.PutNewStat("target angle", Model.CarInfo.TargetWheelAngle);
-            statsCollector.PutNewStat("angle steering", Model.CarInfo.WheelAngleSteering);
-            statsCollector.PutNewStat("current brake", Model.CarInfo.CurrentBrake);
-            statsCollector.PutNewStat("target brake", Model.CarInfo.TargetBrake);
-            statsCollector.PutNewStat("brake steering", Model.CarInfo.BrakeSteering);
-
-            //collecting speed regulator parameters
-            var speedRegulatorParameters = Model.SpeedRegulator.GetRegulatorParameters();
-            foreach (string key in speedRegulatorParameters.Keys)
-            {
-                statsCollector.PutNewStat(String.Format("SpeedRegulator_{0}", key), speedRegulatorParameters[key]);
-            }
-        }
-
-        public void SaveStatsToFile(string fileName)
-        {
-            statsCollector.WriteStatsToFile(fileName);
-            Logger.Log(this, "----------------------------------------------------------------", 2);
-            Logger.Log(this, "----------------------------------------------------------------", 2);
-            Logger.Log(this, "----------------------------------------------------------------", 2);
-            Logger.Log(this, "----------------------------------------------------------------", 2);
-            Logger.Log(this, String.Format("STATS HAS BEEN WRITTEN TO FILE: stats.txt"), 2);
-            Logger.Log(this, "----------------------------------------------------------------", 2);
-            Logger.Log(this, "----------------------------------------------------------------", 2);
-            Logger.Log(this, "----------------------------------------------------------------", 2);
-            Logger.Log(this, "----------------------------------------------------------------", 2);
         }
 
         void mFakeSignalsSenderFoo()
