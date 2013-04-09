@@ -26,10 +26,10 @@ namespace car_communicator
         public const int MAX_THROTTLE = 7000;
         public const int MIN_THROTTLE = 3900;
 
-        public const int GEAR_P = 4000; //IMPORTANT: NOT WORKING
-        public const int GEAR_R = 1;
-        public const int GEAR_N_WHEN_LAST_WAS_R_OR_P  = 5000;
-        public const int GEAR_N_WHEN_LAST_WAS_D = 5000;
+        public const int GEAR_P = 5000; //IMPORTANT: NOT WORKING
+        public const int GEAR_R = 5000;
+        public const int GEAR_N_WHEN_LAST_WAS_R_OR_P  = 5500;
+        public const int GEAR_N_WHEN_LAST_WAS_D = 5300;
         public const int GEAR_D = 6700;
 
         Usc Driver = null;  
@@ -59,6 +59,8 @@ namespace car_communicator
                 //TODO: add device recognising
                 this.overallState = DeviceOverallState.Warrning;
             }
+
+            setGear(Gear.neutral);
         }
 
         protected override void StartSensors()

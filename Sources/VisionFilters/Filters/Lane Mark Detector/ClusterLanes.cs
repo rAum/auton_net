@@ -134,17 +134,17 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
     public class ClusterLanes : ThreadSupplier<List<Point>, SimpleRoadModel> 
     {
         private Supplier<List<Point>> supplier;
-        private double roadCenterDistAvg = 150; // estimated relative road distance [half of width]
+        private double roadCenterDistAvg = 190; // estimated relative road distance [half of width]
         
-        const double ROAD_CENTER_MIN = 120;
-        const double ROAD_CENTER_MAX = 200;
+        const double ROAD_CENTER_MIN = 160;
+        const double ROAD_CENTER_MAX = 210;
         const int CENTER_PROBE_OFFSET = 10;
         const int MIN_POINTS_FOR_EACH = 280;
         const int MIN_POINTS_FOR_ONLY_ONE = 300;
 
-        const int RANSAC_ITERATIONS = 600;
+        const int RANSAC_ITERATIONS = 650;
         const int RANSAC_MODEL_SIZE = 8;
-        const int RANSAC_ERROR_THRESHOLD = 5;
+        const int RANSAC_ERROR_THRESHOLD = 8;
         const double RANSAC_INLINERS = 0.75;
 
         int imgWidth  = CamModel.Width;
@@ -202,7 +202,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 roadCenter = Parabola.merge(leftLane, rightLane);
 
                 // reestimate road center
-                double new_road_width = ((rightLane.c - roadCenter.c) + (roadCenter.c - leftLane.c)) * 0.5 * 0.1 + roadCenterDistAvg * 0.9;
+                double new_road_width = ((rightLane.c - roadCenter.c) + (roadCenter.c - leftLane.c)) * 0.5 * 0.2 + roadCenterDistAvg * 0.8;
                 roadCenterDistAvg = Math.Max(Math.Min(new_road_width, ROAD_CENTER_MAX), ROAD_CENTER_MIN);
             }
             else if (leftLane != null) // check if this is really a left lane
