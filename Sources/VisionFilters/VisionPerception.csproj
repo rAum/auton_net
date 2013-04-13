@@ -76,7 +76,6 @@
     <Compile Include="Filters\Lane Mark Detector\SimpleRoadModel.cs" />
     <Compile Include="Filters\Lane Mark Detector\VisualiseSimpleRoadModel.cs" />
     <Compile Include="InputProperties.cs" />
-    <Compile Include="Output\KalmanFilter.cs" />
     <Compile Include="Output\RoadCenterEvent.cs" />
     <Compile Include="RANSAC\TakeRandom.cs" />
     <Compile Include="RANSAC\Vec2.cs" />
