@@ -125,7 +125,7 @@ namespace Helpers
             else
             {
 #if DEBUG
-                throw new ApplicationException("Invalid state transition");
+                //throw new ApplicationException("Invalid state transition");
 #endif
             }
 
@@ -153,7 +153,7 @@ namespace Helpers
             else
             {
 #if DEBUG
-                throw new ApplicationException("Invalid state transition");
+                //throw new ApplicationException("Invalid state transition");
 #endif
             }
             initializationState = DeviceInitializationState.StartingSensors;
@@ -180,7 +180,7 @@ namespace Helpers
             else
             {
 #if DEBUG
-                throw new ApplicationException("Invalid state transition");
+                //throw new ApplicationException("Invalid state transition");
 #endif
             }
             initializationState = DeviceInitializationState.StartingEffectors;

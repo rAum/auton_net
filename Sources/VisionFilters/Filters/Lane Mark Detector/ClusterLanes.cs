@@ -21,7 +21,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
         private double roadCenterDistAvg = 186; // estimated relative road distance [half of width]
         
         const double ROAD_CENTER_MIN = 174;
-        const double ROAD_CENTER_MAX = 230;
+        const double ROAD_CENTER_MAX = 340;
         const int CENTER_PROBE_OFFSET = 25;
         const int MIN_POINTS_FOR_EACH = 450;
         const int MIN_POINTS_FOR_ONLY_ONE = 320;
@@ -56,7 +56,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 // try to cluster data to distinguish left and right lane
                 List<Point> first = new List<Point>(2048);
                 List<Point> second = new List<Point>(2048);
-
+                //System.Console.WriteLine("Kura");
                 VisionToolkit.Two_Means_Clustering(lanes, ref first, ref second);
 
                 ////////////////////////////////////////////////////////////////
@@ -120,7 +120,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
 
                 // reestimate road center
                 double new_road_width = ((rightLane.c - roadCenter.c) + (roadCenter.c - leftLane.c)) * 0.5 * 0.05 + roadCenterDistAvg * 0.95;
-                roadCenterDistAvg = Math.Max(Math.Min(new_road_width, ROAD_CENTER_MAX), ROAD_CENTER_MAX);
+                roadCenterDistAvg = Math.Max(Math.Min(new_road_width, ROAD_CENTER_MAX), ROAD_CENTER_MIN);
             }
             else if (leftLane != null) // check if this is really a left lane
             {

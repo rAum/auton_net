@@ -29,7 +29,7 @@ namespace Helpers
         public List<Device> devicesList = new List<Device>();
 
 
-        public event DeviceStateHasChangedEventHandler evDeviceStateHasChanged;
+        public event DeviceStateHasChangedEventHandler evDeviceManagerOverallStateHasChanged;
 
         /// <summary>
         /// changing this state will also invoke event 'evDeviceStateHasChanged'
@@ -44,7 +44,7 @@ namespace Helpers
                 if (__OVERALLSTATE__ != value)
                 {
                     __OVERALLSTATE__ = value;
-                    DeviceStateHasChangedEventHandler temp = evDeviceStateHasChanged;
+                    DeviceStateHasChangedEventHandler temp = evDeviceManagerOverallStateHasChanged;
                     if (temp != null)
                     {
                         temp(this, new DeviceStateHasChangedEventArgs(__OVERALLSTATE__));
@@ -109,17 +109,16 @@ namespace Helpers
                     break;
 
                 case DeviceOverallState.OK:
-                    bool isEverythingOk = true;
+                    int devsInWarrningState = 0;
+                    int devsInErrorState = 0;
                     foreach (Device dev in devicesList)
                     {
-                        if (dev.overallState != DeviceOverallState.OK)
-                        {
-                            isEverythingOk = false;
-                        }
-                    }
-                    if (isEverythingOk)
-                    {
-                        overallState = DeviceOverallState.OK;
+                        if (dev.overallState == DeviceOverallState.Warrning) devsInWarrningState++;
+                        else if (dev.overallState == DeviceOverallState.Error) devsInErrorState++;
+
+                        if (devsInErrorState > 0) overallState = DeviceOverallState.Error;
+                        else if (devsInWarrningState > 0) overallState = DeviceOverallState.Warrning;
+                        else overallState = DeviceOverallState.OK;
                     }
                     break;
 
