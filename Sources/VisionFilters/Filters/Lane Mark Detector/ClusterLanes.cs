@@ -20,8 +20,8 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
         private Supplier<List<Point>> supplier;
         private double roadCenterDistAvg = 186; // estimated relative road distance [half of width]
         
-        const double ROAD_CENTER_MIN = 174;
-        const double ROAD_CENTER_MAX = 340;
+        const double ROAD_CENTER_MIN = 170;
+        const double ROAD_CENTER_MAX = 240;
         const int CENTER_PROBE_OFFSET = 25;
         const int MIN_POINTS_FOR_EACH = 450;
         const int MIN_POINTS_FOR_ONLY_ONE = 320;
