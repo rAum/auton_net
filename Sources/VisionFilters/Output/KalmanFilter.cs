@@ -45,10 +45,10 @@ namespace VisionFilters.Output
                 measurementMatrix[i, i] = 1.0f;
 
             Matrix<float> processNoise = new Matrix<float>(dynamicVariables, dynamicVariables);
-            processNoise.SetIdentity(new MCvScalar(6));//1.0e-4));
+            processNoise.SetIdentity(new MCvScalar(1));//1.0e-4));
 
             Matrix<float> measurementNoise = new Matrix<float>(measurementVariables, measurementVariables);
-            measurementNoise.SetIdentity(new MCvScalar(10));//1.0e-1));
+            measurementNoise.SetIdentity(new MCvScalar(4));//1.0e-1));
 
             Matrix<float> errorCovariancePost = new Matrix<float>(dynamicVariables, dynamicVariables);
             errorCovariancePost.SetIdentity();

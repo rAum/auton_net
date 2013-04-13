@@ -13,139 +13,22 @@ using VisionFilters.Output;
 namespace VisionFilters.Filters.Lane_Mark_Detector
 {
     /// <summary>
-    /// Road modelling using Bezier
-    /// </summary>
-    public class ClusterLanes_BezierExperimental : ThreadSupplier<List<Point>, SimpleRoadModel> 
-    {
-        private Supplier<List<Point>> supplier;
-        private double roadCenterDistAvg = 184; // estimated relative road distance [half of width]
-        
-        const double ROAD_CENTER_MIN = 175;
-        const double ROAD_CENTER_MAX = 210;
-        const int CENTER_PROBE_OFFSET = 10;
-        const int MIN_POINTS_FOR_EACH = 280;
-        const int MIN_POINTS_FOR_ONLY_ONE = 300;
-        int imgWidth  = CamModel.Width;
-        int imgHeight = CamModel.Height;
-        int centerProbePoint,
-            carCenter;
-        
-        private void ObtainSimpleModel(List<Point> lanes)
-        {
-            Bezier leftLane   = null;
-            Bezier rightLane  = null;
-            Bezier roadCenter = null;
-
-//             if (lanes.Count > MIN_POINTS_FOR_ONLY_ONE)
-//                 roadCenter = RANSAC.RANSAC.fitBezier(100, 3, (int)(lanes.Count * 0.75), 5, lanes);
-// 
-//             if (roadCenter != null) 
-//                 create_model_from_single_line(ref roadCenter, ref leftLane, ref rightLane);
-//             else if (lanes.Count > MIN_POINTS_FOR_EACH)// no one line mark can be matched. trying to find left and right and then again trying to find model.
-//             {
-//                 // try to cluster data to distinguish left and right lane
-//                 List<Point> first = new List<Point>(6048);
-//                 List<Point> second = new List<Point>(6048);
-// 
-//                 VisionToolkit.Two_Means_Clustering(lanes, ref first, ref second);
-// 
-//                 ////////////////////////////////////////////////////////////////
-// 
-//                 if (first.Count > MIN_POINTS_FOR_EACH)
-//                     leftLane = RANSAC.RANSAC.fitBezier(100, 8, (int)(first.Count * 0.75), 15, first);
-// 
-//                 if (second.Count > MIN_POINTS_FOR_EACH)
-//                     rightLane = RANSAC.RANSAC.fitBezier(100, 8, (int)(second.Count * 0.75), 15, second);
-// 
-//                 create_model_from_two_lanes(ref leftLane, ref rightLane, ref roadCenter);
-//             }
-
-
-            LastResult = new SimpleRoadModel(roadCenter, leftLane, rightLane);
-            PostComplete();
-        }
-
-        private void create_model_from_two_lanes(ref Bezier leftLane, ref Bezier rightLane, ref Bezier roadCenter)
-        {
-            if (leftLane != null && rightLane != null)
-            {
-                // swap lanes if necessary
-                if (leftLane.at(centerProbePoint) > rightLane.at(centerProbePoint))
-                {
-                    var t     = leftLane;
-                    leftLane  = rightLane;
-                    rightLane = leftLane;
-                }
-
-                // center is between left and right lane
-                roadCenter = Bezier.merge(leftLane, rightLane);
-            }
-            else if (leftLane != null) // check if this is really a left lane
-            {
-                if (leftLane.at(centerProbePoint) > carCenter + 5) // this is right lane!!
-                {
-                    rightLane   = leftLane;
-                    leftLane    = null;
-                    roadCenter  = Bezier.Moved(rightLane, -roadCenterDistAvg);
-                }
-                else roadCenter = Bezier.Moved(leftLane, roadCenterDistAvg);
-            }
-            else if (rightLane != null) // check if this is really a left lane
-            {
-                if (rightLane.at(centerProbePoint) < carCenter + 5) // this is left lane!!
-                {
-                    leftLane    = rightLane;
-                    rightLane   = null;
-                    roadCenter  = Bezier.Moved(leftLane, roadCenterDistAvg);
-                }
-                else roadCenter = Bezier.Moved(rightLane, -roadCenterDistAvg);
-            }
-        }
-
-        private void create_model_from_single_line(ref Bezier roadCenter, ref Bezier leftLane, ref Bezier rightLane)
-        {
-            double x = roadCenter.at(imgHeight - CENTER_PROBE_OFFSET);
-            if (x < carCenter) {
-                leftLane   = roadCenter;
-                roadCenter = Bezier.Moved(leftLane, roadCenterDistAvg);
-                rightLane  = Bezier.Moved(roadCenter, roadCenterDistAvg);
-            }
-            else {
-                rightLane  = roadCenter;
-                roadCenter = Bezier.Moved(rightLane, -roadCenterDistAvg);
-                leftLane   = Bezier.Moved(roadCenter, -roadCenterDistAvg);
-            }
-        }
-
-
-        public ClusterLanes_BezierExperimental(Supplier<List<Point>> supplier_)
-        {
-            supplier = supplier_;
-            centerProbePoint = imgHeight - CENTER_PROBE_OFFSET;
-            carCenter = imgWidth / 2;
-
-            supplier.ResultReady += MaterialReady;
-            Process += ObtainSimpleModel;
-        }
-    }
-
-    /// <summary>
-    /// Road modelling using parabolic equation
+    /// Road modeling using parabolic equation
     /// </summary>
     public class ClusterLanes : ThreadSupplier<List<Point>, SimpleRoadModel> 
     {
         private Supplier<List<Point>> supplier;
-        private double roadCenterDistAvg = 190; // estimated relative road distance [half of width]
+        private double roadCenterDistAvg = 186; // estimated relative road distance [half of width]
         
         const double ROAD_CENTER_MIN = 174;
-        const double ROAD_CENTER_MAX = 224;
-        const int CENTER_PROBE_OFFSET = 10;
+        const double ROAD_CENTER_MAX = 230;
+        const int CENTER_PROBE_OFFSET = 25;
         const int MIN_POINTS_FOR_EACH = 450;
         const int MIN_POINTS_FOR_ONLY_ONE = 320;
 
         const int RANSAC_ITERATIONS = 650;
         const int RANSAC_MODEL_SIZE = 7;
-        const int RANSAC_ERROR_THRESHOLD = 5;
+        const int RANSAC_ERROR_THRESHOLD = 6;
         const double RANSAC_INLINERS = 0.65;
 
         int imgWidth  = CamModel.Width;
@@ -164,7 +47,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             Parabola roadCenter = null;
 
             if (lanes.Count > MIN_POINTS_FOR_ONLY_ONE)
-                roadCenter = RANSAC.RANSAC.fitParabola(RANSAC_ITERATIONS + 450, RANSAC_MODEL_SIZE, (int)(lanes.Count * 0.45), RANSAC_ERROR_THRESHOLD + 2, lanes);
+                roadCenter = RANSAC.RANSAC.fitParabola(RANSAC_ITERATIONS + 490, RANSAC_MODEL_SIZE, (int)(lanes.Count * 0.45), RANSAC_ERROR_THRESHOLD + 2, lanes);
 
             if (roadCenter != null) 
                 create_model_from_single_line(ref roadCenter, ref leftLane, ref rightLane);
@@ -201,6 +84,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
         {
             //////////////////////////////////////////////////////////////////////////
             // KALMAN
+            // rAum, 13.04.2013 - question - if this is right place to do kalman? we are making more validation and guessing right/left after that...
             if (leftLane != null)
                 leftLane = leftLaneKalmanFilter.FeedParabola(leftLane);
             else
@@ -222,10 +106,11 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                     rightLane = leftLane;
                 }
 
-                if (Math.Abs(rightLane.c - leftLane.c) <= ROAD_CENTER_MIN - 10)
+                if (Math.Abs(rightLane.c - leftLane.c) <= ROAD_CENTER_MIN) // road is not wide enough
                 {
                     leftLane  = Parabola.merge(rightLane, leftLane);
-                    rightLane = null; 
+                    rightLane = null;
+                    System.Console.WriteLine("road is not wide enough...");
                     goto false_signal;
                 }
 
@@ -234,7 +119,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 roadCenter = roadCenterKalmanFilter.FeedParabola(roadCenter);
 
                 // reestimate road center
-                double new_road_width = ((rightLane.c - roadCenter.c) + (roadCenter.c - leftLane.c)) * 0.5 * 0.1 + roadCenterDistAvg * 0.9;
+                double new_road_width = ((rightLane.c - roadCenter.c) + (roadCenter.c - leftLane.c)) * 0.5 * 0.05 + roadCenterDistAvg * 0.95;
                 roadCenterDistAvg = Math.Max(Math.Min(new_road_width, ROAD_CENTER_MAX), ROAD_CENTER_MAX);
             }
             else if (leftLane != null) // check if this is really a left lane
@@ -264,14 +149,15 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             double x = roadCenter.at(imgHeight - CENTER_PROBE_OFFSET);
 
             if (x < carCenter) {
-                leftLane = leftLaneKalmanFilter.FeedParabola(roadCenter);
+                // there was very little f0ck0p?! we were feeding parabola and doing it again in create_model_... 
+                leftLane = new Parabola(roadCenter);// leftLaneKalmanFilter.FeedParabola(roadCenter);
                 if (rightLane == null)
                     rightLane  = Parabola.Moved(leftLane, 2 * roadCenterDistAvg);
 
                 create_model_from_two_lanes(ref leftLane, ref rightLane, ref roadCenter);
             }
             else {
-                rightLane = rightLaneKalmanFilter.FeedParabola(roadCenter);
+                rightLane = new Parabola(roadCenter);// rightLaneKalmanFilter.FeedParabola(roadCenter);
                 if (leftLane == null)
                     leftLane  = Parabola.Moved(rightLane, -2 * roadCenterDistAvg);
 
