@@ -1,3 +1,5 @@
+https://github.com/hazelnusse/OBD //BICYCLE DYNAMICS
+
 jeœli (x,y) to wspó³¿êdne œrodka samochodu
 
 (x_fl, y_fl) - wspó³¿êdne przedniego lewego ko³a
@@ -41,10 +43,6 @@ Mo¿na wyznaczyæ wspó³¿êdne ka¿dego z kó³ w zale¿noœci od :
 				x + Sin(beta)*length/2
 				y + Cos(beta)*length/2
 				
-			right dodaje:
-				x + Cos(beta)*width/2
-				y - Sin(beta)*width/2
-				
 			w 2 stronê dodaj¹ przeciwn¹ wartoœæ
 			
 		wyniki:			
@@ -63,15 +61,14 @@ Mo¿na wyznaczyæ wspó³¿êdne ka¿dego z kó³ w zale¿noœci od :
 			vyr[x_[t],y_[t],beta_[t]] := D[yr[x[t], y[t], beta[t]], t]
 			
 	Za³o¿enie braku poœlizgu bocznego (na przednim kole)
-		vx*Sin(k¹ta) - vy*Cos(k¹ta) = 0
+		vx*Sin(k¹ta) - vy*Cos(k¹ta) = 0 //B£¥D!!!
+		vx*Cos(k¹ta) - vy*Sin(k¹ta) = 0 //oœ jest odwrocona - tamten wzor bylby dobry, gdyby mierzyæ k¹ty od osi X
 		
 		na przednich ko³ach:
-			NoSlide_front[x_[t],y_[t],beta_[t]] := FullSimplify[vxf[x[t],y[t],beta[t]]*Sin[alfa[t]+beta[t]] - vyf[x[t],y[t],beta[t]]*Cos[alfa[t]+beta[t]] == 0]
-
+			NoSlide_front[x_[t],y_[t],beta_[t]] := FullSimplify[vxf[x[t],y[t],beta[t]]*Cos[alfa[t]+beta[t]] - vyf[x[t],y[t],beta[t]]*Sin[alfa[t]+beta[t]] == 0]
+			
 		wychodzi:
-			length Sin[alfa[t] + 2 beta[t]] Derivative[1][beta][t] + 2 Sin[alfa[t] + beta[t]] Derivative[1][x][t] == 2 Cos[alfa[t] + beta[t]] Derivative[1][y][t]
-				
-	Za³o¿enie braku poœlizgu wzd³u¿nego 
-		vx*cos(k¹ta) + vy*sin(k¹ta) - r * fi(2 k¹ta) = 0
-		
-		
+			length Cos[alfa[t]] (beta^\[Prime])[t]+2 Cos[alfa[t]+beta[t]] (x^\[Prime])[t]==2 Sin[alfa[t]+beta[t]] (y^\[Prime])[t]
+			
+			z tego wyliczam generatory:
+			g1 = 
