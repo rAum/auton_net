@@ -321,8 +321,11 @@ namespace car_communicator
             //to dont waste engine - when steering value is low - we are stopping engine 
             if (strength < MIN_STRENGTH_FOR_BRAKE_TO_REACT_IN_PERCENTS) //strength should be always > 0 in here
             {
-                setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_ON_PORT_LEVEL);
-                setPortAO(BRAKE_STRENGTH_SET_PORT, 0); //TODO: check it //BRAKE_NEUTRAL_STRENGTH_IN_VOLTS);
+                //setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_ON_PORT_LEVEL);
+                //setPortAO(BRAKE_STRENGTH_SET_PORT, BRAKE_NEUTRAL_STRENGTH_IN_VOLTS);
+                
+                /// rAum: to po pokazie tvn, widze todo wiec merguje abys sprawdzil->
+                // setPortAO(BRAKE_STRENGTH_SET_PORT, 0); //TODO: check it //BRAKE_NEUTRAL_STRENGTH_IN_VOLTS);
             }
             else
             {
@@ -332,7 +335,7 @@ namespace car_communicator
                 //setPortAO(BRAKE_STRENGTH_SET_PORT, strength);
             }
             setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_OFF_PORT_LEVEL);
-            setPortDO(BRAKE_DIRECTION_PORT_NO, BRAKE_FORWARD_PORT_LEVEL);
+            setPortDO(BRAKE_DIRECTION_PORT_NO, BRAKE_BACKWARD_PORT_LEVEL);
             setPortAO(BRAKE_STRENGTH_SET_PORT, 0);
         }
 

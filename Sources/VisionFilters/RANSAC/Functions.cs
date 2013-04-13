@@ -131,6 +131,13 @@ namespace RANSAC.Functions
             c = C;
         }
 
+        public Parabola(Parabola p)
+        {
+            a = p.a;
+            b = p.b;
+            c = p.c;
+        }
+
         public override string ToString()
         {
             return String.Format("{0}x^2 + {1}x + {2}", a, b, c);

@@ -32,6 +32,7 @@
             this.imgOutput = new Emgu.CV.UI.ImageBox();
             this.imgDebug = new Emgu.CV.UI.ImageBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.button1 = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.nudVOffset = new System.Windows.Forms.NumericUpDown();
@@ -61,7 +62,7 @@
             this.imgVideoSource = new Emgu.CV.UI.ImageBox();
             this.imgDebug2 = new Emgu.CV.UI.ImageBox();
             this.cbRoadPreview = new System.Windows.Forms.CheckBox();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.imgDebug3 = new Emgu.CV.UI.ImageBox();
             ((System.ComponentModel.ISupportInitialize)(this.imgOutput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDebug)).BeginInit();
             this.panel1.SuspendLayout();
@@ -73,15 +74,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.nud1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgVideoSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDebug2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgDebug3)).BeginInit();
             this.SuspendLayout();
             // 
             // imgOutput
             // 
             this.imgOutput.BackColor = System.Drawing.Color.Transparent;
             this.imgOutput.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
-            this.imgOutput.Location = new System.Drawing.Point(658, 10);
+            this.imgOutput.Location = new System.Drawing.Point(658, 9);
             this.imgOutput.Name = "imgOutput";
-            this.imgOutput.Size = new System.Drawing.Size(160, 120);
+            this.imgOutput.Size = new System.Drawing.Size(320, 240);
             this.imgOutput.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.imgOutput.TabIndex = 2;
             this.imgOutput.TabStop = false;
@@ -89,9 +91,9 @@
             // imgDebug
             // 
             this.imgDebug.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
-            this.imgDebug.Location = new System.Drawing.Point(658, 136);
+            this.imgDebug.Location = new System.Drawing.Point(658, 251);
             this.imgDebug.Name = "imgDebug";
-            this.imgDebug.Size = new System.Drawing.Size(160, 120);
+            this.imgDebug.Size = new System.Drawing.Size(320, 240);
             this.imgDebug.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.imgDebug.TabIndex = 2;
             this.imgDebug.TabStop = false;
@@ -99,10 +101,13 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.statusStrip);
+            this.panel1.Controls.Add(this.cbRoadPreview);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.label9);
+            this.panel1.Controls.Add(this.button4);
             this.panel1.Controls.Add(this.nudVOffset);
             this.panel1.Controls.Add(this.label8);
+            this.panel1.Controls.Add(this.button3);
             this.panel1.Controls.Add(this.nudThreshold);
             this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.nudTau);
@@ -126,8 +131,16 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 503);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(822, 138);
+            this.panel1.Size = new System.Drawing.Size(1309, 138);
             this.panel1.TabIndex = 5;
+            // 
+            // statusStrip
+            // 
+            this.statusStrip.Location = new System.Drawing.Point(0, 116);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(1309, 22);
+            this.statusStrip.TabIndex = 29;
+            this.statusStrip.Text = "statusStrip1";
             // 
             // button1
             // 
@@ -429,7 +442,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(662, 463);
+            this.button4.Location = new System.Drawing.Point(841, 85);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(156, 23);
             this.button4.TabIndex = 3;
@@ -441,7 +454,7 @@
             // 
             this.button3.BackColor = System.Drawing.SystemColors.Control;
             this.button3.ForeColor = System.Drawing.Color.Red;
-            this.button3.Location = new System.Drawing.Point(662, 434);
+            this.button3.Location = new System.Drawing.Point(841, 56);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(156, 23);
             this.button3.TabIndex = 2;
@@ -463,9 +476,9 @@
             // imgDebug2
             // 
             this.imgDebug2.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
-            this.imgDebug2.Location = new System.Drawing.Point(658, 262);
+            this.imgDebug2.Location = new System.Drawing.Point(979, 9);
             this.imgDebug2.Name = "imgDebug2";
-            this.imgDebug2.Size = new System.Drawing.Size(160, 120);
+            this.imgDebug2.Size = new System.Drawing.Size(320, 240);
             this.imgDebug2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.imgDebug2.TabIndex = 7;
             this.imgDebug2.TabStop = false;
@@ -473,7 +486,7 @@
             // cbRoadPreview
             // 
             this.cbRoadPreview.AutoSize = true;
-            this.cbRoadPreview.Location = new System.Drawing.Point(689, 388);
+            this.cbRoadPreview.Location = new System.Drawing.Point(868, 10);
             this.cbRoadPreview.Name = "cbRoadPreview";
             this.cbRoadPreview.Size = new System.Drawing.Size(110, 17);
             this.cbRoadPreview.TabIndex = 21;
@@ -481,13 +494,15 @@
             this.cbRoadPreview.UseVisualStyleBackColor = true;
             this.cbRoadPreview.CheckedChanged += new System.EventHandler(this.cbRoadPreview_CheckedChanged);
             // 
-            // statusStrip
+            // imgDebug3
             // 
-            this.statusStrip.Location = new System.Drawing.Point(0, 116);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(822, 22);
-            this.statusStrip.TabIndex = 29;
-            this.statusStrip.Text = "statusStrip1";
+            this.imgDebug3.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
+            this.imgDebug3.Location = new System.Drawing.Point(979, 251);
+            this.imgDebug3.Name = "imgDebug3";
+            this.imgDebug3.Size = new System.Drawing.Size(320, 240);
+            this.imgDebug3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.imgDebug3.TabIndex = 22;
+            this.imgDebug3.TabStop = false;
             // 
             // ViewForm
             // 
@@ -495,12 +510,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(822, 641);
-            this.Controls.Add(this.cbRoadPreview);
+            this.ClientSize = new System.Drawing.Size(1309, 641);
+            this.Controls.Add(this.imgDebug3);
             this.Controls.Add(this.imgDebug2);
-            this.Controls.Add(this.button4);
             this.Controls.Add(this.imgDebug);
-            this.Controls.Add(this.button3);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.imgOutput);
             this.Controls.Add(this.imgVideoSource);
@@ -521,8 +534,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nud1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgVideoSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDebug2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgDebug3)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -561,5 +574,6 @@
         private System.Windows.Forms.NumericUpDown nudTau;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.StatusStrip statusStrip;
+        private Emgu.CV.UI.ImageBox imgDebug3;
     }
 }

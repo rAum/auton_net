@@ -26,11 +26,11 @@ namespace car_communicator
         public const int MAX_THROTTLE = 7000;
         public const int MIN_THROTTLE = 3900;
 
-        public const int GEAR_P = 4000; //IMPORTANT: NOT WORKING
-        public const int GEAR_R = 1;
-        public const int GEAR_N_WHEN_LAST_WAS_R_OR_P  = 5000;
-        public const int GEAR_N_WHEN_LAST_WAS_D = 5000;
-        public const int GEAR_D = 6700;
+        public const int GEAR_P = 5700; //IMPORTANT: NOT WORKING
+        public const int GEAR_R = 8000;
+        public const int GEAR_N_WHEN_LAST_WAS_R_OR_P  = 7000;
+        public const int GEAR_N_WHEN_LAST_WAS_D = 7000;
+        public const int GEAR_D = 6000;
 
         Usc Driver = null;  
 
@@ -138,7 +138,7 @@ namespace car_communicator
             }
             else
             {
-                Logger.Log(this, "target throttle was not set, effectors are disabled", 1);
+                Logger.Log(this, "target throttle was not set, effectors are disabled");
             }
         }
 

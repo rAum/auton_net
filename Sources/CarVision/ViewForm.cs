@@ -31,6 +31,7 @@ namespace CarVision
         PerspectiveCorrectionRgb invPerp;
 
         DrawPoints filtered;
+        DrawColoredPointSets kalmanFilteredRoadCenter;
 
         VideoWriter videoWriter;
 
@@ -49,6 +50,7 @@ namespace CarVision
             {
                 if (sender == visRoad)
                     imgBox = imgDebug;
+
                 imgBox.Image = (Image<Gray, byte>)e.Result;
             }
             catch (Exception ex)
@@ -78,7 +80,17 @@ namespace CarVision
                 if (sender == invPerp)
                 {
                     Image<Bgr, byte> cam = new Image<Bgr, byte>(big.Image.Bitmap);
-                    small.Image = (Image<Bgr, byte>)e.Result + cam;
+                    Image<Bgr, byte> res = (Image<Bgr, byte>)e.Result + cam;
+                    foreach (var p in probe)
+                        res.Draw(new CircleF(p, 10), new Bgr(0, 0, 255), -1);
+                    small.Image = res;
+                    return;
+                }
+                
+                if (sender == kalmanFilteredRoadCenter)
+                {
+                    //Image<Bgr, byte> cam = new Image<Bgr, byte>(big.Image.Bitmap);
+                    imgDebug3.Image = (Image<Bgr, byte>)e.Result;// +cam;
                     return;
                 }
                 
@@ -137,6 +149,12 @@ namespace CarVision
             filter = new HsvFilter(colorVideoSource, minColor, maxColor);
             roadDetector = new RoadCenterDetector(filter);
             // roadDetector.Perceptor.perspectiveTransform.ResultReady += DisplayVideo;
+
+            // road center points, kalman filtered
+            kalmanFilteredRoadCenter = new DrawColoredPointSets(roadDetector);
+            kalmanFilteredRoadCenter.ResultReady += DisplayVideo;
+            kalmanFilteredRoadCenter.Active = true;
+
             filtered = new DrawPoints(roadDetector.Perceptor.laneDetector);
             filtered.ResultReady += DisplayVideo;
             filtered.Active = true;
@@ -147,6 +165,14 @@ namespace CarVision
             invPerp = new PerspectiveCorrectionRgb(visRoad, CamModel.dstPerspective, CamModel.srcPerspective);
             //invPerp = new PerspectiveCorrectionRgb(colorVideoSource, CamModel.srcPerspective, CamModel.dstPerspective);
             invPerp.ResultReady += DisplayVideo;
+
+            roadDetector.RoadCenterSupply += roadCenter;
+        }
+
+        PointF[] probe = new PointF[3];
+        private void roadCenter(object sender, RoadCenterEvent arg)
+        {
+            probe = arg.road.ToArray();
         }
 
         private void LoadVideos()
@@ -316,6 +342,7 @@ namespace CarVision
         }
 
         bool pause = false;
+
         private void button6_Click(object sender, EventArgs e)
         {
             if (pause == false)
