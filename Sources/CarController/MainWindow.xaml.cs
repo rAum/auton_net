@@ -340,11 +340,5 @@ namespace CarController
         {
             UpdateTextBlock(textBlock_steeringBrake, args.GetBrakeSetting(), steeringBrakeLabelData);
         }
-
-        private void button_saveStats_Click(object sender, RoutedEventArgs e)
-        {
-            Controller.SaveStatsToFile("stats.txt");
-            Logger.Log(this, "STATS HAS BEEN WRITTEN TO FILE!", 1);
-        }
     }
 }

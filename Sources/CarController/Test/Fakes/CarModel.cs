@@ -10,7 +10,6 @@ namespace CarController
     {
         private ICarCommunicator communicator;
         private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-        private StatsCollector statsCollector = new StatsCollector();
 
         private static int TIMER_INTERVAL_IN_MS = 15;
 
@@ -26,6 +25,12 @@ namespace CarController
         private double __carAngle__ = 0.0;
         private double __carX__ = 0.0;
         private double __carY__ = 0.0;
+
+        //car phisical parameters
+        private double carLengthInM;
+        private double carWidthInM; //needed?
+        private double carMaxForceInN;
+        private double carMaxEngineCyclesPerS;
 
         public double Speed { get; private set; }
 
@@ -83,12 +88,12 @@ namespace CarController
             {
                 Speed += BrakePosition * BRAKING_DOWN_WITH_BRAKES_FACTOR;
             }
-            Logger.Log(this, String.Format("new wheel angle has been modeled: {0}   (current angle steering: {1})", Speed, SpeedSteering));
+            Logger.Log(this, String.Format("new speed has been modeled: {0}   (current speed steering: {1})", Speed, SpeedSteering));
 
             //wheels angle
             SteeringWheelAngle += WheelAngleSteering * STEERING_WHEEL_STEERING_FACTOR;
             WheelAngle = SteeringWheelAngle * STEERING_WHEEL_TO_WHEELS_TRANSMISSION;
-            Logger.Log(this, String.Format("new speed has been modeled: {0}   (current speed steering: {1})", WheelAngle, WheelAngleSteering));
+            Logger.Log(this, String.Format("new wheel angle has been modeled: {0}   (current angle steering: {1})", WheelAngle, WheelAngleSteering));
         }
     }
 }

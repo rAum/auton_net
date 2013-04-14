@@ -59,6 +59,8 @@ namespace car_communicator
                 //TODO: add device recognising
                 this.overallState = DeviceOverallState.Warrning;
             }
+
+            setGear(Gear.neutral);
         }
 
         protected override void StartSensors()
