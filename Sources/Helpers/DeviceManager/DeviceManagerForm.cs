@@ -104,19 +104,17 @@ namespace Helpers
         private void JurekGreeting()
         {
             Random rnd = new Random();
-            switch (rnd.Next(0, 4))
-            {
-                case 0: jurek.Say("Cześć."); break;
-                case 1: jurek.Say("Witaj."); break;
-                default: jurek.Say("Dzień dobry."); break;
-            }
-            switch (rnd.Next(0, 4))
-            {
-                case 0: jurek.Say("Jurek, kierowca. Do usług"); break;
-                case 1: jurek.Say("mówi Twój najlepszy kierowca Jurek!"); break;
-                case 2: jurek.Say("to ja, Jurek, kierowca."); break;
-                default: jurek.Say("Kierowca Jurek do usług."); break;
-            }
+            string[] greet = new string[]{
+                "Cześć.", "Witaj.", "Dzień dobry.", "Dzień dobry."
+            };
+
+            string[] me = new string[]{
+                "Jurek, kierowca. Do usług", "mówi Twój najlepszy kierowca Jurek!",
+                "to ja, Jurek, kierowca.", "Kierowca Jurek do usług.", "Kierowca Jurek do usług."
+            };
+
+            jurek.Say(greet[rnd.Next(0, greet.Length-1)]);
+            jurek.Say(me[rnd.Next(0, me.Length-1)]);
         }
 
         bool started = false;
@@ -146,20 +144,16 @@ namespace Helpers
                 else if (cmd == "yoorek")
                 {
                     Random rnd = new Random();
-                    int r = rnd.Next(0, 9);
-                    switch (r)
-                    {
-                        case 0: jurek.Say("Słucham?"); break;
-                        case 1: jurek.Say("no?"); break;
-                        case 2: jurek.Say("Słucham Cię panie?"); break;
-                        case 3: jurek.Say("Tak?"); break;
-                        case 4: jurek.Say("Przed wyruszeniem w drogę należy zebrać drużynę!"); break;
-                        case 5: jurek.Say("Ha ha ha"); break;
-                        case 6: jurek.Say("Co robi grabaż?"); Thread.Sleep(2000); jurek.Say("Częstochowa. Ha ha ha he he"); break;
-                        case 7: jurek.Say("Jakiś problem?"); break;
-                        case 8: jurek.Say("Co robi blondynka pod drzewem?"); Thread.Sleep(2000); jurek.Say("Czeka na autograf Kory. Bu hehehe"); break;
-                        default:  jurek.Say("heh"); break;
-                    }
+                    string[] answer = new string[]{
+                        "Słucham?", "no?", "Słucham Cię panie?"
+                        ,"Tak?","Przed wyruszeniem w drogę należy zebrać drużynę!"
+                        ,"Ha ha ha", "Co robi grabaż? Częstochowa. Ha ha ha he he"
+                        ,"Jakiś problem?"
+                        ,"Co robi blondynka pod drzewem?Czeka na autograf Kory. hehehe"
+                        , "Co robi pojazd autonomiczny na torze wyścigowym? Jeździ haha"
+                    };
+
+                    jurek.Say(answer[rnd.Next(0, answer.Length -1)]);
                 }
             }
         }
@@ -289,9 +283,9 @@ namespace Helpers
         private void button1_Click(object sender, EventArgs e)
         {
             button_initialize_Click(this, new EventArgs());
-            Thread.Sleep(1500);
+            Thread.Sleep(3500);
             button_StartSensors_Click(this, new EventArgs());
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
             button_StartEffectors_Click(this, new EventArgs());
             started = true;
         }
