@@ -27,8 +27,9 @@ namespace CarController
 
         private const int TARGET_BRAKE_SETTING_WHEN_MANUAL_BRAKING_ON = 100;
         private const int BRAKE_ACTIVATION_TIME_ON_SPACE_PRESSING_IN_MS = 500; //its much too much, but smaller values blinks at start
-        private const int MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS = 7; 
-        private const int MAX_BACKWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS = -5; //it should be < 0 !
+        private const int MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS = 10; 
+        private const int MAX_BACKWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS = -10; //it should be < 0 !
+        private const int MAX_WHEEL_ANGLE_VALEUE_WHEN_DRIVING_ON_GAMEPAD = 30;
         private const int MAX_WHEEL_ANGLE_CHANGE_PER_SEC_WHEN_DRIVING_ON_GAMEPAD = 10;
         private const int WHEEL_ANGLE_CHANGING_WITH_GAMEPAD_TIMER_INTERVAL_IN_MS = 50;
         private const double MIN_GAMEPAD_Y_TO_START_TURNING_WHEEL_IN_PERCENTS = 5.0;
@@ -176,26 +177,36 @@ namespace CarController
 
         private void HandleKeyDown(KeyEventArgs key)
         {
+            double valToBeSet;
+
             switch (key.Key)
             {
                 case Key.Up:
                 case Key.W:
-                    Controller.ChangeTargetSpeed(SPEED_CHANGE_PER_UP_DOWN_ARR_CLICK);
+                    valToBeSet = Controller.Model.CarInfo.TargetSpeed + SPEED_CHANGE_PER_UP_DOWN_ARR_CLICK;
+                    Limiter.Limit(ref valToBeSet, MAX_BACKWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS, MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS);
+                    Controller.SetTargetSpeed(valToBeSet);
                     break;
 
                 case Key.Down:
                 case Key.S:
-                    Controller.ChangeTargetSpeed(-SPEED_CHANGE_PER_UP_DOWN_ARR_CLICK);
+                    valToBeSet = Controller.Model.CarInfo.TargetSpeed - SPEED_CHANGE_PER_UP_DOWN_ARR_CLICK;
+                    Limiter.Limit(ref valToBeSet, MAX_BACKWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS, MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS);
+                    Controller.SetTargetSpeed(valToBeSet);
                     break;
 
                 case Key.Left:
                 case Key.A:
-                    Controller.ChangeTargetWheelAngle(-WHEEL_ANGLE_CHANGE_PER_LEFT_RIGHT_ARR_CLICK);
+                    valToBeSet = Controller.Model.CarInfo.TargetWheelAngle - WHEEL_ANGLE_CHANGE_PER_LEFT_RIGHT_ARR_CLICK;
+                    Limiter.Limit(ref valToBeSet, -1 * MAX_WHEEL_ANGLE_VALEUE_WHEN_DRIVING_ON_GAMEPAD, MAX_WHEEL_ANGLE_VALEUE_WHEN_DRIVING_ON_GAMEPAD);
+                    Controller.SetTargetWheelAngle(valToBeSet);
                     break;
 
                 case Key.Right:
                 case Key.D:
-                    Controller.ChangeTargetWheelAngle(WHEEL_ANGLE_CHANGE_PER_LEFT_RIGHT_ARR_CLICK);
+                    valToBeSet = Controller.Model.CarInfo.TargetWheelAngle + WHEEL_ANGLE_CHANGE_PER_LEFT_RIGHT_ARR_CLICK;
+                    Limiter.Limit(ref valToBeSet, -1 * MAX_WHEEL_ANGLE_VALEUE_WHEN_DRIVING_ON_GAMEPAD, MAX_WHEEL_ANGLE_VALEUE_WHEN_DRIVING_ON_GAMEPAD);
+                    Controller.SetTargetWheelAngle(valToBeSet);
                     break;
 
                 case Key.Escape:
@@ -339,6 +350,11 @@ namespace CarController
         void BrakeRegulator_evNewBrakeSettingCalculated(object sender, NewBrakeSettingCalculatedEventArgs args)
         {
             UpdateTextBlock(textBlock_steeringBrake, args.GetBrakeSetting(), steeringBrakeLabelData);
+        }
+
+        private void button_saveStats_Click(object sender, RoutedEventArgs e)
+        {
+            Controller.statsCollector.WriteStatsToFile("STATS " + DateTime.Now.ToLongDateString());
         }
     }
 }
