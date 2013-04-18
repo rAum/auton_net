@@ -47,7 +47,7 @@ namespace Helpers
             }
         }
 
-        public void WriteStatsToFile()
+        private void WriteStatsToFile()
         {
             Logger.Log(this, String.Format("Starting to save new stats: {0}", outFileName));
 
