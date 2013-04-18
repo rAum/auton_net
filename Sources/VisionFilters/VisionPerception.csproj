@@ -65,9 +65,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Filters\Image Operations\DrawColoredPointSets.cs" />
     <Compile Include="Filters\Image Operations\DrawPoints.cs" />
-    <Compile Include="Properties\HsvFilter.cs" />
     <Compile Include="Output\KalmanFilter.cs" />
+    <Compile Include="Properties\HsvFilter.cs" />
     <Compile Include="Filters\Lane Mark Detector\ClusterLanes.cs" />
     <Compile Include="Filters\Lane Mark Detector\LaneMarkDetector.cs" />
     <Compile Include="Filters\Lane Mark Detector\LineModel.cs" />

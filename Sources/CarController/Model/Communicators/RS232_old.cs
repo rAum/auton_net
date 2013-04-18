@@ -29,9 +29,9 @@ namespace CarController_old
         private const int SLEEP_ON_RS232_DESYNC_IN_MS = 10;
         private const int IN_BUFFER_SIZE = 100;
         private const int SLEEP_WHILE_WAITING_FOR_READ_IN_MS = 2;
-        private const int SLEEP_ON_FAILED_PORT_OPPENING_BEFORE_NEXT_TRY_AT_APP_INIT_IN_MS = 1000; //to dont spam so many messages when it fails anyway
+        private const int SLEEP_ON_FAILED_PORT_OPPENING_BEFORE_NEXT_TRY_AT_APP_INIT_IN_MS = 10; //to dont spam so many messages when it fails anyway
         private const int SLEEP_ON_FAILED_PORT_OPPENING_BEFORE_NEXT_TRY_AT_APP_WORKING_IN_MS = 0; //needed ASAP
-        private const int MAX_CONNECTION_TRIES = 30;
+        private const int MAX_CONNECTION_TRIES = 3000;
         private const int SLEEP_BETWEEN_2_READS_IN_MS = 10;
 
         private const bool DIAGNOSIS_ENABLED = false;
@@ -342,7 +342,7 @@ namespace CarController_old
             bool done = false;
             int tries = 0;
 
-            while (tries++ < MAX_CONNECTION_TRIES)
+            while (tries++ < MAX_CONNECTION_TRIES && done == false)
             {
                 try
                 {
