@@ -92,6 +92,7 @@ namespace EngineSimulator
         public abstract List<EnginePointStats> engineStats { get; }
         public abstract double staticEngineAntiForces { get; } //N*m
         public abstract double dynamicEngineAntiForces { get; } //N*m/RPM
+        public abstract double engineMomentum { get; } //kg * m^2
         public abstract double RPM { get; protected set; }
         public abstract double Torque { get; }
         public abstract double Power { get; }
@@ -113,13 +114,13 @@ namespace EngineSimulator
             int upperBound = engineStats.FindIndex(x => x.RPM > RPM);
             int lowerBound = engineStats.FindLastIndex(x => x.RPM < RPM);
 
-            if (lowerBound != null && upperBound != null) //it is in scale
+            if (lowerBound != 1 && upperBound != -1) //it is in scale
             {
                 var p1 = engineStats[lowerBound];
                 var p2 = engineStats[upperBound];
                 return LinearApprox(p1.RPM, p1.torque, p2.RPM, p2.torque, RPM);
             }
-            else if (lowerBound == null) //if its under a scale
+            else if (lowerBound == -1) //if its under a scale
             {
                 var p1 = engineStats[upperBound];
                 var p2 = engineStats[upperBound + 1];
@@ -192,7 +193,7 @@ namespace EngineSimulator
             model = _model;
 
             SimulationTimer.Elapsed += SimulationTimer_Elapsed;
-            //SimulationTimer.Start();
+            SimulationTimer.Start();
         }
 
         void SimulationTimer_Elapsed(object sender, ElapsedEventArgs e)

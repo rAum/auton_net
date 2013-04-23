@@ -1,0 +1,12 @@
+F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\bin\Debug\EngineSImulatorFixed.exe.config
+F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\bin\Debug\EngineSImulatorFixed.exe
+F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\bin\Debug\EngineSImulatorFixed.pdb
+F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\MainWindow.baml
+F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\MainWindow.g.cs
+F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\App.g.cs
+F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed_MarkupCompile.cache
+F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed.g.resources
+F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed.Properties.Resources.resources
+F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed.csproj.GenerateResource.Cache
+F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed.exe
+F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed.pdb
