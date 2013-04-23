@@ -15,7 +15,7 @@ namespace CarController
         private System.Threading.Thread mFakeSignalsSenderThread;
 
         //stats collecting
-        private StatsCollector statsCollector = new StatsCollector();
+        public StatsCollector statsCollector = new StatsCollector();
         private Timer mStatsCollectorTimer = new Timer();
         private const int TIMER_INTERVAL_IN_MS = 10;
 

@@ -180,6 +180,7 @@ namespace CarController_old
                 ReadSteeringWheelSensor(); //there 2 methods should remain 2 methods, because they can be customed in some way in future
                 Thread.Sleep(SLEEP_BETWEEN_2_READS_IN_MS);
                 ReadBrakesSensors();
+                Thread.Sleep(SLEEP_BETWEEN_2_READS_IN_MS);
             }
             catch (Exception e)
             {
