@@ -90,11 +90,17 @@ namespace EngineSimulator
     abstract class CarModel
     {
         public abstract List<EnginePointStats> engineStats { get; }
-        public abstract double staticEngineAntiForces { get; } //N*m
+        public abstract double staticEngineAntiForces { get;  } //N*m
         public abstract double dynamicEngineAntiForces { get; } //N*m/RPM
-        public abstract double RPM { get; protected set; }
+        public abstract double externalAntiForces { get; set; }
+        public abstract double engineMomentum { get; } //kg * m^2
+        public abstract double RPM { get; set; }
         public abstract double Torque { get; }
         public abstract double Power { get; }
+        public abstract double Wheel_radius { get; }
+        public double Wheel_circuit { get { return Wheel_radius * 2 * Math.PI; } }
+        public abstract double Transmission { get; set; }
+
 
         public abstract void Start();
 
@@ -110,25 +116,30 @@ namespace EngineSimulator
 
         protected double GetTorque(double RPM)
         {
-            int upperBound = engineStats.FindIndex(x => x.RPM > RPM);
-            int lowerBound = engineStats.FindLastIndex(x => x.RPM < RPM);
-
-            if (lowerBound != null && upperBound != null) //it is in scale
+            //RPM is a point on our map
+            var engineStat = engineStats.Find(x => x.RPM == RPM);
+            if(engineStat != null)
             {
-                var p1 = engineStats[lowerBound];
-                var p2 = engineStats[upperBound];
+                return engineStat.torque;
+            }
+
+            //RPM is not a point on our map (and it has top be approximated)
+            if (RPM > engineStats.First().RPM && RPM < engineStats.Last().RPM) //it is in scale
+            {
+                var p1 = engineStats.Find(x => x.RPM > RPM);
+                var p2 = engineStats.FindLast(x => x.RPM < RPM); //can be optimized
                 return LinearApprox(p1.RPM, p1.torque, p2.RPM, p2.torque, RPM);
             }
-            else if (lowerBound == null) //if its under a scale
+            else if (RPM < engineStats.First().RPM) //if its under a scale
             {
-                var p1 = engineStats[upperBound];
-                var p2 = engineStats[upperBound + 1];
+                var p1 = engineStats[0];
+                var p2 = engineStats[1];
                 return LinearApprox(p1.RPM, p1.torque, p2.RPM, p2.torque, RPM);
             }
             else //if its over a scale
             {
-                var p1 = engineStats[lowerBound];
-                var p2 = engineStats[lowerBound - 1];
+                var p1 = engineStats.Last();
+                var p2 = engineStats[engineStats.Count-1];
                 return LinearApprox(p1.RPM, p1.torque, p2.RPM, p2.torque, RPM);
             }
         }
@@ -160,14 +171,20 @@ namespace EngineSimulator
             engineStats.Add(new EnginePointStats(6203 / 60, 56100, 86.4));
 
             engineStats.OrderBy(x => x.RPM); //ENGINE STATS HAVE TO BE ORDERED BY RPM
+
+            RPM = 0;
+            externalAntiForces = 0;
+            Transmission = 1;
         }
 
         public override double staticEngineAntiForces{get { return -50; }}
         public override double dynamicEngineAntiForces { get { return -1 * 0.2 * RPM; } }
+        public override double engineMomentum { get { return 2.5; } }
 
-        private double __RPM__;
-        public override double RPM { get { return __RPM__; } protected set { __RPM__ = value; } }
-        public override double Torque{get{ return this.GetTorque(RPM); }}
+        public override double externalAntiForces { get; set; }
+        public override double RPM { get; set; }
+
+        public override double Torque { get { return this.GetTorque(RPM); } }
         public override double Power
         {
             get { throw new NotImplementedException(); }
@@ -177,12 +194,16 @@ namespace EngineSimulator
         {
             RPM = 1000;
         }
-    }
 
+        // wheel: 175/65-R14
+        public override double Wheel_radius{get{return 14.0*2.54/2/100 + 0.65*0.175;}}
+
+        public override double Transmission{get; set;}
+    }
 
     class EngineSimulator
     {
-        CarModel model;
+        public CarModel model;
 
         const double SIMULATION_TIMER_INTERVAL_IN_MS = 10;
         Timer SimulationTimer = new Timer(SIMULATION_TIMER_INTERVAL_IN_MS);
@@ -192,12 +213,19 @@ namespace EngineSimulator
             model = _model;
 
             SimulationTimer.Elapsed += SimulationTimer_Elapsed;
-            //SimulationTimer.Start();
+            SimulationTimer.Start();
         }
 
         void SimulationTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            throw new NotImplementedException();
+            double E_engine = 0;
+            
+            E_engine += model.Torque / model.engineMomentum; //E = epsilon //bezwladnosc silnika
+            if(model.RPM > 0) E_engine -= model.staticEngineAntiForces; //statyczne opory tarcia silnika
+            E_engine -= model.dynamicEngineAntiForces * model.RPM; //statyczne opory tarcia 
+            if (model.RPM > 0) E_engine -= model.externalAntiForces / model.Transmission / model.Wheel_circuit; //sily zewnetrzne
+
+            model.RPM += E_engine * (SIMULATION_TIMER_INTERVAL_IN_MS / 1000);
         }
     }
 }

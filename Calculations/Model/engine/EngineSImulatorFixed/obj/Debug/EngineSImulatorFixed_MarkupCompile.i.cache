@@ -1,18 +1,18 @@
 ﻿EngineSImulatorFixed
 
 
-winexe
+exe
 C#
 .cs
-F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\
 EngineSImulatorFixed
 none
 false
 DEBUG;TRACE
-F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\App.xaml
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSImulatorFixed\App.xaml
 11151548125
 
-10355085656
+10228369002
 12-1401562060
 MainWindow.xaml;
 

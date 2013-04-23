@@ -8,3 +8,11 @@ F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSimulator\obj\
 F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSimulator\obj\Debug\EngineSimulator.g.resources
 F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSimulator\obj\Debug\EngineSimulator.Properties.Resources.resources
 F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSimulator\obj\Debug\EngineSimulator.csproj.GenerateResource.Cache
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSimulator\bin\Debug\EngineSimulator.exe.config
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSimulator\obj\Debug\MainWindow.baml
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSimulator\obj\Debug\MainWindow.g.cs
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSimulator\obj\Debug\App.g.cs
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSimulator\obj\Debug\EngineSimulator_MarkupCompile.cache
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSimulator\obj\Debug\EngineSimulator.g.resources
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSimulator\obj\Debug\EngineSimulator.Properties.Resources.resources
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSimulator\obj\Debug\EngineSimulator.csproj.GenerateResource.Cache

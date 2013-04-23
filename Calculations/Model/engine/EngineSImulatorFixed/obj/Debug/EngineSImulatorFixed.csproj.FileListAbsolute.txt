@@ -10,3 +10,16 @@ F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed
 F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed.csproj.GenerateResource.Cache
 F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed.exe
 F:\maciek\programowanie\auton_net\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed.pdb
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSImulatorFixed\bin\Debug\EngineSImulatorFixed.exe.config
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed.exe
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed.pdb
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed.csprojResolveAssemblyReference.cache
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\MainWindow.baml
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\MainWindow.g.cs
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\App.g.cs
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed_MarkupCompile.cache
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed.g.resources
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed.Properties.Resources.resources
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSImulatorFixed\obj\Debug\EngineSImulatorFixed.csproj.GenerateResource.Cache
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSImulatorFixed\bin\Debug\EngineSImulatorFixed.exe
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSImulatorFixed\bin\Debug\EngineSImulatorFixed.pdb

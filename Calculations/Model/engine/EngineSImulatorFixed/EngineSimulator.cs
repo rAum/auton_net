@@ -90,12 +90,20 @@ namespace EngineSimulator
     abstract class CarModel
     {
         public abstract List<EnginePointStats> engineStats { get; }
-        public abstract double staticEngineAntiForces { get; } //N*m
+        public abstract double staticEngineAntiForces { get;  } //N*m
         public abstract double dynamicEngineAntiForces { get; } //N*m/RPM
+        public abstract double externalAntiForces { get; set; }
         public abstract double engineMomentum { get; } //kg * m^2
-        public abstract double RPM { get; protected set; }
+        public abstract double RPM { get; set; }
         public abstract double Torque { get; }
         public abstract double Power { get; }
+        public abstract double Wheel_radius { get; }
+        public double Wheel_circuit { get { return Wheel_radius * 2 * Math.PI; } }
+        public abstract double Transmission { get; set; }
+        public abstract double CurrAcceleration { get; set; }
+        public abstract double MaxEngineRPM { get; }
+        public abstract double Speed { get; set; }
+
 
         public abstract void Start();
 
@@ -111,27 +119,34 @@ namespace EngineSimulator
 
         protected double GetTorque(double RPM)
         {
-            int upperBound = engineStats.FindIndex(x => x.RPM > RPM);
-            int lowerBound = engineStats.FindLastIndex(x => x.RPM < RPM);
+            double torque;
+            var engineStat = engineStats.Find(x => x.RPM == RPM);
+            if (engineStat != null) //RPM is a point on our map
+            {
+                torque = engineStat.torque;
+            }
+            else
+            {
+                //RPM is not a point on our map (and it has top be approximated)
+                if (RPM > engineStats.First().RPM && RPM < engineStats.Last().RPM) //it is in scale
+                {
+                    var p1 = engineStats.Find(x => x.RPM > RPM);
+                    var p2 = engineStats.FindLast(x => x.RPM < RPM); //can be optimized
+                    torque = LinearApprox(p1.RPM, p1.torque, 0, 0, RPM);
+                }
+                else if (RPM < engineStats.First().RPM) //if its under a scale
+                {
+                    var p1 = engineStats[0];
+                    torque = LinearApprox(p1.RPM, p1.torque, 0, 0, RPM);
+                }
+                else //if its over a scale
+                {
+                    var p1 = engineStats.Last();
+                    torque = LinearApprox(p1.RPM, p1.torque, MaxEngineRPM, 0, RPM);
+                }
+            }
 
-            if (lowerBound != 1 && upperBound != -1) //it is in scale
-            {
-                var p1 = engineStats[lowerBound];
-                var p2 = engineStats[upperBound];
-                return LinearApprox(p1.RPM, p1.torque, p2.RPM, p2.torque, RPM);
-            }
-            else if (lowerBound == -1) //if its under a scale
-            {
-                var p1 = engineStats[upperBound];
-                var p2 = engineStats[upperBound + 1];
-                return LinearApprox(p1.RPM, p1.torque, p2.RPM, p2.torque, RPM);
-            }
-            else //if its over a scale
-            {
-                var p1 = engineStats[lowerBound];
-                var p2 = engineStats[lowerBound - 1];
-                return LinearApprox(p1.RPM, p1.torque, p2.RPM, p2.torque, RPM);
-            }
+            return torque;
         }
     }
 
@@ -145,30 +160,37 @@ namespace EngineSimulator
 
         public ToyotaYaris()
         {
-            engineStats.Add(new EnginePointStats(1493 / 60, 13500, 86.1));
-            engineStats.Add(new EnginePointStats(2010 / 60, 20200, 96.1));
-            engineStats.Add(new EnginePointStats(2508 / 60, 27000, 102.8));
-            engineStats.Add(new EnginePointStats(3010 / 60, 33200, 105.2));
-            engineStats.Add(new EnginePointStats(3508 / 60, 41400, 112.6));
-            engineStats.Add(new EnginePointStats(4017 / 60, 47500, 112.8));
-            engineStats.Add(new EnginePointStats(4209 / 60, 50200, 113.8));
-            engineStats.Add(new EnginePointStats(4416 / 60, 52800, 114.3));
-            engineStats.Add(new EnginePointStats(4616 / 60, 54800, 113.6));
-            engineStats.Add(new EnginePointStats(5011 / 60, 55800, 106.3));
-            engineStats.Add(new EnginePointStats(5512 / 60, 57500, 99.6));
-            engineStats.Add(new EnginePointStats(5811 / 60, 57300, 94.2));
-            engineStats.Add(new EnginePointStats(6006 / 60, 56200, 89.4));
-            engineStats.Add(new EnginePointStats(6203 / 60, 56100, 86.4));
+            engineStats.Add(new EnginePointStats(1493, 13500, 86.1));
+            engineStats.Add(new EnginePointStats(2010, 20200, 96.1));
+            engineStats.Add(new EnginePointStats(2508, 27000, 102.8));
+            engineStats.Add(new EnginePointStats(3010, 33200, 105.2));
+            engineStats.Add(new EnginePointStats(3508, 41400, 112.6));
+            engineStats.Add(new EnginePointStats(4017, 47500, 112.8));
+            engineStats.Add(new EnginePointStats(4209, 50200, 113.8));
+            engineStats.Add(new EnginePointStats(4416, 52800, 114.3));
+            engineStats.Add(new EnginePointStats(4616, 54800, 113.6));
+            engineStats.Add(new EnginePointStats(5011, 55800, 106.3));
+            engineStats.Add(new EnginePointStats(5512, 57500, 99.6));
+            engineStats.Add(new EnginePointStats(5811, 57300, 94.2));
+            engineStats.Add(new EnginePointStats(6006, 56200, 89.4));
+            engineStats.Add(new EnginePointStats(6203, 56100, 86.4));
 
             engineStats.OrderBy(x => x.RPM); //ENGINE STATS HAVE TO BE ORDERED BY RPM
+
+            RPM = 0;
+            externalAntiForces = 0;
+            Transmission = 4;
+            CurrAcceleration = 0;
         }
 
-        public override double staticEngineAntiForces{get { return -50; }}
-        public override double dynamicEngineAntiForces { get { return -1 * 0.2 * RPM; } }
+        public override double staticEngineAntiForces{get { return 10.0; }}
+        public override double dynamicEngineAntiForces { get { return 0.0000005 * RPM; } }
+        public override double engineMomentum { get { return 0.1; } }
 
-        private double __RPM__;
-        public override double RPM { get { return __RPM__; } protected set { __RPM__ = value; } }
-        public override double Torque{get{ return this.GetTorque(RPM); }}
+        public override double externalAntiForces { get; set; }
+        public override double RPM { get; set; }
+
+        public override double Torque { get { return this.GetTorque(RPM); } }
         public override double Power
         {
             get { throw new NotImplementedException(); }
@@ -178,14 +200,20 @@ namespace EngineSimulator
         {
             RPM = 1000;
         }
-    }
 
+        // wheel: 175/65-R14
+        public override double Wheel_radius { get { return 14.0 * 2.54 / 2 / 100 + 0.65 * 0.175; } } // = 0,29155m //in meters
+        public override double Transmission { get; set; }
+        public override double CurrAcceleration { get; set; } //in [0,1] range
+
+        public override double MaxEngineRPM { get { return 7000; } }
+    }
 
     class EngineSimulator
     {
-        CarModel model;
+        public CarModel model;
 
-        const double SIMULATION_TIMER_INTERVAL_IN_MS = 10;
+        const double SIMULATION_TIMER_INTERVAL_IN_MS = 100;
         Timer SimulationTimer = new Timer(SIMULATION_TIMER_INTERVAL_IN_MS);
         
         public EngineSimulator(CarModel _model)
@@ -198,7 +226,25 @@ namespace EngineSimulator
 
         void SimulationTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            throw new NotImplementedException();
+            double E_engine = 0;
+
+            Console.WriteLine("RPM: {0}", model.RPM);
+            Console.WriteLine("E_engine change on: engine inertion: {0}", model.Torque / model.engineMomentum * model.CurrAcceleration);
+            Console.WriteLine("E_engine change on: engine static resistance: {0}", model.staticEngineAntiForces * -1);
+            Console.WriteLine("E_engine change on: engine dynamic resistance:{0}", model.dynamicEngineAntiForces * model.RPM * -1);
+            Console.WriteLine("E_engine change on: external resistance: {0}", model.externalAntiForces / model.Transmission / model.Wheel_circuit * -1);
+
+            E_engine += model.Torque / model.engineMomentum * model.CurrAcceleration; //E = epsilon //bezwladnosc silnika //NOTE: tutaj dodawać następne bezwładności
+            if(model.RPM > 0) E_engine -= model.staticEngineAntiForces; //statyczne opory tarcia silnika
+            E_engine -= model.dynamicEngineAntiForces * model.RPM; //dynamiczne opory tarcia silnika
+            if (model.RPM > 0) E_engine -= model.externalAntiForces / model.Transmission / model.Wheel_circuit; //sily zewnetrzne
+
+            model.RPM += E_engine * (SIMULATION_TIMER_INTERVAL_IN_MS / 1000) * 60;
+
+            if (model.RPM < 0)
+            {
+                model.RPM = 0;
+            }
         }
     }
 }
