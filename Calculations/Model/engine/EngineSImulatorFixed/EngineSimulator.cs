@@ -7,6 +7,8 @@ using System.Timers;
 
 namespace EngineSimulator
 {
+    //http://www.asawicki.info/Mirror/Car%20Physics%20for%20Games/Car%20Physics%20for%20Games.html <- can be usefull
+
     // http://carsmind.com/specification.php?make=TOYOTA&model=Yaris - technical spec
     /*
         FOR NOW LET'S TAKE THIS ONE:
@@ -61,17 +63,25 @@ namespace EngineSimulator
       
         also avitable in .pdf file in projects dir 
      */
-    
-    /* MY CALCULATIONS ABOUT CAR DYNAMICS (TORQUE BASED):
-     * torque_current = E_engine * M_engine + //E = epsilon, M = momentum //engine ineria
-     *          + E_wheels * M_wheels +  //wheels inertia
-     *          + a_car * m_car / transmission_rate / r_wheel + //a = acceleration, m = mass, r = radius //car dynamics
-     *          + internal_forces //???
-     *          + external_forces / transmission_rate / r_wheel //external forces on wheel
-     *          
-     *  torque_current = torque[curr_rpm] * gas_in_peccents_current
+
+
+    /*
+     * GEARS:
+     * http://en.wikipedia.org/wiki/Toyota_C_transmission
+     * 
+     * z wiki:
+     * 1st	    2nd	     3rd	4th	     5th    Reverse	 Final
+     * 3.545	1.913	1.310	1.027	0.850	3.214	 3.550
+     * 
+     * odwrotnosc (1/x) tego z wiki:
+     * 1 -> 0,28208744710860366713681241184767
+     * 2 -> 0,52273915316257187663355985363304
+     * 3 -> 0,76335877862595419847328244274809
+     * 4 -> 0,97370983446932814021421616358325
+     * 5 -> 1,1764705882352941176470588235294
+     * 
+     * Final =  Differential Ratio  = 1 / 3.550 = 0,28169014084507042253521126760563
      */
-        
 
     public class EnginePointStats
     {
@@ -97,13 +107,17 @@ namespace EngineSimulator
         public abstract double RPM { get; set; }
         public abstract double Torque { get; }
         public abstract double Power { get; }
-        public abstract double Wheel_radius { get; }
-        public double Wheel_circuit { get { return Wheel_radius * 2 * Math.PI; } }
-        public abstract double Transmission { get; set; }
-        public abstract double CurrAcceleration { get; set; }
+        public abstract double WheelRadius { get; }
+        public double Wheel_circuit { get { return WheelRadius * 2 * Math.PI; } }
+        public double Transmission { get { return GearRatio(CurrGear) * DifferentialRatio; } }
+        public abstract double DifferentialRatio { get; }
+        public abstract double ThrottleOppeningLevel { get; set; }
         public abstract double MaxEngineRPM { get; }
         public abstract double Speed { get; set; }
 
+        public abstract int CurrGear { get; set; }
+        public abstract int MaxGear { get; }
+        public abstract double GearRatio(int gear);
 
         public abstract void Start();
 
@@ -152,49 +166,63 @@ namespace EngineSimulator
 
     class ToyotaYaris : CarModel
     {
-        private List<EnginePointStats> __ENGINE_STATS__ = new List<EnginePointStats>();
-        public override List<EnginePointStats> engineStats
+        private List<EnginePointStats> __ENGINE_STATS__ = new List<EnginePointStats>()     
         {
-            get { return __ENGINE_STATS__; }
-        }
+            new EnginePointStats(1493, 13500, 86.1),
+            new EnginePointStats(2010, 20200, 96.1),
+            new EnginePointStats(2508, 27000, 102.8),
+            new EnginePointStats(3010, 33200, 105.2),
+            new EnginePointStats(3508, 41400, 112.6),
+            new EnginePointStats(4017, 47500, 112.8),
+            new EnginePointStats(4209, 50200, 113.8),
+            new EnginePointStats(4416, 52800, 114.3),
+            new EnginePointStats(4616, 54800, 113.6),
+            new EnginePointStats(5011, 55800, 106.3),
+            new EnginePointStats(5512, 57500, 99.6),
+            new EnginePointStats(5811, 57300, 94.2),
+            new EnginePointStats(6006, 56200, 89.4),
+            new EnginePointStats(6203, 56100, 86.4)
+        };
+        public override List<EnginePointStats> engineStats { get { return __ENGINE_STATS__; } }
+        private double[] gearTransmissionRatios = new double[]{
+                0.2820874, // 1
+                0.5227392, // 2
+                0.7633588, // 3
+                0.9737099, // 4
+                1.1764705  // 5
+        };
+        public override double DifferentialRatio { get { return 1.0/3.550; } }
+        public override double TransmissionEfficiency { get { return 0.9; } }
 
         public ToyotaYaris()
         {
-            engineStats.Add(new EnginePointStats(1493, 13500, 86.1));
-            engineStats.Add(new EnginePointStats(2010, 20200, 96.1));
-            engineStats.Add(new EnginePointStats(2508, 27000, 102.8));
-            engineStats.Add(new EnginePointStats(3010, 33200, 105.2));
-            engineStats.Add(new EnginePointStats(3508, 41400, 112.6));
-            engineStats.Add(new EnginePointStats(4017, 47500, 112.8));
-            engineStats.Add(new EnginePointStats(4209, 50200, 113.8));
-            engineStats.Add(new EnginePointStats(4416, 52800, 114.3));
-            engineStats.Add(new EnginePointStats(4616, 54800, 113.6));
-            engineStats.Add(new EnginePointStats(5011, 55800, 106.3));
-            engineStats.Add(new EnginePointStats(5512, 57500, 99.6));
-            engineStats.Add(new EnginePointStats(5811, 57300, 94.2));
-            engineStats.Add(new EnginePointStats(6006, 56200, 89.4));
-            engineStats.Add(new EnginePointStats(6203, 56100, 86.4));
-
             engineStats.OrderBy(x => x.RPM); //ENGINE STATS HAVE TO BE ORDERED BY RPM
 
             RPM = 0;
             externalAntiForces = 0;
-            Transmission = 4;
-            CurrAcceleration = 0;
+            ThrottleOppeningLevel = 0;
+            CurrGear = 1;
+        }
+
+        public override int CurrGear { get; set; }
+        public override int MaxGear { get { return 5; } }
+        public override double GearRatio(int gear)
+        {
+            if (gear > MaxGear || gear < 1)
+                throw new ArgumentException("gear is invalid");
+
+            return gearTransmissionRatios[gear - 1];
         }
 
         public override double staticEngineAntiForces{get { return 10.0; }}
         public override double dynamicEngineAntiForces { get { return 0.0000005 * RPM; } }
-        public override double engineMomentum { get { return 0.1; } }
+        public override double engineMomentum { get { return 1.0; } }
 
         public override double externalAntiForces { get; set; }
         public override double RPM { get; set; }
 
         public override double Torque { get { return this.GetTorque(RPM); } }
-        public override double Power
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public override double Power { get { throw new NotImplementedException(); } }
 
         public override void Start()
         {
@@ -202,9 +230,9 @@ namespace EngineSimulator
         }
 
         // wheel: 175/65-R14
-        public override double Wheel_radius { get { return 14.0 * 2.54 / 2 / 100 + 0.65 * 0.175; } } // = 0,29155m //in meters
-        public override double Transmission { get; set; }
-        public override double CurrAcceleration { get; set; } //in [0,1] range
+        public override double WheelRadius { get { return 14.0 * 2.54 / 2 / 100 + 0.65 * 0.175; } } // = 0,29155m //in meters
+        public override double ThrottleOppeningLevel { get; set; } //in [0,1] range //to jak wcisniecie pedalu gazu - przepustnica //TODO: change name of this var
+        public override double Speed { get; set; }
 
         public override double MaxEngineRPM { get { return 7000; } }
     }
@@ -213,7 +241,7 @@ namespace EngineSimulator
     {
         public CarModel model;
 
-        const double SIMULATION_TIMER_INTERVAL_IN_MS = 100;
+        const double SIMULATION_TIMER_INTERVAL_IN_MS = 10;
         Timer SimulationTimer = new Timer(SIMULATION_TIMER_INTERVAL_IN_MS);
         
         public EngineSimulator(CarModel _model)
@@ -224,22 +252,41 @@ namespace EngineSimulator
             SimulationTimer.Start();
         }
 
+        /* MY CALCULATIONS ABOUT CAR DYNAMICS (TORQUE BASED):
+         * torque_current = E_engine * M_engine + //E = epsilon, M = momentum //engine ineria
+         *          + E_wheels * M_wheels +  //wheels inertia
+         *          + a_car * m_car / transmission_rate / r_wheel + //a = acceleration, m = mass, r = radius //car dynamics //ERROR - it probably should be multiplied by transmission //TODO: look for mistake
+         *          + internal_forces //???
+         *          + external_forces / transmission_rate / r_wheel //external forces on wheel
+         *
+         * transmission_rate = omega_wheel / omega_engine 
+         * so:
+         * E_wheels = E_engine * transmission_rate  
+         * 
+         * 
+         *  torque_current = torque[curr_rpm] * gas_in_peccents_current
+         */
+
         void SimulationTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            double ForwardForce = model.Torque / model.Transmission / model.WheelRadius;
+            Console.WriteLine("Forward force on wheels from engine: {0}", ForwardForce);
+
             double E_engine = 0;
 
             Console.WriteLine("RPM: {0}", model.RPM);
-            Console.WriteLine("E_engine change on: engine inertion: {0}", model.Torque / model.engineMomentum * model.CurrAcceleration);
+            Console.WriteLine("E_engine change on: engine inertion: {0}", model.Torque / model.engineMomentum * model.ThrottleOppeningLevel);
             Console.WriteLine("E_engine change on: engine static resistance: {0}", model.staticEngineAntiForces * -1);
             Console.WriteLine("E_engine change on: engine dynamic resistance:{0}", model.dynamicEngineAntiForces * model.RPM * -1);
-            Console.WriteLine("E_engine change on: external resistance: {0}", model.externalAntiForces / model.Transmission / model.Wheel_circuit * -1);
+            Console.WriteLine("E_engine change on: external resistance: {0}", model.externalAntiForces * model.Transmission / model.Wheel_circuit * -1);
 
-            E_engine += model.Torque / model.engineMomentum * model.CurrAcceleration; //E = epsilon //bezwladnosc silnika //NOTE: tutaj dodawać następne bezwładności
+            E_engine += model.Torque / model.engineMomentum * model.ThrottleOppeningLevel; //E = epsilon //bezwladnosc silnika //NOTE: tutaj dodawać następne bezwładności
             if(model.RPM > 0) E_engine -= model.staticEngineAntiForces; //statyczne opory tarcia silnika
             E_engine -= model.dynamicEngineAntiForces * model.RPM; //dynamiczne opory tarcia silnika
-            if (model.RPM > 0) E_engine -= model.externalAntiForces / model.Transmission / model.Wheel_circuit; //sily zewnetrzne
+            if (model.RPM > 0) E_engine -= model.externalAntiForces * model.Transmission / model.Wheel_circuit; //sily zewnetrzne
 
             model.RPM += E_engine * (SIMULATION_TIMER_INTERVAL_IN_MS / 1000) * 60;
+            model.Speed = model.RPM / 60 * model.Transmission * model.Wheel_circuit;
 
             if (model.RPM < 0)
             {

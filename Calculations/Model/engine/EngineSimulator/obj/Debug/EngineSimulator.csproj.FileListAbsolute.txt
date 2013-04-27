@@ -16,3 +16,4 @@ D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSimulator\
 D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSimulator\obj\Debug\EngineSimulator.g.resources
 D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSimulator\obj\Debug\EngineSimulator.Properties.Resources.resources
 D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSimulator\obj\Debug\EngineSimulator.csproj.GenerateResource.Cache
+D:\maciek\programowanie\C_sharp\auton\Calculations\Model\engine\EngineSimulator\obj\Debug\EngineSimulator.csprojResolveAssemblyReference.cache

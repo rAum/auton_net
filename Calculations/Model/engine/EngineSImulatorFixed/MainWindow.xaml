@@ -5,7 +5,7 @@
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <Slider x:Name="slider_RPM" HorizontalAlignment="Left" Margin="20,66,0,0" VerticalAlignment="Top" Width="224" Maximum="7000"/>
-        <Slider x:Name="slider_externalForces" HorizontalAlignment="Left" Margin="297,201,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,1.091" Width="158" Maximum="1000" ValueChanged="slider_externalForces_ValueChanged">
+        <Slider x:Name="slider_externalForces" HorizontalAlignment="Left" Margin="297,201,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,1.091" Width="158" Maximum="10000" ValueChanged="slider_externalForces_ValueChanged">
             <Slider.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -15,7 +15,7 @@
                 </TransformGroup>
             </Slider.RenderTransform>
         </Slider>
-        <Slider x:Name="slider_acceleration" HorizontalAlignment="Left" Margin="376,203,-15,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="156" ValueChanged="slider_acceleration_ValueChanged">
+        <Slider x:Name="slider_acceleration" HorizontalAlignment="Left" Margin="376,203,-15,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="156" ValueChanged="slider_acceleration_ValueChanged" Maximum="100">
             <Slider.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -29,7 +29,7 @@
         <Label Content="external&#xA;forces [N]" HorizontalAlignment="Left" Margin="343,78,0,0" VerticalAlignment="Top"/>
         <Label Content="RPM" HorizontalAlignment="Left" Margin="107,30,0,0" VerticalAlignment="Top"/>
         <Button x:Name="button_start" Content="Start" HorizontalAlignment="Left" Margin="343,34,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
-        <Slider x:Name="slider_transmission" HorizontalAlignment="Left" Margin="220,201,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,1.091" Width="158" Value ="4" ValueChanged="slider_transmission_ValueChanged">
+        <Slider x:Name="slider_transmission" HorizontalAlignment="Left" Margin="220,201,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,1.091" Width="158" Value ="1" ValueChanged="slider_transmission_ValueChanged" Maximum="5" Minimum="1" SmallChange="1">
             <Slider.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -43,11 +43,16 @@
         <Label Content="0" HorizontalAlignment="Left" Margin="20,88,0,0" VerticalAlignment="Top"/>
         <Label Content="7000" HorizontalAlignment="Left" Margin="215,88,0,0" VerticalAlignment="Top" RenderTransformOrigin="13.5,0.538"/>
         <Label Content="1" HorizontalAlignment="Left" Margin="262,267,0,0" VerticalAlignment="Top"/>
-        <Label Content="10" HorizontalAlignment="Left" Margin="262,125,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.875,-4.5"/>
-        <Label Content="1000" HorizontalAlignment="Left" Margin="321,125,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.875,-4.5"/>
-        <Label Content="100" HorizontalAlignment="Left" Margin="397,125,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.875,-4.5"/>
-        <Label Content="0" HorizontalAlignment="Left" Margin="341,267,0,0" VerticalAlignment="Top" RenderTransformOrigin="5.188,0.5"/>
-        <Label Content="0" HorizontalAlignment="Left" Margin="419,267,0,0" VerticalAlignment="Top" RenderTransformOrigin="5.188,0.5"/>
-
+        <Label Content="5" HorizontalAlignment="Left" Margin="262,125,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.875,-4.5"/>
+        <Label Content="10000" HorizontalAlignment="Left" Margin="321,125,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.875,-4.5"/>
+        <Label Content="100" HorizontalAlignment="Left" Margin="406,125,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.875,-4.5"/>
+        <Label Content="0" HorizontalAlignment="Left" Margin="333,267,0,0" VerticalAlignment="Top" RenderTransformOrigin="5.188,0.5"/>
+        <Label Content="0" HorizontalAlignment="Left" Margin="409,267,0,0" VerticalAlignment="Top" RenderTransformOrigin="5.188,0.5"/>
+        <Label Content="Speed:" HorizontalAlignment="Left" Margin="20,125,0,0" VerticalAlignment="Top"/>
+        <TextBlock Name="TextBlock_speed" HorizontalAlignment="Left" Margin="71,130,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Height="4" Margin="-143,310,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="2"/>
+        <TextBlock x:Name="TextBlock_currGear" HorizontalAlignment="Left" Margin="262,199,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
+        <TextBlock x:Name="TextBlock_externalForces" HorizontalAlignment="Left" Margin="333,199,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="TextBlock_acceleration" HorizontalAlignment="Left" Margin="419,199,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
