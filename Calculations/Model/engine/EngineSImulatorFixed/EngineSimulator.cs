@@ -113,7 +113,7 @@ namespace EngineSimulator
         public abstract double DifferentialRatio { get; }
         public abstract double ThrottleOppeningLevel { get; set; }
         public abstract double MaxEngineRPM { get; }
-        public abstract double Speed { get; set; }
+        public abstract double Speed { get { return RPM / 60 * Transmission * Wheel_circuit; } }
 
         public abstract int CurrGear { get; set; }
         public abstract int MaxGear { get; }
@@ -192,7 +192,6 @@ namespace EngineSimulator
                 1.1764705  // 5
         };
         public override double DifferentialRatio { get { return 1.0/3.550; } }
-        public override double TransmissionEfficiency { get { return 0.9; } }
 
         public ToyotaYaris()
         {
@@ -286,7 +285,6 @@ namespace EngineSimulator
             if (model.RPM > 0) E_engine -= model.externalAntiForces * model.Transmission / model.Wheel_circuit; //sily zewnetrzne
 
             model.RPM += E_engine * (SIMULATION_TIMER_INTERVAL_IN_MS / 1000) * 60;
-            model.Speed = model.RPM / 60 * model.Transmission * model.Wheel_circuit;
 
             if (model.RPM < 0)
             {
