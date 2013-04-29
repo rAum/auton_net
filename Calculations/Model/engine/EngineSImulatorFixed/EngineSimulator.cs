@@ -9,6 +9,8 @@ namespace EngineSimulator
 {
     //http://www.asawicki.info/Mirror/Car%20Physics%20for%20Games/Car%20Physics%20for%20Games.html <- can be usefull
 
+    //http://www.carfolio.com/specifications/models/car/?car=140591 <- more spec but for different model
+
     // http://carsmind.com/specification.php?make=TOYOTA&model=Yaris - technical spec
     /*
         FOR NOW LET'S TAKE THIS ONE:
@@ -120,8 +122,7 @@ namespace EngineSimulator
 
         public double dynamicEngineResistanceForces { get { return dynamicEngineResistancePerRPM * RPM; } }
         public double engineResistanceForces { get { return dynamicEngineResistanceForces + staticEngineResistanceForces; } }
-        public double engineResistanceForcesOnWheels { get { return engineResistanceForces / TransmissionRate; } }
-
+        public double engineResistanceForcesOnWheels { get { return engineResistanceForces / TransmissionRate / WheelRadius; } }
 
         public abstract int CurrGear { get; set; }
         public abstract int MaxGear { get; }
@@ -170,6 +171,10 @@ namespace EngineSimulator
 
             return torque;
         }
+
+        public abstract double WheelMomentum { get; }
+        public abstract double WheelMass { get; }
+        public abstract double WheelsNo { get; }
     }
 
     class ToyotaYaris : CarModel
@@ -222,7 +227,7 @@ namespace EngineSimulator
         }
 
         public override double staticEngineResistanceForces{get { return 10.0; }}
-        public override double dynamicEngineResistancePerRPM { get { return 0.005; } }
+        public override double dynamicEngineResistancePerRPM { get { return 0.009; } }
         public override double engineMomentum { get { return 1.0; } }
 
         public override double externalResistanceForces { get; set; }
@@ -244,6 +249,15 @@ namespace EngineSimulator
         public override double MaxEngineRPM { get { return 7000; } }
 
         public override double Mass { get { return 984.0; } }
+
+        public override double WheelMomentum { get { return 1.0 / 2.0 * WheelMass * WheelRadius * WheelRadius; } } // 1/2 M * R^2 for cylinder //TODO: calculate it better
+
+        public override double WheelsNo { get { return 4; } }
+
+        public override double WheelMass{get{6.5 + 
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 
     class EngineSimulator
@@ -278,23 +292,49 @@ namespace EngineSimulator
 
         void SimulationTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            double E_engine = 0;
+            //double E_engine = 0;
 
-            Console.WriteLine("E_engine change on: engine inertion: {0}", model.Torque / model.engineMomentum * model.ThrottleOppeningLevel);
-            Console.WriteLine("E_engine change on: engine resistance: {0}", model.engineResistanceForces * -1);
-            Console.WriteLine("E_engine change on: engine dynamic resistance:{0}", model.dynamicEngineResistanceForces * model.RPM * -1);
-            Console.WriteLine("E_engine change on: external resistance: {0}", model.externalResistanceForces * model.TransmissionRate / model.Wheel_circuit * -1);
+            //Console.WriteLine("E_engine change on: engine inertion: {0}", model.Torque / model.engineMomentum * model.ThrottleOppeningLevel);
+            //Console.WriteLine("E_engine change on: engine resistance: {0}", model.engineResistanceForces * -1);
+            //Console.WriteLine("E_engine change on: engine dynamic resistance:{0}", model.dynamicEngineResistanceForces * model.RPM * -1);
+            //Console.WriteLine("E_engine change on: external resistance: {0}", model.externalResistanceForces * model.TransmissionRate / model.Wheel_circuit * -1);
 
-            E_engine += model.Torque / model.engineMomentum * model.ThrottleOppeningLevel; //E = epsilon //bezwladnosc silnika //NOTE: tutaj dodawać następne bezwładności
-            if(model.RPM > 0) E_engine -= model.engineResistanceForces; //opory tarcia silnika
-            if (model.RPM > 0) E_engine -= model.externalResistanceForces * model.TransmissionRate / model.Wheel_circuit; //sily zewnetrzne
+            //E_engine += model.Torque / model.engineMomentum * model.ThrottleOppeningLevel; //E = epsilon //bezwladnosc silnika //NOTE: tutaj dodawać następne bezwładności
+            //if(model.RPM > 0) E_engine -= model.engineResistanceForces; //opory tarcia silnika
+            //if (model.RPM > 0) E_engine -= model.externalResistanceForces * model.TransmissionRate / model.Wheel_circuit; //sily zewnetrzne
 
-            model.RPM += E_engine * (SIMULATION_TIMER_INTERVAL_IN_MS / 1000) * 60;
+            //model.RPM += E_engine * (SIMULATION_TIMER_INTERVAL_IN_MS / 1000) * 60;
 
-            if (model.RPM < 0)
-            {
-                model.RPM = 0;
-            }
+            //if (model.RPM < 0)
+            //{
+            //    model.RPM = 0;
+            //}
+
+            //new way of calculations (basing on force on wheels)
+            double ForceBallance = 0;
+
+            ForceBallance += model.ForwardForceOnWheelsFromEngine;
+            ForceBallance -= model.engineResistanceForcesOnWheels;
+            ForceBallance -= model.externalResistanceForces;
+
+            //double Epsilon_engine = 
+            //    ForceBallance /
+            //        (model.engineMomentum / model.TransmissionRate / model.WheelRadius +
+            //        model.WheelsNo * model.WheelMomentum / model.WheelRadius +
+            //        model.Mass / model.WheelRadius);
+
+            //model.RPM += Epsilon_engine * (SIMULATION_TIMER_INTERVAL_IN_MS / 1000) * 60;
+
+            //if (model.RPM < 0)
+            //{
+            //    model.RPM = 0;
+            //}
+
+            double Acceleration = //a = F/m (but we got some additional radial inetrions, so we have to remember about E = M / I)
+                ForceBallance /
+                    (model.Mass +
+                    model.engineMomentum / model.TransmissionRate / model.WheelRadius + // engine inertion
+                    model.WheelsNo * model.WheelMomentum / model.WheelRadius); // wheels inertion 
         }
     }
 }
