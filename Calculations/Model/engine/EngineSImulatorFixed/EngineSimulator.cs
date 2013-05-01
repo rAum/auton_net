@@ -115,9 +115,9 @@ namespace EngineSimulator
         public abstract double MaxEngineRPM { get; }
         public abstract double Mass{get;}
 
-        public double Speed { get { return RPM / 60 * TransmissionRate * Wheel_circuit; } }
+        public double Speed { get { return RPM / 60 * TransmissionRate * WheelCircuit; } }
         public double ForwardForceOnWheelsFromEngine { get { return Torque / TransmissionRate / WheelRadius * ThrottleOppeningLevel; } }
-        public double Wheel_circuit { get { return WheelRadius * 2 * Math.PI; } }
+        public double WheelCircuit { get { return WheelRadius * 2 * Math.PI; } }
         public double TransmissionRate { get { return GearRatio(CurrGear) * DifferentialRatio; } }
 
         public double dynamicEngineResistanceForces { get { return dynamicEngineResistancePerRPM * RPM; } }
@@ -204,7 +204,9 @@ namespace EngineSimulator
                 0.9737099, // 4
                 1.1764705  // 5
         };
-        public override double DifferentialRatio { get { return 1.0; } }// { get { return 1.0/3.550; } }
+        public override double DifferentialRatio 
+            //{ get { return 1.0; } }
+        { get { return 1.0/3.550; } }
         
         public ToyotaYaris()
         {
@@ -254,17 +256,14 @@ namespace EngineSimulator
 
         public override double WheelsNo { get { return 4; } }
 
-        public override double WheelMass{get{6.5 + 
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public override double WheelMass { get { return 6.5 + 6.5; } } //TODO: find true data //mass of wheel and tire 
     }
 
     class EngineSimulator
     {
         public CarModel model;
 
-        const double SIMULATION_TIMER_INTERVAL_IN_MS = 10;
+        const double SIMULATION_TIMER_INTERVAL_IN_MS = 10.0;
         Timer SimulationTimer = new Timer(SIMULATION_TIMER_INTERVAL_IN_MS);
         
         public EngineSimulator(CarModel _model)
@@ -334,7 +333,16 @@ namespace EngineSimulator
                 ForceBallance /
                     (model.Mass +
                     model.engineMomentum / model.TransmissionRate / model.WheelRadius + // engine inertion
-                    model.WheelsNo * model.WheelMomentum / model.WheelRadius); // wheels inertion 
+                    model.WheelsNo * model.WheelMomentum / model.WheelRadius); // wheels inertion
+
+            double Epsilon_engine = Acceleration / model.WheelCircuit / model.TransmissionRate;
+
+            model.RPM += Epsilon_engine * (SIMULATION_TIMER_INTERVAL_IN_MS / 1000.0) * 60.0;
+
+            if (model.RPM < 0)
+            {
+                model.RPM = 0;
+            }
         }
     }
 }
