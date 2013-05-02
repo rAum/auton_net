@@ -40,7 +40,7 @@ namespace EngineSimulator
             this.Dispatcher.Invoke(new Action<string>(x => this.TextBlock_currRPM.Text = x), sim.model.RPM.ToString("0.0"));
             this.Dispatcher.Invoke(new Action<double>(x => this.TextBlock_speed.Text = x.ToString() + " km/h"), sim.model.Speed);
             this.Dispatcher.Invoke(new Action<double>(x => this.TextBlock_forwardForce.Text = x.ToString("0.0") + " N"), sim.model.ForwardForceOnWheelsFromEngine);
-            this.Dispatcher.Invoke(new Action<double>(x => this.TextBlock_EngineResisntance_times_transmissionRate.Text = x.ToString("0.0") + " N"), sim.model.engineResistanceForcesOnWheels);
+            this.Dispatcher.Invoke(new Action<double>(x => this.TextBlock_EngineResisntance_times_transmissionRate.Text = x.ToString("0.0") + " N"), sim.model.EngineResistanceForcesOnWheels);
             this.Dispatcher.Invoke(new Action<double>(x => this.TextBlock_trasmissionRate.Text = x.ToString("0.0000")), 1.0/sim.model.TransmissionRate);
         }
 
@@ -62,7 +62,7 @@ namespace EngineSimulator
 
         private void slider_externalForces_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            sim.model.externalResistanceForces = e.NewValue;
+            sim.model.ExternalResistanceForces = e.NewValue;
 
             if (this.TextBlock_externalForces != null)
             {

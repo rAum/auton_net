@@ -101,11 +101,11 @@ namespace EngineSimulator
 
     abstract class CarModel
     {
-        public abstract List<EnginePointStats> engineStats { get; }
-        public abstract double staticEngineResistanceForces { get;  } //N*m
-        public abstract double dynamicEngineResistancePerRPM { get; } //N*m/RPM
-        public abstract double externalResistanceForces { get; set; }
-        public abstract double engineMomentum { get; } //kg * m^2
+        public abstract List<EnginePointStats> EngineStats { get; }
+        public abstract double StaticEngineResistanceForces { get;  } //N*m
+        public abstract double DynamicEngineResistancePerRPM { get; } //N*m/RPM
+        public abstract double ExternalResistanceForces { get; set; }
+        public abstract double EngineMomentum { get; } //kg * m^2
         public abstract double RPM { get; set; }
         public abstract double Torque { get; }
         public abstract double Power { get; }
@@ -120,9 +120,9 @@ namespace EngineSimulator
         public double WheelCircuit { get { return WheelRadius * 2 * Math.PI; } }
         public double TransmissionRate { get { return GearRatio(CurrGear) * DifferentialRatio; } }
 
-        public double dynamicEngineResistanceForces { get { return dynamicEngineResistancePerRPM * RPM; } }
-        public double engineResistanceForces { get { return dynamicEngineResistanceForces + staticEngineResistanceForces; } }
-        public double engineResistanceForcesOnWheels { get { return engineResistanceForces / TransmissionRate / WheelRadius; } }
+        public double DynamicEngineResistanceForces { get { return DynamicEngineResistancePerRPM * RPM; } }
+        public double EngineResistanceForces { get { return DynamicEngineResistanceForces + StaticEngineResistanceForces; } }
+        public double EngineResistanceForcesOnWheels { get { return EngineResistanceForces / TransmissionRate / WheelRadius; } }
 
         public abstract int CurrGear { get; set; }
         public abstract int MaxGear { get; }
@@ -143,7 +143,7 @@ namespace EngineSimulator
         protected double GetTorque(double RPM)
         {
             double torque;
-            var engineStat = engineStats.Find(x => x.RPM == RPM);
+            var engineStat = EngineStats.Find(x => x.RPM == RPM);
             if (engineStat != null) //RPM is a point on our map
             {
                 torque = engineStat.torque;
@@ -151,20 +151,20 @@ namespace EngineSimulator
             else
             {
                 //RPM is not a point on our map (and it has top be approximated)
-                if (RPM > engineStats.First().RPM && RPM < engineStats.Last().RPM) //it is in scale
+                if (RPM > EngineStats.First().RPM && RPM < EngineStats.Last().RPM) //it is in scale
                 {
-                    var p1 = engineStats.Find(x => x.RPM > RPM);
-                    var p2 = engineStats.FindLast(x => x.RPM < RPM); //can be optimized
+                    var p1 = EngineStats.Find(x => x.RPM > RPM);
+                    var p2 = EngineStats.FindLast(x => x.RPM < RPM); //can be optimized
                     torque = LinearApprox(p1.RPM, p1.torque, 0, 0, RPM);
                 }
-                else if (RPM < engineStats.First().RPM) //if its under a scale
+                else if (RPM < EngineStats.First().RPM) //if its under a scale
                 {
-                    var p1 = engineStats[0];
+                    var p1 = EngineStats[0];
                     torque = LinearApprox(p1.RPM, p1.torque, 0, 0, RPM);
                 }
                 else //if its over a scale
                 {
-                    var p1 = engineStats.Last();
+                    var p1 = EngineStats.Last();
                     torque = LinearApprox(p1.RPM, p1.torque, MaxEngineRPM, 0, RPM);
                 }
             }
@@ -196,7 +196,7 @@ namespace EngineSimulator
             new EnginePointStats(6006, 56200, 89.4),
             new EnginePointStats(6203, 56100, 86.4)
         };
-        public override List<EnginePointStats> engineStats { get { return __ENGINE_STATS__; } }
+        public override List<EnginePointStats> EngineStats { get { return __ENGINE_STATS__; } }
         private double[] gearTransmissionRatios = new double[]{
                 0.2820874, // 1
                 0.5227392, // 2
@@ -210,10 +210,10 @@ namespace EngineSimulator
        
         public ToyotaYaris()
         {
-            engineStats.OrderBy(x => x.RPM); //ENGINE STATS HAVE TO BE ORDERED BY RPM
+            EngineStats.OrderBy(x => x.RPM); //ENGINE STATS HAVE TO BE ORDERED BY RPM
 
             RPM = 0;
-            externalResistanceForces = 0;
+            ExternalResistanceForces = 0;
             ThrottleOppeningLevel = 0;
             CurrGear = 1;
         }
@@ -228,11 +228,11 @@ namespace EngineSimulator
             return gearTransmissionRatios[gear - 1];
         }
 
-        public override double staticEngineResistanceForces{get { return 10.0; }}
-        public override double dynamicEngineResistancePerRPM { get { return 0.009; } }
-        public override double engineMomentum { get { return 1.0; } }
+        public override double StaticEngineResistanceForces{get { return 10.0; }}
+        public override double DynamicEngineResistancePerRPM { get { return 0.009; } }
+        public override double EngineMomentum { get { return 1.0; } }
 
-        public override double externalResistanceForces { get; set; }
+        public override double ExternalResistanceForces { get; set; }
         public override double RPM { get; set; }
 
         public override double Torque { get { return this.GetTorque(RPM); } }
@@ -315,11 +315,11 @@ namespace EngineSimulator
             //}
 
             //new way of calculations (basing on force on wheels)
-            double ForceBallance = 0;
+            double forceBallance = 0;
 
-            ForceBallance += model.ForwardForceOnWheelsFromEngine;
-            ForceBallance -= model.engineResistanceForcesOnWheels;
-            ForceBallance -= model.externalResistanceForces;
+            forceBallance += model.ForwardForceOnWheelsFromEngine;
+            forceBallance -= model.EngineResistanceForcesOnWheels;
+            forceBallance -= model.ExternalResistanceForces;
 
             //double Epsilon_engine = 
             //    ForceBallance /
@@ -335,9 +335,9 @@ namespace EngineSimulator
             //}
 
             double Acceleration = //a = F/m (but we got some additional radial inetrions, so we have to remember about E = M / I)
-                ForceBallance /
+                forceBallance /
                     (model.Mass +
-                    model.engineMomentum / model.TransmissionRate / model.WheelRadius + // engine inertion
+                    model.EngineMomentum / model.TransmissionRate / model.WheelRadius + // engine inertion
                     model.WheelsNo * model.WheelMomentum / model.WheelRadius); // wheels inertion
 
             double Epsilon_engine = Acceleration / model.WheelCircuit / model.TransmissionRate;
