@@ -104,26 +104,33 @@ namespace EngineSimulator
         public abstract List<EnginePointStats> EngineStats { get; }
         public abstract double StaticEngineResistanceForces { get;  } //N*m
         public abstract double DynamicEngineResistancePerRPM { get; } //N*m/RPM
-        public double ExternalResistanceForces { get; set; }
         public abstract double EngineMomentum { get; } //kg * m^2
-        public double RPM { get; set; }
         public abstract double Torque { get; }
         public abstract double Power { get; }
         public abstract double WheelRadius { get; }
         public abstract double DifferentialRatio { get; }
+        public abstract double MaxEngineRPM { get; }
+        public abstract double Mass { get; }
+        public abstract double[] GearTransmissionRatios { get; }
+        public abstract int MaxGear { get; }
+        public abstract double WheelMomentum { get; }
+        public abstract double WheelMass { get; }
+        public abstract double WheelsNo { get; }
+        public double ExternalResistanceForces { get; set; }
+        public double RPM { get; set; }
+
         private double __THROTTLE_OPPENING_LEVEL__ = 0.0;
         public double ThrottleOppeningLevel
         {
             get { return __THROTTLE_OPPENING_LEVEL__; }
-            set {
+            set
+            {
                 if (value < 0.0 || value > 1.0)
                     throw new ArgumentException("throttle oppening level is out of [0,1] range");
-            
+
                 __THROTTLE_OPPENING_LEVEL__ = value;
             }
         }
-        public abstract double MaxEngineRPM { get; }
-        public abstract double Mass{get;}
 
         public double RPS { get { return RPM / 60; } } //obroty na sekunde
         public double SpeedInMetersPerSecond { get { return RPS * TransmissionRate * WheelCircuit; } }
@@ -131,7 +138,6 @@ namespace EngineSimulator
         public double ForwardForceOnWheelsFromEngine { get { return Torque / TransmissionRate / WheelRadius * ThrottleOppeningLevel; } }
         public double WheelCircuit { get { return WheelRadius * 2 * Math.PI; } }
         public double TransmissionRate { get { return GearRatio(CurrGear) * DifferentialRatio; } }
-
         public double DynamicEngineResistanceForces { get { return DynamicEngineResistancePerRPM * RPM; } }
         public double EngineResistanceForces { get { return DynamicEngineResistanceForces + StaticEngineResistanceForces; } }
         public double EngineResistanceForcesOnWheels { get { return EngineResistanceForces / TransmissionRate / WheelRadius; } }
@@ -154,6 +160,7 @@ namespace EngineSimulator
                 double oldTransmissionRate = TransmissionRate;
                 __CURR_GEAR__ = value;
                 double newTranmissionRate = TransmissionRate;
+                double speedBefore = SpeedInKilometersPerHour;
 
                 RPM = RPM *
                     (EngineMomentum +
@@ -163,16 +170,29 @@ namespace EngineSimulator
                     (EngineMomentum +
                     newTranmissionRate * WheelMomentum * WheelsNo +
                     newTranmissionRate * WheelCircuit * Mass);
+
+                double speedAfter = SpeedInKilometersPerHour;
+
+                Console.WriteLine("Speed before: {0}", speedBefore);
+                Console.WriteLine("Speed after: {0}", speedAfter);
+                Console.WriteLine("\n\n\n");
             }
         }
-        protected abstract double[] GearTransmissionRatios { get; }
-        public abstract int MaxGear { get; }
+
         public double GearRatio(int gear)
         {
             if (gear > MaxGear || gear < 1)
                 throw new ArgumentException("gear is invalid");
 
             return GearTransmissionRatios[gear - 1];
+        }
+
+        public CarModel()
+        {
+            RPM = 0;
+            ExternalResistanceForces = 0;
+            ThrottleOppeningLevel = 0;
+            CurrGear = 1;
         }
 
         public abstract void Start();
@@ -187,8 +207,15 @@ namespace EngineSimulator
             return y1 + changePerPoint * wantedXdiffFromX1;
         }
 
+        private bool areEngineStatsSortedByRPM = false;
         protected double GetTorque(double RPM)
         {
+            if (!areEngineStatsSortedByRPM)
+            {
+                EngineStats.OrderBy(stat => stat.RPM);
+                areEngineStatsSortedByRPM = true;
+            }
+
             double torque;
             var engineStat = EngineStats.Find(x => x.RPM == RPM);
             if (engineStat != null) //RPM is a point on our map
@@ -218,10 +245,46 @@ namespace EngineSimulator
 
             return torque;
         }
+        /* MY CALCULATIONS ABOUT CAR DYNAMICS (TORQUE BASED):
+         * torque_current = E_engine * M_engine + //E = epsilon, M = momentum //engine ineria
+         *          + E_wheels * M_wheels +  //wheels inertia
+         *          + a_car * m_car / transmission_rate / r_wheel + //a = acceleration, m = mass, r = radius //car dynamics //ERROR - it probably should be multiplied by transmission //TODO: look for mistake
+         *          + internal_forces //???
+         *          + external_forces / transmission_rate / r_wheel //external forces on wheel
+         *
+         * transmission_rate = omega_wheel / omega_engine 
+         * so:
+         * E_wheels = E_engine * transmission_rate  
+         * 
+         * 
+         *  torque_current = torque[curr_rpm] * gas_in_peccents_current
+         */
+        private DateTime lastTickTime = DateTime.Now;
+        public void CalculationsTick()
+        {
+            TimeSpan timeFromLastTick = DateTime.Now - lastTickTime;
+            lastTickTime = DateTime.Now;
+            double forceBallance = 0;
 
-        public abstract double WheelMomentum { get; }
-        public abstract double WheelMass { get; }
-        public abstract double WheelsNo { get; }
+            forceBallance += ForwardForceOnWheelsFromEngine;
+            forceBallance -= EngineResistanceForcesOnWheels;
+            forceBallance -= ExternalResistanceForces;
+
+            double Acceleration = //a = F/m (but we got some additional radial inetrions, so we have to remember about E = M / I)
+                forceBallance /
+                    (Mass +
+                    EngineMomentum / TransmissionRate / WheelRadius + // engine inertion
+                    WheelsNo * WheelMomentum / WheelRadius); // wheels inertion
+
+            double Epsilon_engine = Acceleration / WheelCircuit / TransmissionRate;
+
+            RPM += Epsilon_engine * timeFromLastTick.TotalSeconds * 60.0;
+
+            if (RPM < 0)
+            {
+                RPM = 0;
+            }
+        }
     }
 
     class ToyotaYaris : CarModel
@@ -251,44 +314,29 @@ namespace EngineSimulator
                 0.9737099, // 4
                 1.1764705  // 5
         };
-        protected override double[] GearTransmissionRatios
+        public override double[] GearTransmissionRatios
         {
             get { return __GEAR_TRANMISSIONS_RATIOS__; }
         }
 
         public override double DifferentialRatio { get { return 1.0/3.550; } }
-    
-        public ToyotaYaris()
-        {
-            EngineStats.OrderBy(x => x.RPM); //ENGINE STATS HAVE TO BE ORDERED BY RPM
-
-            RPM = 0;
-            ExternalResistanceForces = 0;
-            ThrottleOppeningLevel = 0;
-            CurrGear = 1;
-        }
-
         public override int MaxGear { get { return 5; } }
-
         public override double StaticEngineResistanceForces{get { return 10.0; }}
         public override double DynamicEngineResistancePerRPM { get { return 0.0009; } }
         public override double EngineMomentum { get { return 1.0; } }
-
         public override double Torque { get { return this.GetTorque(RPM); } }
-        public override double Power { get { throw new NotImplementedException(); } }
+        public override double Power { get { throw new NotImplementedException(); } } //NOTE: I think power is not needed to do anything in a car
+        public override double WheelRadius { get { return 14.0 * 2.54 / 2 / 100 + 0.65 * 0.175; } } // = 0,29155m //in meters // wheel: 175/65-R14
+        public override double MaxEngineRPM { get { return 7000.0; } }
+        public override double Mass { get { return 984.0; } }
+        public override double WheelMomentum { get { return 1.0 / 2.0 * WheelMass * WheelRadius * WheelRadius; } } // 1/2 M * R^2 for cylinder //TODO: calculate it better
+        public override double WheelsNo { get { return 4.0; } }
+        public override double WheelMass { get { return 6.5 + 6.5; } } //TODO: find true data //mass of wheel and tire 
 
         public override void Start()
         {
             RPM = 1000;
         }
-
-        // wheel: 175/65-R14
-        public override double WheelRadius { get { return 14.0 * 2.54 / 2 / 100 + 0.65 * 0.175; } } // = 0,29155m //in meters
-        public override double MaxEngineRPM { get { return 7000; } }
-        public override double Mass { get { return 984.0; } }
-        public override double WheelMomentum { get { return 1.0 / 2.0 * WheelMass * WheelRadius * WheelRadius; } } // 1/2 M * R^2 for cylinder //TODO: calculate it better
-        public override double WheelsNo { get { return 4; } }
-        public override double WheelMass { get { return 6.5 + 6.5; } } //TODO: find true data //mass of wheel and tire 
     }
 
     class EngineSimulator
@@ -307,46 +355,9 @@ namespace EngineSimulator
             SimulationTimer.Start();
         }
 
-        /* MY CALCULATIONS ABOUT CAR DYNAMICS (TORQUE BASED):
-         * torque_current = E_engine * M_engine + //E = epsilon, M = momentum //engine ineria
-         *          + E_wheels * M_wheels +  //wheels inertia
-         *          + a_car * m_car / transmission_rate / r_wheel + //a = acceleration, m = mass, r = radius //car dynamics //ERROR - it probably should be multiplied by transmission //TODO: look for mistake
-         *          + internal_forces //???
-         *          + external_forces / transmission_rate / r_wheel //external forces on wheel
-         *
-         * transmission_rate = omega_wheel / omega_engine 
-         * so:
-         * E_wheels = E_engine * transmission_rate  
-         * 
-         * 
-         *  torque_current = torque[curr_rpm] * gas_in_peccents_current
-         */
-
-        private DateTime lastTickTime = DateTime.Now;
         void SimulationTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            TimeSpan timeFromLastTick = DateTime.Now - lastTickTime;
-            lastTickTime = DateTime.Now;
-            double forceBallance = 0;
-
-            forceBallance += model.ForwardForceOnWheelsFromEngine;
-            forceBallance -= model.EngineResistanceForcesOnWheels;
-            forceBallance -= model.ExternalResistanceForces;
-
-            double Acceleration = //a = F/m (but we got some additional radial inetrions, so we have to remember about E = M / I)
-                forceBallance /
-                    (model.Mass +
-                    model.EngineMomentum / model.TransmissionRate / model.WheelRadius + // engine inertion
-                    model.WheelsNo * model.WheelMomentum / model.WheelRadius); // wheels inertion
-
-            double Epsilon_engine = Acceleration / model.WheelCircuit / model.TransmissionRate;
-
-            model.RPM += Epsilon_engine * timeFromLastTick.TotalSeconds * 60.0;
-
-            if (model.RPM < 0)
-            {
-                model.RPM = 0;
-            }
+            model.CalculationsTick();
         }
     }
 }
