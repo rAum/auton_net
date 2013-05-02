@@ -207,7 +207,7 @@ namespace EngineSimulator
         public override double DifferentialRatio 
             //{ get { return 1.0; } }
         { get { return 1.0/3.550; } }
-        
+       
         public ToyotaYaris()
         {
             engineStats.OrderBy(x => x.RPM); //ENGINE STATS HAVE TO BE ORDERED BY RPM
@@ -289,8 +289,13 @@ namespace EngineSimulator
          *  torque_current = torque[curr_rpm] * gas_in_peccents_current
          */
 
+        private DateTime lastTickTime = DateTime.Now;
         void SimulationTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            TimeSpan timeFromLastTick = DateTime.Now - lastTickTime;
+            lastTickTime = DateTime.Now;
+            Console.WriteLine(timeFromLastTick.TotalSeconds);
+
             //double E_engine = 0;
 
             //Console.WriteLine("E_engine change on: engine inertion: {0}", model.Torque / model.engineMomentum * model.ThrottleOppeningLevel);
@@ -337,7 +342,7 @@ namespace EngineSimulator
 
             double Epsilon_engine = Acceleration / model.WheelCircuit / model.TransmissionRate;
 
-            model.RPM += Epsilon_engine * (SIMULATION_TIMER_INTERVAL_IN_MS / 1000.0) * 60.0;
+            model.RPM += Epsilon_engine * timeFromLastTick.TotalSeconds * 60.0;
 
             if (model.RPM < 0)
             {
