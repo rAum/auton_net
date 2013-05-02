@@ -314,10 +314,7 @@ namespace EngineSimulator
                 0.9737099, // 4
                 1.1764705  // 5
         };
-        public override double[] GearTransmissionRatios
-        {
-            get { return __GEAR_TRANMISSIONS_RATIOS__; }
-        }
+        public override double[] GearTransmissionRatios { get { return __GEAR_TRANMISSIONS_RATIOS__; } }
 
         public override double DifferentialRatio { get { return 1.0/3.550; } }
         public override int MaxGear { get { return 5; } }
@@ -345,7 +342,6 @@ namespace EngineSimulator
 
         const double SIMULATION_TIMER_INTERVAL_IN_MS = 10.0;
         Timer SimulationTimer = new Timer(SIMULATION_TIMER_INTERVAL_IN_MS);
-        Timer LogTimer = new Timer(1000.0);
         
         public EngineSimulator(CarModel _model)
         {
