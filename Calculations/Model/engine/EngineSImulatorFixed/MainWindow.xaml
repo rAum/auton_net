@@ -58,9 +58,13 @@
         <Label Content="Forward force: " HorizontalAlignment="Left" Margin="20,151,0,0" VerticalAlignment="Top"/>
         <TextBlock x:Name="TextBlock_forwardForce" HorizontalAlignment="Left" Margin="106,156,0,0" TextWrapping="Wrap" Text="0 N" VerticalAlignment="Top"/>
         <Label Content="Engine resistance * transmission rate:" HorizontalAlignment="Left" Margin="20,177,0,0" VerticalAlignment="Top"/>
-        <TextBlock x:Name="TextBlock_EngineResisntance_times_transmissionRate" HorizontalAlignment="Left" Margin="231,182,0,0" TextWrapping="Wrap" Text="0 N" VerticalAlignment="Top"/>
-        <Label Content="Transmission rate:" HorizontalAlignment="Left" Margin="20,203,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="TextBlock_EngineResisntance_times_transmissionRate" HorizontalAlignment="Left" Margin="226,182,0,0" TextWrapping="Wrap" Text="0 N" VerticalAlignment="Top"/>
+        <Label Content="Transmission rate:" HorizontalAlignment="Left" Margin="20,255,0,0" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
-        <TextBlock x:Name="TextBlock_trasmissionRate" HorizontalAlignment="Left" Margin="130,208,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+        <TextBlock x:Name="TextBlock_trasmissionRate" HorizontalAlignment="Left" Margin="125,260,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+        <TextBlock x:Name="TextBlock_aerodynamicResistance" HorizontalAlignment="Left" Margin="160,208,0,0" TextWrapping="Wrap" Text="0 N" VerticalAlignment="Top"/>
+        <Label Content="Aerodynamic resistance:" HorizontalAlignment="Left" Margin="22,203,0,0" VerticalAlignment="Top"/>
+        <Label Content="Rolling resistance: " HorizontalAlignment="Left" Margin="22,229,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.158,-0.154"/>
+        <TextBlock x:Name="TextBlock_rollingResistance" HorizontalAlignment="Left" Margin="125,234,0,0" TextWrapping="Wrap" Text="0 N" VerticalAlignment="Top"/>
     </Grid>
 </Window>

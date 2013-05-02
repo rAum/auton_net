@@ -32,7 +32,7 @@ namespace EngineSimulator
         Car transmission:	Manual, 5-speed
         Car power per weight:	0.0888 PS/kg
         0 100 km h 0 62 mph:	12.1 seconds
-        Car drive:	Front
+        Car dr
         Car seats:	5
         Car passenger space:	2662 litres (699,49 gallons)
         Car doors:	3
@@ -101,6 +101,9 @@ namespace EngineSimulator
 
     abstract class CarModel
     {
+        // Gravitational Acceleration at the Earths surface. 
+        public const double EARTH_GRAV_CONST = 9.8067;
+
         public abstract List<EnginePointStats> EngineStats { get; }
         public abstract double StaticEngineResistanceForces { get;  } //N*m
         public abstract double DynamicEngineResistancePerRPM { get; } //N*m/RPM
@@ -111,6 +114,8 @@ namespace EngineSimulator
         public abstract double DifferentialRatio { get; }
         public abstract double MaxEngineRPM { get; }
         public abstract double Mass { get; }
+        public abstract double Width{ get; }
+        public abstract double Height{ get; }
         public abstract double[] GearTransmissionRatios { get; }
         public abstract int MaxGear { get; }
         public abstract double WheelMomentum { get; }
@@ -118,6 +123,17 @@ namespace EngineSimulator
         public abstract double WheelsNo { get; }
         public double ExternalResistanceForces { get; set; }
         public double RPM { get; set; }
+
+        //air resistance part
+        public double AirDensity { get { return 1.2; } } //kg/m^2 //source: http://pl.wikipedia.org/wiki/Gęstość_powietrza
+        public abstract double CarDragCoeffcient { get; }
+        public double CarFrontSurface { get { return Height * Width * 0.85; } } //TODO: pod samochodem jest spora szczelina, ktora trzeba uwzglednic (na razie dalem na pale *0.85)
+        public double AerodynemicResistance { get { return CarDragCoeffcient * AirDensity * Math.Pow(SpeedInMetersPerSecond, 2.0) * CarFrontSurface / 2; } }
+
+        //rolling resistance //from: http://www.engineeringtoolbox.com/rolling-friction-resistance-d_1303.html //TODO: make it some better way
+        public abstract double TyrePresure { get; }
+        public double RollingResistanceCoefficient { get { return 0.005 + 1.0 / TyrePresure * (0.01 + 0.0095 * Math.Pow(SpeedInKilometersPerHour / 100.0, 2.0)); } }
+        public double RollingResistance { get { return RollingResistanceCoefficient * Mass * EARTH_GRAV_CONST; } }
 
         private double __THROTTLE_OPPENING_LEVEL__ = 0.0;
         public double ThrottleOppeningLevel
@@ -157,25 +173,28 @@ namespace EngineSimulator
              */
             set
             {
-                double oldTransmissionRate = TransmissionRate;
-                __CURR_GEAR__ = value;
-                double newTranmissionRate = TransmissionRate;
-                double speedBefore = SpeedInKilometersPerHour;
+                if (value != __CURR_GEAR__)
+                {
+                    double oldTransmissionRate = TransmissionRate;
+                    double speedBefore = SpeedInKilometersPerHour;
+                    __CURR_GEAR__ = value;
+                    double newTranmissionRate = TransmissionRate;
 
-                RPM = RPM *
-                    (EngineMomentum +
-                    oldTransmissionRate * WheelMomentum * WheelsNo +
-                    oldTransmissionRate * WheelCircuit * Mass)
-                    /
-                    (EngineMomentum +
-                    newTranmissionRate * WheelMomentum * WheelsNo +
-                    newTranmissionRate * WheelCircuit * Mass);
+                    RPM = RPM *
+                        (EngineMomentum +
+                        oldTransmissionRate * WheelMomentum * WheelsNo +
+                        oldTransmissionRate * WheelCircuit * Mass)
+                        /
+                        (EngineMomentum +
+                        newTranmissionRate * WheelMomentum * WheelsNo +
+                        newTranmissionRate * WheelCircuit * Mass);
 
-                double speedAfter = SpeedInKilometersPerHour;
+                    double speedAfter = SpeedInKilometersPerHour;
 
-                Console.WriteLine("Speed before: {0}", speedBefore);
-                Console.WriteLine("Speed after: {0}", speedAfter);
-                Console.WriteLine("\n\n\n");
+                    Console.WriteLine("Speed before: {0}", speedBefore);
+                    Console.WriteLine("Speed after: {0}", speedAfter);
+                    Console.WriteLine("\n\n\n");
+                }
             }
         }
 
@@ -269,6 +288,8 @@ namespace EngineSimulator
             forceBallance += ForwardForceOnWheelsFromEngine;
             forceBallance -= EngineResistanceForcesOnWheels;
             forceBallance -= ExternalResistanceForces;
+            forceBallance -= AerodynemicResistance;
+            forceBallance -= RollingResistance;
 
             double Acceleration = //a = F/m (but we got some additional radial inetrions, so we have to remember about E = M / I)
                 forceBallance /
@@ -320,7 +341,7 @@ namespace EngineSimulator
         public override int MaxGear { get { return 5; } }
         public override double StaticEngineResistanceForces{get { return 10.0; }}
         public override double DynamicEngineResistancePerRPM { get { return 0.0009; } }
-        public override double EngineMomentum { get { return 1.0; } }
+        public override double EngineMomentum { get { return 8.0; } } //TODO: its actually random value
         public override double Torque { get { return this.GetTorque(RPM); } }
         public override double Power { get { throw new NotImplementedException(); } } //NOTE: I think power is not needed to do anything in a car
         public override double WheelRadius { get { return 14.0 * 2.54 / 2 / 100 + 0.65 * 0.175; } } // = 0,29155m //in meters // wheel: 175/65-R14
@@ -328,7 +349,11 @@ namespace EngineSimulator
         public override double Mass { get { return 984.0; } }
         public override double WheelMomentum { get { return 1.0 / 2.0 * WheelMass * WheelRadius * WheelRadius; } } // 1/2 M * R^2 for cylinder //TODO: calculate it better
         public override double WheelsNo { get { return 4.0; } }
-        public override double WheelMass { get { return 6.5 + 6.5; } } //TODO: find true data //mass of wheel and tire 
+        public override double WheelMass { get { return 6.5 + 6.5; } } //TODO: find true data //mass of wheel and tire
+        public override double CarDragCoeffcient { get { return 0.29; } } //from: http://en.wikipedia.org/wiki/Automobile_drag_coefficient
+        public override double Width { get { return 1.66; } } //from: http://en.wikipedia.org/wiki/Toyota_Vitz
+        public override double Height { get { return 1.51; } }
+        public override double TyrePresure { get { return 1.7; } } //TODO: CHECK IT!!! 
 
         public override void Start()
         {
