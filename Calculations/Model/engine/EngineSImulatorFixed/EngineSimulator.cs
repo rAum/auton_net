@@ -104,18 +104,30 @@ namespace EngineSimulator
         public abstract List<EnginePointStats> EngineStats { get; }
         public abstract double StaticEngineResistanceForces { get;  } //N*m
         public abstract double DynamicEngineResistancePerRPM { get; } //N*m/RPM
-        public abstract double ExternalResistanceForces { get; set; }
+        public double ExternalResistanceForces { get; set; }
         public abstract double EngineMomentum { get; } //kg * m^2
-        public abstract double RPM { get; set; }
+        public double RPM { get; set; }
         public abstract double Torque { get; }
         public abstract double Power { get; }
         public abstract double WheelRadius { get; }
         public abstract double DifferentialRatio { get; }
-        public abstract double ThrottleOppeningLevel { get; set; }
+        private double __THROTTLE_OPPENING_LEVEL__ = 0.0;
+        public double ThrottleOppeningLevel
+        {
+            get { return __THROTTLE_OPPENING_LEVEL__; }
+            set {
+                if (value < 0.0 || value > 1.0)
+                    throw new ArgumentException("throttle oppening level is out of [0,1] range");
+            
+                __THROTTLE_OPPENING_LEVEL__ = value;
+            }
+        }
         public abstract double MaxEngineRPM { get; }
         public abstract double Mass{get;}
 
-        public double Speed { get { return RPM / 60 * TransmissionRate * WheelCircuit; } }
+        public double RPS { get { return RPM / 60; } } //obroty na sekunde
+        public double SpeedInMetersPerSecond { get { return RPS * TransmissionRate * WheelCircuit; } }
+        public double SpeedInKilometersPerHour { get { return SpeedInMetersPerSecond * 3.6; } }
         public double ForwardForceOnWheelsFromEngine { get { return Torque / TransmissionRate / WheelRadius * ThrottleOppeningLevel; } }
         public double WheelCircuit { get { return WheelRadius * 2 * Math.PI; } }
         public double TransmissionRate { get { return GearRatio(CurrGear) * DifferentialRatio; } }
@@ -124,9 +136,44 @@ namespace EngineSimulator
         public double EngineResistanceForces { get { return DynamicEngineResistanceForces + StaticEngineResistanceForces; } }
         public double EngineResistanceForcesOnWheels { get { return EngineResistanceForces / TransmissionRate / WheelRadius; } }
 
-        public abstract int CurrGear { get; set; }
+        private int __CURR_GEAR__ = 1;
+        public int CurrGear
+        {
+            get { return __CURR_GEAR__; }
+            
+            /*
+             *   I assume that total momnentum is unchanged:
+             *   RPS * 
+             *   (M_engine +                                    // engine momentum 
+             *   transmission_rate * M_wheel * no_of_wheels +   // wheels momentum
+             *   transmission_rate * wheel_circuit * car_mass)  // car mass momentum
+             *       = const;
+             */
+            set
+            {
+                double oldTransmissionRate = TransmissionRate;
+                __CURR_GEAR__ = value;
+                double newTranmissionRate = TransmissionRate;
+
+                RPM = RPM *
+                    (EngineMomentum +
+                    oldTransmissionRate * WheelMomentum * WheelsNo +
+                    oldTransmissionRate * WheelCircuit * Mass)
+                    /
+                    (EngineMomentum +
+                    newTranmissionRate * WheelMomentum * WheelsNo +
+                    newTranmissionRate * WheelCircuit * Mass);
+            }
+        }
+        protected abstract double[] GearTransmissionRatios { get; }
         public abstract int MaxGear { get; }
-        public abstract double GearRatio(int gear);
+        public double GearRatio(int gear)
+        {
+            if (gear > MaxGear || gear < 1)
+                throw new ArgumentException("gear is invalid");
+
+            return GearTransmissionRatios[gear - 1];
+        }
 
         public abstract void Start();
 
@@ -197,17 +244,20 @@ namespace EngineSimulator
             new EnginePointStats(6203, 56100, 86.4)
         };
         public override List<EnginePointStats> EngineStats { get { return __ENGINE_STATS__; } }
-        private double[] gearTransmissionRatios = new double[]{
-                0.2820874, // 1
+        private double[]  __GEAR_TRANMISSIONS_RATIOS__ = new double[]{
+                0.2820874, // gear 1
                 0.5227392, // 2
                 0.7633588, // 3
                 0.9737099, // 4
                 1.1764705  // 5
         };
-        public override double DifferentialRatio 
-            //{ get { return 1.0; } }
-        { get { return 1.0/3.550; } }
-       
+        protected override double[] GearTransmissionRatios
+        {
+            get { return __GEAR_TRANMISSIONS_RATIOS__; }
+        }
+
+        public override double DifferentialRatio { get { return 1.0/3.550; } }
+    
         public ToyotaYaris()
         {
             EngineStats.OrderBy(x => x.RPM); //ENGINE STATS HAVE TO BE ORDERED BY RPM
@@ -218,27 +268,14 @@ namespace EngineSimulator
             CurrGear = 1;
         }
 
-        public override int CurrGear { get; set; }
         public override int MaxGear { get { return 5; } }
-        public override double GearRatio(int gear)
-        {
-            if (gear > MaxGear || gear < 1)
-                throw new ArgumentException("gear is invalid");
-
-            return gearTransmissionRatios[gear - 1];
-        }
 
         public override double StaticEngineResistanceForces{get { return 10.0; }}
-        public override double DynamicEngineResistancePerRPM { get { return 0.009; } }
+        public override double DynamicEngineResistancePerRPM { get { return 0.0009; } }
         public override double EngineMomentum { get { return 1.0; } }
-
-        public override double ExternalResistanceForces { get; set; }
-        public override double RPM { get; set; }
 
         public override double Torque { get { return this.GetTorque(RPM); } }
         public override double Power { get { throw new NotImplementedException(); } }
-
-        public override double ThrottleOppeningLevel { get; set; } //in [0,1] range
 
         public override void Start()
         {
@@ -247,15 +284,10 @@ namespace EngineSimulator
 
         // wheel: 175/65-R14
         public override double WheelRadius { get { return 14.0 * 2.54 / 2 / 100 + 0.65 * 0.175; } } // = 0,29155m //in meters
-
         public override double MaxEngineRPM { get { return 7000; } }
-
         public override double Mass { get { return 984.0; } }
-
         public override double WheelMomentum { get { return 1.0 / 2.0 * WheelMass * WheelRadius * WheelRadius; } } // 1/2 M * R^2 for cylinder //TODO: calculate it better
-
         public override double WheelsNo { get { return 4; } }
-
         public override double WheelMass { get { return 6.5 + 6.5; } } //TODO: find true data //mass of wheel and tire 
     }
 
@@ -265,6 +297,7 @@ namespace EngineSimulator
 
         const double SIMULATION_TIMER_INTERVAL_IN_MS = 10.0;
         Timer SimulationTimer = new Timer(SIMULATION_TIMER_INTERVAL_IN_MS);
+        Timer LogTimer = new Timer(1000.0);
         
         public EngineSimulator(CarModel _model)
         {
@@ -294,45 +327,11 @@ namespace EngineSimulator
         {
             TimeSpan timeFromLastTick = DateTime.Now - lastTickTime;
             lastTickTime = DateTime.Now;
-            Console.WriteLine(timeFromLastTick.TotalSeconds);
-
-            //double E_engine = 0;
-
-            //Console.WriteLine("E_engine change on: engine inertion: {0}", model.Torque / model.engineMomentum * model.ThrottleOppeningLevel);
-            //Console.WriteLine("E_engine change on: engine resistance: {0}", model.engineResistanceForces * -1);
-            //Console.WriteLine("E_engine change on: engine dynamic resistance:{0}", model.dynamicEngineResistanceForces * model.RPM * -1);
-            //Console.WriteLine("E_engine change on: external resistance: {0}", model.externalResistanceForces * model.TransmissionRate / model.Wheel_circuit * -1);
-
-            //E_engine += model.Torque / model.engineMomentum * model.ThrottleOppeningLevel; //E = epsilon //bezwladnosc silnika //NOTE: tutaj dodawać następne bezwładności
-            //if(model.RPM > 0) E_engine -= model.engineResistanceForces; //opory tarcia silnika
-            //if (model.RPM > 0) E_engine -= model.externalResistanceForces * model.TransmissionRate / model.Wheel_circuit; //sily zewnetrzne
-
-            //model.RPM += E_engine * (SIMULATION_TIMER_INTERVAL_IN_MS / 1000) * 60;
-
-            //if (model.RPM < 0)
-            //{
-            //    model.RPM = 0;
-            //}
-
-            //new way of calculations (basing on force on wheels)
             double forceBallance = 0;
 
             forceBallance += model.ForwardForceOnWheelsFromEngine;
             forceBallance -= model.EngineResistanceForcesOnWheels;
             forceBallance -= model.ExternalResistanceForces;
-
-            //double Epsilon_engine = 
-            //    ForceBallance /
-            //        (model.engineMomentum / model.TransmissionRate / model.WheelRadius +
-            //        model.WheelsNo * model.WheelMomentum / model.WheelRadius +
-            //        model.Mass / model.WheelRadius);
-
-            //model.RPM += Epsilon_engine * (SIMULATION_TIMER_INTERVAL_IN_MS / 1000) * 60;
-
-            //if (model.RPM < 0)
-            //{
-            //    model.RPM = 0;
-            //}
 
             double Acceleration = //a = F/m (but we got some additional radial inetrions, so we have to remember about E = M / I)
                 forceBallance /
