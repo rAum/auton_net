@@ -127,6 +127,9 @@ namespace EngineSimulator
         public abstract double MaxBreakingForcePerWheel { get; }
         public abstract int BrakingWheelsNo { get; }
         public double DistanceDoneInMeters { get; set; }
+        public abstract int AcceleratingWheelsNo { get; }
+        public double StaticFrictionFactor { get; set; } //set coz it van vary when evironment changes
+        public double KineticFrictionFactor { get; set; } //set coz it van vary when evironment changes
 
         //air resistance part
         public double AirDensity { get { return 1.2; } } //kg/m^2 //source: http://pl.wikipedia.org/wiki/Gęstość_powietrza
@@ -282,17 +285,47 @@ namespace EngineSimulator
         {
             TimeSpan timeFromLastTick = DateTime.Now - lastTickTime;
             lastTickTime = DateTime.Now;
-            double forceBallance = 0;
+            double tyresForceBallance = 0;
 
-            forceBallance += ForwardForceOnWheelsFromEngine;
-            forceBallance -= EngineResistanceForcesOnWheels;
-            forceBallance -= ExternalResistanceForces;
-            forceBallance -= AerodynemicResistance;
-            forceBallance -= RollingResistance;
-            forceBallance -= BrakingForce * Math.Sign(SpeedInMetersPerSecond); //force opposite to speed vector
+            tyresForceBallance += ForwardForceOnWheelsFromEngine;
+            tyresForceBallance -= EngineResistanceForcesOnWheels;
+            tyresForceBallance -= RollingResistance;
+            tyresForceBallance -= BrakingForce * Math.Sign(SpeedInMetersPerSecond); //force opposite to speed vector
+
+            double carForceBallance = 0;
+
+            int workingWheels;
+            if (BrakingForce * Math.Sign(SpeedInMetersPerSecond) > ForwardForceOnWheelsFromEngine - EngineResistanceForcesOnWheels - RollingResistance)
+            {
+                workingWheels = BrakingWheelsNo;
+            }
+            else
+            {
+                workingWheels = AcceleratingWheelsNo;
+            }
+
+            if (Math.Abs(tyresForceBallance) < Mass * EARTH_GRAV_CONST * StaticFrictionFactor * workingWheels / WheelsNo)
+            {
+                carForceBallance = tyresForceBallance;
+            }
+            else
+            {
+                carForceBallance = Math.Sign(tyresForceBallance) * Mass * EARTH_GRAV_CONST * DynamicEngineResistanceForces * workingWheels / WheelsNo; 
+                /*
+                 * IMPORTANT: NOTE: 
+                 * this model just wastes energy of slide
+                 * 
+                 * in real this energy forces wheels to move wheels and engine faster, but not accelerate the car
+                 */
+
+                //TODO: fix it by adding some variables for connections (engine <---> wheels) and (wheels <---> enviroment)
+            }
+
+            carForceBallance -= AerodynemicResistance;
+            tyresForceBallance -= ExternalResistanceForces;
 
             double Acceleration = //a = F/m (but we got some additional radial inetrions, so we have to remember about E = M / I)
-                forceBallance /
+                carForceBallance /
                     (Mass +
                     EngineMomentum / TransmissionRate / WheelRadius + // engine inertion
                     WheelsNo * WheelMomentum / WheelRadius); // wheels inertion
@@ -358,6 +391,14 @@ namespace EngineSimulator
         public override double TyrePresure { get { return 1.7; } } //TODO: CHECK IT!!! 
         public override double MaxBreakingForcePerWheel { get { return 5000.0; } }  //TODO: its complately random value, but seems legit (excluding sliding)
         public override int BrakingWheelsNo { get { return 2; } } //only front wheels are breaking
+        public override int AcceleratingWheelsNo { get { return 2; } }
+
+        public ToyotaYaris()
+        {
+            //tarcie guma-asfalt bazujac na SLABYCH zrodlach z neta //TODO: find some real data
+            StaticFrictionFactor = 0.9; 
+            KineticFrictionFactor = 0.6; 
+        }
 
         public override void Start()
         {

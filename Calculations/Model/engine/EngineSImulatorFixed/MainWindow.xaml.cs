@@ -44,7 +44,7 @@ namespace EngineSimulator
             this.Dispatcher.Invoke(new Action<double>(x => this.TextBlock_trasmissionRate.Text = x.ToString("0.0000")), 1.0/sim.model.TransmissionRate);
             this.Dispatcher.Invoke(new Action<double>(x => this.TextBlock_aerodynamicResistance.Text = x.ToString("0.0") + " N"), sim.model.AerodynemicResistance);
             this.Dispatcher.Invoke(new Action<double>(x => this.TextBlock_rollingResistance.Text = x.ToString("0.0") + " N"), sim.model.RollingResistance);
-            this.Dispatcher.Invoke(new Action<double>(x => this.TextBlock_distanceDone.Text = x.ToString() + " m"), sim.model.DistanceDoneInMeters);
+            this.Dispatcher.Invoke(new Action<double>(x => this.TextBlock_distanceDone.Text = x.ToString("0.0") + " m"), sim.model.DistanceDoneInMeters);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
