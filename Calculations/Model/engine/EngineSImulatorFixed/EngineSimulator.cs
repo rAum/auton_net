@@ -123,6 +123,10 @@ namespace EngineSimulator
         public abstract double WheelsNo { get; }
         public double ExternalResistanceForces { get; set; }
         public double RPM { get; set; }
+        public double BrakingLevel { get; set; } // in range [0,1]
+        public abstract double MaxBreakingForcePerWheel { get; }
+        public abstract int BrakingWheelsNo { get; }
+        public double DistanceDoneInMeters { get; set; }
 
         //air resistance part
         public double AirDensity { get { return 1.2; } } //kg/m^2 //source: http://pl.wikipedia.org/wiki/Gęstość_powietrza
@@ -157,6 +161,7 @@ namespace EngineSimulator
         public double DynamicEngineResistanceForces { get { return DynamicEngineResistancePerRPM * RPM; } }
         public double EngineResistanceForces { get { return DynamicEngineResistanceForces + StaticEngineResistanceForces; } }
         public double EngineResistanceForcesOnWheels { get { return EngineResistanceForces / TransmissionRate / WheelRadius; } }
+        public double BrakingForce { get { return BrakingLevel * BrakingWheelsNo * MaxBreakingForcePerWheel; } }
 
         private int __CURR_GEAR__ = 1;
         public int CurrGear
@@ -176,7 +181,6 @@ namespace EngineSimulator
                 if (value != __CURR_GEAR__)
                 {
                     double oldTransmissionRate = TransmissionRate;
-                    double speedBefore = SpeedInKilometersPerHour;
                     __CURR_GEAR__ = value;
                     double newTranmissionRate = TransmissionRate;
 
@@ -188,12 +192,6 @@ namespace EngineSimulator
                         (EngineMomentum +
                         newTranmissionRate * WheelMomentum * WheelsNo +
                         newTranmissionRate * WheelCircuit * Mass);
-
-                    double speedAfter = SpeedInKilometersPerHour;
-
-                    Console.WriteLine("Speed before: {0}", speedBefore);
-                    Console.WriteLine("Speed after: {0}", speedAfter);
-                    Console.WriteLine("\n\n\n");
                 }
             }
         }
@@ -212,6 +210,7 @@ namespace EngineSimulator
             ExternalResistanceForces = 0;
             ThrottleOppeningLevel = 0;
             CurrGear = 1;
+            DistanceDoneInMeters = 0;
         }
 
         public abstract void Start();
@@ -290,6 +289,7 @@ namespace EngineSimulator
             forceBallance -= ExternalResistanceForces;
             forceBallance -= AerodynemicResistance;
             forceBallance -= RollingResistance;
+            forceBallance -= BrakingForce * Math.Sign(SpeedInMetersPerSecond); //force opposite to speed vector
 
             double Acceleration = //a = F/m (but we got some additional radial inetrions, so we have to remember about E = M / I)
                 forceBallance /
@@ -305,6 +305,8 @@ namespace EngineSimulator
             {
                 RPM = 0;
             }
+
+            DistanceDoneInMeters += Math.Abs(SpeedInMetersPerSecond) * timeFromLastTick.TotalSeconds;
         }
     }
 
@@ -354,6 +356,8 @@ namespace EngineSimulator
         public override double Width { get { return 1.66; } } //from: http://en.wikipedia.org/wiki/Toyota_Vitz
         public override double Height { get { return 1.51; } }
         public override double TyrePresure { get { return 1.7; } } //TODO: CHECK IT!!! 
+        public override double MaxBreakingForcePerWheel { get { return 5000.0; } }  //TODO: its complately random value, but seems legit (excluding sliding)
+        public override int BrakingWheelsNo { get { return 2; } } //only front wheels are breaking
 
         public override void Start()
         {

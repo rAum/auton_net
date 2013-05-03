@@ -44,6 +44,7 @@ namespace EngineSimulator
             this.Dispatcher.Invoke(new Action<double>(x => this.TextBlock_trasmissionRate.Text = x.ToString("0.0000")), 1.0/sim.model.TransmissionRate);
             this.Dispatcher.Invoke(new Action<double>(x => this.TextBlock_aerodynamicResistance.Text = x.ToString("0.0") + " N"), sim.model.AerodynemicResistance);
             this.Dispatcher.Invoke(new Action<double>(x => this.TextBlock_rollingResistance.Text = x.ToString("0.0") + " N"), sim.model.RollingResistance);
+            this.Dispatcher.Invoke(new Action<double>(x => this.TextBlock_distanceDone.Text = x.ToString() + " m"), sim.model.DistanceDoneInMeters);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -74,12 +75,21 @@ namespace EngineSimulator
 
         private void slider_acceleration_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            Console.WriteLine("acceleration changed to: {0}", e.NewValue / 100);
-            sim.model.ThrottleOppeningLevel = e.NewValue / 100;
+            sim.model.ThrottleOppeningLevel = e.NewValue / 100.0;
 
             if (this.TextBlock_acceleration != null)
             {
                 this.TextBlock_acceleration.Text = String.Format("{0}", e.NewValue.ToString("0.0"));
+            }
+        }
+
+        private void Slider_braking_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            sim.model.BrakingLevel = e.NewValue / 100.0;
+
+            if (this.TextBlock_braking != null)
+            {
+                this.TextBlock_braking.Text = String.Format("{0}", e.NewValue.ToString("0.0"));
             }
         }
     }
