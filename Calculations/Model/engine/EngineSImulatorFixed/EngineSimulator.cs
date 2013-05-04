@@ -310,7 +310,7 @@ namespace EngineSimulator
             }
             else
             {
-                carForceBallance = Math.Sign(tyresForceBallance) * Mass * EARTH_GRAV_CONST * DynamicEngineResistanceForces * workingWheels / WheelsNo; 
+                carForceBallance = Math.Sign(tyresForceBallance) * Mass * EARTH_GRAV_CONST * KineticFrictionFactor * workingWheels / WheelsNo; 
                 /*
                  * IMPORTANT: NOTE: 
                  * this model just wastes energy of slide
@@ -319,10 +319,11 @@ namespace EngineSimulator
                  */
 
                 //TODO: fix it by adding some variables for connections (engine <---> wheels) and (wheels <---> enviroment)
+                Console.Write("IM SLIDING ");
             }
 
             carForceBallance -= AerodynemicResistance;
-            tyresForceBallance -= ExternalResistanceForces;
+            carForceBallance -= ExternalResistanceForces;
 
             double Acceleration = //a = F/m (but we got some additional radial inetrions, so we have to remember about E = M / I)
                 carForceBallance /
@@ -334,7 +335,7 @@ namespace EngineSimulator
 
             RPM += Epsilon_engine * timeFromLastTick.TotalSeconds * 60.0;
 
-            if (RPM < 0)
+            if (RPM < 5)
             {
                 RPM = 0;
             }
@@ -389,7 +390,7 @@ namespace EngineSimulator
         public override double Width { get { return 1.66; } } //from: http://en.wikipedia.org/wiki/Toyota_Vitz
         public override double Height { get { return 1.51; } }
         public override double TyrePresure { get { return 1.7; } } //TODO: CHECK IT!!! 
-        public override double MaxBreakingForcePerWheel { get { return 5000.0; } }  //TODO: its complately random value, but seems legit (excluding sliding)
+        public override double MaxBreakingForcePerWheel { get { return 10000.0; } }  //TODO: its complately random value, but seems legit (excluding sliding)
         public override int BrakingWheelsNo { get { return 2; } } //only front wheels are breaking
         public override int AcceleratingWheelsNo { get { return 2; } }
 
