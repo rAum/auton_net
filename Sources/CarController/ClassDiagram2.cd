@@ -19,7 +19,7 @@
     <Position X="8.109" Y="10.259" Height="0.419" Width="1.314" />
   </Comment>
   <Comment CommentText="OBSOLETE">
-    <Position X="27.014" Y="0.5" Height="0.75" Width="1.7" />
+    <Position X="29.514" Y="0.5" Height="0.75" Width="1.7" />
   </Comment>
   <Comment CommentText="Device manager">
     <Position X="8.042" Y="3.932" Height="0.419" Width="1.229" />
@@ -57,7 +57,7 @@
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>CKgBAAayAWAioAEQAGAAAhCAgAIhAIAhIEEACACWAgI=</HashCode>
+      <HashCode>CKgAAAayAWAioAEQAGAAAhCAgAIhAIAhIEEACACWAgI=</HashCode>
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -200,7 +200,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="CarController_old.RS232Controller" Collapsed="true">
-    <Position X="25.25" Y="0.5" Width="1.5" />
+    <Position X="27.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>RECAgJAQAkQAJyADCJgcymJEAAQgQJggAAgCDQBIgEA=</HashCode>
       <FileName>Model\Communicators\RS232_old.cs</FileName>
@@ -223,14 +223,14 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="car_communicator.ServoDriver" Collapsed="true">
-    <Position X="25.25" Y="4" Width="1.5" />
+    <Position X="27.75" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACCgABAAAAAQUGAIAAAAAAQBAAgIEAAIgAQAAAAAA=</HashCode>
       <FileName>Model\Communicators\ServoDriver.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="car_communicator.USB4702" Collapsed="true">
-    <Position X="23.25" Y="4" Width="1.5" />
+    <Position X="26" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAIEDCODUREQAQYOJMJIQAQIIAGCIpYAAplACgEGkAE=</HashCode>
       <FileName>Model\Communicators\USB4702.cs</FileName>
@@ -276,14 +276,14 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CarController.Model.Communicators.SafeRS232Communicator" Collapsed="true">
-    <Position X="30" Y="4" Width="1.5" />
+    <Position X="32.5" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AIAAgBAQAAAAAQAEAAAAQACEAAgAAAgAAAAADoHgCAI=</HashCode>
       <FileName>Model\Communicators\SafeRS232Communicator.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CarController.Model.Communicators.SafeRS232Controller" Collapsed="true">
-    <Position X="27.25" Y="4" Width="2" />
+    <Position X="29.75" Y="4" Width="2" />
     <TypeIdentifier>
       <HashCode>QQGAAIgAAgQAJyAHAIgUgqJAAIAAAJAAAAgAAQAAAEA=</HashCode>
       <FileName>Model\Communicators\SafeRS232Controller.cs</FileName>
@@ -301,8 +301,39 @@
     <TypeIdentifier />
   </Class>
   <Class Name="Helpers.Device" Collapsed="true">
-    <Position X="25.25" Y="2.75" Width="1.5" />
+    <Position X="27.75" Y="2.75" Width="1.5" />
     <TypeIdentifier />
+  </Class>
+  <Class Name="CarController.RS232Controller" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QECAgJAQAkQAJyABCBgcymJEAAQgQBggAAACDQBIgEA=</HashCode>
+      <FileName>Model\Communicators\RS232.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CarController.Model.Communicators.MaxTriesToConnectRS232ExceededException" Collapsed="true">
+    <Position X="3.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Communicators\SafeRS232Communicator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CarController.Model.Communicators.Speedometer" Collapsed="true">
+    <Position X="22.5" Y="4" Width="1.5" />
+    <NestedTypes>
+      <Struct Name="CarController.Model.Communicators.Speedometer.SpeedMeasurementPoint" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Model\Communicators\Speedometer.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAIABAQIAEAQAGAKAAAAEAAAChAIBAAAgAACgAAAA=</HashCode>
+      <FileName>Model\Communicators\Speedometer.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="extentionCardCommunicator" />
+    </ShowAsAssociation>
   </Class>
   <Interface Name="CarController.ICar">
     <Position X="17" Y="5" Width="1.75" />
