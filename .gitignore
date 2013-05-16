@@ -58,3 +58,12 @@ ipch/
 *.psess
 *.vsp
 *.vspx
+
+# ROS intermediate/output files
+ros/robocar-debug/debug
+ros/robocar-debug/release
+
+# QtCreator temporary files
+*.pro.user
+*.pro.user.*
+
