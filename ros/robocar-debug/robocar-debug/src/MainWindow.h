@@ -55,11 +55,25 @@ private slots:
      */
     void on_btnRefreshTopicList_clicked();
 
+    void on_actionArrangeRows_triggered();
+
+    void on_actionArrangeColumns_triggered();
+
+    void on_actionArrangeGrid_triggered();
+
 private:
     /**
      * @brief Refreshes ROS topics list.
      */
     void refreshTopicsList();
+
+    /**
+     * @brief Arranges opened ROS windows into a grid.
+     */
+    void arrangeRosWindows(
+        int rows,   /**< Number of grid rows. */
+        int cols    /**< Number of grid cols. */
+    );
 
     /** Window controls handle */
     Ui::MainWindow *ui;

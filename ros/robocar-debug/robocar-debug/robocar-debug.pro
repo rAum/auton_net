@@ -34,8 +34,4 @@ FORMS    += mainwindow.ui
 
 unix:!macx:!symbian: LIBS += -L/opt/ros/groovy/lib/ -lcpp_common -lroscpp -lrosconsole -lroscpp_serialization
 
-INCLUDEPATH += \
-    $$PWD/src \
-    $$PWD/../ros-proxy/include
-
-DEPENDPATH += $$PWD/../ros-proxy/include
+INCLUDEPATH += $$PWD/src

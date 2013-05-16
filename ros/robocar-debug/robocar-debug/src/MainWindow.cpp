@@ -4,7 +4,9 @@
 #include <cstdio>
 
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(
+    QWidget *parent
+):
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     mRosSpinTimer(new QTimer(this))
@@ -29,8 +31,9 @@ void MainWindow::doRosSpin()
     ros::spinOnce();
 }
 
-void MainWindow::on_listTopics_itemDoubleClicked(QListWidgetItem *item)
-{
+void MainWindow::on_listTopics_itemDoubleClicked(
+    QListWidgetItem *item
+) {
     std::string rosTopicName = item->text().toStdString();
 
     boost::shared_ptr<rosgui::Window> subscriber =
@@ -66,6 +69,29 @@ void MainWindow::refreshTopicsList()
     pclose(availableTopics);
 }
 
+void MainWindow::arrangeRosWindows(
+    int rows,
+    int cols
+) {
+    qDebug("arranging: %d rows, %d cols\n", rows, cols);
+
+    int wndWidth = ui->mdiArea->width() / cols;
+    int wndHeight = ui->mdiArea->height() / rows;
+
+    for (int row = 0; row < rows; ++row)
+    {
+        for (int col = 0; col < cols; ++col)
+        {
+            int idx = row * cols + col;
+            if (idx >= (int)mSubscribers.size())
+                return; // all windows arranged
+
+            mSubscribers[idx]->resize(wndWidth, wndHeight);
+            mSubscribers[idx]->move(col * wndWidth, row * wndHeight);
+        }
+    }
+}
+
 void MainWindow::on_btnRefreshTopicList_clicked()
 {
     ui->btnRefreshTopicList->setEnabled(false);
@@ -74,4 +100,22 @@ void MainWindow::on_btnRefreshTopicList_clicked()
 
     ui->btnRefreshTopicList->setEnabled(true);
     ui->statusBar->showMessage("Topics list refreshed!", 2000);
+}
+
+void MainWindow::on_actionArrangeRows_triggered()
+{
+    arrangeRosWindows(mSubscribers.size(), 1);
+}
+
+void MainWindow::on_actionArrangeColumns_triggered()
+{
+    arrangeRosWindows(1, mSubscribers.size());
+}
+
+void MainWindow::on_actionArrangeGrid_triggered()
+{
+    int cols = (int)ceil(sqrt((double)mSubscribers.size()));
+    int rows = (int)ceil((double)mSubscribers.size() / (double)cols);
+
+    arrangeRosWindows(rows, cols);
 }
