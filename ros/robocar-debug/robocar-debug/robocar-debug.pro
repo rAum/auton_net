@@ -32,7 +32,6 @@ HEADERS  += \
 
 FORMS    += mainwindow.ui
 
-unix:!macx:!symbian: LIBS += -L$$PWD/../ros-proxy/bin/ -lros-proxy
 unix:!macx:!symbian: LIBS += -L/opt/ros/groovy/lib/ -lcpp_common -lroscpp -lrosconsole -lroscpp_serialization
 
 INCLUDEPATH += \
