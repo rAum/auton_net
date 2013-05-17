@@ -31,6 +31,17 @@ void MainWindow::doRosSpin()
     ros::spinOnce();
 }
 
+void MainWindow::onSubscriberWindowClosed(
+    rosgui::Window *closedWindow
+) {
+    for (auto it = mSubscribers.begin(); it != mSubscribers.end(); ++it)
+        if (it->get() == closedWindow)
+        {
+            mSubscribers.erase(it);
+            break;
+        }
+}
+
 void MainWindow::on_listTopics_itemDoubleClicked(
     QListWidgetItem *item
 ) {
@@ -43,8 +54,39 @@ void MainWindow::on_listTopics_itemDoubleClicked(
     {
         subscriber->show();
         mSubscribers.push_back(subscriber);
+
+        connect(subscriber.get(), SIGNAL(windowClosed(rosgui::Window*)), this, SLOT(onSubscriberWindowClosed(rosgui::Window*)));
     }
 }
+
+void MainWindow::on_btnRefreshTopicList_clicked()
+{
+    ui->btnRefreshTopicList->setEnabled(false);
+
+    refreshTopicsList();
+
+    ui->btnRefreshTopicList->setEnabled(true);
+    ui->statusBar->showMessage("Topics list refreshed!", 2000);
+}
+
+void MainWindow::on_actionArrangeRows_triggered()
+{
+    arrangeRosWindows(mSubscribers.size(), 1);
+}
+
+void MainWindow::on_actionArrangeColumns_triggered()
+{
+    arrangeRosWindows(1, mSubscribers.size());
+}
+
+void MainWindow::on_actionArrangeGrid_triggered()
+{
+    int cols = (int)ceil(sqrt((double)mSubscribers.size()));
+    int rows = (int)ceil((double)mSubscribers.size() / (double)cols);
+
+    arrangeRosWindows(rows, cols);
+}
+
 
 void MainWindow::refreshTopicsList()
 {
@@ -90,32 +132,4 @@ void MainWindow::arrangeRosWindows(
             mSubscribers[idx]->move(col * wndWidth, row * wndHeight);
         }
     }
-}
-
-void MainWindow::on_btnRefreshTopicList_clicked()
-{
-    ui->btnRefreshTopicList->setEnabled(false);
-
-    refreshTopicsList();
-
-    ui->btnRefreshTopicList->setEnabled(true);
-    ui->statusBar->showMessage("Topics list refreshed!", 2000);
-}
-
-void MainWindow::on_actionArrangeRows_triggered()
-{
-    arrangeRosWindows(mSubscribers.size(), 1);
-}
-
-void MainWindow::on_actionArrangeColumns_triggered()
-{
-    arrangeRosWindows(1, mSubscribers.size());
-}
-
-void MainWindow::on_actionArrangeGrid_triggered()
-{
-    int cols = (int)ceil(sqrt((double)mSubscribers.size()));
-    int rows = (int)ceil((double)mSubscribers.size() / (double)cols);
-
-    arrangeRosWindows(rows, cols);
 }

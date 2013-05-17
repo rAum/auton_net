@@ -29,6 +29,12 @@ namespace rosgui
     {
         Q_OBJECT
 
+    signals:
+        /**
+         * @brief Signal sent when the window is closed.
+         */
+        void windowClosed(rosgui::Window*);
+
     public:
         /**
          * @brief Factory function that creates a specific window.

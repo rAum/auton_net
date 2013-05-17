@@ -44,6 +44,13 @@ private slots:
     void doRosSpin();
 
     /**
+     * @brief Slot - removes given window from the active subscribers list.
+     */
+    void onSubscriberWindowClosed(
+        rosgui::Window* closedWindow
+    );
+
+    /**
      * @brief Slot - opens a window and connects it to ROS topic.
      */
     void on_listTopics_itemDoubleClicked(
@@ -55,10 +62,19 @@ private slots:
      */
     void on_btnRefreshTopicList_clicked();
 
+    /**
+     * @brief Slot - arranges subscriber windows in rows.
+     */
     void on_actionArrangeRows_triggered();
 
+    /**
+     * @brief Slot - arranges subscriber windows in columns.
+     */
     void on_actionArrangeColumns_triggered();
 
+    /**
+     * @brief Slot - arranges subscriber windows in a grid.
+     */
     void on_actionArrangeGrid_triggered();
 
 private:

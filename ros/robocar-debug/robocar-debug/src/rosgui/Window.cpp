@@ -62,5 +62,8 @@ namespace rosgui
 
         // unsubscribe
         mSubscriber = ros::Subscriber();
+
+        // notify parent
+        emit windowClosed(this);
     }
 }
