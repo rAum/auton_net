@@ -51,6 +51,11 @@ namespace EngineSimulator
         public double StaticFrictionFactor { get; set; } //set coz it van vary when evironment changes
         public double KineticFrictionFactor { get; set; } //set coz it van vary when evironment changes
 
+        //automatic gearbox part
+        public abstract bool IsGearBoxAutomatic { get; }
+        public abstract double RpmToRaiseGearOnAutomaticGearbox { get; }
+        public abstract double RpmToLowerGearOnAutomaticGearbox { get; }
+
         //air resistance part
         public double AirDensity { get { return 1.2; } } //kg/m^2 //source: http://pl.wikipedia.org/wiki/Gęstość_powietrza
         public abstract double CarDragCoeffcient { get; }
@@ -255,12 +260,36 @@ namespace EngineSimulator
 
             RPM += Epsilon_engine * timeFromLastTick.TotalSeconds * 60.0;
 
+            if (IsGearBoxAutomatic)
+            {
+                MakeAutoGearChanges();
+            }
+
             if (RPM < 5)
             {
                 RPM = 0;
             }
 
             DistanceDoneInMeters += Math.Abs(SpeedInMetersPerSecond) * timeFromLastTick.TotalSeconds;
+        }
+
+        private void MakeAutoGearChanges()
+        {
+            if (RPM > RpmToRaiseGearOnAutomaticGearbox) 
+            {
+                if (CurrGear < MaxGear)
+                {
+                    CurrGear++;
+                }
+            }
+
+            if (RPM < RpmToLowerGearOnAutomaticGearbox)
+            {
+                if (CurrGear > 1)
+                {
+                    CurrGear--;
+                }
+            }
         }
     }
 }

@@ -134,6 +134,9 @@ namespace EngineSimulator
         public override double MaxBreakingForcePerWheel { get { return 10000.0; } }  //TODO: its complately random value, but seems legit (excluding sliding)
         public override int BrakingWheelsNo { get { return 2; } } //only front wheels are breaking
         public override int AcceleratingWheelsNo { get { return 2; } }
+        public override bool IsGearBoxAutomatic { get { return true; } }
+        public override double RpmToRaiseGearOnAutomaticGearbox { get { return 5300; } } //TODO: IMPORTANT: It is complately random value
+        public override double RpmToLowerGearOnAutomaticGearbox { get { return 2000; } } //TODO: IMPORTANT: It is complately random value
 
         public ToyotaYaris()
         {
@@ -146,5 +149,7 @@ namespace EngineSimulator
         {
             RPM = 1000;
         }
+
+
     }
 }
