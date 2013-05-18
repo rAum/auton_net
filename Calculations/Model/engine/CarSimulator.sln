@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineSImulatorFixed", "EngineSImulatorFixed\EngineSImulatorFixed.csproj", "{C62CA2BF-63CB-4173-A14B-7F3CA9D8EB70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarSimulator", "EngineSImulatorFixed\CarSimulator.csproj", "{C62CA2BF-63CB-4173-A14B-7F3CA9D8EB70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

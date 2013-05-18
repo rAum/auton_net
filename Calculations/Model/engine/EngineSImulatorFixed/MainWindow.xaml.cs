@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Timers;
 
-namespace EngineSimulator
+namespace CarSimulator
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
