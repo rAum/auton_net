@@ -60,7 +60,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CarModel.cs" />
     <Compile Include="EngineSimulator.cs" />
+    <Compile Include="ToyotaYaris.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainWindow.xaml.cs">
