@@ -106,6 +106,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\Regulators\MFCSPeedRegulator.cs" />
     <Compile Include="Model\Communicators\RS232_old.cs" />
     <Compile Include="Model\Communicators\SafeRS232Communicator.cs" />
     <Compile Include="Model\Communicators\SafeRS232Controller.cs" />
@@ -172,6 +173,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CarSimulator\CarSimulator.csproj">
+      <Project>{c62ca2bf-63cb-4173-a14b-7f3ca9d8eb70}</Project>
+      <Name>CarSimulator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Helpers\Helpers.csproj">
       <Project>{AC8330CF-3F32-45C6-B8E8-5BE9F8AFF33D}</Project>
       <Name>Helpers</Name>

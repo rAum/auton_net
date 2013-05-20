@@ -50,33 +50,58 @@ namespace CarController.Model.Communicators
 
             SpeedMeasuringTimer.Elapsed += SpeedMeasuringTimer_Tick;
         }
-        
+
+        volatile bool speedMeasuringOngoing = false;
+        Object speedMeasuringLock = new Object();
         void SpeedMeasuringTimer_Tick(object sender, EventArgs e)
         {
-            int ticks = extentionCardCommunicator.getSpeedCounterStatus();
-            int newTicks = ticks - lastTicks;
-            measurePoints.AddLast(new SpeedMeasurementPoint(newTicks));
-            
-            CleanUpMeasurePoints();
-
-            TimeSpan totalTimeOnMeasurementsList = measurePoints.Last().measurementTime - measurePoints.First().measurementTime;
-            int totalTicksOnMeasurementsList = measurePoints.Sum(x => x.ticks);
-
-            double speedInMetersPerSecond = totalTicksOnMeasurementsList * DISTANCE_PER_HAAL_METER_CATCHED / totalTimeOnMeasurementsList.TotalSeconds;
-
-            if (ticks > TICKS_TO_RESTART)
+            if (speedMeasuringOngoing)
             {
-                extentionCardCommunicator.RestartSpeedCounter();
-                lastTicks = 0;
+                return;
             }
 
-            SpeedInfoReceivedEventHander SpeedEvent = evSpeedInfoReceived;
-            if (SpeedEvent != null)
+            lock (speedMeasuringLock)
             {
-                SpeedEvent(this, new SpeedInfoReceivedEventArgs(speedInMetersPerSecond));
-            }
+                try
+                {
+                    speedMeasuringOngoing = true;
+                    int ticks = extentionCardCommunicator.getSpeedCounterStatus();
+                    int newTicks = ticks - lastTicks;
+                    measurePoints.AddLast(new SpeedMeasurementPoint(newTicks));
 
-            lastTicks = ticks;
+                    CleanUpMeasurePoints();
+
+                    TimeSpan totalTimeOnMeasurementsList = measurePoints.Last().measurementTime - measurePoints.First().measurementTime;
+                    int totalTicksOnMeasurementsList = measurePoints.Sum(x => x.ticks);
+
+                    double speedInMetersPerSecond = totalTicksOnMeasurementsList * DISTANCE_PER_HAAL_METER_CATCHED / totalTimeOnMeasurementsList.TotalSeconds;
+
+                    if (ticks > TICKS_TO_RESTART)
+                    {
+                        extentionCardCommunicator.RestartSpeedCounter();
+                        lastTicks = 0;
+                    }
+
+                    if (Double.IsNaN(speedInMetersPerSecond) || Double.IsInfinity(speedInMetersPerSecond)) //WORKARROUND
+                    {
+                        Logger.Log(this, "speed from speedometer is NaN", 2);
+                    }
+                    else
+                    {
+                        SpeedInfoReceivedEventHander SpeedEvent = evSpeedInfoReceived;
+                        if (SpeedEvent != null)
+                        {
+                            SpeedEvent(this, new SpeedInfoReceivedEventArgs(speedInMetersPerSecond));
+                        }
+                    }
+
+                    lastTicks = ticks;
+                }
+                finally
+                {
+                    speedMeasuringOngoing = false;
+                }
+            }
         }
 
         /// <summary>

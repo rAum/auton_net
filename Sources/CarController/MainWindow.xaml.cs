@@ -27,7 +27,7 @@ namespace CarController
 
         private const int TARGET_BRAKE_SETTING_WHEN_MANUAL_BRAKING_ON = 100;
         private const int BRAKE_ACTIVATION_TIME_ON_SPACE_PRESSING_IN_MS = 500; //its much too much, but smaller values blinks at start
-        private const int MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS = 10; 
+        private const int MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS = 20; 
         private const int MAX_BACKWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS = -10; //it should be < 0 !
         private const int MAX_WHEEL_ANGLE_VALEUE_WHEN_DRIVING_ON_GAMEPAD = 30;
         private const int MAX_WHEEL_ANGLE_CHANGE_PER_SEC_WHEN_DRIVING_ON_GAMEPAD = 10;
@@ -276,6 +276,28 @@ namespace CarController
             }
         }
 
+        private void UpdateProgressBar(ProgressBar progressBar, double valueToSet, LabelData labelData)
+        {
+            labelData.newValue = valueToSet;
+            if (labelData.newValue != labelData.setValue)
+            {
+                if (!labelData.labelSetInvokeAwaiting)
+                {
+                    labelData.labelSetInvokeAwaiting = true;
+                    this.Dispatcher.Invoke(
+                        new Action<TextBlock, double>((textBox, val) =>
+                        {
+                            progressBar.Value = valueToSet;
+                            labelData.setValue = val;
+                            labelData.labelSetInvokeAwaiting = false;
+                        }),
+                            progressBar,
+                            labelData.newValue
+                    );
+                }
+            }
+        }
+
         /* 
          * below actions are done in order to fix stack overflow error which was happening in here
          *      (when there was just invoke on event like commented bellow)
@@ -326,6 +348,7 @@ namespace CarController
         void Model_evTargetSteeringWheelAngleChanged(object sender, TargetSteeringWheelAngleChangedEventArgs args)
         {
             UpdateTextBlock(textBlock_targetAngle, args.GetTargetWheelAngle(), targetBrakeLabelData);
+            //UpdateProgressBar(progressBar_rightDir, args.GetTargetWheelAngle, 
         }
 
         LabelData currentSpeedLabelData = new LabelData();

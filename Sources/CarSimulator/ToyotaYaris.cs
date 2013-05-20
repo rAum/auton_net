@@ -85,7 +85,7 @@ namespace CarSimulator
      */
 
 
-    class ToyotaYaris : CarModel
+    public class ToyotaYaris : CarModel
     {
         private List<EnginePointStats> __ENGINE_STATS__ = new List<EnginePointStats>()     
         {

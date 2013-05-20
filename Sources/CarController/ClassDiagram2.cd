@@ -57,7 +57,7 @@
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>CKgAAAayAWAioAEQAGAAAhCAgAIhAIAhIEEACACWAgI=</HashCode>
+      <HashCode>CKgAAAayAWAioAEQAGAAAhCAgAIhAJAhIEEACACWAgI=</HashCode>
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -292,10 +292,6 @@
       <Field Name="RS232" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="Helpers.DeviceManager" Collapsed="true">
-    <Position X="14.75" Y="3.75" Width="1.5" />
-    <TypeIdentifier />
-  </Class>
   <Class Name="Helpers.DeviceStateHasChangedEventArgs" Collapsed="true">
     <Position X="4.25" Y="3.75" Width="3.25" />
     <TypeIdentifier />
@@ -320,20 +316,25 @@
   </Class>
   <Class Name="CarController.Model.Communicators.Speedometer" Collapsed="true">
     <Position X="22.5" Y="4" Width="1.5" />
-    <NestedTypes>
-      <Struct Name="CarController.Model.Communicators.Speedometer.SpeedMeasurementPoint" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Model\Communicators\Speedometer.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAIABAQIAEAQAGAKAAAAEAAAChAIBAAAgAACgAAAA=</HashCode>
+      <HashCode>AAAAIABAQIAEAQAGAaAAAAEAAAShAIBAAAgAACgAAAA=</HashCode>
       <FileName>Model\Communicators\Speedometer.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="extentionCardCommunicator" />
     </ShowAsAssociation>
+  </Class>
+  <Class Name="Helpers.DeviceManager" Collapsed="true">
+    <Position X="14.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="CarController.MFCSPeedRegulator">
+    <Position X="13.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAQAAAAgAAAAAAAAAAgAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Model\Regulators\MFCSPeedRegulator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Interface Name="CarController.ICar">
     <Position X="17" Y="5" Width="1.75" />

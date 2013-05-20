@@ -19,7 +19,7 @@ namespace CarSimulator
             torque = _torque;
         }
     }
-    abstract class CarModel
+    public abstract class CarModel
     {
         // Gravitational Acceleration at the Earths surface. 
         public const double EARTH_GRAV_CONST = 9.8067;
