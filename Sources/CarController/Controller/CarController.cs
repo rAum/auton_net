@@ -16,7 +16,7 @@ namespace CarController
 
         //stats collecting
         public StatsCollector statsCollector = new StatsCollector();
-        private Timer mStatsCollectorTimer = new Timer();
+        private System.Timers.Timer mStatsCollectorTimer = new System.Timers.Timer();
         private const int TIMER_INTERVAL_IN_MS = 10;
 
         public DefaultCarController()

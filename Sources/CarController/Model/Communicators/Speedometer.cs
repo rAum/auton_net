@@ -40,7 +40,7 @@ namespace CarController.Model.Communicators
         private const double MIN_SECONDS_ON_MEASUREMENTS_LIST = 1.0;
         private const int MIN_MEASUREMENTS_ON_MEASUREMENTS_LIST = 3;
 
-        private Timer SpeedMeasuringTimer = new Timer(SPEED_MEASURING_TIMER_INTERVAL_IN_MS);
+        private System.Timers.Timer SpeedMeasuringTimer = new System.Timers.Timer(SPEED_MEASURING_TIMER_INTERVAL_IN_MS);
         private int lastTicks = 0;
         private LinkedList<SpeedMeasurementPoint> measurePoints = new LinkedList<SpeedMeasurementPoint>();
 

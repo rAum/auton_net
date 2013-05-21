@@ -62,7 +62,7 @@ namespace CarController
         private bool alertBrakeActive = false;
 
         //timer initialization
-        private Timer mTimer = new Timer();
+        private System.Timers.Timer mTimer = new System.Timers.Timer();
         private const double TIMER_INTERVAL_IN_MS = 10;
 
         //consts

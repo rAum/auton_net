@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Helpers;
+using System.Timers;
 
 namespace CarController
 {
@@ -38,7 +39,7 @@ namespace CarController
             }
         }
 
-        private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+        private System.Timers.Timer timer = new System.Timers.Timer();
         private const int TIMER_INTERVAL_IN_MS = 10;
 
         public FakeCarCommunicator(ICar car)
@@ -50,7 +51,7 @@ namespace CarController
             model = new CarModel(this);
 
             timer.Interval = TIMER_INTERVAL_IN_MS;
-            timer.Tick += new EventHandler(timer_Tick);
+            timer.Elapsed += timer_Elapsed;
             timer.Start();
         }
 
@@ -79,7 +80,7 @@ namespace CarController
             model.SpeedSteering = args.getSpeedSetting();
         }
 
-        void timer_Tick(object sender, EventArgs e)
+        void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             SteeringWheelAngleInfoReceivedEventHandler tempAngleEvent = evSteeringWheelAngleInfoReceived;
             if (tempAngleEvent != null)
