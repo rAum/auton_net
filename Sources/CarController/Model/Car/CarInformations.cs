@@ -27,17 +27,17 @@ namespace CarController
 
         public CarInformations()
         {
-            CurrentSpeed = double.NaN;
-            TargetSpeed = double.NaN;
-            SpeedSteering = double.NaN;
+            CurrentSpeed = 0.0d;
+            TargetSpeed = 0.0d;
+            SpeedSteering = 0.0d;
 
-            CurrentBrake = double.NaN;
-            TargetBrake = double.NaN;
-            BrakeSteering = double.NaN;
+            CurrentBrake = 0.0d;
+            TargetBrake = 0.0d;
+            BrakeSteering = 0.0d;
 
-            CurrentWheelAngle = double.NaN;
-            TargetSpeed = double.NaN;
-            WheelAngleSteering = double.NaN;
+            CurrentWheelAngle = 0.0d;
+            TargetSpeed = 0.0d;
+            WheelAngleSteering = 0.0d;
 
             AlertBrakeActive = false;
         }
