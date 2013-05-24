@@ -175,6 +175,24 @@ namespace CarController
             HandleKeyDown(e);
         }
 
+
+        private enum RideMode { Forward, Backward }
+        private RideMode rideMode = RideMode.Forward;
+
+        double LimitSpeedDueToCurrRideMode(double wantedSpeed)
+        {
+            if (rideMode == RideMode.Forward)
+            {
+                Limiter.Limit(ref wantedSpeed, 0.0d, double.MaxValue);
+            }
+            else
+            {
+                Limiter.Limit(ref wantedSpeed, double.MinValue, 0.0d);
+            }
+
+            return wantedSpeed;
+        }
+
         private void HandleKeyDown(KeyEventArgs key)
         {
             double valToBeSet;
@@ -185,6 +203,7 @@ namespace CarController
                 case Key.W:
                     valToBeSet = Controller.Model.CarInfo.TargetSpeed + SPEED_CHANGE_PER_UP_DOWN_ARR_CLICK;
                     Limiter.Limit(ref valToBeSet, MAX_BACKWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS, MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS);
+                    valToBeSet = LimitSpeedDueToCurrRideMode(valToBeSet);
                     Controller.SetTargetSpeed(valToBeSet);
                     break;
 
@@ -192,6 +211,7 @@ namespace CarController
                 case Key.S:
                     valToBeSet = Controller.Model.CarInfo.TargetSpeed - SPEED_CHANGE_PER_UP_DOWN_ARR_CLICK;
                     Limiter.Limit(ref valToBeSet, MAX_BACKWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS, MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS);
+                    valToBeSet = LimitSpeedDueToCurrRideMode(valToBeSet);
                     Controller.SetTargetSpeed(valToBeSet);
                     break;
 
@@ -217,6 +237,18 @@ namespace CarController
                     Controller.OverrideTargetBrakeSetting(TARGET_BRAKE_SETTING_WHEN_MANUAL_BRAKING_ON);
                     brakingTimer.Interval = BRAKE_ACTIVATION_TIME_ON_SPACE_PRESSING_IN_MS;
                     brakingTimer.Start();
+                    break;
+
+                case Key.K: //K -> change road direction
+                    if(rideMode == RideMode.Forward)
+                    {
+                        rideMode = RideMode.Backward;
+                    }
+                    else
+                    {
+                        rideMode = RideMode.Forward;
+                    }
+                    Controller.SetTargetSpeed(0.0);
                     break;
 
             }
