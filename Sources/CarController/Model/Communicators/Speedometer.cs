@@ -122,6 +122,9 @@ namespace CarController.Model.Communicators
                     {
                         measurePoints.RemoveFirst();
                         measurementRemoved = true;
+
+                        secondMeasurementTime = measurePoints.First.Next.Value.measurementTime;
+                        timeFromSecondToLastMeasurement = measurePoints.Last().measurementTime - secondMeasurementTime;
                     }
                 }
             }
