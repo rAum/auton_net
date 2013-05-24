@@ -6,6 +6,7 @@ using CarController;
 using CarController.Model.Car;
 using Helpers;
 using System.Timers;
+using System.Threading;
 
 namespace CarController
 {
@@ -16,14 +17,14 @@ namespace CarController
 
         //stats collecting
         public StatsCollector statsCollector = new StatsCollector();
-        private Timer mStatsCollectorTimer = new Timer();
-        private const int TIMER_INTERVAL_IN_MS = 500;
+        private const double TIMER_INTERVAL_IN_MS = 100.0d;
+        //private Timer mStatsCollectorTimer = new Timer(TIMER_INTERVAL_IN_MS);
 
         public DefaultCarController()
         {
             //Model = new ExampleFakeCar(this);
             Model = new RealCar(this);
-            //Model = new CarWithFakeRegulators(this);
+            //Model = 4new CarWithFakeRegulators(this);
             //Model = new CarWithFakeCommunicator(this);
 
             Model.SetTargetSpeed(0.0);
@@ -32,51 +33,90 @@ namespace CarController
             EventHandlingForStatsCollectingInit();
 
             //timer init
-            mStatsCollectorTimer.Interval = TIMER_INTERVAL_IN_MS;
-            mStatsCollectorTimer.Elapsed += mStatsCollectorTimer_Elapsed;
-            mStatsCollectorTimer.Start();
-
+            //TODO: TEMPORARY COMMENTED
+            //mStatsCollectorTimer.Elapsed += mStatsCollectorTimer_Elapsed;
+            //mStatsCollectorTimer.Start();
+            StatsCollectingThread = new Thread(new ThreadStart(StatsCollectingThreadFoo));
+            StatsCollectingThread.Start();
+            
             //mFakeSignalsSenderThread = new System.Threading.Thread(new System.Threading.ThreadStart(mFakeSignalsSenderFoo));
             //mFakeSignalsSenderThread.Start();
         }
 
+        Thread StatsCollectingThread;
+        void StatsCollectingThreadFoo() //TODO: refactor this shit
+        {
+            while (true)
+            {
+                Console.Write("STATS COLLECTING ONGOING");
+
+                DBStatsCollector.AddNewDataToDB(
+                    curr_speed: Model.CarInfo.CurrentSpeed,
+                    target_speed: Model.CarInfo.TargetSpeed,
+                    speed_steering: Model.CarInfo.SpeedSteering,
+                    curr_angle: Model.CarInfo.CurrentWheelAngle,
+                    target_angle: Model.CarInfo.TargetWheelAngle,
+                    angle_steering: Model.CarInfo.WheelAngleSteering,
+                    curr_brake: Model.CarInfo.CurrentBrake,
+                    target_brake: Model.CarInfo.TargetBrake,
+                    brake_steering: Model.CarInfo.BrakeSteering
+                );
+
+                Thread.Sleep((int)TIMER_INTERVAL_IN_MS);
+            }
+        }
+
         Object TimerLock = new Object();
+        volatile bool StatsCollectingOngoing = false;
         void mStatsCollectorTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            lock (TimerLock)
+            if (StatsCollectingOngoing) return;
+
+            try
             {
-            //stats collecting
-            //statsCollector.PutNewStat("time", Time.GetTimeFromProgramBeginnig().TotalMilliseconds);
-            //statsCollector.PutNewStat("current speed", Model.CarInfo.CurrentSpeed);
-            //statsCollector.PutNewStat("target speed", Model.CarInfo.TargetSpeed);
-            //statsCollector.PutNewStat("speed steering", Model.CarInfo.SpeedSteering);
-            //statsCollector.PutNewStat("current angle", Model.CarInfo.CurrentWheelAngle);
-            //statsCollector.PutNewStat("target angle", Model.CarInfo.TargetWheelAngle);
-            //statsCollector.PutNewStat("angle steering", Model.CarInfo.WheelAngleSteering);
-            //statsCollector.PutNewStat("current brake", Model.CarInfo.CurrentBrake);
-            //statsCollector.PutNewStat("target brake", Model.CarInfo.TargetBrake);
-            //statsCollector.PutNewStat("brake steering", Model.CarInfo.BrakeSteering);
+                lock (TimerLock)
+                {
+                    StatsCollectingOngoing = true;
+
+                    Console.Write("STATS COLLECTING ONGOING");
+                    //stats collecting
+                    //statsCollector.PutNewStat("time", Time.GetTimeFromProgramBeginnig().TotalMilliseconds);
+                    //statsCollector.PutNewStat("current speed", Model.CarInfo.CurrentSpeed);
+                    //statsCollector.PutNewStat("target speed", Model.CarInfo.TargetSpeed);
+                    //statsCollector.PutNewStat("speed steering", Model.CarInfo.SpeedSteering);
+                    //statsCollector.PutNewStat("current angle", Model.CarInfo.CurrentWheelAngle);
+                    //statsCollector.PutNewStat("target angle", Model.CarInfo.TargetWheelAngle);
+                    //statsCollector.PutNewStat("angle steering", Model.CarInfo.WheelAngleSteering);
+                    //statsCollector.PutNewStat("current brake", Model.CarInfo.CurrentBrake);
+                    //statsCollector.PutNewStat("target brake", Model.CarInfo.TargetBrake);
+                    //statsCollector.PutNewStat("brake steering", Model.CarInfo.BrakeSteering);
 
 
-            DBStatsCollector.AddNewDataToDB(
-                curr_speed: Model.CarInfo.CurrentSpeed,
-                target_speed: Model.CarInfo.TargetSpeed,
-                speed_steering: Model.CarInfo.SpeedSteering,
-                curr_angle: Model.CarInfo.CurrentWheelAngle,
-                target_angle: Model.CarInfo.TargetWheelAngle,
-                angle_steering: Model.CarInfo.WheelAngleSteering,
-                curr_brake: Model.CarInfo.CurrentBrake,
-                target_brake: Model.CarInfo.TargetBrake,
-                brake_steering: Model.CarInfo.BrakeSteering
-            ); 
+                    DBStatsCollector.AddNewDataToDB(
+                        curr_speed: Model.CarInfo.CurrentSpeed,
+                        target_speed: Model.CarInfo.TargetSpeed,
+                        speed_steering: Model.CarInfo.SpeedSteering,
+                        curr_angle: Model.CarInfo.CurrentWheelAngle,
+                        target_angle: Model.CarInfo.TargetWheelAngle,
+                        angle_steering: Model.CarInfo.WheelAngleSteering,
+                        curr_brake: Model.CarInfo.CurrentBrake,
+                        target_brake: Model.CarInfo.TargetBrake,
+                        brake_steering: Model.CarInfo.BrakeSteering
+                    );
 
 
-            //collecting speed regulator parameters
-            //var speedRegulatorParameters = Model.SpeedRegulator.GetRegulatorParameters();
-            //foreach (string key in speedRegulatorParameters.Keys)
-            //{
-            //    statsCollector.PutNewStat(String.Format("SpeedRegulator_{0}", key), speedRegulatorParameters[key]);
-            //}
+                    //collecting speed regulator parameters
+                    //var speedRegulatorParameters = Model.SpeedRegulator.GetRegulatorParameters();
+                    //foreach (string key in speedRegulatorParameters.Keys)
+                    //{
+                    //    statsCollector.PutNewStat(String.Format("SpeedRegulator_{0}", key), speedRegulatorParameters[key]);
+                    //}
+                }
+
+            }
+            finally
+            {
+                StatsCollectingOngoing = false;
             }
         }
 
