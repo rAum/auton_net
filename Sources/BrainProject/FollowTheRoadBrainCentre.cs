@@ -22,7 +22,8 @@ namespace BrainProject
         public delegate void newTargetSpeedCalculatedEventHandler(object sender, double speed);
         public event newTargetSpeedCalculatedEventHandler evNewTargetSpeedCalculated;
 
-        private const double AUTOMATIC_DRIVING_SPEED = 3.4;
+        private const double AUTOMATIC_DRIVING_SPEED = System.Math.PI;
+
         private const int TIME_TO_STOP_CAR_WHEN_NO_INFO_RECEIVED_IN_MS = 1500;
 
         /// <summary>

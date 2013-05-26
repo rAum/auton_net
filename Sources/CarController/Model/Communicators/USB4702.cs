@@ -136,20 +136,21 @@ namespace car_communicator
 
         protected override void PauseEffectors()
         {
+            SetSteeringWheel(0.0);
             DisableSteeringWheelSteering();
             TurnOffEngine();
 
             effectorsActive = false;
-            SetSteeringWheel(0.0); //do not move steering wheel
         }
 
         protected override void EmergencyStop()
         {
+            SetSteeringWheel(0.0); //do not move steering wheel
+
             DisableSteeringWheelSteering();
             TurnOffEngine();
 
             effectorsActive = false;
-            SetSteeringWheel(0.0); //do not move steering wheel
         }
         
         /// <summary>

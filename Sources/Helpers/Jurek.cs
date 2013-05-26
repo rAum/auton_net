@@ -32,8 +32,8 @@ namespace Helpers
         public Jurek(string grammar = "")
         {
             talk = new SpeechSynthesizer();
-            talk.SelectVoiceByHints(VoiceGender.Male);
-
+            //talk.SelectVoiceByHints(VoiceGender.Male);
+            talk.SelectVoice("IVONA 2 Jacek");
             // Not available while using polish windows version without English package...
             listen = createSpeechEngine("EN-us");
             listen.RequestRecognizerUpdate();
@@ -101,7 +101,7 @@ namespace Helpers
             {
                 foreach (var word in e.Result.Words)
                 {
-                    if (word.Confidence >= 0.7)
+                    if (word.Confidence >= 0.35)
                         del(word.Text, word.Confidence);
                 }
                 

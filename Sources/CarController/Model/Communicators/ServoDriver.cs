@@ -26,11 +26,11 @@ namespace car_communicator
         public const int MAX_THROTTLE = 7000;
         public const int MIN_THROTTLE = 3900;
 
-        public const int GEAR_P = 5700; //IMPORTANT: NOT WORKING
-        public const int GEAR_R = 8000;
-        public const int GEAR_N_WHEN_LAST_WAS_R_OR_P  = 7000;
-        public const int GEAR_N_WHEN_LAST_WAS_D = 7000;
-        public const int GEAR_D = 6000;
+        public const int GEAR_N_WHEN_LAST_WAS_R_OR_P = 8000;
+        public const int GEAR_N_WHEN_LAST_WAS_D = 8000;
+        public const int GEAR_D = 6800;
+        public const int GEAR_R = GEAR_N_WHEN_LAST_WAS_D; //IMPORTANT: NOT USED RIGHT NOW
+        public const int GEAR_P = GEAR_N_WHEN_LAST_WAS_D; //IMPORTANT: NOT WORKING
 
         Usc Driver = null;  
 

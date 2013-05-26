@@ -13,18 +13,17 @@ namespace CarController
     public class DefaultCarController
     {
         public ICar Model { get; private set; }
-        private System.Threading.Thread mFakeSignalsSenderThread;
+        //private System.Threading.Thread mFakeSignalsSenderThread;
 
         //stats collecting
         public StatsCollector statsCollector = new StatsCollector();
         private const double TIMER_INTERVAL_IN_MS = 100.0d;
-        //private Timer mStatsCollectorTimer = new Timer(TIMER_INTERVAL_IN_MS);
 
         public DefaultCarController()
         {
             //Model = new ExampleFakeCar(this);
             Model = new RealCar(this);
-            //Model = 4new CarWithFakeRegulators(this);
+            //Model = new CarWithFakeRegulators(this);
             //Model = new CarWithFakeCommunicator(this);
 
             Model.SetTargetSpeed(0.0);
@@ -32,12 +31,8 @@ namespace CarController
 
             EventHandlingForStatsCollectingInit();
 
-            //timer init
-            //TODO: TEMPORARY COMMENTED
-            //mStatsCollectorTimer.Elapsed += mStatsCollectorTimer_Elapsed;
-            //mStatsCollectorTimer.Start();
             StatsCollectingThread = new Thread(new ThreadStart(StatsCollectingThreadFoo));
-            StatsCollectingThread.Start();
+            StatsCollectingThread.Start(); 
             
             //mFakeSignalsSenderThread = new System.Threading.Thread(new System.Threading.ThreadStart(mFakeSignalsSenderFoo));
             //mFakeSignalsSenderThread.Start();
@@ -48,7 +43,7 @@ namespace CarController
         {
             while (true)
             {
-                Console.Write("STATS COLLECTING ONGOING");
+                //Console.Write("STATS COLLECTING ONGOING");
 
                 DBStatsCollector.AddNewDataToDB(
                     curr_speed: Model.CarInfo.CurrentSpeed,
@@ -78,7 +73,7 @@ namespace CarController
                 {
                     StatsCollectingOngoing = true;
 
-                    Console.Write("STATS COLLECTING ONGOING");
+                    //Console.Write("STATS COLLECTING ONGOING");
                     //stats collecting
                     //statsCollector.PutNewStat("time", Time.GetTimeFromProgramBeginnig().TotalMilliseconds);
                     //statsCollector.PutNewStat("current speed", Model.CarInfo.CurrentSpeed);

@@ -26,10 +26,10 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
         const int MIN_POINTS_FOR_EACH = 450;
         const int MIN_POINTS_FOR_ONLY_ONE = 320;
 
-        const int RANSAC_ITERATIONS = 650;
+        const int RANSAC_ITERATIONS = 600;
         const int RANSAC_MODEL_SIZE = 7;
         const int RANSAC_ERROR_THRESHOLD = 6;
-        const double RANSAC_INLINERS = 0.65;
+        const double RANSAC_INLINERS = 0.55;
 
         int imgWidth  = CamModel.Width;
         int imgHeight = CamModel.Height;
@@ -47,7 +47,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
             Parabola roadCenter = null;
 
             if (lanes.Count > MIN_POINTS_FOR_ONLY_ONE)
-                roadCenter = RANSAC.RANSAC.fitParabola(RANSAC_ITERATIONS + 490, RANSAC_MODEL_SIZE, (int)(lanes.Count * 0.45), RANSAC_ERROR_THRESHOLD + 2, lanes);
+                roadCenter = RANSAC.RANSAC.fitParabola(RANSAC_ITERATIONS + 300, RANSAC_MODEL_SIZE, (int)(lanes.Count * 0.45), RANSAC_ERROR_THRESHOLD + 2, lanes);
 
             if (roadCenter != null) 
                 create_model_from_single_line(ref roadCenter, ref leftLane, ref rightLane);
@@ -94,7 +94,7 @@ namespace VisionFilters.Filters.Lane_Mark_Detector
                 rightLane = rightLaneKalmanFilter.FeedParabola(rightLane);
             else
                 rightLane = rightLaneKalmanFilter.PredictParabola();
-            //////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////
             false_signal:
             if (leftLane != null && rightLane != null)
             {

@@ -27,7 +27,7 @@ namespace CarController
 
         private const int TARGET_BRAKE_SETTING_WHEN_MANUAL_BRAKING_ON = 100;
         private const int BRAKE_ACTIVATION_TIME_ON_SPACE_PRESSING_IN_MS = 500; //its much too much, but smaller values blinks at start
-        private const int MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS = 20; 
+        private const double MAX_FORWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS = 7.5; 
         private const int MAX_BACKWARD_SPEED_WHEN_DRIVING_ON_GAMEPAD_IN_MPS = -10; //it should be < 0 !
         private const int MAX_WHEEL_ANGLE_VALEUE_WHEN_DRIVING_ON_GAMEPAD = 30;
         private const int MAX_WHEEL_ANGLE_CHANGE_PER_SEC_WHEN_DRIVING_ON_GAMEPAD = 10;
@@ -251,6 +251,9 @@ namespace CarController
                     Controller.SetTargetSpeed(0.0);
                     break;
 
+                case Key.Enter: //Enter -> set wheel to middles
+                    Controller.SetTargetWheelAngle(0.0);
+                    break;
             }
         }
 
