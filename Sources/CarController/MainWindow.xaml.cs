@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Timers;
 using Helpers;
 
 namespace CarController
@@ -22,8 +23,8 @@ namespace CarController
     {
         public DefaultCarController Controller { get; private set; }
 
-        private System.Windows.Forms.Timer mTimer = new System.Windows.Forms.Timer();
-        private const int TIMER_INTERVAL_IN_MS = 10;
+        private System.Timers.Timer mTimer = new System.Timers.Timer(TIMER_INTERVAL_IN_MS);
+        private const int TIMER_INTERVAL_IN_MS = 25;
 
         private const int TARGET_BRAKE_SETTING_WHEN_MANUAL_BRAKING_ON = 100;
         private const int BRAKE_ACTIVATION_TIME_ON_SPACE_PRESSING_IN_MS = 500; //its much too much, but smaller values blinks at start
@@ -38,10 +39,10 @@ namespace CarController
 
         private GamePad gamePad;
 
-        System.Timers.Timer brakingTimer;
+        private System.Timers.Timer brakingTimer;
         private bool GamePadBrakingButtonPressed = false;
 
-        System.Windows.Forms.Timer wheelAngleChangingWithGamePadTimer;
+        private System.Timers.Timer wheelAngleChangingWithGamePadTimer;
 
         private double gamePadCurrentTurningPerTick = 0.0;
 
@@ -61,9 +62,20 @@ namespace CarController
             this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
 
             //initialize timer
-            mTimer.Interval = TIMER_INTERVAL_IN_MS;
-            mTimer.Tick += new EventHandler(mTimer_Tick);
+            mTimer.Elapsed += mTimer_Elapsed;
             mTimer.Start();
+        }
+
+        void mTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            this.Dispatcher.Invoke(
+                new Action<TextBlock, TimeSpan>(
+                    (textBlock, timeSpan) => 
+                        textBlock.Text = timeSpan.ToString(@"mm\:ss\:ff")
+                ), 
+                textBlock_time, 
+                Time.GetTimeFromProgramBeginnig()
+            );
         }
 
         public MainWindow(DefaultCarController _controller)
@@ -79,13 +91,13 @@ namespace CarController
 
             //initialize timer
             mTimer.Interval = TIMER_INTERVAL_IN_MS;
-            mTimer.Tick += new EventHandler(mTimer_Tick);
+            mTimer.Elapsed += mTimer_Elapsed;
             mTimer.Start();
         }
 
         private void ExternalEventsHandlingInit()
         {
-            brakingTimer = new System.Timers.Timer();
+            brakingTimer = new Timer();
             brakingTimer.Elapsed += new System.Timers.ElapsedEventHandler(brakingTimer_Elapsed);
 
             Controller.Model.evTargetSpeedChanged += new TargetSpeedChangedEventHandler(Model_evTargetSpeedChanged);
@@ -101,9 +113,9 @@ namespace CarController
 
             Controller.Model.evAlertBrake += new EventHandler(Model_evAlertBrake);
 
-            wheelAngleChangingWithGamePadTimer = new System.Windows.Forms.Timer();
+            wheelAngleChangingWithGamePadTimer = new Timer();
             wheelAngleChangingWithGamePadTimer.Interval = WHEEL_ANGLE_CHANGING_WITH_GAMEPAD_TIMER_INTERVAL_IN_MS;
-            wheelAngleChangingWithGamePadTimer.Tick += new EventHandler(wheelAngleChangingWithGamePadTimer_Tick);
+            wheelAngleChangingWithGamePadTimer.Elapsed += wheelAngleChangingWithGamePadTimer_Elapsed;
             //please dont start me (wheelAngleChangingWithGamePadTimer) in here //it really should not be started in here
 
             gamePad = new GamePad();
@@ -112,17 +124,17 @@ namespace CarController
 
         }
 
+        void wheelAngleChangingWithGamePadTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Controller.ChangeTargetWheelAngle(gamePadCurrentTurningPerTick);
+        }
+
         void brakingTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             if (!GamePadBrakingButtonPressed)
             {
                 Controller.EndTargetBrakeSteeringOverriding();
             }
-        }
-
-        void wheelAngleChangingWithGamePadTimer_Tick(object sender, EventArgs e)
-        {
-            Controller.ChangeTargetWheelAngle(gamePadCurrentTurningPerTick);
         }
 
         void gamePad_evNewGamePadButtonInfoAcquired(object sender, int buttonNo, bool pressed)
@@ -256,13 +268,6 @@ namespace CarController
                     break;
             }
         }
-
-        void mTimer_Tick(object sender, EventArgs e)
-        {
-            textBlock_time.Text = String.Format(@"{0:mm\:ss\:ff}", Time.GetTimeFromProgramBeginnig());
-        }
-
-
 
         private class LabelData
         {

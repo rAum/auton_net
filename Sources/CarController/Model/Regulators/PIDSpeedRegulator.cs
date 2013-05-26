@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Helpers;
 using CarController.Model.Regulators;
+using System.Timers;
 
 namespace CarController
 {
@@ -61,8 +62,8 @@ namespace CarController
         private bool alertBrakeActive = false;
 
         //timer initialization
-        private System.Windows.Forms.Timer mTimer = new System.Windows.Forms.Timer();
-        private const int TIMER_INTERVAL_IN_MS = 10;
+        private System.Timers.Timer mTimer = new System.Timers.Timer();
+        private const double TIMER_INTERVAL_IN_MS = 10;
 
         //consts
         private const double MAX_STAND_STILL_SPEED_IN_MPS = 1; //MPS = meter per s = m/s = 3.6km/h

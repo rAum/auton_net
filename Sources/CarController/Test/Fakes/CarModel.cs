@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Helpers;
+using System.Timers;
 
 namespace CarController
 {
     public class CarModel
     {
         private ICarCommunicator communicator;
-        private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+        private System.Timers.Timer timer = new System.Timers.Timer();
 
         private static int TIMER_INTERVAL_IN_MS = 15;
 
@@ -60,11 +61,11 @@ namespace CarController
             Speed = 0;
             
             timer.Interval = TIMER_INTERVAL_IN_MS;
-            timer.Tick += new EventHandler(timer_Tick);
+            timer.Elapsed += timer_Elapsed;
             timer.Start();
         }
 
-        void timer_Tick(object sender, EventArgs e)
+        void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             //brake posiotion
             BrakePosition += BrakeSteering * BRAKE_PUSHING_OR_PULLING_SPEED_FACTOR;
