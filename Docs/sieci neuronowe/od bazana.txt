@@ -1,0 +1,2 @@
+funkcja RBF Wendlanda + modelowanie gauss-zaidl (mamy macierz rzadką)
+SNNS - biblioteka C++ do sieci - Stuttgart Neural Network Simulator
