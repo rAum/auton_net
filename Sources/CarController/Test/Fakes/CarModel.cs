@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Helpers;
-using System.Timers;
+using System.Threading;
 
 namespace CarController
 {
     public class CarModel
     {
         private ICarCommunicator communicator;
-        private System.Timers.Timer timer = new System.Timers.Timer();
+        private Thread modelThread;
 
-        private static int TIMER_INTERVAL_IN_MS = 15;
+        private static int MODEL_THREAD_SLEEP_PER_LOOP_IN_MS = 15;
 
         //steering parameters
         public double SpeedSteering { get; set; }
@@ -59,42 +59,53 @@ namespace CarController
             WheelAngle = 0;
             SteeringWheelAngle = 0;
             Speed = 0;
-            
-            timer.Interval = TIMER_INTERVAL_IN_MS;
-            timer.Elapsed += timer_Elapsed;
-            timer.Start();
+
+            modelThread = new Thread(ContinousModelSimulation);
+            modelThread.Start();
         }
 
-        void timer_Elapsed(object sender, ElapsedEventArgs e)
+        void ContinousModelSimulation()
         {
-            //brake posiotion
-            BrakePosition += BrakeSteering * BRAKE_PUSHING_OR_PULLING_SPEED_FACTOR;
-
-            Speed *= SLOWING_DOWN_FACTOR;
-
-            if (Gear == Gear.drive)
+            while (true)
             {
-                Speed += SpeedSteering * ACCELERATING_FACTOR;
-            }
-            else if (Gear == Gear.reverse)
-            {
-                Speed -= SpeedSteering * ACCELERATING_FACTOR;
-            }
+                try
+                {
+                    BrakePosition += BrakeSteering * BRAKE_PUSHING_OR_PULLING_SPEED_FACTOR;
 
-            if (Speed > 0)
-            {
-                Speed -= BrakePosition * BRAKING_DOWN_WITH_BRAKES_FACTOR;
-            }
-            else
-            {
-                Speed += BrakePosition * BRAKING_DOWN_WITH_BRAKES_FACTOR;
-            }
-            Logger.Log(this, String.Format("new speed has been modeled: {0}   (current speed steering: {1})", Speed, SpeedSteering));
+                    Speed *= SLOWING_DOWN_FACTOR;
 
-            //wheels angle
-            SteeringWheelAngle += WheelAngleSteering * STEERING_WHEEL_STEERING_FACTOR;
-            WheelAngle = SteeringWheelAngle * STEERING_WHEEL_TO_WHEELS_TRANSMISSION;
-            Logger.Log(this, String.Format("new wheel angle has been modeled: {0}   (current angle steering: {1})", WheelAngle, WheelAngleSteering));
+                    if (Gear == Gear.drive)
+                    {
+                        Speed += SpeedSteering * ACCELERATING_FACTOR;
+                    }
+                    else if (Gear == Gear.reverse)
+                    {
+                        Speed -= SpeedSteering * ACCELERATING_FACTOR;
+                    }
+
+                    if (Speed > 0)
+                    {
+                        Speed -= BrakePosition * BRAKING_DOWN_WITH_BRAKES_FACTOR;
+                    }
+                    else
+                    {
+                        Speed += BrakePosition * BRAKING_DOWN_WITH_BRAKES_FACTOR;
+                    }
+                    Logger.Log(this, String.Format("new speed has been modeled: {0}   (current speed steering: {1})", Speed, SpeedSteering));
+
+                    //wheels angle
+                    SteeringWheelAngle += WheelAngleSteering * STEERING_WHEEL_STEERING_FACTOR;
+                    WheelAngle = SteeringWheelAngle * STEERING_WHEEL_TO_WHEELS_TRANSMISSION;
+                    Logger.Log(this, String.Format("new wheel angle has been modeled: {0}   (current angle steering: {1})", WheelAngle, WheelAngleSteering));
+
+                    Thread.Sleep(MODEL_THREAD_SLEEP_PER_LOOP_IN_MS);
+                }
+                catch (Exception e)
+                {
+                    Logger.Log(this, String.Format("Car model exception catched: {0}", e.Message), 2);
+                    Logger.Log(this, String.Format("Car model exception stack: {0}", e.StackTrace), 1);
+                }
+            }
         }
     }
 }

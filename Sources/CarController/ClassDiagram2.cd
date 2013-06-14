@@ -67,7 +67,7 @@
   <Class Name="CarController.PIDSpeedRegulator" Collapsed="true" HideInheritanceLine="true">
     <Position X="12.5" Y="10.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EACQAACAAIQAQAAAAgAAABAQqEAAAGIAAAAAICAIEgA=</HashCode>
+      <HashCode>EACQAACAAIQAQAAAAgAAAAAQKEAAAGIAAAAAICAIEgA=</HashCode>
       <FileName>Model\Regulators\PIDSpeedRegulator.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -112,7 +112,7 @@
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AIAAQAaoAAACIAAAABAaEBgAAAACAAAACAgAAEAEAiA=</HashCode>
+      <HashCode>AIAgQAaoAAACIAAAABAaEBgAAAACAAAACAgAAEAEAiA=</HashCode>
       <FileName>Controller\CarController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -164,7 +164,7 @@
   <Class Name="CarController.CarModel" Collapsed="true">
     <Position X="26.25" Y="6.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAwBAAAAQAAgAKACAgAAAhghABBBAgIUAAAAIAAAgQQ=</HashCode>
+      <HashCode>AAgRAAAAAAIgAKACAgAAAgghABBBAgIUAAgAIAAAgQQ=</HashCode>
       <FileName>Test\Fakes\CarModel.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -310,7 +310,7 @@
   <Class Name="CarController.Model.Communicators.Speedometer" Collapsed="true">
     <Position X="22.5" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAIABAQIAEAQAGAaAAAAEAAAShAIBAAAgAACgAAAA=</HashCode>
+      <HashCode>AAAAIABAQIAAAQAGAKAIAAEgAAChAIBAAAgAACgAAAA=</HashCode>
       <FileName>Model\Communicators\Speedometer.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -324,7 +324,7 @@
   <Class Name="CarController.MFCSPeedRegulator" Collapsed="true">
     <Position X="13.25" Y="11.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAQACAAAIQAQAAAAgBAAAAAKAAAgCoAgAAAIAEEEAA=</HashCode>
+      <HashCode>AAAQAiAAAIQAQIAAAgBAAAAAKAAAgCoAAAAAIAEEEAA=</HashCode>
       <FileName>Model\Regulators\MFCSPeedRegulator.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />

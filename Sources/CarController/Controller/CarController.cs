@@ -17,7 +17,7 @@ namespace CarController
 
         //stats collecting
         public StatsCollector statsCollector = new StatsCollector();
-        private const double TIMER_INTERVAL_IN_MS = 100.0d;
+        private const double STATS_COLLECTING_THREAD_SLEEP_PER_LOOP_IN_MS = 100;
 
         public DefaultCarController()
         {
@@ -57,7 +57,7 @@ namespace CarController
                     brake_steering: Model.CarInfo.BrakeSteering
                 );
 
-                Thread.Sleep((int)TIMER_INTERVAL_IN_MS);
+                Thread.Sleep(STATS_COLLECTING_THREAD_SLEEP_PER_LOOP_IN_MS);
             }
         }
 
