@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Helpers;
-using System.Timers;
 
 namespace CarController
 {
@@ -39,8 +38,8 @@ namespace CarController
             }
         }
 
-        private System.Timers.Timer timer = new System.Timers.Timer();
-        private const int TIMER_INTERVAL_IN_MS = 10;
+        private Thread communicationThread;
+        private const int COMMUNICATION_THREAD_SLEEP_PER_LOOP = 10;
 
         public FakeCarCommunicator(ICar car)
         {
@@ -50,9 +49,8 @@ namespace CarController
 
             model = new CarModel(this);
 
-            timer.Interval = TIMER_INTERVAL_IN_MS;
-            timer.Elapsed += timer_Elapsed;
-            timer.Start();
+            communicationThread = new Thread(ContinousCommunication);
+            communicationThread.Start();
         }
 
         /// <summary>
@@ -80,24 +78,37 @@ namespace CarController
             model.SpeedSteering = args.getSpeedSetting();
         }
 
-        void timer_Elapsed(object sender, ElapsedEventArgs e)
+        void ContinousCommunication()
         {
-            SteeringWheelAngleInfoReceivedEventHandler tempAngleEvent = evSteeringWheelAngleInfoReceived;
-            if (tempAngleEvent != null)
+            while (true)
             {
-                tempAngleEvent(this, new SteeringWheelAngleInfoReceivedEventArgs(model.WheelAngle));
-            }
+                try
+                {
+                    SteeringWheelAngleInfoReceivedEventHandler tempAngleEvent = evSteeringWheelAngleInfoReceived;
+                    if (tempAngleEvent != null)
+                    {
+                        tempAngleEvent(this, new SteeringWheelAngleInfoReceivedEventArgs(model.WheelAngle));
+                    }
 
-            SpeedInfoReceivedEventHander tempSpeedEvent = evSpeedInfoReceived;
-            if (tempSpeedEvent != null)
-            {
-                tempSpeedEvent(this, new SpeedInfoReceivedEventArgs(model.Speed));
-            }
+                    SpeedInfoReceivedEventHander tempSpeedEvent = evSpeedInfoReceived;
+                    if (tempSpeedEvent != null)
+                    {
+                        tempSpeedEvent(this, new SpeedInfoReceivedEventArgs(model.Speed));
+                    }
 
-            BrakePositionReceivedEventHandler temp = evBrakePositionReceived;
-            if (temp != null)
-            {
-                temp(this, new BrakePositionReceivedEventArgs(model.BrakePosition));
+                    BrakePositionReceivedEventHandler temp = evBrakePositionReceived;
+                    if (temp != null)
+                    {
+                        temp(this, new BrakePositionReceivedEventArgs(model.BrakePosition));
+                    }
+
+                    Thread.Sleep(COMMUNICATION_THREAD_SLEEP_PER_LOOP);
+                }
+                catch (Exception e)
+                {
+                    Logger.Log(this, String.Format("Fake car communicator exception catched: {0}", e.Message), 2);
+                    Logger.Log(this, String.Format("Fake car communicator exception stack: {0}", e.StackTrace), 1);
+                }
             }
         }
 
