@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Timers;
 using Helpers;
+using System.Threading;
 
 namespace CarController
 {
@@ -106,8 +106,9 @@ namespace CarController
             throw new NotImplementedException();
         }
 
-        private const double MODEL_TIMER_INTERVAL_IN_MS = 20.0d;
+        private const int MODEL_TIMER_INTERVAL_IN_MS = 20;
         private System.Timers.Timer ModelTimer = new System.Timers.Timer(MODEL_TIMER_INTERVAL_IN_MS);
+        private Thread ModelThread;
 
         MFCSPeedRegulator(ICar car, CarSimulator.CarModel carModel)
         {
@@ -116,8 +117,8 @@ namespace CarController
 
             RegisterModelForSteeringEvents();
 
-            ModelTimer.Elapsed += ModelTimer_Elapsed;
-            ModelTimer.Start();
+            ModelThread = new Thread(ContinousCarSimulation);
+            ModelThread.Start();
         }
 
         private void RegisterModelForSteeringEvents()
@@ -134,11 +135,23 @@ namespace CarController
         void BrakeRegulator_evNewBrakeSettingCalculated(object sender, NewBrakeSettingCalculatedEventArgs args)
         {
  	        CarModel.BrakingLevel = args.GetBrakeSetting() / 100.0d;
-        } 
+        }
 
-        void ModelTimer_Elapsed(object sender, ElapsedEventArgs e)
+        void ContinousCarSimulation()
         {
-            CarModel.CalculationsTick();
+            while (true)
+            {
+                try
+                {
+                    CarModel.CalculationsTick();
+                    Thread.Sleep(MODEL_TIMER_INTERVAL_IN_MS);
+                }
+                catch (Exception e)
+                {
+                    Logger.Log(this, String.Format("MFC model exception catched: {0}", e.Message), 2);
+                    Logger.Log(this, String.Format("MFC model exception stack: {0}", e.StackTrace), 1);
+                }
+            }
         }
     }
 }

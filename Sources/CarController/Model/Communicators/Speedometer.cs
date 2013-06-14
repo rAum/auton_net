@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using car_communicator;
 using Helpers;
-using System.Timers;
 using System.Threading;
 
 namespace CarController.Model.Communicators

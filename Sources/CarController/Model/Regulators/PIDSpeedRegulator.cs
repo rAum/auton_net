@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Helpers;
 using CarController.Model.Regulators;
-using System.Timers;
 
 namespace CarController
 {
@@ -60,10 +59,6 @@ namespace CarController
         //alert brake fields
         private const double ALERT_BRAKE_SPEED_STEERING = 0.0;
         private bool alertBrakeActive = false;
-
-        //timer initialization
-        private System.Timers.Timer mTimer = new System.Timers.Timer();
-        private const double TIMER_INTERVAL_IN_MS = 10;
 
         //consts
         private const double MAX_STAND_STILL_SPEED_IN_MPS = 1; //MPS = meter per s = m/s = 3.6km/h
