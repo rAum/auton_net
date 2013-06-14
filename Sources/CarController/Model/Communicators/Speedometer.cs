@@ -5,6 +5,7 @@ using System.Text;
 using car_communicator;
 using Helpers;
 using System.Timers;
+using System.Threading;
 
 namespace CarController.Model.Communicators
 {
@@ -40,7 +41,7 @@ namespace CarController.Model.Communicators
         private const double MIN_SECONDS_ON_MEASUREMENTS_LIST = 1.0;
         private const int MIN_MEASUREMENTS_ON_MEASUREMENTS_LIST = 3;
 
-        private Timer SpeedMeasuringTimer = new Timer(SPEED_MEASURING_TIMER_INTERVAL_IN_MS);
+        private Thread SpeedMeasuringThread;
         private int lastTicks = 0;
         private LinkedList<SpeedMeasurementPoint> measurePoints = new LinkedList<SpeedMeasurementPoint>();
 
@@ -48,23 +49,17 @@ namespace CarController.Model.Communicators
         {
             extentionCardCommunicator = extentionCard;
 
-            SpeedMeasuringTimer.Elapsed += SpeedMeasuringTimer_Tick;
+            SpeedMeasuringThread = new Thread(new ThreadStart(ConstantSpeedMeasuring));
         }
 
         volatile bool speedMeasuringOngoing = false;
-        Object speedMeasuringLock = new Object();
-        void SpeedMeasuringTimer_Tick(object sender, EventArgs e)
-        {
-            if (speedMeasuringOngoing)
-            {
-                return;
-            }
 
-            lock (speedMeasuringLock)
+        void ConstantSpeedMeasuring()
+        {
+            while (true)
             {
                 try
                 {
-                    speedMeasuringOngoing = true;
                     int ticks = extentionCardCommunicator.getSpeedCounterStatus();
                     int newTicks = ticks - lastTicks;
                     measurePoints.AddLast(new SpeedMeasurementPoint(newTicks));
@@ -97,9 +92,10 @@ namespace CarController.Model.Communicators
 
                     lastTicks = ticks;
                 }
-                finally
+                catch (Exception e)
                 {
-                    speedMeasuringOngoing = false;
+                    Logger.Log(this, String.Format("Speed measuring exception catched: {0}", e.Message), 2);
+                    Logger.Log(this, String.Format("Speed measuring exception stack: {0}", e.StackTrace), 1);
                 }
             }
         }
@@ -137,7 +133,7 @@ namespace CarController.Model.Communicators
 
         protected override void StartSensors()
         {
-            SpeedMeasuringTimer.Start();
+            SpeedMeasuringThread.Start();
         }
 
         protected override void StartEffectors()

@@ -22,9 +22,9 @@ namespace CarController
         public DefaultCarController()
         {
             //Model = new ExampleFakeCar(this);
-            Model = new RealCar(this);
+            //Model = new RealCar(this);
             //Model = new CarWithFakeRegulators(this);
-            //Model = new CarWithFakeCommunicator(this);
+            Model = new CarWithFakeCommunicator(this);
 
             Model.SetTargetSpeed(0.0);
             Model.SetTargetWheelAngle(0.0);

@@ -37,7 +37,7 @@
   <Class Name="CarController.FakeCarCommunicator" Collapsed="true" HideInheritanceLine="true">
     <Position X="23.5" Y="6.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAQADBAAAAAAAAABACAAEBAABIAAAABAgAAAACgMAAA=</HashCode>
+      <HashCode>CAQADBAAQAAAAAABACAAEBAABIAAAAAAgAAAACgMAAA=</HashCode>
       <FileName>Test\Fakes\FakeCarCommunicator.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -57,7 +57,7 @@
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>CKgAAAayAWAioAAQAGAAAhCAgAIhAJAhIEEACACWAgI=</HashCode>
+      <HashCode>DKgAAAayAWAipAAAAGAAAhCAgAIhAJAhIEEACACWAgI=</HashCode>
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -112,7 +112,7 @@
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AIAAQAaoAAACIAAAABAKEBgAAAACAAIACAgAAAAEAiA=</HashCode>
+      <HashCode>AIAAQAaoAAACIAAAABAaEBgAAAACAAAACAgAAEAEAiA=</HashCode>
       <FileName>Controller\CarController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -164,7 +164,7 @@
   <Class Name="CarController.CarModel" Collapsed="true">
     <Position X="26.25" Y="6.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAwBAAAAAAAgAKACAgAAAhghABBBAgJUAAAAIAAAgQQ=</HashCode>
+      <HashCode>AAwBAAAAQAAgAKACAgAAAhghABBBAgIUAAAAIAAAgQQ=</HashCode>
       <FileName>Test\Fakes\CarModel.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -309,13 +309,6 @@
   </Class>
   <Class Name="CarController.Model.Communicators.Speedometer" Collapsed="true">
     <Position X="22.5" Y="4" Width="1.5" />
-    <NestedTypes>
-      <Struct Name="CarController.Model.Communicators.Speedometer.SpeedMeasurementPoint" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Model\Communicators\Speedometer.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAAIABAQIAEAQAGAaAAAAEAAAShAIBAAAgAACgAAAA=</HashCode>
       <FileName>Model\Communicators\Speedometer.cs</FileName>
@@ -330,15 +323,8 @@
   </Class>
   <Class Name="CarController.MFCSPeedRegulator" Collapsed="true">
     <Position X="13.25" Y="11.75" Width="1.5" />
-    <NestedTypes>
-      <Enum Name="CarController.MFCSPeedRegulator.RideMode" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Model\Regulators\MFCSPeedRegulator.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAACAAAIQAQAAAAgBAAAAAKAAAgCoAgAAAIAEEAAA=</HashCode>
+      <HashCode>AAAQACAAAIQAQAAAAgBAAAAAKAAAgCoAgAAAIAEEEAA=</HashCode>
       <FileName>Model\Regulators\MFCSPeedRegulator.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
