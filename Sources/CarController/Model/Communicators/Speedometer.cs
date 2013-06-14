@@ -33,7 +33,7 @@ namespace CarController.Model.Communicators
 
         private USB4702 extentionCardCommunicator;
 
-        private const double SPEED_MEASURING_TIMER_INTERVAL_IN_MS = 10; //should be lowest possible
+        private const int SPEED_MEASURING_TIMER_INTERVAL_IN_MS = 10; //should be lowest possible
         private const double WHEEL_CIRCUIT_IN_M = 0.548 * Math.PI; //informacja of Filipa Godlewskiego z grupy mechaniki - oby prawdziwa ;)
         private const double NO_OF_HAAL_METERS = 5.0;
         private const double DISTANCE_PER_HAAL_METER_CATCHED = WHEEL_CIRCUIT_IN_M / NO_OF_HAAL_METERS;
@@ -51,8 +51,6 @@ namespace CarController.Model.Communicators
 
             SpeedMeasuringThread = new Thread(new ThreadStart(ConstantSpeedMeasuring));
         }
-
-        volatile bool speedMeasuringOngoing = false;
 
         void ConstantSpeedMeasuring()
         {
@@ -91,6 +89,8 @@ namespace CarController.Model.Communicators
                     }
 
                     lastTicks = ticks;
+
+                    Thread.Sleep(SPEED_MEASURING_TIMER_INTERVAL_IN_MS);
                 }
                 catch (Exception e)
                 {
@@ -138,7 +138,7 @@ namespace CarController.Model.Communicators
 
         protected override void StartEffectors()
         {
-            //no effectors in here
+            //no effectors in here 
         }
 
         protected override void PauseEffectors()
