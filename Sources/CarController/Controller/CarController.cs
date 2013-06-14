@@ -17,7 +17,7 @@ namespace CarController
 
         //stats collecting
         public StatsCollector statsCollector = new StatsCollector();
-        private const double STATS_COLLECTING_THREAD_SLEEP_PER_LOOP_IN_MS = 100;
+        private const int STATS_COLLECTING_THREAD_SLEEP_PER_LOOP_IN_MS = 100;
 
         public DefaultCarController()
         {
