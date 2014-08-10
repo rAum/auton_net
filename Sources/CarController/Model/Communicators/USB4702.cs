@@ -17,12 +17,13 @@ namespace car_communicator
 
         public override string ToString()
         {
-            return "USB4702";    
+            return "extentionCardCommunicator";    
         }
 
         static int buffer;
-        static InstantAoCtrl instantAoCtrl = new InstantAoCtrl(); //for initialize analog outputs
-        static InstantDoCtrl instantDoCtrl = new InstantDoCtrl(); //for initialize digital outputs
+        static InstantAoCtrl instantAoCtrl = new InstantAoCtrl(); //for analog outputs
+        static InstantDoCtrl instantDoCtrl = new InstantDoCtrl(); //for digital outputs
+        static InstantDiCtrl instantDiCtrl = new InstantDiCtrl(); //for digital inputs
         static EventCounterCtrl eventSpeedCounterCtrl = new EventCounterCtrl(); // for initialize counter
 
         const string USB4702_DEVICE_DESCRIPTION_STRING = "USB-4702,BID#0"; // '0' -> 1st extension card
@@ -64,6 +65,8 @@ namespace car_communicator
         const int STEERING_WHEEL_ENABLER_ON_PORT_LEVEL = 1;
         const int STEERING_WHEEL_ENABLER_OFF_PORT_LEVEL = 0;
 
+        const int DIGITAL_INTPUT_PORT_NO = 0;
+
         private bool effectorsActive = false;
 
         protected override void Initialize()
@@ -79,7 +82,7 @@ namespace car_communicator
             {
                 if (++tries > MAX_TRIES_TO_INITIALIZE_BEFORE_ERROR)
                 {
-                    Logger.Log(this, "USB4702 could not be initialized - max tries no hes been exceeded", 3);
+                    Logger.Log(this, "extentionCardCommunicator could not be initialized - max tries no hes been exceeded", 3);
                     this.overallState = DeviceOverallState.Error;
                     initializationFinished = true; //it failed, but its end of trying
                 }
@@ -104,7 +107,7 @@ namespace car_communicator
                 }
                 catch (Exception e)
                 {
-                    Logger.Log(this, String.Format("cannot initialize connection for USB4702, tries left: {0}", MAX_TRIES_TO_INITIALIZE_BEFORE_ERROR - tries), 2);
+                    Logger.Log(this, String.Format("cannot initialize connection for extentionCardCommunicator, tries left: {0}", MAX_TRIES_TO_INITIALIZE_BEFORE_ERROR - tries), 2);
                     Logger.Log(this, String.Format("Exception received: {0}", e.Message), 2);
                 }
             } while (!initializationFinished);
@@ -160,7 +163,7 @@ namespace car_communicator
                 }
                 catch (InvalidCastException)
                 {
-                    Logger.Log(this, "msg couldn't been send via USB4702 - probably because of no connection", 2);
+                    Logger.Log(this, "msg couldn't been send via extentionCardCommunicator - probably because of no connection", 2);
                 }
             }
             else
@@ -198,7 +201,7 @@ namespace car_communicator
                 }
                 catch (Exception)
                 {
-                    Logger.Log(this, "msg couldn't been send via USB4702 - probably because of no connection", 2);
+                    Logger.Log(this, "msg couldn't been send via extentionCardCommunicator - probably because of no connection", 2);
                 }
             }
             else
@@ -279,6 +282,52 @@ namespace car_communicator
             Helpers.ReScaller.ReScale(ref strength, -100, 100, STEERING_WHEEL_MIN_SET_VALUE_IN_VOLTS, STEERING_WHEEL_MAX_SET_VALUE_IN_VOLTS);
 
             setPortAO(STEERING_WHEEL_SET_PORT, strength);
+        }
+
+        public List<bool> ReadDigitalInputs()
+        {
+            List<bool> output = new List<bool>();
+            byte data;
+            
+            ErrorCode code = instantDiCtrl.Read(DIGITAL_INTPUT_PORT_NO, out data);
+
+            if (code != ErrorCode.Success)
+            {
+                Logger.Log(this, String.Format("Reading digital input failed! Error code: {0}", code.ToString()), 3);
+            }
+
+            for (int i = 0; i < 8; i++)
+            {
+                bool currBit = data % 2 == 1;
+                output.Add(currBit);
+                data >>= 1;
+            }
+
+            return output;
+        }
+
+        const int GEARBOX_STEP_ENGINE_STEP_PORT_NO = 7;
+        const byte GEARBOX_STEP_ENGINE_STEP_HIGH_LEVEL = 1;
+        const byte GEARBOX_STEP_ENGINE_STEP_LOW_LEVEL = 1;
+
+        const int GEARBOX_STEP_ENGINE_DIRECTION_PORT_NO = 6;
+        const byte GEARBOX_STEP_ENGINE_DIRECTION_FRONT_LEVEL = 0;
+        const byte GEARBOX_STEP_ENGINE_DIRECTION_REAR_LEVEL = 1;
+        public void MoveGearbox(bool frontDirection, int highTimeInMs, int lowTimeInMs)
+        {
+            if (frontDirection)
+            {
+                setPortDO(GEARBOX_STEP_ENGINE_DIRECTION_PORT_NO, GEARBOX_STEP_ENGINE_DIRECTION_FRONT_LEVEL);
+            }
+            else
+            {
+                setPortDO(GEARBOX_STEP_ENGINE_DIRECTION_PORT_NO, GEARBOX_STEP_ENGINE_DIRECTION_REAR_LEVEL);
+            }
+
+            setPortDO(GEARBOX_STEP_ENGINE_STEP_PORT_NO, GEARBOX_STEP_ENGINE_STEP_HIGH_LEVEL);
+            Thread.Sleep(highTimeInMs);
+            setPortDO(GEARBOX_STEP_ENGINE_STEP_PORT_NO, GEARBOX_STEP_ENGINE_STEP_LOW_LEVEL);
+            Thread.Sleep(lowTimeInMs);
         }
 
         /// <summary>

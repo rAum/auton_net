@@ -11,7 +11,8 @@ namespace CarController
         parking,
         reverse,
         neutral,
-        drive
+        drive,
+        two
     }
     //evSpeedInfoReceived
     public delegate void SpeedInfoReceivedEventHander(object sender, SpeedInfoReceivedEventArgs args);

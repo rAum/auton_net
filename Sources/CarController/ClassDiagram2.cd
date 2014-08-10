@@ -79,7 +79,7 @@
   <Class Name="CarController.RealCarCommunicator" Collapsed="true" HideInheritanceLine="true">
     <Position X="23.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CIAADBAAAMAAAAAJAGAAEABAAAAAgAAAAAAAIKgGAAA=</HashCode>
+      <HashCode>CIAADBAAAMAAAAAJAGAAEABAAAAAgAAAAAAAIKgGACA=</HashCode>
       <FileName>Model\Communicators\RealCarCommunicator.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -154,7 +154,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="CarController.CarModel" Collapsed="true">
-    <Position X="26.25" Y="6.5" Width="1.5" />
+    <Position X="23.75" Y="7.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAgRAAAAAAIgAKACAgAAAgghABBBAgIUAAgAIAAAgQQ=</HashCode>
       <FileName>Test\Fakes\CarModel.cs</FileName>
@@ -209,17 +209,17 @@
   <Class Name="car_communicator.ServoDriver" Collapsed="true">
     <Position X="27.75" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACCgABAAAAAQUGAIAAAAAAQBAAgIEAAIgAQAAAAAA=</HashCode>
+      <HashCode>AAAACgABAAAAAQEGAIAAAAAAAAAAgIEAAIgAQAAAAAA=</HashCode>
       <FileName>Model\Communicators\ServoDriver.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="car_communicator.USB4702">
-    <Position X="31.25" Y="8.25" Width="3.5" />
+  <Class Name="car_communicator.USB4702" Collapsed="true">
+    <Position X="29.5" Y="6.5" Width="3.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>IAIEDCODUREQAQYOJMJIQAQIIAGCIpYAAplACgEGkAE=</HashCode>
+      <HashCode>IAIEDAGAURGQAQaPRMJIQISIIAACaoYAAplACoEGkAE=</HashCode>
       <FileName>Model\Communicators\USB4702.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -263,14 +263,14 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CarController.Model.Communicators.SafeRS232Communicator" Collapsed="true">
-    <Position X="32.5" Y="4" Width="1.5" />
+    <Position X="30.75" Y="5.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AIAAgBAQAAAAAQAEAAAAQACEAAgAAAgAAAAADoHgCAI=</HashCode>
       <FileName>Model\Communicators\SafeRS232Communicator.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CarController.Model.Communicators.SafeRS232Controller" Collapsed="true">
-    <Position X="29.75" Y="4" Width="2" />
+    <Position X="30.5" Y="4" Width="2" />
     <TypeIdentifier>
       <HashCode>QQGAAIgAAgQAJyAHAIgUgqJAAIAAAJAAAAgAAQAAAEA=</HashCode>
       <FileName>Model\Communicators\SafeRS232Controller.cs</FileName>
@@ -294,8 +294,20 @@
       <FileName>Model\Communicators\RS232.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CarController.Model.Communicators.Speedometer">
-    <Position X="25.25" Y="8.25" Width="4" />
+  <Class Name="CarController.Model.Communicators.Speedometer" Collapsed="true">
+    <Position X="26.25" Y="7" Width="1.75" />
+    <NestedTypes>
+      <Struct Name="CarController.Model.Communicators.Speedometer.SpeedMeasurementPoint" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Model\Communicators\Speedometer.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <AssociationLine Name="extentionCardCommunicator" Type="car_communicator.USB4702">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.005" Y="-0.253" />
+      </MemberNameLabel>
+    </AssociationLine>
     <TypeIdentifier>
       <HashCode>AAAAIABAQIAAAQAGAKAIAAEgAAChAIBAAAgAACgAAAA=</HashCode>
       <FileName>Model\Communicators\Speedometer.cs</FileName>
@@ -323,6 +335,27 @@
       <FileName>Model\Communicators\RS232_old.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="car_communicator.GearboxController" Collapsed="true">
+    <Position X="27.5" Y="5.25" Width="1.5" />
+    <AssociationLine Name="extentionCardCommunicator" Type="car_communicator.USB4702" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="28.531" Y="5.941" />
+        <Point X="28.531" Y="6.25" />
+        <Point X="29.938" Y="6.25" />
+        <Point X="29.938" Y="6.5" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.081" Y="-0.036" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>gCAAAAgAAIAAgUADgIQAEgAKAAAQAIAAAAgACAAAAAI=</HashCode>
+      <FileName>Model\Communicators\GearboxController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="extentionCardCommunicator" />
+    </ShowAsAssociation>
+  </Class>
   <Interface Name="CarController.ICar">
     <Position X="17" Y="5" Width="1.75" />
     <AssociationLine Name="SteeringWheelAngleRegulator" Type="CarController.ISteeringWheelAngleRegulator" FixedFromPoint="true" FixedToPoint="true">
@@ -342,15 +375,6 @@
         <Point X="15.5" Y="8.625" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="BrakeRegulator" Type="CarController.IBrakeRegulator" FixedFromPoint="true">
-      <Path>
-        <Point X="17.875" Y="8.161" />
-        <Point X="17.875" Y="9.25" />
-      </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-1.172" Y="0.096" />
-      </MemberNameLabel>
-    </AssociationLine>
     <AssociationLine Name="Controller" Type="CarController.DefaultCarController">
       <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
         <Position X="-0.985" Y="0.2" Height="0.162" Width="0.783" />
@@ -363,6 +387,15 @@
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-0.836" Y="0.1" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="BrakeRegulator" Type="CarController.IBrakeRegulator" FixedFromPoint="true">
+      <Path>
+        <Point X="17.875" Y="8.161" />
+        <Point X="17.875" Y="9.25" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.172" Y="0.096" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
@@ -450,7 +483,7 @@
   <Enum Name="CarController.Gear">
     <Position X="13" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAECgAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAECgAAAACAIAAAAAAAAAAAA=</HashCode>
       <FileName>Model\Communicators\ICarComunicator.cs</FileName>
     </TypeIdentifier>
   </Enum>

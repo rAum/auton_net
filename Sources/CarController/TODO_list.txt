@@ -16,6 +16,9 @@ TODO:
 	- skalibrować czujnik hamulca (!)
 	- odciskać hamulec przy wyłączaniu
 	- zrobić jakoś na hardo ustawianie konkretnego położenia hamulca z konsoli
-	
+	- przywrocic hamulec
+	- wyświetlać obecny bieg!
+	- zminą biegu (kiedy komp nic nie robi) można wyłączać samochód
+	- zmiana biegu reaguje teraz dopiero po jakimś czasie (do 50ms) od ustawienia -
 
 
