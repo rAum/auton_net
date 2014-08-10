@@ -37,7 +37,7 @@
   <Class Name="CarController.FakeCarCommunicator" Collapsed="true" HideInheritanceLine="true">
     <Position X="23.5" Y="6.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAQADBAAQAAAAAABACAAEBAABIAAAAAAgAAAACgMAAA=</HashCode>
+      <HashCode>CAAADBAAAAAAAAABACAAEAAABIAUAAAAgAAAQCgMAAA=</HashCode>
       <FileName>Test\Fakes\FakeCarCommunicator.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -47,11 +47,7 @@
   </Class>
   <Class Name="CarController.MainWindow" Collapsed="true">
     <Position X="20.25" Y="2.25" Width="1.5" />
-    <AssociationLine Name="Controller" Type="CarController.DefaultCarController" FixedFromPoint="true">
-      <Path>
-        <Point X="20.25" Y="2.812" />
-        <Point X="18.75" Y="2.812" />
-      </Path>
+    <AssociationLine Name="Controller" Type="CarController.DefaultCarController">
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="0.248" Y="0.1" />
       </MemberNameLabel>
@@ -102,11 +98,7 @@
   </Class>
   <Class Name="CarController.DefaultCarController" Collapsed="true">
     <Position X="17" Y="2.5" Width="1.75" />
-    <AssociationLine Name="Model" Type="CarController.ICar" FixedToPoint="true">
-      <Path>
-        <Point X="18.188" Y="3.062" />
-        <Point X="18.188" Y="5" />
-      </Path>
+    <AssociationLine Name="Model" Type="CarController.ICar">
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="0.06" Y="0.253" />
       </MemberNameLabel>
@@ -199,14 +191,6 @@
       <FileName>Model\Communicators\ICarComunicator.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CarController_old.RS232Controller" Collapsed="true">
-    <Position X="27.75" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>RECAgJAQAkQAJyADCJgcymJEAAQgQJggAAgCDQBIgEA=</HashCode>
-      <FileName>Model\Communicators\RS232_old.cs</FileName>
-      <NewMemberFileName>Model\Communicators\RS232.cs</NewMemberFileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="CarController.NewBrakeSettingCalculatedEventArgs" Collapsed="true">
     <Position X="4.25" Y="10.25" Width="3.25" />
     <TypeIdentifier>
@@ -229,8 +213,11 @@
       <FileName>Model\Communicators\ServoDriver.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="car_communicator.USB4702" Collapsed="true">
-    <Position X="26" Y="4" Width="1.5" />
+  <Class Name="car_communicator.USB4702">
+    <Position X="31.25" Y="8.25" Width="3.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>IAIEDCODUREQAQYOJMJIQAQIIAGCIpYAAplACgEGkAE=</HashCode>
       <FileName>Model\Communicators\USB4702.cs</FileName>
@@ -307,8 +294,8 @@
       <FileName>Model\Communicators\RS232.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CarController.Model.Communicators.Speedometer" Collapsed="true">
-    <Position X="22.5" Y="4" Width="1.5" />
+  <Class Name="CarController.Model.Communicators.Speedometer">
+    <Position X="25.25" Y="8.25" Width="4" />
     <TypeIdentifier>
       <HashCode>AAAAIABAQIAAAQAGAKAIAAEgAAChAIBAAAgAACgAAAA=</HashCode>
       <FileName>Model\Communicators\Speedometer.cs</FileName>
@@ -324,10 +311,17 @@
   <Class Name="CarController.MFCSPeedRegulator" Collapsed="true">
     <Position X="13.25" Y="11.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAQAiAAAIQAQIAAAgBAAAAAKAAAgCoAAAAAIAEEEAA=</HashCode>
+      <HashCode>AAAQACAAAIQAQIAAAgBAAAAAKAAAgCoAAAAAIAEEEAA=</HashCode>
       <FileName>Model\Regulators\MFCSPeedRegulator.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CarController_old.RS232Controller" Collapsed="true">
+    <Position X="27.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>RECAgJAQAkQAJyADCJgcymJEAAQgQJggAAgCDQBIgEA=</HashCode>
+      <FileName>Model\Communicators\RS232_old.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Interface Name="CarController.ICar">
     <Position X="17" Y="5" Width="1.75" />
@@ -348,26 +342,6 @@
         <Point X="15.5" Y="8.625" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="Controller" Type="CarController.DefaultCarController">
-      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
-        <Position X="-0.985" Y="0.2" Height="0.162" Width="0.783" />
-      </MemberNameLabel>
-    </AssociationLine>
-    <AssociationLine Name="CarComunicator" Type="CarController.ICarCommunicator" FixedFromPoint="true">
-      <Path>
-        <Point X="18.75" Y="5.854" />
-        <Point X="20.25" Y="5.854" />
-      </Path>
-    </AssociationLine>
-    <AssociationLine Name="CarInfo" Type="CarController.CarInformations" ManuallyRouted="true" FixedFromPoint="true">
-      <Path>
-        <Point X="17" Y="5.583" />
-        <Point X="15.75" Y="5.469" />
-      </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-0.836" Y="0.1" />
-      </MemberNameLabel>
-    </AssociationLine>
     <AssociationLine Name="BrakeRegulator" Type="CarController.IBrakeRegulator" FixedFromPoint="true">
       <Path>
         <Point X="17.875" Y="8.161" />
@@ -375,6 +349,20 @@
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-1.172" Y="0.096" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="Controller" Type="CarController.DefaultCarController">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-0.985" Y="0.2" Height="0.162" Width="0.783" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="CarInfo" Type="CarController.CarInformations" ManuallyRouted="true">
+      <Path>
+        <Point X="17" Y="5.583" />
+        <Point X="15.75" Y="5.469" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.836" Y="0.1" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
@@ -412,12 +400,6 @@
   </Interface>
   <Interface Name="CarController.ICarCommunicator">
     <Position X="20.25" Y="5" Width="2.5" />
-    <AssociationLine Name="ICar" Type="CarController.ICar" FixedFromPoint="true">
-      <Path>
-        <Point X="20.25" Y="5.874" />
-        <Point X="18.75" Y="5.874" />
-      </Path>
-    </AssociationLine>
     <TypeIdentifier>
       <HashCode>AAAADBAAAAAAAAAAACAAEAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
       <FileName>Model\Communicators\ICarComunicator.cs</FileName>

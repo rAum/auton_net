@@ -22,17 +22,17 @@ namespace CarController
         public DefaultCarController()
         {
             //Model = new ExampleFakeCar(this);
-            //Model = new RealCar(this);
+            Model = new RealCar(this);
             //Model = new CarWithFakeRegulators(this);
-            Model = new CarWithFakeCommunicator(this);
+            //Model = new CarWithFakeCommunicator(this);
 
             Model.SetTargetSpeed(0.0);
             Model.SetTargetWheelAngle(0.0);
 
             EventHandlingForStatsCollectingInit();
 
-            StatsCollectingThread = new Thread(new ThreadStart(StatsCollectingThreadFoo));
-            StatsCollectingThread.Start(); 
+            //StatsCollectingThread = new Thread(new ThreadStart(StatsCollectingThreadFoo));
+            //StatsCollectingThread.Start(); 
             
             //mFakeSignalsSenderThread = new System.Threading.Thread(new System.Threading.ThreadStart(mFakeSignalsSenderFoo));
             //mFakeSignalsSenderThread.Start();

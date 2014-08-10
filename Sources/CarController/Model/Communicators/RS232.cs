@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Helpers; 
 using System.Text;
 using System.IO.Ports;
 using System.Threading;
-using Helpers;
 
 namespace CarController
 {
@@ -12,7 +12,7 @@ namespace CarController
     public class RS232Controller
     {
         // Create the serial port with basic settings 
-        private SerialPort port = new SerialPort("COM4", 9600, Parity.None, 8, StopBits.One); //ITS OBSOLETE ANYWAY  //TO DO: add choosing COM no from form
+        private SerialPort port = new SerialPort("COM6", 9600, Parity.None, 8, StopBits.One); //ITS OBSOLETE ANYWAY  //TO DO: add choosing COM no from form
 
         //messages
         readonly char[] giveMeSteeringWheelAngleMsg = new char[] { '1', 'P', (char)13 }; //ITS OBSOLETE ANYWAY  //TO DO: try changing it to byte[] //not necessery, but char[] probably wont work for values > 127...

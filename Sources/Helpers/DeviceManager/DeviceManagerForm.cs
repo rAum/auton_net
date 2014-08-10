@@ -14,7 +14,7 @@ namespace Helpers
     {
         private const int UPDATER_TIMER_INTERVAL_IN_MS = 100;
 
-        private Jurek jurek;
+        //private Jurek jurek;
 
         private DeviceManager deviceManager;
         private System.Windows.Forms.Timer updaterTimer;
@@ -24,7 +24,7 @@ namespace Helpers
             deviceManager = devManager;
 
             InitializeComponent();
-            jurek = new Jurek();
+            //jurek = new Jurek();
 
             dataGridView1.Columns.Add("device name", "device name");
             dataGridView1.Columns.Add("overall state", "overall state");
@@ -36,7 +36,7 @@ namespace Helpers
             updaterTimer.Start();
 
             JurekGreeting();
-            jurek.StartListening(hearedCommand);
+            //jurek.StartListening(hearedCommand);
 
             deviceManager.evDeviceManagerOverallStateHasChanged += deviceManager_evDeviceStateHasChanged;
         }
@@ -113,8 +113,8 @@ namespace Helpers
                 "to ja, Jurek, kierowca.", "Kierowca Jurek do usług.", "Kierowca Jurek do usług."
             };
 
-            jurek.Say(greet[rnd.Next(0, greet.Length-1)]);
-            jurek.Say(me[rnd.Next(0, me.Length-1)]);
+            //jurek.Say(greet[rnd.Next(0, greet.Length-1)]);
+            //jurek.Say(me[rnd.Next(0, me.Length-1)]);
         }
 
         bool started = false;
@@ -153,7 +153,7 @@ namespace Helpers
                         , "Co robi pojazd autonomiczny na torze wyścigowym? Jeździ haha"
                     };
 
-                    jurek.Say(answer[rnd.Next(0, answer.Length -1)]);
+                    //jurek.Say(answer[rnd.Next(0, answer.Length -1)]);
                 }
             }
         }
@@ -221,7 +221,7 @@ namespace Helpers
         {
             if (button_initialize.Enabled) //voice recognition can "click" button even if it is disabled
             {
-                jurek.Say("Inicjalizacja sterowników.");
+                //jurek.Say("Inicjalizacja sterowników.");
                 deviceManager.Initialize();
 
                 if (deviceManager.overallState != DeviceOverallState.Error)
@@ -236,7 +236,7 @@ namespace Helpers
         {
             if (button_StartSensors.Enabled)
             {
-                jurek.Say("Uruchamiam sensory.");
+                //jurek.Say("Uruchamiam sensory.");
                 deviceManager.StartSensors();
 
                 button_StartSensors.Enabled = false;
@@ -249,9 +249,9 @@ namespace Helpers
         {
             if (button_StartEffectors.Enabled)
             {
-                jurek.Say("Uruchamiam efektory.");
+                //jurek.Say("Uruchamiam efektory.");
                 deviceManager.StartEffectors();
-                jurek.Say("Pojazd gotowy do jazdy.");
+                //jurek.Say("Pojazd gotowy do jazdy.");
 
                 button_StartEffectors.Enabled = false;
                 button_PauseEffectors.Enabled = true;
@@ -263,7 +263,7 @@ namespace Helpers
         {
             if (button_PauseEffectors.Enabled)
             {
-                jurek.Say("Pauzuje efektory.");
+                //jurek.Say("Pauzuje efektory.");
                 deviceManager.PauseEffectors();
 
                 button_PauseEffectors.Enabled = false;
@@ -276,7 +276,7 @@ namespace Helpers
             if (button_EmergencyStop.Enabled)
             {
                 deviceManager.EmergencyStop();
-                jurek.Say("Ojej! Zatrzymać! Przycisk bezpieczeństwa użyty.");
+                //jurek.Say("Ojej! Zatrzymać! Przycisk bezpieczeństwa użyty.");
             }
         }
 

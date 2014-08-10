@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -79,7 +79,7 @@ namespace CarController_old
         {
             get
             {
-                return __brakeRead__;    
+                return __brakeRead__;
             }
 
             set
@@ -97,7 +97,7 @@ namespace CarController_old
             {
                 Logger.Log(this, "brake received value is out of range", 1);
             }
-            return ReScaller.ReScale(ref val, BRAKE_OUTPUT_MAX_PULLED, BRAKE_OUTPUT_MAX_PUSHED, BRAKE_POWER_WHEN_MAX_PULLED, BRAKE_POWER_WHEN_MAX_PUSHED); 
+            return ReScaller.ReScale(ref val, BRAKE_OUTPUT_MAX_PULLED, BRAKE_OUTPUT_MAX_PUSHED, BRAKE_POWER_WHEN_MAX_PULLED, BRAKE_POWER_WHEN_MAX_PUSHED);
         }
 
 
@@ -127,7 +127,7 @@ namespace CarController_old
 
         /// <summary>
         /// note: must work as a new thread
-        /// Datasheet in repo: "autonomiczny_samochod\docs\Dane techniczne - czujnik kąta.pdf"
+        /// Datasheet in repo: "autonomiczny_samochod\docs\Dane techniczne - czujnik k�ta.pdf"
         /// in case of any problems contact "Korad Zawada" and Electronics group
         /// </summary>
         private void startDataTransmission()
@@ -281,19 +281,19 @@ namespace CarController_old
                 }
                 else
                 {
-                    if (readMsg[1]%2 == 0)
+                    if (readMsg[1] % 2 == 0)
                     {
                         Logger.Log(this, "RS232 sterring wheel diagnosis bit 0 error", 1);
                     }
-                    if ((readMsg[1]/2)%2 == 1)
+                    if ((readMsg[1] / 2) % 2 == 1)
                     {
                         Logger.Log(this, "RS232 sterring wheel diagnosis bit 1 error", 1);
                     }
-                    if ((readMsg[1]/4)%2 == 1)
+                    if ((readMsg[1] / 4) % 2 == 1)
                     {
                         Logger.Log(this, "RS232 sterring wheel diagnosis bit 2 error - magnet is too strong or too close", 1);
                     }
-                    if ((readMsg[1]/8)%2 == 1)
+                    if ((readMsg[1] / 8) % 2 == 1)
                     {
                         Logger.Log(this, "RS232 sterring wheel diagnosis bit 3 error - magnet is too weak or too far", 1);
                     }
@@ -365,55 +365,55 @@ namespace CarController_old
                 overallState = DeviceOverallState.Error;
             }
         }
-     
+
 
         //TODO: REMOVE BELOW CODE AFTER TESTING THAT CURRENT CODE WORKS
-     /* it has been rewriten below due to reciving values > 127 problems //and that it was piece shit written in garage
+        /* it has been rewriten below due to reciving values > 127 problems //and that it was piece shit written in garage
 
-    private volatile string inBuffer = string.Empty;
-    private volatile string receivedWord = string.Empty;
+       private volatile string inBuffer = string.Empty;
+       private volatile string receivedWord = string.Empty;
 
-    /// <summary>
-    /// its NOT THREAD-SAFE - cant work on different threads
-    /// uses volatile vars "inBuffer" and "receivedWord"
-    /// </summary>
-    /// <returns></returns>
-    private string readWordFromRS232()
-    {
-        while (receivedWord == string.Empty)
-            System.Threading.Thread.Sleep(SLEEP_WHILE_WAITING_FOR_READ_IN_MS);
+       /// <summary>
+       /// its NOT THREAD-SAFE - cant work on different threads
+       /// uses volatile vars "inBuffer" and "receivedWord"
+       /// </summary>
+       /// <returns></returns>
+       private string readWordFromRS232()
+       {
+           while (receivedWord == string.Empty)
+               System.Threading.Thread.Sleep(SLEEP_WHILE_WAITING_FOR_READ_IN_MS);
 
-        string temp = receivedWord;
-        receivedWord = string.Empty;
+           string temp = receivedWord;
+           receivedWord = string.Empty;
 
-        return temp;
-    }
+           return temp;
+       }
 
         
-    //http://stackoverflow.com/questions/5848907/received-byte-never-over-127-in-serial-port <--- use just read();
-    private void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-    {
-        string temp = port.ReadExisting(); //<-------- to nie dziala -> powyzej 128 daje 63
-        //int temp = port.ReadChar();
-        Console.WriteLine(temp);
-        //inBuffer = inBuffer + Convert.ToChar(temp);
-        inBuffer = inBuffer + temp;
-        if (inBuffer != string.Empty)
-        {
-            if (inBuffer[inBuffer.Length - 1] == 13)
-            //if(temp == 13)
-            {
-                if (receivedWord != string.Empty)
-                {
-                    Logger.Log(this, String.Format("message from RS232 was not read: {0}", receivedWord), 1);
-                }
-                receivedWord = inBuffer;
-                inBuffer = string.Empty;
-            }
-        }
-    }
-    */
-        
+       //http://stackoverflow.com/questions/5848907/received-byte-never-over-127-in-serial-port <--- use just read();
+       private void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
+       {
+           string temp = port.ReadExisting(); //<-------- to nie dziala -> powyzej 128 daje 63
+           //int temp = port.ReadChar();
+           Console.WriteLine(temp);
+           //inBuffer = inBuffer + Convert.ToChar(temp);
+           inBuffer = inBuffer + temp;
+           if (inBuffer != string.Empty)
+           {
+               if (inBuffer[inBuffer.Length - 1] == 13)
+               //if(temp == 13)
+               {
+                   if (receivedWord != string.Empty)
+                   {
+                       Logger.Log(this, String.Format("message from RS232 was not read: {0}", receivedWord), 1);
+                   }
+                   receivedWord = inBuffer;
+                   inBuffer = string.Empty;
+               }
+           }
+       }
+       */
+
 
         /// <summary>
         /// this is rewriten function from above
@@ -423,7 +423,7 @@ namespace CarController_old
         volatile bool RS232dataIsBeingRead = false; //to dont allow data reading start twice
 
         private void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        { 
+        {
             /* 
              * due to: http://msdn.microsoft.com/en-us/library/y2sxhat8.aspx 
              * changing encoding to "UTF8Encoding" fixes bug with getting "63" instead of values bigger than 127
@@ -471,7 +471,7 @@ namespace CarController_old
             int timeoutCounter = 0;
             while ((node = RS232SignalsInputList.Find(13)) == null)
             {
-                if (timeoutCounter++ > READ_TIMEOUT_IN_MS/SLEEP_WHILE_WAITING_FOR_READ_IN_MS)
+                if (timeoutCounter++ > READ_TIMEOUT_IN_MS / SLEEP_WHILE_WAITING_FOR_READ_IN_MS)
                 {
                     RS232SignalsInputList.Clear(); //clearing list on timeout should prevent desync
                     throw new TimeoutException("RS232 read custom timeout has occured");
@@ -522,7 +522,7 @@ namespace CarController_old
                 RS232SignalsInputList.Clear(); //clearing list on timeout should prevent desync
                 Logger.Log(this, "timeout on write has occured, message was not sent", 1); //TODO: real exceptions handling
             }
-            catch(Exception)
+            catch (Exception)
             {
                 Logger.Log(this, "some error has occured on writing msg to RS232", 1);
             }

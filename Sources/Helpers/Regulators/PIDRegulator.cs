@@ -22,7 +22,7 @@ namespace Helpers
 
         public double targetValue;
 
-        private PIDSettings settigs;
+        private PIDSettings settings;
 
         private string reulatorName;
 
@@ -30,7 +30,7 @@ namespace Helpers
         
         public PIDRegulator(PIDSettings stgs, string regName)
         {
-            settigs = stgs;
+            settings = stgs;
             reulatorName = regName;
         }
 
@@ -64,29 +64,29 @@ namespace Helpers
             double deviation = targetValue - currValue;
 
             //P
-            P_Factor = deviation * settigs.P_FACTOR_MULTIPLER;
+            P_Factor = deviation * settings.P_FACTOR_MULTIPLER;
 
             //I
             I_Factor_sum *= Math.Pow(
-                settigs.I_FACTOR_SUM_SUPPRESSION_PER_SEC,
+                settings.I_FACTOR_SUM_SUPPRESSION_PER_SEC,
                 (double)timeFromLastValueReceived.Milliseconds / 1000.0
             ); //suppressing old value
             I_Factor_sum += deviation * (double)timeFromLastValueReceived.Milliseconds / 1000.0;
-            Limiter.Limit(ref I_Factor_sum, settigs.I_FACTOR_SUM_MIN_VALUE, settigs.I_FACTOR_SUM_MAX_VALUE);
-            I_Factor = I_Factor_sum * settigs.I_FACTOR_MULTIPLER;
+            Limiter.Limit(ref I_Factor_sum, settings.I_FACTOR_SUM_MIN_VALUE, settings.I_FACTOR_SUM_MAX_VALUE);
+            I_Factor = I_Factor_sum * settings.I_FACTOR_MULTIPLER;
 
             //D
             D_Factor_sum *= Math.Pow(
-                settigs.D_FACTOR_SUPPRESSION_PER_SEC,
+                settings.D_FACTOR_SUPPRESSION_PER_SEC,
                 (double)timeFromLastValueReceived.Milliseconds / 1000.0
             ); //suppresing olf value
             D_Factor_sum += deviation - lastDeviation;
-            Limiter.Limit(ref D_Factor_sum, settigs.D_FACTOR_SUM_MIN_VALUE, settigs.D_FACTOR_SUM_MAX_VALUE);
-            D_Factor = D_Factor_sum * settigs.D_FACTOR_MULTIPLER;
+            Limiter.Limit(ref D_Factor_sum, settings.D_FACTOR_SUM_MIN_VALUE, settings.D_FACTOR_SUM_MAX_VALUE);
+            D_Factor = D_Factor_sum * settings.D_FACTOR_MULTIPLER;
 
             //calculating steering = limitted (P + I + D)
             CalculatedSteering = P_Factor + I_Factor + D_Factor;
-            CalculatedSteering = Limiter.ReturnLimmitedVar(CalculatedSteering, settigs.MIN_FACTOR_CONST, settigs.MAX_FACTOR_CONST);
+            CalculatedSteering = Limiter.ReturnLimmitedVar(CalculatedSteering, settings.MIN_FACTOR_CONST, settings.MAX_FACTOR_CONST);
 
             lastObjectValueReceived = currValue;
             lastObjectValueReceivedTime = DateTime.Now;
