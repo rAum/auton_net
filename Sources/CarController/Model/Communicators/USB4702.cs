@@ -37,26 +37,17 @@ namespace car_communicator
 
         const int BRAKE_STRENGTH_SET_PORT = 1;
         const double BRAKE_MIN_SET_VALUE_IN_VOLTS = 0.0; //from 0
-        const double BRAKE_NEUTRAL_STRENGTH_IN_VOLTS = 2.5;
         const double BRAKE_MAX_SET_VALUE_IN_VOLST = 4.2; //from 5
 
-        const double MIN_STRENGTH_FOR_BRAKE_TO_REACT_IN_PERCENTS = 20;
+        const double MIN_STRENGTH_FOR_BRAKE_TO_REACT_IN_PERCENTS = 5;
 
         const int BRAKE_ENABLE_PORT_NO = 0;
         const byte BRAKE_ENABLE_ON_PORT_LEVEL = 0; 
         const byte BRAKE_ENABLE_OFF_PORT_LEVEL = 1;
 
-        const int BRAKE_STOP_PORT_NO = 2;
-        const byte BRAKE_STOP_ON_PORT_LEVEL = 0;
-        const byte BRAKE_STOP_OFF_PORT_LEVEL = 1;
-
         const int BRAKE_DIRECTION_PORT_NO = 1;
         const int BRAKE_BACKWARD_PORT_LEVEL = 1; 
         const int BRAKE_FORWARD_PORT_LEVEL = 0;
-
-        const int BRAKE_SOFT_START_PORT_NO = 3; // the same as STEERING_WHEEL_ENABLER_PORT_NO TODO:!
-        const int BRAKE_SOFT_START_ON_PORT_LEVEL = 1;
-        const int BRAKE_SOFT_START_OFF_PORT_LEVEL = 0;
 
         const int IGNITION_PORT_NO = 4; //zaplon
         const int IGNITION_ON_PORT_LEVEL = 0;
@@ -73,7 +64,6 @@ namespace car_communicator
         const int STEERING_WHEEL_ENABLER_ON_PORT_LEVEL = 1;
         const int STEERING_WHEEL_ENABLER_OFF_PORT_LEVEL = 0;
 
-        private bool carEngineEnabled = false;
         private bool effectorsActive = false;
 
         protected override void Initialize()
@@ -105,10 +95,9 @@ namespace car_communicator
                     eventSpeedCounterCtrl.SelectedDevice = new DeviceInformation(USB4702_DEVICE_DESCRIPTION_STRING);
 
                     eventSpeedCounterCtrl.Channel = 0;
-                    eventSpeedCounterCtrl.Enabled = true; //IMPORTANT: was ----> // false; // block counter
+                    eventSpeedCounterCtrl.Enabled = true;
 
                     setPortDO(BRAKE_ENABLE_PORT_NO, BRAKE_ENABLE_ON_PORT_LEVEL); //enabling brake engine
-                    setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_OFF_PORT_LEVEL);
 
                     initializationFinished = true; //no exceptions and get here - everything is ok!
                     this.overallState = DeviceOverallState.OK;
@@ -322,22 +311,14 @@ namespace car_communicator
             //to dont waste engine - when steering value is low - we are stopping engine 
             if (strength < MIN_STRENGTH_FOR_BRAKE_TO_REACT_IN_PERCENTS) //strength should be always > 0 in here
             {
-                //setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_ON_PORT_LEVEL);
-                //setPortAO(BRAKE_STRENGTH_SET_PORT, BRAKE_NEUTRAL_STRENGTH_IN_VOLTS);
-                
-                /// rAum: to po pokazie tvn, widze todo wiec merguje abys sprawdzil->
-                // setPortAO(BRAKE_STRENGTH_SET_PORT, 0); //TODO: check it //BRAKE_NEUTRAL_STRENGTH_IN_VOLTS);
+                setPortAO(BRAKE_STRENGTH_SET_PORT, BRAKE_MIN_SET_VALUE_IN_VOLTS);
             }
             else
             {
-                setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_OFF_PORT_LEVEL);
                 Helpers.ReScaller.ReScale(ref strength, 0, 100, BRAKE_MIN_SET_VALUE_IN_VOLTS, BRAKE_MAX_SET_VALUE_IN_VOLST);
 
-                //setPortAO(BRAKE_STRENGTH_SET_PORT, strength);
+                setPortAO(BRAKE_STRENGTH_SET_PORT, strength);
             }
-            setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_OFF_PORT_LEVEL);
-            setPortDO(BRAKE_DIRECTION_PORT_NO, BRAKE_BACKWARD_PORT_LEVEL);
-            setPortAO(BRAKE_STRENGTH_SET_PORT, 0);
         }
 
     }

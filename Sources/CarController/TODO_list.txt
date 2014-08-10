@@ -8,9 +8,14 @@
 		- real time charts drawing (from gathered stats) (it would make regulators tuning much easier)
 
 NEW TODO:
-	- przycisk bezpieczenstwa ma odcinac zasilanie od huba (bo kierownica napierdala)
-	- POPRAWIC HAMULEC
-	- daszek na stałe do kamerki
-	- wyjebac timery!! zwlaszcza od predkosciomierza 
-	- czemu kierownica pierdzi (Konrad)
 	- nawiew + wycieraczki (okna zaparowują przy zamkniętych oknach - kiedy w środku jest mokro jest masakra, kiedy deszcz pada trzeba otwierać okna przez co w środku jest mokro - po 4 godzinach pokazu w deszczu szału nie ma ;))
+
+TODO:
+	- skalibrować kierownicę (max wychylenia)
+	- skalibrować prędkość
+	- skalibrować czujnik hamulca (!)
+	- odciskać hamulec przy wyłączaniu
+	- zrobić jakoś na hardo ustawianie konkretnego położenia hamulca z konsoli
+	
+
+
