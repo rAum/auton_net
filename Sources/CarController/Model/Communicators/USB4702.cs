@@ -50,6 +50,10 @@ namespace car_communicator
         const int BRAKE_BACKWARD_PORT_LEVEL = 1; 
         const int BRAKE_FORWARD_PORT_LEVEL = 0;
 
+        const int BRAKE_STOP_PORT_NO = 2;
+        const byte BRAKE_STOP_ON_PORT_LEVEL = 0;
+        const byte BRAKE_STOP_OFF_PORT_LEVEL = 1;
+
         const int IGNITION_PORT_NO = 4; //zaplon
         const int IGNITION_ON_PORT_LEVEL = 0;
         const int IGNITION_OFF_PORT_LEVEL = 1;
@@ -361,11 +365,13 @@ namespace car_communicator
             if (strength < MIN_STRENGTH_FOR_BRAKE_TO_REACT_IN_PERCENTS) //strength should be always > 0 in here
             {
                 setPortAO(BRAKE_STRENGTH_SET_PORT, BRAKE_MIN_SET_VALUE_IN_VOLTS);
+                setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_ON_PORT_LEVEL);
             }
             else
             {
                 Helpers.ReScaller.ReScale(ref strength, 0, 100, BRAKE_MIN_SET_VALUE_IN_VOLTS, BRAKE_MAX_SET_VALUE_IN_VOLST);
 
+                setPortDO(BRAKE_STOP_PORT_NO, BRAKE_STOP_OFF_PORT_LEVEL);
                 setPortAO(BRAKE_STRENGTH_SET_PORT, strength);
             }
         }
