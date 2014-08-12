@@ -106,6 +106,7 @@ namespace CarController
             Controller.Model.evTargetSteeringWheelAngleChanged += new TargetSteeringWheelAngleChangedEventHandler(Model_evTargetSteeringWheelAngleChanged);
             Controller.Model.CarComunicator.evSteeringWheelAngleInfoReceived += new SteeringWheelAngleInfoReceivedEventHandler(CarComunicator_evSteeringWheelAngleInfoReceived);
             Controller.Model.CarComunicator.evBrakePositionReceived += new BrakePositionReceivedEventHandler(CarComunicator_evBrakePositionReceived);
+            Controller.Model.CarComunicator.evGearPositionReceived += CarComunicator_evGearPositionReceived;
 
             Controller.Model.SpeedRegulator.evNewSpeedSettingCalculated += new NewSpeedSettingCalculatedEventHandler(SpeedRegulator_evNewSpeedSettingCalculated); //this is also target for brake regulator
             Controller.Model.SteeringWheelAngleRegulator.evNewSteeringWheelSettingCalculated += new NewSteeringWheelSettingCalculatedEventHandler(SteeringWheelAngleRegulator_evNewSteeringWheelSettingCalculated);
@@ -413,6 +414,16 @@ namespace CarController
         void BrakeRegulator_evNewBrakeSettingCalculated(object sender, NewBrakeSettingCalculatedEventArgs args)
         {
             UpdateTextBlock(textBlock_steeringBrake, args.GetBrakeSetting(), steeringBrakeLabelData);
+        }
+
+        LabelData currentGearLabelData = new LabelData();
+        void CarComunicator_evGearPositionReceived(object sender, GearPositionReceivedEventArgs args)
+        {
+            this.Dispatcher.Invoke(
+                new Action<Gear>((gear) =>
+                {
+                    textBlock_currentGear.Text = gear.ToString();
+                }));
         }
     }
 }

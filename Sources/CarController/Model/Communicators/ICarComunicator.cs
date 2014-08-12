@@ -70,12 +70,29 @@ namespace CarController
             return brakePosition;
         }
     }
+    
+    public delegate void GearPositionReceivedEventHandler(object sender, GearPositionReceivedEventArgs args);
+    public class GearPositionReceivedEventArgs : EventArgs
+    {
+        private Gear gear;
+
+        public GearPositionReceivedEventArgs(Gear _gear)
+        {
+            gear = _gear;
+        }
+
+        public Gear GetGear()
+        {
+            return gear;
+        }
+    }
 
     public interface ICarCommunicator
     {
         event SpeedInfoReceivedEventHander evSpeedInfoReceived;
         event SteeringWheelAngleInfoReceivedEventHandler evSteeringWheelAngleInfoReceived;
         event BrakePositionReceivedEventHandler evBrakePositionReceived;
+        event GearPositionReceivedEventHandler evGearPositionReceived;
 
         ICar ICar
         {

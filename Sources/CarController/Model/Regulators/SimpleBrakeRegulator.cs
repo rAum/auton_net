@@ -61,10 +61,10 @@ namespace CarController.Model.Regulators
             ICar = car;
             regulator = new SimpleRegulator(new Settings(), "brake PID regulator");
 
-            ICar.SpeedRegulator.evNewSpeedSettingCalculated += new NewSpeedSettingCalculatedEventHandler(SpeedRegulator_evNewSpeedSettingCalculated);
-            ICar.CarComunicator.evBrakePositionReceived += new BrakePositionReceivedEventHandler(CarComunicator_evBrakePositionReceived);
-            evNewBrakeSettingCalculated += new NewBrakeSettingCalculatedEventHandler(PIDBrakeRegulator_evNewBrakeSettingCalculated);
-            ICar.evAlertBrake += new EventHandler(ICar_evAlertBrake);
+            ICar.SpeedRegulator.evNewSpeedSettingCalculated += SpeedRegulator_evNewSpeedSettingCalculated;
+            ICar.CarComunicator.evBrakePositionReceived += CarComunicator_evBrakePositionReceived;
+            evNewBrakeSettingCalculated += PIDBrakeRegulator_evNewBrakeSettingCalculated;
+            ICar.evAlertBrake += ICar_evAlertBrake;
         }
 
         void ICar_evAlertBrake(object sender, EventArgs e)

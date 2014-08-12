@@ -12,7 +12,7 @@ namespace CarController_old
     public class RS232Controller : Device
     {
         // Create the serial port with basic settings 
-        private SerialPort port = new SerialPort("COM4", 9600, Parity.None, 8, StopBits.One); //TODO: add choosing COM no from form
+        private SerialPort port = new SerialPort("COM5", 9600, Parity.None, 8, StopBits.One); //TODO: add choosing COM no from form
 
         //messages
         char[] giveMeSteeringWheelAngleMsg = new char[] { '1', 'P', (char)13 }; //TODO: try changing it to byte[] //not necessery, but char[] probably wont work for values > 127...
@@ -42,10 +42,10 @@ namespace CarController_old
         private const double WHEEL_ANGLE_ON_MAX_LEFT = -30.0; //IMPORTANT: TODO: check it in documentation
 
         //brake
-        private const int BRAKE_OUTPUT_MAX_PUSHED = 11070; //was checked to be 11170 when max but decreased to improve steering
+        private const int BRAKE_OUTPUT_MAX_PUSHED = 13433; //was checked to be 11170 when max but decreased to improve steering
         private const double BRAKE_POWER_WHEN_MAX_PUSHED = 100;
 
-        private const int BRAKE_OUTPUT_MAX_PULLED = 10700; //ze sprezynami jest 10709; //was checked to be 10729 when min but increased to improve steering
+        private const int BRAKE_OUTPUT_MAX_PULLED = 12817; //ze sprezynami jest 10709; //was checked to be 10729 when min but increased to improve steering
         private const double BRAKE_POWER_WHEN_MAX_PULLED = 0;
 
         //read values

@@ -48,9 +48,9 @@ namespace CarController.Model.Car
 
         private void InternalEventHandlingInitialization()
         {
-            evAlertBrake += new EventHandler(ExampleFakeCar_evAlertBrake);
-            evTargetSpeedChanged += new TargetSpeedChangedEventHandler(ExampleFakeCar_evTargetSpeedChanged);
-            evTargetSteeringWheelAngleChanged += new TargetSteeringWheelAngleChangedEventHandler(ExampleFakeCar_evTargetSteeringWheelAngleChanged);
+            evAlertBrake += ExampleFakeCar_evAlertBrake;
+            evTargetSpeedChanged += ExampleFakeCar_evTargetSpeedChanged;
+            evTargetSteeringWheelAngleChanged += ExampleFakeCar_evTargetSteeringWheelAngleChanged;
             deviceManager.evDeviceManagerOverallStateHasChanged += deviceManager_evDeviceStateHasChanged;
         }
 

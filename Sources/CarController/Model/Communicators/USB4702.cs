@@ -98,6 +98,8 @@ namespace car_communicator
                     //Digital output
                     instantDoCtrl.SelectedDevice = new DeviceInformation(USB4702_DEVICE_DESCRIPTION_STRING);
 
+                    instantDiCtrl.SelectedDevice = new DeviceInformation(USB4702_DEVICE_DESCRIPTION_STRING);
+
                     //Counter
                     eventSpeedCounterCtrl.SelectedDevice = new DeviceInformation(USB4702_DEVICE_DESCRIPTION_STRING);
 
@@ -312,7 +314,7 @@ namespace car_communicator
 
         const int GEARBOX_STEP_ENGINE_STEP_PORT_NO = 7;
         const byte GEARBOX_STEP_ENGINE_STEP_HIGH_LEVEL = 1;
-        const byte GEARBOX_STEP_ENGINE_STEP_LOW_LEVEL = 1;
+        const byte GEARBOX_STEP_ENGINE_STEP_LOW_LEVEL = 0;
 
         const int GEARBOX_STEP_ENGINE_DIRECTION_PORT_NO = 6;
         const byte GEARBOX_STEP_ENGINE_DIRECTION_FRONT_LEVEL = 0;

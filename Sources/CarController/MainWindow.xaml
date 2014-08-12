@@ -40,5 +40,7 @@
         </GroupBox>
         <ProgressBar x:Name="progressBar_speed" HorizontalAlignment="Left" Height="104" Margin="201,358,0,0" VerticalAlignment="Top" Width="20" Orientation="Vertical" Grid.Column="1"/>
         <ProgressBar x:Name="progressBar_rightDir" HorizontalAlignment="Left" Height="23" Margin="264,397,0,0" VerticalAlignment="Top" Width="152" Foreground="#FF0101D3" Grid.Column="1"/>
+        <Label Content="Gear" Grid.Column="1" HorizontalAlignment="Left" Margin="369,58,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlock_currentGear" Grid.Column="1" HorizontalAlignment="Left" Margin="366,89,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
     </Grid>
 </Window>

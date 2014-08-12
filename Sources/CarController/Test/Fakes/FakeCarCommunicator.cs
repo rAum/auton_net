@@ -58,9 +58,9 @@ namespace CarController
         /// </summary>
         public void InitRegulatorsEventsHandling()
         {
-            SpeedRegulator.evNewSpeedSettingCalculated += new NewSpeedSettingCalculatedEventHandler(ISpeedRegulator_evNewSpeedSettingCalculated);
-            SteeringWheelAngleRegulator.evNewSteeringWheelSettingCalculated += new NewSteeringWheelSettingCalculatedEventHandler(ISteeringWheelAngleRegulator_evNewSteeringWheelSettingCalculated);
-            BrakeRegulator.evNewBrakeSettingCalculated += new NewBrakeSettingCalculatedEventHandler(BrakeRegulator_evNewBrakeSettingCalculated);
+            SpeedRegulator.evNewSpeedSettingCalculated += ISpeedRegulator_evNewSpeedSettingCalculated;
+            SteeringWheelAngleRegulator.evNewSteeringWheelSettingCalculated += ISteeringWheelAngleRegulator_evNewSteeringWheelSettingCalculated;
+            BrakeRegulator.evNewBrakeSettingCalculated += BrakeRegulator_evNewBrakeSettingCalculated;
         }
 
         void BrakeRegulator_evNewBrakeSettingCalculated(object sender, NewBrakeSettingCalculatedEventArgs args)
@@ -131,6 +131,9 @@ namespace CarController
         {
             model.Gear = gear;
         }
+
+
+        public event GearPositionReceivedEventHandler evGearPositionReceived;
     }
 }
 

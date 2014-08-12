@@ -17,12 +17,13 @@ namespace car_communicator
         private const int GEARBOX_UPDATING_INTERVAL_IN_MS = 50;
         private const int GEARBOX_POSITION_SETTER_SLEEP_IN_MS = 100;
 
-        private const int GEARBOX_HIGH_STEP_IN_MS = 1;
-        private const int GEARBOX_LOW_STEP_IN_MS = 1;
+        private const int GEARBOX_HIGH_STEP_IN_MS = 4;
+        private const int GEARBOX_LOW_STEP_IN_MS = 4;
 
-        public GearboxController(USB4702 _extentionCardCommunicator)
+        public GearboxController(USB4702 _extentionCardCommunicator, RealCarCommunicator comunicator)
         {
             extentionCardCommunicator = _extentionCardCommunicator;
+            realCarCommunicator = comunicator;
         }
     
         protected override void Initialize()
@@ -64,10 +65,28 @@ namespace car_communicator
                 {
                     Logger.Log(this, String.Format("Wrong number of active inputs from gearbox!"), 3);
                 }
+                else if (gearboxInput.Count(x => x == GEARBOX_INPUT_ACTIVE_VALUE) == 0)
+                {
+                    Logger.Log(this, String.Format("No data from gearbox reveived"));
+                }
                 else
                 {
                     int activeGear = gearboxInput.FindIndex(x => x == GEARBOX_INPUT_ACTIVE_VALUE);
-                    lastSeenGear = ConvertRawPositionToGear(activeGear);
+                    Gear newFoundGear = ConvertRawPositionToGear(activeGear); 
+                    if (lastSeenGear != newFoundGear)
+                    {
+                        lastSeenGear = newFoundGear;
+
+                        try
+                        {
+                            //realCarCommunicator.GearboxPositionAcquired(lastSeenGear);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.Log(this, String.Format("Exception occured on new gear acquiring: {1}", e.Message), 3);
+                        }
+                    }
+                    
                 }
 
                 Thread.Sleep(GEARBOX_UPDATING_INTERVAL_IN_MS);
@@ -162,6 +181,7 @@ namespace car_communicator
         }
 
         private USB4702 extentionCardCommunicator;
+        RealCarCommunicator realCarCommunicator;
         private Thread gearboxPositionUpdater;
         private Thread gearboxPositionSetter;
         private Gear lastSeenGear;

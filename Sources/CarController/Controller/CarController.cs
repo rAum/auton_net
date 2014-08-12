@@ -120,6 +120,7 @@ namespace CarController
             Model.CarComunicator.evSpeedInfoReceived += new SpeedInfoReceivedEventHander(CarComunicator_evSpeedInfoReceived);
             Model.CarComunicator.evSteeringWheelAngleInfoReceived += new SteeringWheelAngleInfoReceivedEventHandler(CarComunicator_evSteeringWheelAngleInfoReceived);
             Model.CarComunicator.evBrakePositionReceived += new BrakePositionReceivedEventHandler(CarComunicator_evBrakePositionReceived);
+            Model.CarComunicator.evGearPositionReceived += CarComunicator_evGearPositionReceived;
 
             Model.SteeringWheelAngleRegulator.evNewSteeringWheelSettingCalculated += new NewSteeringWheelSettingCalculatedEventHandler(SteeringWheelAngleRegulator_evNewSteeringWheelSettingCalculated);
             Model.SpeedRegulator.evNewSpeedSettingCalculated += new NewSpeedSettingCalculatedEventHandler(SpeedRegulator_evNewSpeedSettingCalculated);
@@ -127,6 +128,11 @@ namespace CarController
 
             Model.evTargetSpeedChanged += Model_evTargetSpeedChanged;
             Model.evTargetSteeringWheelAngleChanged += Model_evTargetSteeringWheelAngleChanged;
+        }
+
+        void CarComunicator_evGearPositionReceived(object sender, GearPositionReceivedEventArgs args)
+        {
+            Model.CarInfo.CurrentGear = args.GetGear();
         }
 
         void Model_evTargetSteeringWheelAngleChanged(object sender, TargetSteeringWheelAngleChangedEventArgs args)

@@ -11,19 +11,19 @@ namespace Helpers
 {
     using System;
     using System.Data.Entity;
-    using System.Data.Entity.Infrastructure;
+    //using System.Data.Entity.Infrastructure;
     
-    public partial class autonEntities : DbContext
-    {
-        public autonEntities()
-            : base("name=autonEntities")
-        {
-        }
+    //public partial class autonEntities : DbContext
+    //{
+    //    public autonEntities()
+    //        : base("name=autonEntities")
+    //    {
+    //    }
     
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            throw new UnintentionalCodeFirstException();
-        }
+    //    protected override void OnModelCreating(DbModelBuilder modelBuilder)
+    //    {
+    //        throw new UnintentionalCodeFirstException();
+    //    }
     
-    }
+    //}
 }

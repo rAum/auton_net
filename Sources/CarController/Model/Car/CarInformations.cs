@@ -25,6 +25,9 @@ namespace CarController
         //alert brake
         public bool AlertBrakeActive { get; set; }
 
+        //gear
+        public Gear CurrentGear { get; set; }
+
         public CarInformations()
         {
             CurrentSpeed = 0.0d;
@@ -41,5 +44,6 @@ namespace CarController
 
             AlertBrakeActive = false;
         }
+
     }
 }
